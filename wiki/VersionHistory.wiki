@@ -1,0 +1,74 @@
+#summary Describes the features and fixes available in each release.
+
+=2.0.0.0=
+  * Added Sandcastle documentation preview and tag compatibility.
+  * Updated minimum requirement for CR_Documentor to 3.0.8.0.
+  * Fixed issue where updated options weren't properly reflected in the documentation preview window.
+  * Fixed issue where abstract class/method documentation wasn't being rendered correctly.
+  * Added proper syntax generation for generic parameters and return values on methods.
+  * CR_Documentor now appears in the "About" box for DevExpress tools.
+  * Added ability to process <include> tags that have file paths relative to the source document being previewed.
+  * Released plugin as open source.
+
+=1.8.2.0510=
+  * Fixed rendering issue with table lists being wider than the window.
+  * Fixed rendering issue where generics didn't display correctly in syntax preview.
+  * Updated minimum requirement for CR_Documentor to DXCore 1.1.58. Needed for syntax preview.
+  * Cleaned up icons in the preview window toolbar.
+  * Added CR_Documentor to the DXCore "About" box.
+
+=1.8.1.0508=
+  * Fixed bug in diagnostic logging of MouseDown event.
+  * Added preview of member syntax.
+  * Added member title banner in preview.
+
+=1.7.3.1207=
+  * Fixed bug that would cause VS 2005 to throw an exception on shutdown if the CR_Documentor window had been displayed during the session.
+  * Fixed bug that would display a security warning in the CR_Documentor window for VS 2005 users.  CR_Documentor now executes the preview in the "Local Intranet" security zone.
+
+=1.7.0.1201=
+  * Added the ability for documentation to be included via <include>.
+  * Added option in options window for enabling/disabling <include>.
+
+=1.6.0.0909=
+  * Optimized so the preview isn't being refreshed when the window isn't visible.
+
+=1.5.0.0815=
+  * Added toolbar to CR_Documentor window with ability to print the current documentation view or open the CR_Documentor settings.
+  * Updated settings to allow toolbar to be shown/hidden.
+
+=1.4.0.0601=
+  * Added logging to the DXCore "Messages" window.
+  * Fixed bug where nested lists weren't rendering correctly.
+  * Optimized context menu creation.
+  * Optimized handling of XmlDocuments for faster rendering in preview window.
+  * Updated parser error handling to more accurately display information about the location of errors in XML comments.  (Errors now show approximate line/character locations in relation to the source document as well as in relation to the XML comment begin/end.)
+  * Fixed bug where attributes on unrecognized tags weren't passing through to be rendered.
+
+=1.3.0.0228=
+  * Added option to replace tabs in code blocks with spaces.
+  * Added option to remove duplicate links in major sections (<summary>, <remarks>, etc.) to avoid "link noise."  Links will be replaced with bold text.
+  * Added context menu for inserting XML doc comment templates.
+  * Added context menu for embedding selections in XML doc comment templates.
+  * Added context menu for XML encoding selected text.
+  * Added context menu for converting selected lines to XML doc comment.
+  * Added context menu for expanding/collapsing XML doc comment blocks.
+  * Added context menu for toggling visibility of CR_Documentor window.
+
+=1.2.0.0106=
+  * Added support for ECMA "block" tag.
+  * Added support for "obsolete" tag.
+  * Added support for use of "style" and "align" attribute on "para" and "note" tags.
+  * Fixed issue where code and other text containing encoded XML entities would not properly render.
+  * Fixed placeholder support for "include" tag at top level of documentation.
+  * Added language word expansions when using "<see langword="..." />" tags.
+  * Fixed issue where empty tags might potentially render twice ("<br />" would become "<br><br>").
+
+=1.1.0.1220=
+  * Updated tag handling for NDoc 1.3 tags.  Added options page for configuration of tag recognition level and unhandled tag rendering method.
+
+=1.0.1.0=
+  * Fixed - made the parser "language agnostic" to support any valid XML comments that DXCore does.  (Comments must still be valid XML for the Documentor plug-in to render them.)
+
+=1.0.0.0=
+  * First version
