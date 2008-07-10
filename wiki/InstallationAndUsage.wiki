@@ -1,0 +1,21 @@
+#summary Describes how to install and use CR_Documentor
+#labels Featured,Phase-Deploy
+
+= Prerequisites =
+To use the latest CR_Documentor, you must have...
+  * Visual Studio 2005 or higher.
+  * DXCore 3.0.8.0 or higher.
+
+= Installation =
+
+  * Make sure all instances of Visual Studio are closed.
+  * Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.  This is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
+  * Start Visual Studio.
+
+= Usage =
+
+  * Open an instance of Visual Studio.
+  * From the !DevExpress menu, select "Tool Windows," then "Documentor."  This will show the Documentor window.
+  * When working in a C# source file with XML documentation, watch the Documentor window as you edit your XML comments.  It will contain a preview of what your comments will look like when rendered into end-user documentation.
+
+While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not. These options help you while working with XML doc comments. See the FeaturesList page for information on what's available.
