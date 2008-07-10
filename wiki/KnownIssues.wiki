@@ -24,7 +24,7 @@ Rather than use the "escaped" attribute, you can enclose the text in a CDATA tag
 =The context menu templates may not insert/embed as expected if you have word wrap turned on in the Visual Studio editor.=
 This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word wrap in Visual Studio and find the templates aren't working right, turn off word wrap.
 
-=The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).
+=The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).=
 This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
 
 =You see a security warning in the preview window and the preview doesn't render right (or at all).=
