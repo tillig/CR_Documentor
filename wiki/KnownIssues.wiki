@@ -1,0 +1,31 @@
+#summary Known issues and potential workarounds.
+#labels Phase-Support
+
+= Introduction =
+
+There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker].
+
+=The CR_Documentor window may not update as "real-time" as you would expect.=
+This is because it relies on the DXCore parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
+  * *Workaround 1: Save the document.* This causes DXCore to re-parse the document and provide a new set of information to CR_Documentor, which will update the preview.
+  * *Workaround 2: Change the frequency of document parsing.* If you work with large documents (or a lot of small documents) simultaneously, this may slow things down a little, but it will provide more frequent updates in the preview window and with other DXCore plugins.  To do this:
+    # In Visual Studio, from the !DevExpress menu, select "Options."
+    # In the bottom-left corner of the Options window, make sure "Expert" is selected.
+    # Find the "Core" folder in the left-hand treeview, at the top.
+    # Select the "Parsing" node of the "Core" folder.
+    # Set the "Parsing" option to "Incremental" or "Full." Automatic parsing doesn't update often enough. ("Full" may slow things down a bit but is a more thorough parse.)
+    # Set the "Line change commit idle time" value to 250.
+    # Set the "Idle time after a change" value to 1000.
+    # Click OK to apply the changes and close the Options window. You should now see updates to the CR_Documentor window after approximately one second of editor idle time.
+
+=The "code" tag's "escaped" attribute doesn't properly handle whitespace.=
+Rather than use the "escaped" attribute, you can enclose the text in a CDATA tag.  CDATA whitespace is properly handled.  The "escaped" attribute is not supported by Sandcastle - it is an NDoc 1.3 specific feature.
+
+=The context menu templates may not insert/embed as expected if you have word wrap turned on in the Visual Studio editor.=
+This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word wrap in Visual Studio and find the templates aren't working right, turn off word wrap.
+
+=The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).
+This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
+
+=You see a security warning in the preview window and the preview doesn't render right (or at all).=
+The preview window hosts Internet Explorer and uses !JavaScript to do some formatting. On occasion, IE will behave inconsistently with its documented behavior and will ignore the security markings in the HTML that should allow the script to execute. You can bypass this by going into the IE security settings and checking the box marked "Allow active cotnent to run in files on My Computer" and then restarting Visual Studio.
