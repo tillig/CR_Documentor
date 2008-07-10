@@ -11,6 +11,7 @@ To use the latest CR_Documentor, you must have...
   * Make sure all instances of Visual Studio are closed.
   * Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.  This is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
   * Start Visual Studio.
+  * The ConfigurationOptions page explains the various ways you can configure behavior.
 
 = Usage =
 
