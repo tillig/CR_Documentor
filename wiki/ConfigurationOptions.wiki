@@ -8,6 +8,8 @@ You may configure options for CR_Documentor behavior.  To get to the CR_Document
   * In the tree-view on the left, find the "Tool Windows" folder.
   * Inside the "Tool Windows" folder, select "Documentor." The available options for CR_Documentor will be displayed.
 
+http://cr-documentor.googlecode.com/svn/site/screenshots/options_dialog.png
+
 = Available Options =
 
   * *Documentation Tag Compatibility*: This option allows you to choose which XML documentation tags are recognized.
