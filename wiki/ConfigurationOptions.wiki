@@ -1,0 +1,30 @@
+#summary Describes the points of configuration for CR_Documentor.
+#labels Phase-Deploy
+
+= Opening the Options Window =
+You may configure options for CR_Documentor behavior.  To get to the CR_Documentor options window:
+
+  * In Visual Studio .NET, select the "!DevExpress" menu, then "Options."
+  * In the tree-view on the left, find the "Tool Windows" folder.
+  * Inside the "Tool Windows" folder, select "Documentor." The available options for CR_Documentor will be displayed.
+
+= Available Options =
+
+  * *Documentation Tag Compatibility*: This option allows you to choose which XML documentation tags are recognized.
+    * _NDoc 1.3_ (default): Recognize the tags outlined for use by NDoc 1.3, which is a superset of the Microsoft tags.
+    * _Sandcastle_: Recognize the tags supported by the Sandcastle documentation renderer. This is a superset of the Microsoft tags, but a subset of NDoc 1.3.
+    * _Microsoft Tags_: Recognize only the tags outlined in the Microsoft developer documentation about inline XML doc.
+  * *Unrecognized Tag Handling*:
+    * _Render Contents_ (default): Attempts to render the tag contents as HTML. This option will allow you to use HTML to format documentation, similar to NDoc.  Note that since tags are passed directly through to the preview browser window, if the tag is not a recognized HTML tag and isn't recognized as a special documentation tag (as selected in the "Documentation Tag Compatibility" option), this may end up hiding the contents of unrecognized tags inadvertently.
+    * _Highlight Tag And Contents_: Displays the actual unrecognized tag and its contents with a highlight behind it.  Allows you to see which tags are not specifically recognized documentation tags.  HTML tags, not being documentation tags, will also be highlighted as "unrecognized."
+    * _Strip Tag, Show Contents_: Removes the unknown tag, but continues trying to render the contents.
+    * _Hide Tag And Contents_: Removes the unknown tag and everything inside it.
+  * *Formatting Options*:
+    * _Replace "code" tabs with spaces_: Allows you to preview "code" blocks with spaces in place of tabs.  This is default NDoc 1.3 behavior but isn't inherently supported by Sandcastle.
+    * _Remove duplicate <see cref> links_: Removes "link clutter" by only linking to the first unique <see cref> in a doc section (<summary>, <remarks>, etc.). Duplicate <see cref> links will be made bold rather than being links.  This is default NDoc 1.3 behavior but isn't inherently supported by Sandcastle.
+  * *Process <include> Tags*:
+    * _Don't process <include /> tags_: Places where <include /> is used will be shown with some placeholder text. Actual inclusion will not occur.
+    * _Process and allow absolute file paths only_: Process <include /> tags and actually include the documentation, but only if the path to the included XML doc is absolute. Relative paths will fail.
+    * _Process, allow relative/absolute file paths_: Process <include /> tags and actually include the documentation. Allow both absolute paths and relative paths. ("Relative" means "relative to the source code document location.")
+  * *Toolbar Visibility*: Show or hide the toolbar that appears in the CR_Documentor preview window.
+  * *Preview Style*: Choose the style of the documentation preview. Choices include classic MSDN/NDoc 1.3 style and Sandcastle "Prototype" style.
