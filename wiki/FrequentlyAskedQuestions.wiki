@@ -1,0 +1,21 @@
+#summary Troubleshooting/FAQ information about using CR_Documentor
+#labels Featured,Phase-Support
+
+=Q: Why isn't my documentation rendering correctly?=
+While it may sound obvious, XML documentation comments are precisely that - XML.  If you enter invalid XML in your comments, they will not render properly.  CR_Documentor will do its best to point out parsing errors in your documentation, but in the end it's up to you to ensure your comments are valid XML.  For example, if you have "if(i < 10)" in a code block in your document, it's not going to render right (the unencoded "<" is invalid XML).  If you have "if(a && b)" in a comment, it's not going to render right ("&&" is not a valid XML entity).  The easiest solution to comment blocks not rendering is to select the problem block in the code editor, right-click, and select the "XML Encode Selection" option from the CR_Documentor context menu.  The other option is to enclose the text in a CDATA section.
+
+=Q: The parsing errors displayed don't point to the location of the error (or if they do, I'm not seeing the problem). What gives?=
+CR_Documentor attempts to parse your XML doc comment into an internal XML structure so it can be processed for preview.  If it encounters a parsing error, the error encountered is in relation to the start, end, and content of the XML comment, not necessarily in relation to the source document that contains the comment.  CR_Documentor then takes that error information and attempts to determine where in relation to the original source the error is located.  Usually it's pretty close; sometimes it's off by a line or a couple of characters.  The parsing error should show information both in relation to the original source and in relation to the XML comment content. Between the two, you should be able to locate the problem.
+
+=Q: How do I manually refresh the preview window?=
+You don't. CR_Documentor displays the latest information it has available. See the KnownIssues section for some workarounds.
+
+=Q: Why is so much memory being used?=
+You may see a lot of memory get used if you have enabled the insertion of documentation via the <include> tag in CR_Documentor options.  (By default this option is turned off.)  CR_Documentor caches included documentation to speed up the rendering process rather than reading from the disk each time.  Pending on the size of your included documents (the documents are cached in their entirety, even if you only include a single line), you may see a significant amount of memory get used.  If you are uncomfortable with this, disable the insertion of documentation via <include> and restart Visual Studio.
+
+Also, to display the preview CR_Documentor is hosting the Internet Explorer browser.  Some of the memory you're seeing used is the hosted IE.
+
+=Q: Why isn't my included documentation being found?=
+If you enable the inclusion of documentation via <include>, you may see errors telling you that the documentation couldn't be rendered for one reason or another.  This is generally caused by the specified include file not being found or the XPath selection expression not finding any nodes in the specified document.
+  * If the XPath isn't finding anything, you will need to use your favorite XML tool to determine why.
+  * If the file isn't found, make sure that you are specifying the correct location. Historically this required you to specify an absolute path to the included file ("C:\includes\mydoc.xml") but recent versions of the .NET compilers will locate included files relative to the source document they're being included into. Check your CR_Documentor options - you can select to allow just absolute paths or both absolute and relative. If you're using relative paths, be sure to enable that option.
