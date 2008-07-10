@@ -1,0 +1,9 @@
+#summary Explains what you'll need to build and modify the source code.
+#labels Phase-Implementation
+
+To build the CR_Documentor source, you'll need...
+
+  * Visual Studio 2008.
+  * [http://www.devexpress.com/Downloads/NET/IDETools/DXCore/ DXCore] 3.0.8.0 or later installed in the default location. Plugins will go in: `$(ProgramFiles)\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins`
+  * [http://msbuildtasks.tigris.org/ MSBuild Community Tasks]
+  * [http://codeplex.com/Sandcastle Sandcastle]
