@@ -19,4 +19,6 @@ To use the latest CR_Documentor, you must have...
   * From the !DevExpress menu, select "Tool Windows," then "Documentor."  This will show the Documentor window.
   * When working in a C# source file with XML documentation, watch the Documentor window as you edit your XML comments.  It will contain a preview of what your comments will look like when rendered into end-user documentation.
 
+http://cr-documentor.googlecode.com/svn/site/screenshots/show_window.png
+
 While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not. These options help you while working with XML doc comments. See the FeaturesList page for information on what's available.
