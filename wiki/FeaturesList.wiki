@@ -1,0 +1,27 @@
+#summary Describes the various features and shows screen shots of CR_Documentor.
+#labels Featured,Phase-Deploy
+
+= Documentation Preview =
+
+The main CR_Documentor tool window displays a preview of your XML documentation comments. As you move around your code and edit comments, the preview window will update.
+
+http://cr-documentor.googlecode.com/svn/site/screenshots/main_window.png
+
+= Context Menu =
+
+A context menu is provided to help you work with your XML doc comments.
+
+When your cursor is not inside a doc comment, you'll see options to...
+  * Show/hide the CR_Documentor window.
+  * Collapse all of your XML doc comment blocks.
+  * Expand all of your XML doc comment blocks.
+
+When your cursor is inside a doc comment, you'll see all of the above options plus you'll be given several XML doc comment templates that you can insert into your comment.
+
+http://cr-documentor.googlecode.com/svn/site/screenshots/context_menu_templates.png
+
+= Configuration Options =
+
+There are several ways you can configure the behavior of CR_Documentor. See the ConfigurationOptions page for more details.
+
+http://cr-documentor.googlecode.com/svn/site/screenshots/options_dialog.png
