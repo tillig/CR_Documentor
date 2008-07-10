@@ -3,7 +3,7 @@
 
 = Introduction =
 
-There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker].
+There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker]. Also check the FrequentlyAskedQuestions page if you find you're having trouble.
 
 =The CR_Documentor window may not update as "real-time" as you would expect.=
 This is because it relies on the DXCore parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
