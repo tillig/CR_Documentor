@@ -28,4 +28,9 @@ This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word
 This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
 
 =You see a security warning in the preview window and the preview doesn't render right (or at all).=
-The preview window hosts Internet Explorer and uses !JavaScript to do some formatting. On occasion, IE will behave inconsistently with its documented behavior and will ignore the security markings in the HTML that should allow the script to execute. You can bypass this by going into the IE security settings and checking the box marked "Allow active cotnent to run in files on My Computer" and then restarting Visual Studio.
+The preview window hosts Internet Explorer and uses !JavaScript to do some formatting. On occasion, IE will behave inconsistently with its documented behavior and will ignore the security markings in the HTML that should allow the script to execute. You can generally bypass this by going into the IE security settings and checking the box marked "Allow active cotnent to run in files on My Computer" and then restarting Visual Studio, though sometimes just a VS restart will fix it.
+
+=The CR_Documentor window occasionally steals focus when it refreshes.=
+This looks like it has something to do with the way Internet Explorer is hosted and the behavior isn't consistent. Usually it coincides with the security warning appearing (see above). While it's being looked into, for now there are two workarounds to this:
+  * *Workaround 1: Don't leave CR_Documentor open all the time.* Just open it when you need a doc preview and close it after that.
+  * *Workaround 2: Restart Visual Studio.* For some reason, restarting VS seems to fix this.
