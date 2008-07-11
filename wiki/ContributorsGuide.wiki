@@ -1,0 +1,35 @@
+#summary A jump-off point for contributing to the CR_Documentor project.
+#labels Phase-Implementation
+
+= Introduction =
+
+Here's all the stuff you should know if you want to do more than just use CR_Documentor.
+
+= Checking Out and Building =
+
+There are some DeveloperToolsAndDependencies you'll need to have installed if you actually want to build the code.
+
+= Code Style =
+
+Gotta have some sort of style guideline or we'll get a bajillion merge conflicts, so here it is:
+
+  * Tabs, not spaces, for indentation.
+  * Everything else out of the box Visual Studio defaults.
+
+Easiest way to do this is to visit "Tools/Options..." in Visual Studio, find the "Text Editor" node in settings, expand "All Languages," and select the "Tabs" node. Select the "Smart" indenting mechanism, choose a tab/indent size (mine's 4), and select "Keep tabs." Click OK and you're done.
+
+I can post these settings somewhere for you to download and import into VS if that doesn't work - let me know.
+
+= Issue Tracking =
+
+Any contributions that go into the plugin really need to be tracked in the issue tracker. That way we know what the list of features/fixes is that we make from version to version and we can track work back to the issues and see why things were done the way they were done.
+
+= Source Control =
+
+Again, trying to keep this simple yet disciplined:
+
+  * No commits directly to the trunk unless it's a broken-build-one-line-fix-emergency.
+  * Any significant work happens in task branches.
+  * Task branches should be named after the issue they're addressing. (If you need to create an issue so the work can be tracked back, do it.)
+
+I'll post a branching pattern shortly so the task branches will be uniform and intelligible to all contributors (and the folks just browsing).
