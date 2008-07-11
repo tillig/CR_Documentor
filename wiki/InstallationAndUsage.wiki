@@ -6,6 +6,8 @@ To use the latest CR_Documentor, you must have...
   * Visual Studio 2005 or higher.
   * DXCore 3.0.8.0 or higher.
 
+*Note*: CR_Documentor 1.8.2.0510 is the last version to support Visual Studio 2003 or previous versions of DXCore.
+
 = Installation =
 
   * Make sure all instances of Visual Studio are closed.
