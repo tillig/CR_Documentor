@@ -1,0 +1,43 @@
+#summary Major features and milestones we'd like to accomplish.
+#labels Phase-Requirements
+
+= Introduction =
+
+You wouldn't think that "preview XML doc comments" would really be something that needs a roadmap, but there are some big-ticket features and internals that would make the whole product easier to contribute to, easier to add features to, and more reliable.
+
+Maybe this isn't so "roadmap-ish" as much as a list of large items to keep in mind and work toward as smaller goals get accomplished. Hmmm.
+
+= Internal Web Server =
+
+There's a known issue (KnownIssues) about how the preview window occasionally (and unpredictably) will display a security warning because the preview uses !JavaScript. This is due to the way the preview currently works - by navigating to a local temporary HTML file and then programmatically modifying the DOM to update the preview.
+
+Adding an internal web server, we could get rid of this warning (default security settings would allow script), we'd be able to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
+
+= Testability =
+
+At version 2.0.0.0, there really are no unit tests - there are live integration tests, but nothing that can run in an automated fashion. The code was never really written with testability in mind.
+
+Things should be refactored so we can make use of unit testing and mocking as well as the DXTestRunner plugin (as needed) to provide more automated testing.
+
+= Internal Flexibility =
+
+There are several things that fall into this category that, honestly, I couldn't think of a better name for. The idea is that I want the individual preview generators to be easier to implement and maintain because, ideally, I'd like to be able to offer a way for a user to provide custom rendering handlers that allow them to better imitate their custom doc rendering process.
+
+  * *Attribute-based renering registration.* Right now each rendering engine has an abstract method it has to implement to say "method Foo handles tag Bar." Also, each rendering engine is very much hard-coded into the set of available options, so adding or removing an engine is painful. I'd like to make it all automatic and attribute-based:
+    * Mark rendering engines with attributes. Registering a rendering engine with the preview control shouldn't be a manual thing that the option set and everything has to know about. It also shouldn't necessarily be entirely based on class hierarchy. Instead, the type that implements the rendering engine should be marked with an attribute that has a description (that can appear in the options dialog) and some sort of unique identifier (that will be stored in the user's option set).
+    * Mark tag handling methods with attributes. Instead of registering tag handling methods in an event-handler format, mark them with an attribute like `[Tag("para")]` or some such.
+  * *Unified syntax generator.* Syntax preview generation is the most painful part of the preview process, and right now there's a different syntax preview engine for each rendering engine. Let's unify this into a single syntax generator that can be styled in a custom fashion through CSS. Then each engine could provide custom CSS instead of a full engine.
+  * *Design pattern overhaul.* This sounds like one of those architects who says, "we need more design patterns" but doesn't know what that means. Actually, what I mean by this is that there are a lot of opportunities to make things more flexible and testable by applying some better patterns in pretty obvious places. Creating the instance of the selected rendering engine, for example, is a _Factory_ pattern waiting to happen. Testability in many areas could be improved with some _Inversion of Control_ and better _Separation of Concerns_. Places that would very obviously benefit from a better pattern - let's do that refactor and make it clean.
+  * *No more "tag compatibility levels."* Now that there are multiple players in the rendering field, it's less an issue of what list of tags are "approved" so much as "does the rendering engine support the tag or not?" The "tag compatibility level" option should go, and if a rendering engine doesn't have a registered handler for a given tag, that's when it should be considered "unsupported."
+
+= More Inline Writing Help =
+
+It's great to provide a preview, but some additional help in authoring the comments (beyond the expandable templates) would be welcome, too. Spell checking, grammar checking, error messages for missing documentation, etc.
+
+= Better Upgrade Experience =
+
+As we add/remove options, the upgrade experience and the fault tolerance of reading/writing settings needs to be better. If someone finds a showstopper defect, they need to be able to roll back to the previous version safely. That's not currently possible - it's a one-way move.
+
+Better ways to help users report defects would be good. Maybe an internal diagnostics that runs automated tests live on the user's system and reports so the user can submit the results through email? Something so when a defect gets reported, we can say "give us the error log from DXCore and this additional info" and that's an easy thing to do.
+
+Possibly a way to check for updates automatically online? Auto-upgrade won't necessarily be possible, but notification could be enough.
