@@ -9,6 +9,9 @@ Here's all the stuff you should know if you want to do more than just use CR_Doc
 
 There are some DeveloperToolsAndDependencies you'll need to have installed if you actually want to build the code.
 
+= Product Roadmap =
+Besides fixing bugs, hopefully we're heading down a path that gets us to a better product with more features. The ProductRoadmap talks about some of the more major features and milestones we'd like to accomplish.
+
 = Patch Acceptance =
 
 If you file an issue and include a source fix for it, we'll make sure it gets added as appropriate with the proper code style and tracking. We'd rather get contributions than have y'all scared off by the rules. :)
