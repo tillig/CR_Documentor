@@ -15,6 +15,13 @@ Adding an internal web server, we could get rid of this warning (default securit
 
 This is a fairly high priority update to perform because it's the one major issue that folks will generally encounter.
 
+Ideas:
+  * Custom in-proc web server from scratch. Harder to write, but would mean we don't have to assume any dependencies.
+  * Custom in-proc web server based on !WebDev.!WebHost. This is the assembly that performs the primary ASP.NET development server functionality. We'd have to write a little custom in-proc wrapper for it, but that'd be that.
+  * ASP.NET development server (!WebDev.!WebServer.exe). The easiest of the options - use the ASP.NET development server as it is to navigate to a temporary filesystem location.
+
+If we rely on the ASP.NET development server... does everyone have that? Is it OK to add that dependency?
+
 = Testability =
 
 At version 2.0.0.0, there really are no unit tests - there are live integration tests, but nothing that can run in an automated fashion. The code was never really written with testability in mind.
