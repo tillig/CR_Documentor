@@ -39,4 +39,76 @@ Again, trying to keep this simple yet disciplined:
   * Any significant work happens in task branches.
   * Task branches should be named after the issue they're addressing. (If you need to create an issue so the work can be tracked back, do it.)
 
-I'll post a branching pattern shortly so the task branches will be uniform and intelligible to all contributors (and the folks just browsing).
+== Trunk ==
+
+The trunk always has the latest and greatest. It may have stuff that hasn't been released yet.
+
+== Branches ==
+
+There are two kinds of branches - issue branches and spike branches. There is a folder inside the "branches" folder to contain each of these branch types.
+
+=== Issues ===
+
+*Issue branches* are for doing work that relates to an issue filed in the issue tracker. This might be fixing a bug, adding a feature, or whatever.
+
+Issue branches should be named after the issue ID they correspond to.
+
+=== Spikes ===
+
+*Spike branches* are for experimental work that isn't filed in the issue tracker. For example, a while ago I ran a spike to see if I could use XSLT rather than programmatically processing the XML comments - not an issue, but wanted to see if it'd work so maybe we could implement something like that. (It didn't work).
+
+Spike branches should be named in two-or-three word descriptions, all lower case, separated by dashes. For example, I might have called my XSLT spike something like "xslt-processing" or some such.
+
+=== Branch Structure ===
+
+Whether it's an issue or a spike, the general branch structure is the same:
+
+{{{
+ + svn
+    + branches
+       + issue
+       |  + 1
+       |    + dev                // Codeline/trunk for the task
+       |    + tags               // Contains tags relevant to merging this task code
+       |       + source          // Tags of the main codeline (trunk)
+       |       |  + branchpoint  // Tag of trunk where this task branched off
+       |       |  + mergepoint00 // Tag where trunk code was brought into this task
+       |       |  + mergepointN
+       |       + task            // Tags of this task branch codeline (dev)
+       |          + mergepoint00 // Tag of dev to push task changes to trunk
+       |          + mergepointN
+       + spike
+          + xslt-processing
+             + dev               // See above
+             + tags              // See above
+}}}
+
+The general process (refer to the above template for some context as you read this):
+
+  # *Create your task branch.*
+    # Create a folder under "issue" or "spike" to contain your branch. Name it accordingly.
+    # Create a "tags" folder under that to house your tags.
+    # Create a "source" folder under "tags" so you can create trunk tags.
+    # Create a "task" folder under "tags" so you can create task codeline tags.
+    # Do an svn copy from trunk to the tags/source folder. Call the copied folder "branchpoint" - this marks where you're jumping off of trunk and starting your work.
+    # Do an svn copy from the "branchpoint" to a folder called "dev" right under your main issue/spike folder. This is the "trunk" for your task, and this is what you'll check out and do your work in.
+  # *Do your work in your task branch.* Check in often - it doesn't matter how much because it's your branch, not the trunk. As long as you work in your branch you won't be affecting anyone else.
+  # *Bring in changes from the main codeline.* As you work, other folks may also be working and committing to the trunk. You'll want to get these changes into your task branch.
+    # Do an svn copy from trunk to the tags/source folder (where "branchpoint" is). Call the copied folder "mergepoint00" - you may bring changes in from the trunk more than once, so number these serially (mergepoint01, mergepoint02, etc.).
+    # Do an svn merge from the branchpoint tag to your new mergepoint tag and commit them into your working copy of your task. What this is doing is saying, "I want all the changes between the branchpoint and the new mergepoint, and I want to apply them to my task." You may have to resolve some conflicts if you've been working in the same file as some other folks.
+    # As you do more work, you'll perform this action several times - bringing changes from the trunk into your task. When you do subsequent merges, do it from the last mergepoint to the most recent. For example, your next merge would be from mergepoint00 to mergepoint01; then from mergepoint01 to mergepoint02; etc.
+  # *When you're done with a spike,* generally that means you're done and the branch gets abandoned. Spikes are usually experimental only, they're usually rushed, and you probably don't test them as well. If you want to apply the changes for real to the trunk, it's best if you file an issue in the issue tracker and do the work in an issue branch following good production practices.
+  # *When you're done with an issue,* you'll want to merge your task changes back to trunk.
+    # Make sure you have gotten the latest changes from trunk merged into your task branch. See above for more on that.
+    # Make sure it builds from the command line and you've tested it out for real.
+    # Do an svn copy from your task codeline (dev) to the tags/task folder. Call it "mergepoint00" (usually there will only be one of these mergepoints ever, but in the event you need to continue work, we'll just number it anyway).
+    # Do an svn switch on your working copy - switch it back so you're working in the main trunk.
+    # Do an svn merge from the last mergepoint in your task's tags/source folder to the mergepoint in your tags/task folder. Basically you're saying "take the differences between the latest trunk that I grabbed and the stuff in my codeline, then apply it to the trunk."
+    # *BEFORE YOU COMMIT do one last build* from the command-line and try it out live in Visual Studio to make sure the merge went correctly.
+    # *Once it works, commit the changes to the trunk.* You just successfully resolved an issue. On some largely-unpredictable basis, we'll tag the trunk and release, and that release will include your fix.
+
+This sounds like a lot of work, but there's a lot of benefit to doing it in this disciplined fashion:
+  * *Your work is isolated.* No one checking something in will break you, and you can get the changes to the trunk at your leisure.
+  * *The trunk build will never be broken.* You can check partially-completed things into your task branch but you won't be breaking the trunk.
+  * *Issue work is quantifiable.* If we want to see what work went into fixing a particular issue, we can look in Subversion and it's easy to tell. It also means if a particular fix breaks something, we can roll that changeset out.
+  * *We can use the merges to the trunk as a way to figure out what's new* (and put that in the readme).
