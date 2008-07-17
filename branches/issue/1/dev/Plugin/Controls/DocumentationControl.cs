@@ -220,6 +220,25 @@ namespace CR_Documentor.Controls
 			if (refresh)
 			{
 				this.WebServer.Content = this._transformer.ToString();
+
+				// Occasionally when the browser refreshes it steals focus.
+				// This is noted in various forums like this one:
+				// http://www.tech-archive.net/Archive/InetSDK/microsoft.public.inetsdk.programming.webbrowser_ctl/2005-05/msg00040.html
+				//
+				// For a while it was being fixed by saving a reference to the active
+				// document, like this:
+				// DevExpress.CodeRush.Core.Document doc = DevExpress.CodeRush.Core.CodeRush.Documents.Active;
+				// ...then doing the refresh, then restoring the active document:
+				// DevExpress.CodeRush.Core.CodeRush.Editor.Activate(doc);
+				//
+				// However, that didn't really address the issue because if you
+				// highlight very slowly over a long block of code, possibly crossing
+				// XML doc comments, the browser refreshes and this save/restore
+				// stops your consistent highlight.
+				//
+				// Not sure what the solution to this is. It should probably be
+				// fixed, and the browser control is probably the place to do it.
+
 				this._browser.Reload();
 			}
 		}
