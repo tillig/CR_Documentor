@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -13,7 +13,7 @@ namespace CR_Documentor.Server
 	public class WebServer : IDisposable
 	{
 		/// <summary>
-		/// Flag indicating the <see cref="CR_Documentor.Server.WebServer.Dispose"/> method has been called.
+		/// Flag indicating the <see cref="CR_Documentor.Server.WebServer.Dispose()"/> method has been called.
 		/// </summary>
 		private bool _disposed = false;
 
