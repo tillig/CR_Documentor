@@ -1,19 +1,16 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using XML = System.Xml;
 using System.Windows.Forms;
-
+using CR_Documentor.Controls;
+using CR_Documentor.Options;
+using CR_Documentor.Server;
 using DevExpress.CodeRush.Core;
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
-
-using CR_Documentor.Controls;
-using CR_Documentor.Options;
+using XML = System.Xml;
 
 namespace CR_Documentor
 {
@@ -60,6 +57,16 @@ namespace CR_Documentor
 		/// Prefix for log messages generated in this module.
 		/// </summary>
 		private const string LOG_PREFIX = "CR_Documentor: ";
+
+		/// <summary>
+		/// Internal web server used to serve up the preview content.
+		/// </summary>
+		private WebServer _webServer = null;
+
+		/// <summary>
+		/// The default port the web server will listen on for preview requests.
+		/// </summary>
+		private const UInt16 WebServerPort = 11235;
 
 		#endregion
 
@@ -108,11 +115,19 @@ namespace CR_Documentor
 			InitializeComponent();
 			this.SuspendLayout();
 
+			// Get the web server ready
+			this._webServer = new WebServer(WebServerPort);
+			this._webServer.Start();
+
 			// Create the controls for the form
-			this._previewer = new DocumentationControl();
 			this._toolBar = new ToolBar();
+			this._previewer = new DocumentationControl(this._webServer);
 
 			// Refresh the options
+			// Right now we do some manipulation of the controls during the
+			// refresh of settings. This will make it difficult to change the
+			// web server information based on config later. Maybe we need to
+			// separate the load of settings from the update of control behavior.
 			RefreshSettings();
 
 			// Set doc control view info
@@ -253,6 +268,8 @@ namespace CR_Documentor
 		/// </summary>
 		public override void FinalizePlugIn()
 		{
+			this._webServer.Stop();
+			this._webServer.Dispose();
 			base.FinalizePlugIn();
 		}
 

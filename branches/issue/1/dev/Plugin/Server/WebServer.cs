@@ -96,6 +96,7 @@ namespace CR_Documentor.Server
 					HttpListenerResponse response = context.Response;
 					byte[] buffer = Encoding.UTF8.GetBytes(this.Content);
 					response.ContentLength64 = buffer.Length;
+					response.ContentEncoding = Encoding.UTF8;
 					response.OutputStream.Write(buffer, 0, buffer.Length);
 					response.OutputStream.Close();
 				}
