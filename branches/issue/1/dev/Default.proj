@@ -26,6 +26,7 @@
 		<CleanFolders Include="DocTestVB\obj"/>
 		<CleanFolders Include="CR_Documentor.Test\bin"/>
 		<CleanFolders Include="CR_Documentor.Test\obj"/>
+		<CleanFolders Include="TestResults"/>
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<Target Name="All">
