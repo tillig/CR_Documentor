@@ -4,7 +4,7 @@ using System;
 using System.Net;
 using System.IO;
 
-namespace CR_Documentor.Test
+namespace CR_Documentor.Test.Server
 {
 	[TestClass]
 	public class WebServerTest
