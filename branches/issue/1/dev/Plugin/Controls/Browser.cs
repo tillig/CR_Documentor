@@ -15,11 +15,6 @@ namespace CR_Documentor.Controls
 		public const string MEMBER_URL_PREFIX = "urn:member:";
 
 		/// <summary>
-		/// The default text that should appear in the window.
-		/// </summary>
-		public const string DefaultBodyMessage = "This window will show a preview of XML documentation when an XML comment is entered.";
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Controls.Browser" /> class.
 		/// </summary>
 		public Browser()

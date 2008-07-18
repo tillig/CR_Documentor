@@ -39,6 +39,11 @@ namespace CR_Documentor.Controls
 		private CR_Documentor.Controls.Browser _browser = new CR_Documentor.Controls.Browser();
 
 		/// <summary>
+		/// The default text that should appear in the window.
+		/// </summary>
+		public const string DefaultBodyMessage = "This window will show a preview of XML documentation when an XML comment is entered.";
+
+		/// <summary>
 		/// The transformation class that will convert the XML doc to HTML.
 		/// </summary>
 		private TransformEngine _transformer = null;
@@ -66,7 +71,7 @@ namespace CR_Documentor.Controls
 				_transformer = value;
 				if (_transformer != null)
 				{
-					this.WebServer.Content = _transformer.GetHtmlPage(Browser.DefaultBodyMessage);
+					this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
 					this._browser.Refresh();
 				}
 			}
@@ -113,7 +118,7 @@ namespace CR_Documentor.Controls
 		static DocumentationControl()
 		{
 			DefaultDocument = new System.Xml.XmlDocument();
-			DefaultDocument.LoadXml("<member><summary>" + Browser.DefaultBodyMessage + "</summary></member>");
+			DefaultDocument.LoadXml("<member><summary>" + DefaultBodyMessage + "</summary></member>");
 		}
 
 		/// <summary>
