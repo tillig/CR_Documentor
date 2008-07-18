@@ -26,7 +26,6 @@ namespace CR_Documentor.Controls
 		{
 			this.BeforeNavigate2 += new AxSHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(Browser_BeforeNavigate2);
 			this.SafeUrls = new StringCollection();
-			// TODO: When the handle is created, this.Navigate to the default document.
 		}
 
 		/// <summary>
