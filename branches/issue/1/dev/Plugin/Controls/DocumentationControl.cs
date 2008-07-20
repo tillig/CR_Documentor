@@ -87,32 +87,6 @@ namespace CR_Documentor.Controls
 		public virtual WebServer WebServer { get; set; }
 
 		/// <summary>
-		/// Gets the currently displayed HTML document.
-		/// </summary>
-		/// <value>
-		/// An <see cref="mshtml.IHTMLDocument2"/> that contains the HTML
-		/// document currently being displayed.
-		/// </value>
-		/// <remarks>
-		/// <para>
-		/// This is used by toolbar options in the preview window. Executing
-		/// actions on the browser requires access to the document as HTML.
-		/// </para>
-		/// </remarks>
-		private mshtml.IHTMLDocument2 HtmlDocument
-		{
-			get
-			{
-				mshtml.IHTMLDocument2 retVal = null;
-				if (this._browser != null && this._browser.IsHandleCreated)
-				{
-					retVal = this._browser.Document as mshtml.IHTMLDocument2;
-				}
-				return retVal;
-			}
-		}
-
-		/// <summary>
 		/// Performs <see langword="static" /> member initialization for the <see cref="DocumentationControl"/> class.
 		/// </summary>
 		static DocumentationControl()
@@ -136,17 +110,15 @@ namespace CR_Documentor.Controls
 			this.Dock = DockStyle.Fill;
 			this._browser.TabStop = false;
 			this._browser.Dock = DockStyle.Fill;
-			this._browser.HandleCreated += new EventHandler(Browser_HandleCreated);
 			this.Controls.Add(this._browser);
+			this.NavigateToInitialPage();
 			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
 		}
 
 		/// <summary>
 		/// Refreshes the browser to the first page view.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">An <see cref="System.EventArgs" /> that contains the event data.</param>
-		private void Browser_HandleCreated(object sender, EventArgs e)
+		private void NavigateToInitialPage()
 		{
 			string[] prefixes = new string[this.WebServer.Prefixes.Count];
 			this.WebServer.Prefixes.CopyTo(prefixes, 0);
@@ -164,23 +136,7 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		public virtual void Print()
 		{
-			mshtml.IHTMLDocument2 printdoc = this.HtmlDocument;
-			if (printdoc != null)
-			{
-				Log.Send("Executing Print command on document.");
-				if (printdoc.execCommand("Print", true, null))
-				{
-					Log.Send("Printing successful.");
-				}
-				else
-				{
-					Log.SendWarning("Printing unsuccessful.");
-				}
-			}
-			else
-			{
-				Log.SendError("Print document is null. Unable to print.");
-			}
+			this._browser.Print();
 		}
 
 		/// <summary>
@@ -244,7 +200,7 @@ namespace CR_Documentor.Controls
 				// Not sure what the solution to this is. It should probably be
 				// fixed, and the browser control is probably the place to do it.
 
-				this._browser.Reload();
+				this._browser.Refresh();
 			}
 		}
 
