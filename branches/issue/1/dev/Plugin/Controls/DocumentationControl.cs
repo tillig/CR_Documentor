@@ -49,6 +49,11 @@ namespace CR_Documentor.Controls
 		private TransformEngine _transformer = null;
 
 		/// <summary>
+		/// Indicates whether the browser is currently refreshing the preview.
+		/// </summary>
+		private bool _isRefreshing = false;
+
+		/// <summary>
 		/// The default message that gets put into the Documentor window.
 		/// </summary>
 		private static readonly System.Xml.XmlDocument DefaultDocument;
@@ -72,7 +77,7 @@ namespace CR_Documentor.Controls
 				if (_transformer != null)
 				{
 					this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
-					this._browser.Refresh();
+					this.RefreshBrowser();
 				}
 			}
 		}
@@ -110,9 +115,30 @@ namespace CR_Documentor.Controls
 			this.Dock = DockStyle.Fill;
 			this._browser.TabStop = false;
 			this._browser.Dock = DockStyle.Fill;
+			this._browser.ProgressChanged += new WebBrowserProgressChangedEventHandler(Browser_ProgressChanged);
 			this.Controls.Add(this._browser);
 			this.NavigateToInitialPage();
 			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
+		}
+
+		/// <summary>
+		/// Re-enables the control after the browser is done refreshing.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">An <see cref="System.Windows.Forms.WebBrowserProgressChangedEventArgs" /> that contains the event data.</param>
+		/// <remarks>
+		/// <para>
+		/// This handler works in conjunction with <see cref="CR_Documentor.Controls.DocumentationControl.RefreshBrowser()"/>
+		/// to safely refresh the browser without stealing focus.
+		/// </para>
+		/// </remarks>
+		private void Browser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
+		{
+			if (this._isRefreshing && e.CurrentProgress == e.MaximumProgress)
+			{
+				this._isRefreshing = false;
+				this.Enabled = true;
+			}
 		}
 
 		/// <summary>
@@ -181,27 +207,35 @@ namespace CR_Documentor.Controls
 			if (refresh)
 			{
 				this.WebServer.Content = this._transformer.ToString();
-
-				// Occasionally when the browser refreshes it steals focus.
-				// This is noted in various forums like this one:
-				// http://www.tech-archive.net/Archive/InetSDK/microsoft.public.inetsdk.programming.webbrowser_ctl/2005-05/msg00040.html
-				//
-				// For a while it was being fixed by saving a reference to the active
-				// document, like this:
-				// DevExpress.CodeRush.Core.Document doc = DevExpress.CodeRush.Core.CodeRush.Documents.Active;
-				// ...then doing the refresh, then restoring the active document:
-				// DevExpress.CodeRush.Core.CodeRush.Editor.Activate(doc);
-				//
-				// However, that didn't really address the issue because if you
-				// highlight very slowly over a long block of code, possibly crossing
-				// XML doc comments, the browser refreshes and this save/restore
-				// stops your consistent highlight.
-				//
-				// Not sure what the solution to this is. It should probably be
-				// fixed, and the browser control is probably the place to do it.
-
-				this._browser.Refresh();
+				this.RefreshBrowser();
 			}
+		}
+
+		/// <summary>
+		/// Safely does a browser refresh without stealing focus.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// This is actually a multi-part solution. The standard
+		/// <see cref="System.Windows.Forms.WebBrowser.Refresh()"/> method
+		/// will steal focus when you execute it. To avoid that, you need to
+		/// disable the control that hosts the browser (this control) during the
+		/// browser refresh and re-enable it when it's done refreshing.
+		/// </para>
+		/// <para>
+		/// This method disables this control, sets a flag to indicate the browser
+		/// is refreshing, and hits the refresh. In a handler for the browser's
+		/// <see cref="System.Windows.Forms.WebBrowser.ProgressChanged"/>
+		/// event, we check to see if the document is done loading and if we're
+		/// refreshing and, if so, we re-enable the control.
+		/// </para>
+		/// </remarks>
+		/// <seealso cref="CR_Documentor.Controls.DocumentationControl.Browser_ProgressChanged"/>
+		private void RefreshBrowser()
+		{
+			this.Enabled = false;
+			this._isRefreshing = true;
+			this._browser.Refresh();
 		}
 
 		/// <summary>
