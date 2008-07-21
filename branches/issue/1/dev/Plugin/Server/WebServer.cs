@@ -92,13 +92,22 @@ namespace CR_Documentor.Server
 					// When we start serving other things - images, etc. - we'll need to get the request info.
 					// HttpListenerRequest request = context.Request;
 
-					// Respond to the request by passing the content back.
-					HttpListenerResponse response = context.Response;
-					byte[] buffer = Encoding.UTF8.GetBytes(this.Content);
-					response.ContentLength64 = buffer.Length;
-					response.ContentEncoding = Encoding.UTF8;
-					response.OutputStream.Write(buffer, 0, buffer.Length);
-					response.OutputStream.Close();
+					Log.Enter(ImageType.Method, "Preview server handling request.");
+					try
+					{
+						// Respond to the request by passing the content back.
+						HttpListenerResponse response = context.Response;
+						byte[] buffer = Encoding.UTF8.GetBytes(this.Content);
+						response.ContentLength64 = buffer.Length;
+						Log.Send(String.Format("Sending {0} bytes of content.", response.ContentLength64));
+						response.ContentEncoding = Encoding.UTF8;
+						response.OutputStream.Write(buffer, 0, buffer.Length);
+						response.OutputStream.Close();
+					}
+					finally
+					{
+						Log.Exit();
+					}
 				}
 				catch (HttpListenerException err)
 				{
@@ -120,7 +129,10 @@ namespace CR_Documentor.Server
 			this._listener.Start();
 			new ThreadStart(this.AsyncListenThreadStart).BeginInvoke(null, null);
 			this.IsListening = true;
-			Log.Send("Server listening for requests.");
+			foreach (object p in this._listener.Prefixes)
+			{
+				Log.Send(String.Format("Server listening for requests on {0}", p));
+			}
 		}
 
 		/// <summary>

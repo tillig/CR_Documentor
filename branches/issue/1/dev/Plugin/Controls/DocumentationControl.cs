@@ -1,21 +1,12 @@
-// Original code based on Lutz Roeder's Documentor; this
-// version is modified from the original.  Original copyright
-// follows:
-// ---------------------------------------------------------
-// Lutz Roeder's .NET Reflector, October 2000.
-// Copyright (C) 2000-2003 Lutz Roeder. All rights reserved.
-// http://www.aisto.com/roeder/dotnet
-// roeder@aisto.com
-// ---------------------------------------------------------
 using System;
 using System.Windows.Forms;
 using System.Xml;
 
+using CR_Documentor.Server;
 using CR_Documentor.Transformation;
 
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.StructuralParser;
-using CR_Documentor.Server;
 
 namespace CR_Documentor.Controls
 {
@@ -76,8 +67,16 @@ namespace CR_Documentor.Controls
 				_transformer = value;
 				if (_transformer != null)
 				{
-					this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
-					this.RefreshBrowser();
+					Log.Enter(ImageType.Method, "Transformation engine updated. Refreshing browser.");
+					try
+					{
+						this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
+						this.RefreshBrowser();
+					}
+					finally
+					{
+						Log.Exit();
+					}
 				}
 			}
 		}
@@ -134,6 +133,7 @@ namespace CR_Documentor.Controls
 		/// </remarks>
 		private void Browser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
 		{
+			Log.Send(String.Format("CR_Documentor browser updating: {0} of {1} bytes.", e.CurrentProgress, e.MaximumProgress));
 			if (this._isRefreshing && e.CurrentProgress == e.MaximumProgress)
 			{
 				this._isRefreshing = false;
@@ -146,15 +146,23 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		private void NavigateToInitialPage()
 		{
-			string[] prefixes = new string[this.WebServer.Prefixes.Count];
-			this.WebServer.Prefixes.CopyTo(prefixes, 0);
-			foreach (string prefix in prefixes)
+			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
+			try
 			{
-				// Prefixes are wildcards; we need a host name in there.
-				string url = prefix.Replace("*", "localhost");
-				this._browser.SafeUrls.Add(url);
+				string[] prefixes = new string[this.WebServer.Prefixes.Count];
+				this.WebServer.Prefixes.CopyTo(prefixes, 0);
+				foreach (string prefix in prefixes)
+				{
+					// Prefixes are wildcards; we need a host name in there.
+					string url = prefix.Replace("*", "localhost");
+					this._browser.SafeUrls.Add(url);
+				}
+				this._browser.Navigate(this._browser.SafeUrls[0]);
 			}
-			this._browser.Navigate(this._browser.SafeUrls[0]);
+			finally
+			{
+				Log.Exit();
+			}
 		}
 
 		/// <summary>
@@ -206,8 +214,16 @@ namespace CR_Documentor.Controls
 			// Refresh if there was a change
 			if (refresh)
 			{
-				this.WebServer.Content = this._transformer.ToString();
-				this.RefreshBrowser();
+				Log.Enter(ImageType.Method, "Refreshing browser with new content.");
+				try
+				{
+					this.WebServer.Content = this._transformer.ToString();
+					this.RefreshBrowser();
+				}
+				finally
+				{
+					Log.Exit();
+				}
 			}
 		}
 
