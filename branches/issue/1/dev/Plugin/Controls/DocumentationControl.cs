@@ -45,6 +45,11 @@ namespace CR_Documentor.Controls
 		private bool _isRefreshing = false;
 
 		/// <summary>
+		/// Indicates if the browser has been initialized and has navigated to the preview page.
+		/// </summary>
+		private bool _isBrowserInitialized = false;
+
+		/// <summary>
 		/// The default message that gets put into the Documentor window.
 		/// </summary>
 		private static readonly System.Xml.XmlDocument DefaultDocument;
@@ -116,7 +121,7 @@ namespace CR_Documentor.Controls
 			this._browser.Dock = DockStyle.Fill;
 			this._browser.ProgressChanged += new WebBrowserProgressChangedEventHandler(Browser_ProgressChanged);
 			this.Controls.Add(this._browser);
-			this.NavigateToInitialPage();
+			// Setting the transformation engine will refresh/initialize the browser.
 			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
 		}
 
@@ -246,13 +251,26 @@ namespace CR_Documentor.Controls
 		/// event, we check to see if the document is done loading and if we're
 		/// refreshing and, if so, we re-enable the control.
 		/// </para>
+		/// <para>
+		/// Note that if the browser has not been initialized (i.e., it hasn't
+		/// navigated to the intial page yet), it does so via
+		/// <see cref="CR_Documentor.Controls.DocumentationControl.NavigateToInitialPage"/>.
+		/// </para>
 		/// </remarks>
 		/// <seealso cref="CR_Documentor.Controls.DocumentationControl.Browser_ProgressChanged"/>
 		private void RefreshBrowser()
 		{
-			this.Enabled = false;
-			this._isRefreshing = true;
-			this._browser.Refresh();
+			if (!this._isBrowserInitialized)
+			{
+				this._isBrowserInitialized = true;
+				this.NavigateToInitialPage();
+			}
+			else
+			{
+				this.Enabled = false;
+				this._isRefreshing = true;
+				this._browser.Refresh();
+			}
 		}
 
 		/// <summary>
