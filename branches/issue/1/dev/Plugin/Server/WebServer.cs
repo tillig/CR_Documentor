@@ -97,7 +97,8 @@ namespace CR_Documentor.Server
 					{
 						// Respond to the request by passing the content back.
 						HttpListenerResponse response = context.Response;
-						byte[] buffer = Encoding.UTF8.GetBytes(this.Content);
+						string content = String.IsNullOrEmpty(this.Content) ? "&nbsp;" : this.Content;
+						byte[] buffer = Encoding.UTF8.GetBytes(content);
 						response.ContentLength64 = buffer.Length;
 						Log.Send(String.Format("Sending {0} bytes of content.", response.ContentLength64));
 						response.ContentEncoding = Encoding.UTF8;
