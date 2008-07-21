@@ -1,3 +1,12 @@
+// This plugin is based on original code from Lutz Roeder's
+// Documentor and contains some code from .NET Reflector.
+// Original copyright follows:
+// ---------------------------------------------------------
+// Lutz Roeder's .NET Reflector, October 2000.
+// Copyright (C) 2000-2003 Lutz Roeder. All rights reserved.
+// http://www.aisto.com/roeder/dotnet
+// roeder@aisto.com
+// ---------------------------------------------------------
 using System;
 using System.Drawing;
 using System.IO;
