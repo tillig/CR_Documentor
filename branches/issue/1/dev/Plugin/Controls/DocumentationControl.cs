@@ -170,7 +170,8 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		public virtual void Print()
 		{
-			this._browser.Print();
+			Log.Send("Printing documentation preview.");
+			this._browser.ShowPrintDialog();
 		}
 
 		/// <summary>
