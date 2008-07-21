@@ -15,7 +15,9 @@ namespace CR_Documentor.Controls
 		public Browser()
 		{
 			this.Navigating += new WebBrowserNavigatingEventHandler(Browser_Navigating);
+			this.ScriptErrorsSuppressed = true;
 			this.SafeUrls = new StringCollection();
+			this.AllowNavigation = false;
 		}
 
 		/// <summary>
