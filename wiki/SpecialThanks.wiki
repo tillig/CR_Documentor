@@ -5,3 +5,4 @@
 
   * [http://www.aisto.com/roeder/dotnet/ Lutz Roeder], who passed along his original "Documentor" source so I could "play with it."
   * Kevin Downs from the (now defunct) NDoc project for providing some great ideas and helping me figure out some correct behavior for the preview window.
+  * DFyNt2U for providing much needed assistance on our first issue, Issue #1, in solving the IE script security warning and verifying the fix.
