@@ -138,7 +138,7 @@ namespace CR_Documentor.Controls
 		/// </remarks>
 		private void Browser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
 		{
-			Log.Send(String.Format("CR_Documentor browser updating: {0} of {1} bytes.", e.CurrentProgress, e.MaximumProgress));
+			Log.Send(String.Format("CR_Documentor browser updating: {0} of {1}.", e.CurrentProgress, e.MaximumProgress));
 			if (this._isRefreshing && e.CurrentProgress == e.MaximumProgress)
 			{
 				this._isRefreshing = false;
