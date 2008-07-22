@@ -24,6 +24,9 @@
 		<CleanFolders Include="DocTest\obj"/>
 		<CleanFolders Include="DocTestVB\bin"/>
 		<CleanFolders Include="DocTestVB\obj"/>
+		<CleanFolders Include="CR_Documentor.Test\bin"/>
+		<CleanFolders Include="CR_Documentor.Test\obj"/>
+		<CleanFolders Include="TestResults"/>
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<Target Name="All">
@@ -35,14 +38,10 @@
 		<Message Text="Creating build output folder hierarchy..."/>
 		<MakeDir Directories="$(BuildDir);$(BuildBinDir);$(BuildDocDir);$(BuildLogDir)"/>
 		<Message Text="Compiling CR_Documentor plugin..."/>
-		<MSBuild Projects="Plugin\CR_Documentor.csproj" Properties="Configuration=$(Configuration)"/>
+		<MSBuild Projects="CR_Documentor.sln" Properties="Configuration=$(Configuration)"/>
 		<CreateItem Include="Plugin\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
-		<Message Text="Copying CR_Documentor plugin to build output area..."/>
-		<Copy SourceFiles="@(BuildOutput)" DestinationFolder="$(BuildBinDir)"/>
-		<Message Text="Compiling test documentation assemblies..."/>
-		<MSBuild Projects="DocTest\DocTest.csproj;DocTestVB\DocTestVB.vbproj" Properties="Configuration=$(Configuration)"/>
 		<CreateItem Include="DocTest\bin\$(Configuration)\**;DocTestVB\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
@@ -65,7 +64,11 @@
 		<MSBuild Projects="Build\SandcastlePrototype.proj" Targets="Doc" Properties="AssemblyPath=%(AssembliesToDocument.FullPath);AssemblyName=%(AssembliesToDocument.Filename);TempDir=..\$(BuildDocTempDir);OutputDir=..\$(BuildDocDir);DocXmlPath=..\$(BuildBinDir)\%(AssembliesToDocument.Filename).xml"/>
 	</Target>
 	<Target Name="Test">
-		<!-- No Unit Tests. Yet. -->
+		<CreateProperty Value="$(BuildLogDir)\TestResults.trx">
+			<Output PropertyName="UnitTestResultsFile" TaskParameter="Value"/>
+		</CreateProperty>
+		<Delete Files="$(UnitTestResultsFile)"/>
+		<Exec Command="mstest.exe /noisolation /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
 	</Target>
 	<Target Name="Package">
 		<MakeDir Directories="$(BuildPackageDir)"/>
