@@ -78,6 +78,11 @@ namespace CR_Documentor.Server
 		/// </summary>
 		private void AsyncListenThreadStart()
 		{
+			// DXCore might die on finalization if logging happens
+			// during the shutdown and the timing is *just wrong*
+			// so we try/catch around log statements here, swallow the exceptions,
+			// and move on. It seems to be because of thread synchronization
+			// issues.
 			while (this.IsListening)
 			{
 				try
@@ -92,7 +97,13 @@ namespace CR_Documentor.Server
 					// When we start serving other things - images, etc. - we'll need to get the request info.
 					// HttpListenerRequest request = context.Request;
 
-					Log.Enter(ImageType.Method, "Preview server handling request.");
+					try
+					{
+						Log.Enter(ImageType.Method, "Preview server handling request.");
+					}
+					catch
+					{
+					}
 					try
 					{
 						// Respond to the request by passing the content back.
@@ -100,19 +111,37 @@ namespace CR_Documentor.Server
 						string content = String.IsNullOrEmpty(this.Content) ? "&nbsp;" : this.Content;
 						byte[] buffer = Encoding.UTF8.GetBytes(content);
 						response.ContentLength64 = buffer.Length;
-						Log.Send(String.Format("Sending {0} bytes of content.", response.ContentLength64));
+						try
+						{
+							Log.Send(String.Format("Sending {0} bytes of content.", response.ContentLength64));
+						}
+						catch
+						{
+						}
 						response.ContentEncoding = Encoding.UTF8;
 						response.OutputStream.Write(buffer, 0, buffer.Length);
 						response.OutputStream.Close();
 					}
 					finally
 					{
-						Log.Exit();
+						try
+						{
+							Log.Exit();
+						}
+						catch
+						{
+						}
 					}
 				}
 				catch (HttpListenerException err)
 				{
-					Log.SendException("Server exiting request handling loop.", err);
+					try
+					{
+						Log.SendException("Server exiting request handling loop.", err);
+					}
+					catch
+					{
+					}
 					break;
 				}
 			}
@@ -147,7 +176,16 @@ namespace CR_Documentor.Server
 			}
 			this.IsListening = false;
 			this._listener.Stop();
-			Log.Send("Server stopped.");
+			try
+			{
+				Log.Send("Server stopped.");
+			}
+			catch
+			{
+				// If this happens in the finalizer, DXCore might already
+				// have finalized the log so we need to swallow any exceptions
+				// here and move on.
+			}
 		}
 
 		/// <summary>
