@@ -293,8 +293,10 @@ namespace CR_Documentor
 		/// </summary>
 		public override void FinalizePlugIn()
 		{
+			Log.Send("Stopping web server.");
 			this._webServer.Stop();
 			this._webServer.Dispose();
+			Log.Send("Web server stopped.");
 			base.FinalizePlugIn();
 		}
 
