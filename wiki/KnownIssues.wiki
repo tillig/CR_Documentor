@@ -5,18 +5,6 @@
 
 There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker] and/or are on the ProductRoadmap. Also check the FrequentlyAskedQuestions page if you find you're having trouble.
 
-=You see a security warning in the preview window and the preview doesn't render right (or at all).=
-The preview window hosts Internet Explorer and uses !JavaScript to do some formatting. On occasion, IE will behave inconsistently with its documented behavior and will ignore the security markings in the HTML that should allow the script to execute.
-
-You can sometimes fix this by going into the IE security settings and checking the box marked "Allow active cotnent to run in files on My Computer" and then restarting Visual Studio, though sometimes just a VS restart will fix it. Unfortunately, this isn't a consistent workaround for all people - sometimes the preview is stubborn and always shows the warning and won't go away regardless of the IE settings.
-
-*This is an issue we are currently fixing.* You can follow the status of the issue here: http://code.google.com/p/cr-documentor/issues/detail?id=1
-
-=The CR_Documentor window occasionally steals focus when it refreshes.=
-This looks like it has something to do with the way Internet Explorer is hosted and the behavior isn't consistent. Usually it coincides with the security warning appearing (see above). While it's being looked into, for now there are two workarounds to this:
-  * *Workaround 1: Don't leave CR_Documentor open all the time.* Just open it when you need a doc preview and close it after that.
-  * *Workaround 2: Restart Visual Studio.* For some reason, restarting VS seems to fix this.
-
 =The CR_Documentor window may not update as "real-time" as you would expect.=
 This is because it relies on the DXCore parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
   * *Workaround 1: Save the document.* This causes DXCore to re-parse the document and provide a new set of information to CR_Documentor, which will update the preview.
