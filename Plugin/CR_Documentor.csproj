@@ -231,6 +231,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector\MemberKey.cs" />
     <Compile Include="Reflector\TypeInformation.cs" />
+    <Compile Include="Server\WebServer.cs" />
     <Compile Include="Transformation\CommentMatchEventArgs.cs" />
     <Compile Include="Transformation\MSDN\Engine.cs">
       <SubType>Code</SubType>

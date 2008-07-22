@@ -1,19 +1,25 @@
+// This plugin is based on original code from Lutz Roeder's
+// Documentor and contains some code from .NET Reflector.
+// Original copyright follows:
+// ---------------------------------------------------------
+// Lutz Roeder's .NET Reflector, October 2000.
+// Copyright (C) 2000-2003 Lutz Roeder. All rights reserved.
+// http://www.aisto.com/roeder/dotnet
+// roeder@aisto.com
+// ---------------------------------------------------------
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using XML = System.Xml;
 using System.Windows.Forms;
-
+using CR_Documentor.Controls;
+using CR_Documentor.Options;
+using CR_Documentor.Server;
 using DevExpress.CodeRush.Core;
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
-
-using CR_Documentor.Controls;
-using CR_Documentor.Options;
+using XML = System.Xml;
 
 namespace CR_Documentor
 {
@@ -60,6 +66,16 @@ namespace CR_Documentor
 		/// Prefix for log messages generated in this module.
 		/// </summary>
 		private const string LOG_PREFIX = "CR_Documentor: ";
+
+		/// <summary>
+		/// Internal web server used to serve up the preview content.
+		/// </summary>
+		private WebServer _webServer = null;
+
+		/// <summary>
+		/// The default port the web server will listen on for preview requests.
+		/// </summary>
+		private const UInt16 WebServerPort = 11235;
 
 		#endregion
 
@@ -108,116 +124,140 @@ namespace CR_Documentor
 			InitializeComponent();
 			this.SuspendLayout();
 
-			// Create the controls for the form
-			this._previewer = new DocumentationControl();
-			this._toolBar = new ToolBar();
-
-			// Refresh the options
-			RefreshSettings();
-
-			// Set doc control view info
-			this._previewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._previewer.Location = new System.Drawing.Point(0, 0);
-			this._previewer.Name = "documentor";
-			this._previewer.Size = new System.Drawing.Size(400, 150);
-			this._previewer.TabIndex = 0;
-			this._previewer.Text = "documentor";
-			this.Controls.Add(this._previewer);
-
-			// Create the toolbar ImageList
-			ImageList imgList = new ImageList();
-			bool showIcons = true;
+			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LOG_PREFIX);
 			try
 			{
-				Icon icon = null;
-				System.IO.Stream iconStream = null;
-				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
 
-				// Get the printer icon
+				// Get the web server ready
+				Log.Send("Starting web server.");
+				this._webServer = new WebServer(WebServerPort);
+				this._webServer.Start();
+
+				// Create the controls for the form
+				Log.Send("Building controls.");
+				this._toolBar = new ToolBar();
+				this._previewer = new DocumentationControl(this._webServer);
+
+				// Refresh the options
+				// Right now we do some manipulation of the controls during the
+				// refresh of settings. This will make it difficult to change the
+				// web server information based on config later. Maybe we need to
+				// separate the load of settings from the update of control behavior.
+				RefreshSettings();
+
+				// Set doc control view info
+				Log.Send("Setting browser properties.");
+				this._previewer.Dock = System.Windows.Forms.DockStyle.Fill;
+				this._previewer.Location = new System.Drawing.Point(0, 0);
+				this._previewer.Name = "documentor";
+				this._previewer.Size = new System.Drawing.Size(400, 150);
+				this._previewer.TabIndex = 0;
+				this._previewer.Text = "documentor";
+				this.Controls.Add(this._previewer);
+
+				// Create the toolbar ImageList
+				Log.Send("Building toolbar image list.");
+				ImageList imgList = new ImageList();
+				bool showIcons = true;
 				try
 				{
-					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Printer.ico");
-					if (iconStream == null)
+					Icon icon = null;
+					System.IO.Stream iconStream = null;
+					System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+
+					// Get the printer icon
+					try
 					{
-						throw new IOException("Unable to load printer icon from embedded resources.");
+						iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Printer.ico");
+						if (iconStream == null)
+						{
+							throw new IOException("Unable to load printer icon from embedded resources.");
+						}
+						icon = new Icon(iconStream);
+						imgList.Images.Add(icon);
 					}
-					icon = new Icon(iconStream);
-					imgList.Images.Add(icon);
+					finally
+					{
+						if (iconStream != null)
+						{
+							iconStream.Close();
+							iconStream = null;
+						}
+					}
+
+					// Get the settings icon
+					try
+					{
+						iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Settings.ico");
+						if (iconStream == null)
+						{
+							throw new IOException("Unable to load settings icon from embedded resources.");
+						}
+						icon = new Icon(iconStream);
+						imgList.Images.Add(icon);
+					}
+					finally
+					{
+						if (iconStream != null)
+						{
+							iconStream.Close();
+							iconStream = null;
+						}
+					}
 				}
-				finally
+				catch (Exception err)
 				{
-					if (iconStream != null)
-					{
-						iconStream.Close();
-						iconStream = null;
-					}
+					Log.SendException(String.Format("{0}Error loading icons for toolbar. Not showing icons.", LOG_PREFIX), err);
+					showIcons = false;
 				}
 
-				// Get the settings icon
-				try
+				// Create the toolbar
+				Log.Send("Setting toolbar properties.");
+				this._toolBar.ButtonClick += new ToolBarButtonClickEventHandler(ToolBar_ButtonClick);
+				this._toolBar.ImageList = imgList;
+				this._toolBar.Appearance = ToolBarAppearance.Flat;
+				this._toolBar.TextAlign = ToolBarTextAlign.Right;
+
+				// Add the toolbar buttons
+				ToolBarButton tbb = null;
+
+				// Print button
+				tbb = new ToolBarButton();
+				tbb.Tag = "Print";
+				if (showIcons)
 				{
-					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Settings.ico");
-					if (iconStream == null)
-					{
-						throw new IOException("Unable to load settings icon from embedded resources.");
-					}
-					icon = new Icon(iconStream);
-					imgList.Images.Add(icon);
+					tbb.ImageIndex = 0;
+					tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
 				}
-				finally
+				else
 				{
-					if (iconStream != null)
-					{
-						iconStream.Close();
-						iconStream = null;
-					}
+					tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
 				}
-			}
-			catch (Exception err)
-			{
-				Log.SendException(String.Format("{0}Error loading icons for toolbar. Not showing icons.", LOG_PREFIX), err);
-				showIcons = false;
-			}
+				this._toolBar.Buttons.Add(tbb);
 
-			// Create the toolbar
-			this._toolBar.ButtonClick += new ToolBarButtonClickEventHandler(ToolBar_ButtonClick);
-			this._toolBar.ImageList = imgList;
-			this._toolBar.Appearance = ToolBarAppearance.Flat;
-			this._toolBar.TextAlign = ToolBarTextAlign.Right;
+				// Settings button
+				tbb = new ToolBarButton();
+				tbb.Tag = "Settings";
+				if (showIcons)
+				{
+					tbb.ImageIndex = 1;
+					tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
+				}
+				else
+				{
+					tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
+				}
+				this._toolBar.Buttons.Add(tbb);
 
-			// Add the toolbar buttons
-			ToolBarButton tbb = null;
+				// Add the toolbar
+				this.Controls.Add(this._toolBar);
 
-			// Print button
-			tbb = new ToolBarButton();
-			tbb.Tag = "Print";
-			if (showIcons)
-			{
-				tbb.ImageIndex = 0;
-				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+				Log.Send("Construction complete.");
 			}
-			else
+			finally
 			{
-				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+				Log.Exit();
 			}
-			this._toolBar.Buttons.Add(tbb);
-
-			// Settings button
-			tbb = new ToolBarButton();
-			tbb.Tag = "Settings";
-			if (showIcons)
-			{
-				tbb.ImageIndex = 1;
-				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-			}
-			else
-			{
-				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-			}
-			this._toolBar.Buttons.Add(tbb);
-
-			// Add the toolbar
-			this.Controls.Add(this._toolBar);
 
 			this.ResumeLayout(false);
 		}
@@ -253,6 +293,10 @@ namespace CR_Documentor
 		/// </summary>
 		public override void FinalizePlugIn()
 		{
+			Log.Send("Stopping web server.");
+			this._webServer.Stop();
+			this._webServer.Dispose();
+			Log.Send("Web server stopped.");
 			base.FinalizePlugIn();
 		}
 

@@ -1,22 +1,8 @@
-// Original code based on Lutz Roeder's Documentor; this
-// version is modified from the original.  Original copyright
-// follows:
-// ---------------------------------------------------------
-// Lutz Roeder's .NET Reflector, October 2000.
-// Copyright (C) 2000-2003 Lutz Roeder. All rights reserved.
-// http://www.aisto.com/roeder/dotnet
-// roeder@aisto.com
-// ---------------------------------------------------------
 using System;
-using System.Collections;
-using System.IO;
-using System.Globalization;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
-using CR_Documentor.Options;
-using CR_Documentor.Reflector;
+using CR_Documentor.Server;
 using CR_Documentor.Transformation;
 
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
@@ -24,7 +10,6 @@ using DevExpress.CodeRush.StructuralParser;
 
 namespace CR_Documentor.Controls
 {
-
 	/// <summary>
 	/// Marries the transformation engine with the browser to display documentation.
 	/// </summary>
@@ -39,13 +24,15 @@ namespace CR_Documentor.Controls
 	/// <seealso cref="CR_Documentor.Controls.Browser" />
 	public class DocumentationControl : Control
 	{
-
-		#region DocumentationControl Variables
-
 		/// <summary>
 		/// The browser that will display rendered documentation.
 		/// </summary>
 		private CR_Documentor.Controls.Browser _browser = new CR_Documentor.Controls.Browser();
+
+		/// <summary>
+		/// The default text that should appear in the window.
+		/// </summary>
+		public const string DefaultBodyMessage = "This window will show a preview of XML documentation when an XML comment is entered.";
 
 		/// <summary>
 		/// The transformation class that will convert the XML doc to HTML.
@@ -53,15 +40,19 @@ namespace CR_Documentor.Controls
 		private TransformEngine _transformer = null;
 
 		/// <summary>
+		/// Indicates whether the browser is currently refreshing the preview.
+		/// </summary>
+		private bool _isRefreshing = false;
+
+		/// <summary>
+		/// Indicates if the browser has been initialized and has navigated to the preview page.
+		/// </summary>
+		private bool _isBrowserInitialized = false;
+
+		/// <summary>
 		/// The default message that gets put into the Documentor window.
 		/// </summary>
-		protected static readonly System.Xml.XmlDocument DefaultDocument;
-
-		#endregion
-
-
-
-		#region DocumentationControl Properties
+		private static readonly System.Xml.XmlDocument DefaultDocument;
 
 		/// <summary>
 		/// Gets or sets the transformation engine.
@@ -81,38 +72,28 @@ namespace CR_Documentor.Controls
 				_transformer = value;
 				if (_transformer != null)
 				{
-					this._browser.ResetToBaseDocument(_transformer.GetHtmlPage(Browser.DefaultBodyMessage));
+					Log.Enter(ImageType.Method, "Transformation engine updated. Refreshing browser.");
+					try
+					{
+						this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
+						this.RefreshBrowser();
+					}
+					finally
+					{
+						Log.Exit();
+					}
 				}
 			}
 		}
 
 		/// <summary>
-		/// Gets the currently displayed HTML document.
+		/// Gets or sets the web server instance serving the documentation preview.
 		/// </summary>
 		/// <value>
-		/// An <see cref="mshtml.IHTMLDocument2"/> that contains the HTML
-		/// document currently being displayed.
+		/// A <see cref="CR_Documentor.Server.WebServer"/> that will serve up
+		/// preview content to the browser.
 		/// </value>
-		private mshtml.IHTMLDocument2 HtmlDocument
-		{
-			get
-			{
-				mshtml.IHTMLDocument2 retVal = null;
-				if (this._browser != null && this._browser.IsHandleCreated)
-				{
-					retVal = this._browser.Document as mshtml.IHTMLDocument2;
-				}
-				return retVal;
-			}
-		}
-
-		#endregion
-
-
-
-		#region DocumentationControl Implementation
-
-		#region Constructors
+		public virtual WebServer WebServer { get; set; }
 
 		/// <summary>
 		/// Performs <see langword="static" /> member initialization for the <see cref="DocumentationControl"/> class.
@@ -120,50 +101,82 @@ namespace CR_Documentor.Controls
 		static DocumentationControl()
 		{
 			DefaultDocument = new System.Xml.XmlDocument();
-			DefaultDocument.LoadXml("<member><summary>This window will show a preview of XML documentation when an XML comment is entered.</summary></member>");
+			DefaultDocument.LoadXml("<member><summary>" + DefaultBodyMessage + "</summary></member>");
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Controls.DocumentationControl" /> class.
 		/// </summary>
-		public DocumentationControl()
+		/// <param name="previewServer">The web server that will serve up preview content to the browser.</param>
+		public DocumentationControl(WebServer previewServer)
 		{
-
-			// Set control properties
+			if (previewServer == null)
+			{
+				throw new ArgumentNullException("previewServer");
+			}
+			this.WebServer = previewServer;
 			this.TabStop = false;
 			this.Dock = DockStyle.Fill;
 			this._browser.TabStop = false;
 			this._browser.Dock = DockStyle.Fill;
-			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
+			this._browser.ProgressChanged += new WebBrowserProgressChangedEventHandler(Browser_ProgressChanged);
 			this.Controls.Add(this._browser);
+			// Setting the transformation engine will refresh/initialize the browser.
+			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
 		}
 
-		#endregion
+		/// <summary>
+		/// Re-enables the control after the browser is done refreshing.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">An <see cref="System.Windows.Forms.WebBrowserProgressChangedEventArgs" /> that contains the event data.</param>
+		/// <remarks>
+		/// <para>
+		/// This handler works in conjunction with <see cref="CR_Documentor.Controls.DocumentationControl.RefreshBrowser()"/>
+		/// to safely refresh the browser without stealing focus.
+		/// </para>
+		/// </remarks>
+		private void Browser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
+		{
+			Log.Send(String.Format("CR_Documentor browser updating: {0} of {1}.", e.CurrentProgress, e.MaximumProgress));
+			if (this._isRefreshing && e.CurrentProgress == e.MaximumProgress)
+			{
+				this._isRefreshing = false;
+				this.Enabled = true;
+			}
+		}
 
-		#region Methods
+		/// <summary>
+		/// Refreshes the browser to the first page view.
+		/// </summary>
+		private void NavigateToInitialPage()
+		{
+			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
+			try
+			{
+				string[] prefixes = new string[this.WebServer.Prefixes.Count];
+				this.WebServer.Prefixes.CopyTo(prefixes, 0);
+				foreach (string prefix in prefixes)
+				{
+					// Prefixes are wildcards; we need a host name in there.
+					string url = prefix.Replace("*", "localhost");
+					this._browser.SafeUrls.Add(url);
+				}
+				this._browser.Navigate(this._browser.SafeUrls[0]);
+			}
+			finally
+			{
+				Log.Exit();
+			}
+		}
 
 		/// <summary>
 		/// Prints the currently displayed document.
 		/// </summary>
 		public virtual void Print()
 		{
-			mshtml.IHTMLDocument2 printdoc = this.HtmlDocument;
-			if (printdoc != null)
-			{
-				Log.Send("Executing Print command on document.");
-				if (printdoc.execCommand("Print", true, null))
-				{
-					Log.Send("Printing successful.");
-				}
-				else
-				{
-					Log.SendWarning("Printing unsuccessful.");
-				}
-			}
-			else
-			{
-				Log.SendError("Print document is null. Unable to print.");
-			}
+			Log.Send("Printing documentation preview.");
+			this._browser.ShowPrintDialog();
 		}
 
 		/// <summary>
@@ -207,32 +220,56 @@ namespace CR_Documentor.Controls
 			// Refresh if there was a change
 			if (refresh)
 			{
-				this._browser.PreviewDocument = this._transformer.ToString();
+				Log.Enter(ImageType.Method, "Refreshing browser with new content.");
+				try
+				{
+					this.WebServer.Content = this._transformer.ToString();
+					this.RefreshBrowser();
+				}
+				finally
+				{
+					Log.Exit();
+				}
+			}
+		}
 
-				// For a while it seemed that when the browser refreshed, it was
-				// stealing focus. This is noted in various forums like this
-				// one:
-				// http://www.tech-archive.net/Archive/InetSDK/microsoft.public.inetsdk.programming.webbrowser_ctl/2005-05/msg00040.html
-				//
-				// For a while it was being fixed by saving a reference to the active
-				// document, like this:
-				// DevExpress.CodeRush.Core.Document doc = DevExpress.CodeRush.Core.CodeRush.Documents.Active;
-				// ...then doing the refresh, then restoring the active document:
-				// DevExpress.CodeRush.Core.CodeRush.Editor.Activate(doc);
-				//
-				// However, that didn't really address the issue because if you
-				// highlight very slowly over a long block of code, possibly crossing
-				// XML doc comments, the browser refreshes and this save/restore
-				// stops your consistent highlight.
-				//
-				// After recompiling in .NET 2.0 in VS 2008 and updating to the
-				// new DXCore (3.0.8.0), this behavior can't be reproduced. If
-				// it comes back, it will either need to be fixed here or set
-				// on the AxWebBrowser control proper.
-
+		/// <summary>
+		/// Safely does a browser refresh without stealing focus.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// This is actually a multi-part solution. The standard
+		/// <see cref="System.Windows.Forms.WebBrowser.Refresh()"/> method
+		/// will steal focus when you execute it. To avoid that, you need to
+		/// disable the control that hosts the browser (this control) during the
+		/// browser refresh and re-enable it when it's done refreshing.
+		/// </para>
+		/// <para>
+		/// This method disables this control, sets a flag to indicate the browser
+		/// is refreshing, and hits the refresh. In a handler for the browser's
+		/// <see cref="System.Windows.Forms.WebBrowser.ProgressChanged"/>
+		/// event, we check to see if the document is done loading and if we're
+		/// refreshing and, if so, we re-enable the control.
+		/// </para>
+		/// <para>
+		/// Note that if the browser has not been initialized (i.e., it hasn't
+		/// navigated to the intial page yet), it does so via
+		/// <see cref="CR_Documentor.Controls.DocumentationControl.NavigateToInitialPage"/>.
+		/// </para>
+		/// </remarks>
+		/// <seealso cref="CR_Documentor.Controls.DocumentationControl.Browser_ProgressChanged"/>
+		private void RefreshBrowser()
+		{
+			if (!this._isBrowserInitialized)
+			{
+				this._isBrowserInitialized = true;
+				this.NavigateToInitialPage();
+			}
+			else
+			{
+				this.Enabled = false;
+				this._isRefreshing = true;
 				this._browser.Refresh();
-				System.Windows.Forms.Application.DoEvents();
-				this.Invalidate(true);
 			}
 		}
 
@@ -254,9 +291,5 @@ namespace CR_Documentor.Controls
 			}
 			base.Dispose(disposing);
 		}
-
-		#endregion
-
-		#endregion
 	}
 }
