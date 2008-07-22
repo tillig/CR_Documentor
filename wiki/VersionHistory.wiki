@@ -1,6 +1,10 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured
 
+=2.1.0.0=
+  * Fixed Issue #1: Changed preview so it is served up by an embedded web server instead of through manipulation of the IE DOM. This fixes the script security warning.
+  * Changed the hosting of the web browser so it's using the .NET !WebBrowser control instead of hosting the ActiveX control directly.
+
 =2.0.0.0=
   * Added Sandcastle documentation preview and tag compatibility.
   * Updated minimum requirement for CR_Documentor to 3.0.8.0.
