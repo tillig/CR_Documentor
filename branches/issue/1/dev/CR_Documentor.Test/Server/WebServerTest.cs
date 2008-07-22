@@ -12,6 +12,40 @@ namespace CR_Documentor.Test.Server
 		private const UInt16 TestServerPort = 22334;
 
 		[TestMethod]
+		public void AsyncListenThreadStart_EmptyContent()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				server.Content = "";
+				server.Start();
+				WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
+				WebResponse response = request.GetResponse();
+				Stream responseStream = response.GetResponseStream();
+				StreamReader reader = new StreamReader(responseStream);
+				string responseContent = reader.ReadToEnd();
+				Assert.AreEqual("&nbsp;", responseContent, "Empty content should be served as a non-breaking space.");
+				response.Close();
+			}
+		}
+
+		[TestMethod]
+		public void AsyncListenThreadStart_NullContent()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				server.Content = null;
+				server.Start();
+				WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
+				WebResponse response = request.GetResponse();
+				Stream responseStream = response.GetResponseStream();
+				StreamReader reader = new StreamReader(responseStream);
+				string responseContent = reader.ReadToEnd();
+				Assert.AreEqual("&nbsp;", responseContent, "Null content should be served as a non-breaking space.");
+				response.Close();
+			}
+		}
+
+		[TestMethod]
 		public void AsyncListenThreadStart_ServesContent()
 		{
 			using (WebServer server = new WebServer(TestServerPort))
