@@ -68,7 +68,7 @@
 			<Output PropertyName="UnitTestResultsFile" TaskParameter="Value"/>
 		</CreateProperty>
 		<Delete Files="$(UnitTestResultsFile)"/>
-		<Exec Command="mstest.exe /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
+		<Exec Command="mstest.exe /noisolation /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
 	</Target>
 	<Target Name="Package">
 		<MakeDir Directories="$(BuildPackageDir)"/>
