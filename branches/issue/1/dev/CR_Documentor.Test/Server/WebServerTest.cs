@@ -1,4 +1,4 @@
-﻿using CR_Documentor.Server;
+using CR_Documentor.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
@@ -14,53 +14,19 @@ namespace CR_Documentor.Test.Server
 		[TestMethod]
 		public void AsyncListenThreadStart_EmptyContent()
 		{
-			using (WebServer server = new WebServer(TestServerPort))
-			{
-				server.Content = "";
-				server.Start();
-				WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
-				WebResponse response = request.GetResponse();
-				Stream responseStream = response.GetResponseStream();
-				StreamReader reader = new StreamReader(responseStream);
-				string responseContent = reader.ReadToEnd();
-				Assert.AreEqual("&nbsp;", responseContent, "Empty content should be served as a non-breaking space.");
-				response.Close();
-			}
+			this.ServerRequestTestBody("", "&nbsp;");
 		}
 
 		[TestMethod]
 		public void AsyncListenThreadStart_NullContent()
 		{
-			using (WebServer server = new WebServer(TestServerPort))
-			{
-				server.Content = null;
-				server.Start();
-				WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
-				WebResponse response = request.GetResponse();
-				Stream responseStream = response.GetResponseStream();
-				StreamReader reader = new StreamReader(responseStream);
-				string responseContent = reader.ReadToEnd();
-				Assert.AreEqual("&nbsp;", responseContent, "Null content should be served as a non-breaking space.");
-				response.Close();
-			}
+			this.ServerRequestTestBody(null, "&nbsp;");
 		}
 
 		[TestMethod]
 		public void AsyncListenThreadStart_ServesContent()
 		{
-			using (WebServer server = new WebServer(TestServerPort))
-			{
-				string content = "expected content";
-				server.Content = content;
-				server.Start();
-				WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
-				WebResponse response = request.GetResponse();
-				Stream responseStream = response.GetResponseStream();
-				StreamReader reader = new StreamReader(responseStream);
-				string responseContent = reader.ReadToEnd();
-				Assert.AreEqual(content, responseContent, "The expected content was not returned by the server.");
-				response.Close();
-			}
+			this.ServerRequestTestBody("expected content", "expected content");
 		}
 
 		[TestMethod]
@@ -137,6 +103,26 @@ namespace CR_Documentor.Test.Server
 			Assert.IsTrue(server.IsListening, "The server should be listening after it starts.");
 			server.Stop();
 			Assert.IsFalse(server.IsListening, "The server should not be listening after it stops.");
+		}
+
+		private void ServerRequestTestBody(string initialContent, string expectedContent)
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				server.Content = initialContent;
+				server.Start();
+				for (int i = 0; i < 3; i++)
+				{
+					WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
+					WebResponse response = request.GetResponse();
+					Stream responseStream = response.GetResponseStream();
+					StreamReader reader = new StreamReader(responseStream);
+					string responseContent = reader.ReadToEnd();
+					Assert.AreEqual(expectedContent, responseContent, "The expected content was not returned by the server.");
+					response.Close();
+				}
+				server.Stop();
+			}
 		}
 
 		private class WebServerMock : WebServer
