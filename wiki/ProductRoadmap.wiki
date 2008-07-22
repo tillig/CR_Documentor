@@ -7,13 +7,9 @@ You wouldn't think that "preview XML doc comments" would really be something tha
 
 Maybe this isn't so "roadmap-ish" as much as a list of large items to keep in mind and work toward as smaller goals get accomplished. Hmmm.
 
-= Internal Web Server (High Priority) =
+= Internal Web Server =
 
-There's a known issue (KnownIssues) about how the preview window occasionally (and unpredictably) will display a security warning because the preview uses !JavaScript. This is due to the way the preview currently works - by navigating to a local temporary HTML file and then programmatically modifying the DOM to update the preview.
-
-Adding an internal web server, we could get rid of this warning (default security settings would allow script), we'd be able to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
-
-This is a fairly high priority update to perform because it's the one major issue that folks will generally encounter. It's currently [http://code.google.com/p/cr-documentor/issues/detail?id=1 Issue #1] and is being handled by adding an internal web server based on System.Net.!HttpListener.
+The solution to Issue #1 left us with an internal web server. We should use this to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
 
 = Testability =
 
