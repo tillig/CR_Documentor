@@ -8,6 +8,8 @@ There are a few known issues with CR_Documentor. Many have workarounds, but some
 =CR_Documentor doesn't appear when run as a standard user in Vista.=
 The internal web server in CR_Documentor uses System.Net.!HttpListener which is only allowed to start up and handle requests if you're an administrator. While there's no way to "get around the security," an admin user can grant permissions to non-admin users to enable this to function. Issue #10 has been filed on this. We'll probably pop up a message explaining the issue and what can be done on the user's side to fix it.
 
+*Solution: Get an administrative user to grant you permissions.* CR_Documentor listens to port 11235 so that's what you need to grant permissions to. Here's info on [http://blogs.msdn.com/drnick/archive/2006/10/16/configuring-http-for-windows-vista.aspx setting up Vista using netsh.exe] and here's info on [http://msdn.microsoft.com/en-us/library/ms733768.aspx Windows XP and 2003 using httpcfg.exe].
+
 =The CR_Documentor window may not update as "real-time" as you would expect.=
 This is because it relies on the DXCore parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
   * *Workaround 1: Save the document.* This causes DXCore to re-parse the document and provide a new set of information to CR_Documentor, which will update the preview.
