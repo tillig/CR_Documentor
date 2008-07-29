@@ -5,6 +5,9 @@
 
 As you run CR_Documentor, you may encounter an error telling you that the internal preview web server is unable to start. There are a few common reasons this happens. Below are those reasons and their corresponding error codes, along with information (where available) about how to fix the issue.
 
+  * [http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors#Error_#5_(0x5):_Access_Denied Error #5 (0x5): Access Denied]
+  * [http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors#Error_#183_(0xB7):_Listener_Already_Exists Error #183 (0xB7): Listener Already Exists]
+
 ----
 
 = Error #5 (0x5): Access Denied =
