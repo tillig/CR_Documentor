@@ -1,0 +1,58 @@
+#summary Describes the various reasons the internal preview server won't start and solutions for those issues.
+#labels Phase-Support
+
+= Introduction =
+
+As you run CR_Documentor, you may encounter an error telling you that the internal preview web server is unable to start. There are a few common reasons this happens. Below are those reasons and their corresponding error codes, along with information (where available) about how to fix the issue.
+
+----
+
+= Error #5 (0x5): Access Denied =
+
+If you run Visual Studio as a non-admin user and/or the security for starting up services to listen for requests on ports has been locked down, the server may not have the proper rights to start up. This is commonly seen when running Visual Studio in Windows Vista as a non-admin user.
+
+To fix this, you need to have rights to start up a listener on port 11235, the port CR_Documentor currently listens to. (You can read about [http://msdn.microsoft.com/en-us/library/ms733768.aspx configuring HTTP and HTTPS on MSDN].)
+
+*_CHANGE YOUR SECURITY SETTINGS AT YOUR OWN RISK!!!_*
+
+== The Simple Fix ==
+
+The easiest way to fix this is to run Visual Studio as an administrator. This gives CR_Documentor admin rights, and admins generally are allowed to start up listeners without issues. Barring that...
+
+== Windows Vista ==
+
+In Windows Vista you need to use the `netsh` tool to configure your security to allow you to start a listener. Choose one of the following commands and run it as an administrator user.
+
+*To fix it for a single user:*
+
+`netsh http add urlacl url=http://*:11235/ user={DOMAIN/MACHINE}\{USER}`
+
+Substitute in your domain/machine name and user name in the appropriate locations above. This will unlock that port for just the specified user.
+
+*To fix it for all non-admin users:*
+
+`netsh http add urlacl url=http://*:11235/ sddl=D:(A;;GX;;;WD)`
+
+This will unlock that port for Everyone.
+
+== Windows XP or 2003 ==
+
+In Windows XP or 2003 you need to use [http://technet2.microsoft.com/WindowsServer/en/library/e17527d2-105a-451f-8e3f-d515479527011033.mspx?mfr=true httpcfg] to configure your security to allow you to start a listener. The `httpcfg` tool ships with 2003 but you have to download it for XP.
+
+`httpcfg` is a bit more complicated than `netsh` because you have to write your settings in [http://msdn.microsoft.com/en-us/library/aa379567(VS.85).aspx Security Descriptor Definition Language].
+
+*To fix it for all non-admin users:*
+
+`httpcfg.exe set urlacl /u http://*:11235/ /a "D:(A;;GX;;;WD)"`
+
+This will unlock that port for Everyone.
+
+----
+
+= Error #183 (0xB7): Listener Already Exists =
+
+This error means that something is already listening on the port/URI that CR_Documentor wants to listen to. Since two things can't listen to the same thing at the same time, the server can't start. This is currently seen if you try to start two instances of Visual Studio at the same time, both with CR_Documentor windows open.
+
+Issue #11 has been filed to enable multiple VS instances to use CR_Documentor simultaneously. In the meantime, you won't be able to have multiple instances of VS running and use CR_Documentor.
+
+You may also see this issue if you already have a web server or some other service already listening on port 11235. Issue #12 has been filed to allow you to configure which port CR_Documentor listens on so you can change it and remove the conflict. Until then, assuming you only have one instance of Visual Studio running, you may need to stop the other service to allow CR_Documentor to run.
