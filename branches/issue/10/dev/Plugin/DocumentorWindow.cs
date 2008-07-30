@@ -158,6 +158,7 @@ namespace CR_Documentor
                 bool showIcons = LoadIcons(imgList);
                 CreateToolbar(imgList, showIcons);
 
+
                 // Add the toolbar
                 this.Controls.Add(this._toolBar);
 
