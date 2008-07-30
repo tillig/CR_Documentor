@@ -9,7 +9,9 @@
 // ---------------------------------------------------------
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using CR_Documentor.Controls;
@@ -20,7 +22,6 @@ using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
 using XML = System.Xml;
-using System.Net;
 
 namespace CR_Documentor
 {
@@ -41,7 +42,7 @@ namespace CR_Documentor
 		/// <summary>
 		/// Document rendering control.
 		/// </summary>
-		private CR_Documentor.Controls.DocumentationControl _previewer;
+		private DocumentationControl _previewer;
 
 		/// <summary>
 		/// The main menu control.
@@ -66,7 +67,7 @@ namespace CR_Documentor
 		/// <summary>
 		/// Prefix for log messages generated in this module.
 		/// </summary>
-		private const string LOG_PREFIX = "CR_Documentor: ";
+		private const string LogPrefix = "CR_Documentor: ";
 
 		/// <summary>
 		/// Internal web server used to serve up the preview content.
@@ -78,6 +79,23 @@ namespace CR_Documentor
 		/// </summary>
 		private const UInt16 WebServerPort = 11235;
 
+		/// <summary>
+		/// URL to the wiki page explaining the reasons the web server might fail to start.
+		/// </summary>
+		private const string ServerStartupErrorUrl = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
+
+		/// <summary>
+		/// The format of the message to display when the server fails to start.
+		/// Parameter {0} is the error message/code.
+		/// </summary>
+		private static readonly string ServerStartupErrorMessageFormat =
+			String.Format(
+				CultureInfo.CurrentCulture,
+				"An exception has occurred. Error: {{0}}{0}Please check {1} for help with startup errors.{0}Would you like CR_Documentor to launch this url for you?",
+				Environment.NewLine,
+				ServerStartupErrorUrl
+			);
+
 		#endregion
 
 
@@ -87,7 +105,7 @@ namespace CR_Documentor
 		/// Gets the control that contains the browser/preview.
 		/// </summary>
 		/// <value>A <see cref="CR_Documentor.Controls.DocumentationControl"/> that is the document previewer.</value>
-		public CR_Documentor.Controls.DocumentationControl Previewer
+		public DocumentationControl Previewer
 		{
 			get
 			{
@@ -119,196 +137,68 @@ namespace CR_Documentor
 		/// <summary>
 		/// Initializes a new <see cref="DocumentorWindow"/> object.
 		/// </summary>
-        public DocumentorWindow()
-        {
-            // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();
-            this.SuspendLayout();
+		public DocumentorWindow()
+		{
+			// This call is required by the Windows.Forms Form Designer.
+			InitializeComponent();
+			this.SuspendLayout();
 
-            Log.Enter(ImageType.Window, "{0}Constructing plugin.", LOG_PREFIX);
-            try
-            {
+			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LogPrefix);
+			try
+			{
+				InitializeWebServer();
+				// Create the controls for the form
+				Log.Send("Building controls.");
+				this._toolBar = new ToolBar();
+				this._previewer = new DocumentationControl(this._webServer);
 
-                InitialiseWebServer();
-                // Create the controls for the form
-                Log.Send("Building controls.");
-                this._toolBar = new ToolBar();
-                this._previewer = new DocumentationControl(this._webServer);
+				// Refresh the options
+				// Right now we do some manipulation of the controls during the
+				// refresh of settings. This will make it difficult to change the
+				// web server information based on config later. Maybe we need to
+				// separate the load of settings from the update of control behavior.
+				RefreshSettings();
 
-                // Refresh the options
-                // Right now we do some manipulation of the controls during the
-                // refresh of settings. This will make it difficult to change the
-                // web server information based on config later. Maybe we need to
-                // separate the load of settings from the update of control behavior.
-                RefreshSettings();
+				// Set doc control view info
+				Log.Send("Setting browser properties.");
+				this._previewer.Dock = DockStyle.Fill;
+				this._previewer.Location = new System.Drawing.Point(0, 0);
+				this._previewer.Name = "documentor";
+				this._previewer.Size = new System.Drawing.Size(400, 150);
+				this._previewer.TabIndex = 0;
+				this._previewer.Text = "documentor";
+				this.Controls.Add(this._previewer);
 
-                // Set doc control view info
-                Log.Send("Setting browser properties.");
-                this._previewer.Dock = DockStyle.Fill;
-                this._previewer.Location = new System.Drawing.Point(0, 0);
-                this._previewer.Name = "documentor";
-                this._previewer.Size = new System.Drawing.Size(400, 150);
-                this._previewer.TabIndex = 0;
-                this._previewer.Text = "documentor";
-                this.Controls.Add(this._previewer);
-
-                // Create the toolbar ImageList
-                Log.Send("Building toolbar image list.");
-                ImageList imgList = new ImageList();
-                bool showIcons = LoadIcons(imgList);
-                CreateToolbar(imgList, showIcons);
-
-
-                // Add the toolbar
-                this.Controls.Add(this._toolBar);
-
-                Log.Send("Construction complete.");
-            }
-            catch (Exception ex)
-            {
-                // Need generic routine here to deal with unhandled exceptions before the DXCore swallows them.
-                Log.SendException(ex);
-                string BaseMessage = String.Empty;
-                BaseMessage += "An exception has occurred. Error: {0}";
-                BaseMessage += Environment.NewLine;
-                const string STR_StartupErrorsURL = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
-                BaseMessage += String.Format(@"Please check {0} for help with startup errors.", STR_StartupErrorsURL);
-                BaseMessage += Environment.NewLine;
-                BaseMessage += @"Would you like CR_Documentor to launch this url for you?";
-
-                String InnerMessage = String.Empty;
-                if (ex is HttpListenerException)
-                    InnerMessage = String.Format("(Code {0}) {1}", (ex as HttpListenerException).ErrorCode, ex.Message);
-                else 
-                    InnerMessage = ex.Message;
-                if (MessageBox.Show(String.Format(BaseMessage, InnerMessage), "Error during startup", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    // This version to launch in Default Browser (RB) I prefer this)
-                    System.Diagnostics.Process.Start(STR_StartupErrorsURL);
-                    // (RB) This version to launch in VS internal broswer
-                    //CodeRush.ShowURL(STR_StartupErrorsURL);
-                }
-                throw;
-                // This last 'Throw' should cause DXCore to abandon Toolbox window creation.
-                // It would be better if we could test the facility to listen prior to entering this class constructor.
-                // However I cannot find an earlier entry point at the moment in which to test this.
-            }
-            finally
-            {
-                Log.Exit();
-            }
-
-            this.ResumeLayout(false);
-        }
+				// Create the toolbar ImageList
+				Log.Send("Building toolbar image list.");
+				ImageList imgList = new ImageList();
+				bool showIcons = LoadIcons(imgList);
+				CreateToolbar(imgList, showIcons);
 
 
-        #endregion
+				// Add the toolbar
+				this.Controls.Add(this._toolBar);
 
-        #region Initialisation
-        private void InitialiseWebServer()
-        {
-            // Get the web server ready
-            Log.Send("Starting web server.");
-            this._webServer = new WebServer(WebServerPort);
-            this._webServer.Start();
-        }
-        private static bool LoadIcons(ImageList imgList)
-        {
-            try
-            {
-                Icon icon = null;
-                System.IO.Stream iconStream = null;
-                System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+				Log.Send("Construction complete.");
+			}
+			catch (Exception ex)
+			{
+				Log.SendException("Error initializing CR_Documentor window.", ex);
+				throw;
+				// This last 'Throw' should cause DXCore to abandon Toolbox window creation.
+				// It would be better if we could test the facility to listen prior to entering this class constructor.
+				// However I cannot find an earlier entry point at the moment in which to test this.
+			}
+			finally
+			{
+				Log.Exit();
+			}
 
-                // Get the printer icon
-                try
-                {
-                    iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Printer.ico");
-                    if (iconStream == null)
-                    {
-                        throw new IOException("Unable to load printer icon from embedded resources.");
-                    }
-                    icon = new Icon(iconStream);
-                    imgList.Images.Add(icon);
-                }
-                finally
-                {
-                    if (iconStream != null)
-                    {
-                        iconStream.Close();
-                        iconStream = null;
-                    }
-                }
+			this.ResumeLayout(false);
+		}
 
-                // Get the settings icon
-                try
-                {
-                    iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Settings.ico");
-                    if (iconStream == null)
-                    {
-                        throw new IOException("Unable to load settings icon from embedded resources.");
-                    }
-                    icon = new Icon(iconStream);
-                    imgList.Images.Add(icon);
-                }
-                finally
-                {
-                    if (iconStream != null)
-                    {
-                        iconStream.Close();
-                        iconStream = null;
-                    }
-                }
-                return true;
-            }
-            catch (Exception err)
-            {
-                Log.SendException(String.Format("{0}Error loading icons for toolbar. Not showing icons.", LOG_PREFIX), err);
-                return false;
-            }
-        }
-        private void CreateToolbar(ImageList imgList, bool showIcons)
-        {
-            // Create the toolbar
-            Log.Send("Setting toolbar properties.");
-            this._toolBar.ButtonClick += new ToolBarButtonClickEventHandler(ToolBar_ButtonClick);
-            this._toolBar.ImageList = imgList;
-            this._toolBar.Appearance = ToolBarAppearance.Flat;
-            this._toolBar.TextAlign = ToolBarTextAlign.Right;
 
-            // Add the toolbar buttons
-            ToolBarButton tbb = null;
-
-            // Print button
-            tbb = new ToolBarButton();
-            tbb.Tag = "Print";
-            if (showIcons)
-            {
-                tbb.ImageIndex = 0;
-                tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
-            }
-            else
-            {
-                tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
-            }
-            this._toolBar.Buttons.Add(tbb);
-
-            // Settings button
-            tbb = new ToolBarButton();
-            tbb.Tag = "Settings";
-            if (showIcons)
-            {
-                tbb.ImageIndex = 1;
-                tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-            }
-            else
-            {
-                tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-            }
-            this._toolBar.Buttons.Add(tbb);
-        }
-        #endregion
-
+		#endregion
 
 
 		#region Overrides
@@ -359,7 +249,7 @@ namespace CR_Documentor
 		private void ToolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			string tag = e.Button.Tag.ToString();
-			Log.Enter(ImageType.Info, "{0}Handling toolbar button click for tag [{1}].", LOG_PREFIX, tag);
+			Log.Enter(ImageType.Info, "{0}Handling toolbar button click for tag [{1}].", LogPrefix, tag);
 			try
 			{
 				switch (tag)
@@ -473,7 +363,7 @@ namespace CR_Documentor
 		/// </param>
 		private void events_OptionsChanged(OptionsChangedEventArgs ea)
 		{
-			Log.Enter(ImageType.Options, "{0}Options changed.", LOG_PREFIX);
+			Log.Enter(ImageType.Options, "{0}Options changed.", LogPrefix);
 			try
 			{
 				RefreshSettings();
@@ -501,6 +391,83 @@ namespace CR_Documentor
 		#region Methods
 
 		#region Instance
+
+		/// <summary>
+		/// Sets up the toolbar with the appropriate icons during window initialization.
+		/// </summary>
+		/// <param name="imgList">The list of images containing the icons for the tool buttons.</param>
+		/// <param name="showIcons"><see langword="true" /> to show icons on the buttons, <see langword="false" /> to show text.</param>
+		private void CreateToolbar(ImageList imgList, bool showIcons)
+		{
+			// Create the toolbar
+			Log.Send("Setting toolbar properties.");
+			this._toolBar.ButtonClick += new ToolBarButtonClickEventHandler(ToolBar_ButtonClick);
+			this._toolBar.ImageList = imgList;
+			this._toolBar.Appearance = ToolBarAppearance.Flat;
+			this._toolBar.TextAlign = ToolBarTextAlign.Right;
+
+			// Add the toolbar buttons
+			ToolBarButton tbb = null;
+
+			// Print button
+			tbb = new ToolBarButton();
+			tbb.Tag = "Print";
+			if (showIcons)
+			{
+				tbb.ImageIndex = 0;
+				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+			}
+			else
+			{
+				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+			}
+			this._toolBar.Buttons.Add(tbb);
+
+			// Settings button
+			tbb = new ToolBarButton();
+			tbb.Tag = "Settings";
+			if (showIcons)
+			{
+				tbb.ImageIndex = 1;
+				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
+			}
+			else
+			{
+				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
+			}
+			this._toolBar.Buttons.Add(tbb);
+		}
+
+		/// <summary>
+		/// Starts up the internal web server.
+		/// </summary>
+		private void InitializeWebServer()
+		{
+			try
+			{
+				// Get the web server ready
+				Log.Send("Starting web server.");
+				this._webServer = new WebServer(WebServerPort);
+				this._webServer.Start();
+			}
+			catch (Exception ex)
+			{
+				Log.SendException("Error starting CR_Documentor web server.", ex);
+				String innerMessage = ex.Message;
+				if (ex is HttpListenerException)
+				{
+					innerMessage = String.Format("(Code {0}) {1}", ((HttpListenerException)ex).ErrorCode, ex.Message);
+				}
+				if (MessageBox.Show(String.Format(ServerStartupErrorMessageFormat, innerMessage), "Error during startup", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				{
+					// This version to launch in default browser (preferred)
+					System.Diagnostics.Process.Start(ServerStartupErrorUrl);
+					// This version to launch in VS internal broswer
+					//CodeRush.ShowURL(ServerStartupErrorUrl);
+				}
+				throw;
+			}
+		}
 
 		/// <summary>
 		/// Refreshes the settings from the options window.
@@ -660,6 +627,67 @@ namespace CR_Documentor
 			IntPtr[] phIconLarge,  //32x32 icon
 			IntPtr[] phIconSmall,  //16x16 icon
 			int nIcons);           //how many to get
+
+		/// <summary>
+		/// Loads the set of toolbar icons into an image list.
+		/// </summary>
+		/// <param name="imgList">The list to populate with icons.</param>
+		/// <returns><see langword="true" /> on successful load, <see langword="false" /> if the load fails.</returns>
+		private static bool LoadIcons(ImageList imgList)
+		{
+			try
+			{
+				Icon icon = null;
+				System.IO.Stream iconStream = null;
+				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+
+				// Get the printer icon
+				try
+				{
+					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Printer.ico");
+					if (iconStream == null)
+					{
+						throw new IOException("Unable to load printer icon from embedded resources.");
+					}
+					icon = new Icon(iconStream);
+					imgList.Images.Add(icon);
+				}
+				finally
+				{
+					if (iconStream != null)
+					{
+						iconStream.Close();
+						iconStream = null;
+					}
+				}
+
+				// Get the settings icon
+				try
+				{
+					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Settings.ico");
+					if (iconStream == null)
+					{
+						throw new IOException("Unable to load settings icon from embedded resources.");
+					}
+					icon = new Icon(iconStream);
+					imgList.Images.Add(icon);
+				}
+				finally
+				{
+					if (iconStream != null)
+					{
+						iconStream.Close();
+						iconStream = null;
+					}
+				}
+				return true;
+			}
+			catch (Exception err)
+			{
+				Log.SendException(String.Format("{0}Error loading icons for toolbar. Not showing icons.", LogPrefix), err);
+				return false;
+			}
+		}
 
 		#endregion
 
