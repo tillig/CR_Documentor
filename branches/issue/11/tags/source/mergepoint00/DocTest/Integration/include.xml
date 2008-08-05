@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <members>
+        <member name="M:Absolute.Include">
+            <remarks>
+            This text is included absolutely: <see cref="System.String"/>.
+            </remarks>
+        </member>
+        <member name="M:Relative.Include">
+            <remarks>
+            This text is included relatively: <see cref="System.String"/>.
+            </remarks>
+        </member>
+    </members>
+</doc>
