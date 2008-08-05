@@ -1,8 +1,8 @@
 using CR_Documentor.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Net;
 using System.IO;
+using System.Net;
 
 namespace CR_Documentor.Test.Server
 {
@@ -88,11 +88,34 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
-		public void Prefixes_Default()
+		public void Prefix_CR_DocumentorIsSecondSegment()
 		{
 			WebServer server = new WebServer(TestServerPort);
-			Assert.IsNotNull(server.Prefixes, "The prefix collection should not be null.");
-			Assert.IsTrue(server.Prefixes.Contains(String.Format("http://*:{0}/", TestServerPort)), "The prefix with the specified port should be in the collection.");
+			string[] segments = server.Prefix.Segments;
+			// Get the path segment and trim the trailing slash
+			string crdSegment = segments[1];
+			crdSegment = crdSegment.Substring(0, crdSegment.Length - 1);
+			Assert.AreEqual("CR_Documentor", crdSegment, "'CR_Documentor' should be at the base of the prefix, right after the root.");
+		}
+
+		[TestMethod]
+		public void Prefix_Format()
+		{
+			WebServer server = new WebServer(TestServerPort);
+			string prefix = String.Format(WebServer.BaseUriFormat, TestServerPort, server.UniqueId);
+			Assert.AreEqual(prefix, server.Prefix.AbsoluteUri, "The prefix should be properly formatted.");
+		}
+
+		[TestMethod]
+		public void Prefix_GuidIsThirdSegment()
+		{
+			WebServer server = new WebServer(TestServerPort);
+			string[] segments = server.Prefix.Segments;
+			// Get the path segment and trim the trailing slash
+			string guidSegment = segments[2];
+			guidSegment = guidSegment.Substring(0, guidSegment.Length - 1);
+			Guid guidId = new Guid(guidSegment);
+			Assert.AreEqual(server.UniqueId, guidId, "The GUID identifier segment should be the last segment and should match the server's unique ID.");
 		}
 
 		[TestMethod]
@@ -113,7 +136,7 @@ namespace CR_Documentor.Test.Server
 				server.Start();
 				for (int i = 0; i < 3; i++)
 				{
-					WebRequest request = WebRequest.Create(String.Format("http://localhost:{0}/", TestServerPort));
+					WebRequest request = WebRequest.Create(String.Format(WebServer.BaseUriFormat, TestServerPort, server.UniqueId));
 					WebResponse response = request.GetResponse();
 					Stream responseStream = response.GetResponseStream();
 					StreamReader reader = new StreamReader(responseStream);
