@@ -16,6 +16,9 @@ If you run Visual Studio as a non-admin user and/or the security for starting up
 
 To fix this, you need to have rights to start up a listener on port 11235, the port CR_Documentor currently listens to. (You can read about [http://msdn.microsoft.com/en-us/library/ms733768.aspx configuring HTTP and HTTPS on MSDN].)
 
+  * Version 2.1.0.0 listens on `http://*:11235/`
+  * Subsequent versions listen on `http://*:11235/CR_Documentor/<guid>/` where `<guid>` is a unique ID for the instance of CR_Documentor. (This allows multiple VS instances to be open and use CR_Documentor simultaneously.) You may be able to specify the URI `http://*:11235/CR_Documentor/` in your security settings (below) if you need to be more specific/exact.
+
 *_CHANGE YOUR SECURITY SETTINGS AT YOUR OWN RISK!!!_*
 
 == The Simple Fix ==
@@ -56,6 +59,6 @@ This will unlock that port for Everyone.
 
 This error means that something is already listening on the port/URI that CR_Documentor wants to listen to. Since two things can't listen to the same thing at the same time, the server can't start. This is currently seen if you try to start two instances of Visual Studio at the same time, both with CR_Documentor windows open.
 
-Issue #11 has been filed to enable multiple VS instances to use CR_Documentor simultaneously. In the meantime, you won't be able to have multiple instances of VS running and use CR_Documentor.
+Issue #11 has been resolved and enables multiple VS instances to use CR_Documentor simultaneously. It will appear in the next release after 2.1.0.0. Version 2.1.0.0 does not support multiple VS instances.
 
 You may also see this issue if you already have a web server or some other service already listening on port 11235. Issue #12 has been filed to allow you to configure which port CR_Documentor listens on so you can change it and remove the conflict. Until then, assuming you only have one instance of Visual Studio running, you may need to stop the other service to allow CR_Documentor to run.
