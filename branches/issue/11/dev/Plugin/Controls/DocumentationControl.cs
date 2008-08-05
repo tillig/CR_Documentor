@@ -154,15 +154,9 @@ namespace CR_Documentor.Controls
 			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
 			try
 			{
-				string[] prefixes = new string[this.WebServer.Prefixes.Count];
-				this.WebServer.Prefixes.CopyTo(prefixes, 0);
-				foreach (string prefix in prefixes)
-				{
-					// Prefixes are wildcards; we need a host name in there.
-					string url = prefix.Replace("*", "localhost");
-					this._browser.SafeUrls.Add(url);
-				}
-				this._browser.Navigate(this._browser.SafeUrls[0]);
+				string url = this.WebServer.Prefix.AbsoluteUri;
+				this._browser.SafeUrls.Add(url);
+				this._browser.Navigate(url);
 			}
 			finally
 			{

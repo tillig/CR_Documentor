@@ -13,6 +13,11 @@ namespace CR_Documentor.Server
 	public class WebServer : IDisposable
 	{
 		/// <summary>
+		/// The base format for the URI that the web server will listen for. Takes two parameters - the port to listen on and the GUID identifier.
+		/// </summary>
+		public const string BaseUriFormat = "http://localhost:{0}/CR_Documentor/{1:D}/";
+
+		/// <summary>
 		/// Flag indicating the <see cref="CR_Documentor.Server.WebServer.Dispose()"/> method has been called.
 		/// </summary>
 		private bool _disposed = false;
@@ -21,6 +26,11 @@ namespace CR_Documentor.Server
 		/// The listener that will serve incoming requests.
 		/// </summary>
 		private HttpListener _listener = null;
+
+		/// <summary>
+		/// The prefix the server is listening to requests on.
+		/// </summary>
+		private Uri _prefix = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WebServer"/> class.
@@ -36,7 +46,9 @@ namespace CR_Documentor.Server
 				throw new NotSupportedException("The HttpListener class is not supported on this operating system.");
 			}
 			this._listener = new HttpListener();
-			this._listener.Prefixes.Add(String.Format(CultureInfo.InvariantCulture, "http://*:{0}/", port));
+			this.UniqueId = Guid.NewGuid();
+			this._prefix = new Uri(String.Format(CultureInfo.InvariantCulture, BaseUriFormat, port, this.UniqueId));
+			this._listener.Prefixes.Add(this._prefix.AbsoluteUri.Replace("http://localhost:", "http://*:"));
 		}
 
 		/// <summary>
@@ -58,20 +70,30 @@ namespace CR_Documentor.Server
 		public virtual bool IsListening { get; private set; }
 
 		/// <summary>
-		/// Gets the Uniform Resource Indicator (URI) prefixes handled by this
+		/// Gets the Uniform Resource Indicator (URI) prefix handled by this
 		/// server.
 		/// </summary>
 		/// <value>
-		/// An <see cref="System.Net.HttpListenerPrefixCollection"/> that contains
-		/// the URI prefixes that this server is configured to handle.
+		/// A <see cref="System.Uri"/> indicating the base location for requests
+		/// that this server is configured to handle.
 		/// </value>
-		public virtual HttpListenerPrefixCollection Prefixes
+		public virtual Uri Prefix
 		{
 			get
 			{
-				return this._listener.Prefixes;
+				return this._prefix;
 			}
 		}
+
+		/// <summary>
+		/// Gets the unique identifier for this server.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.Guid"/> that uniquely identifies this server instance.
+		/// Will show up in the <see cref="CR_Documentor.Server.WebServer.Prefix"/>
+		/// that the server listens on.
+		/// </value>
+		public virtual Guid UniqueId { get; private set; }
 
 		/// <summary>
 		/// Loops and listens for a request. Responds with the <see cref="CR_Documentor.Server.WebServer.Content"/>.
