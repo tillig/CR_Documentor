@@ -14,7 +14,10 @@ As you run CR_Documentor, you may encounter an error telling you that the intern
 
 If you run Visual Studio as a non-admin user and/or the security for starting up services to listen for requests on ports has been locked down, the server may not have the proper rights to start up. This is commonly seen when running Visual Studio in Windows Vista as a non-admin user.
 
-To fix this, you need to have rights to start up a listener on port 11235, the port CR_Documentor currently listens to. (You can read about [http://msdn.microsoft.com/en-us/library/ms733768.aspx configuring HTTP and HTTPS on MSDN].)
+First, be sure you have hotfix 939786 from Microsoft applied. This fixes an issue where a non-admin user is unable to start an HTTP listener on the local machine:
+http://support.microsoft.com/kb/939786/
+
+If you still see the issue, then to fix this, you need to have rights to start up a listener on port 11235, the port CR_Documentor currently listens to. (You can read about [http://msdn.microsoft.com/en-us/library/ms733768.aspx configuring HTTP and HTTPS on MSDN].)
 
   * Version 2.1.0.0 listens on `http://*:11235/`
   * Subsequent versions listen on `http://*:11235/CR_Documentor/<guid>/` where `<guid>` is a unique ID for the instance of CR_Documentor. (This allows multiple VS instances to be open and use CR_Documentor simultaneously.) You may be able to specify the URI `http://*:11235/CR_Documentor/` in your security settings (below) if you need to be more specific/exact.
