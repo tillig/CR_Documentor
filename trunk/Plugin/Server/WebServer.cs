@@ -48,7 +48,7 @@ namespace CR_Documentor.Server
 			this._listener = new HttpListener();
 			this.UniqueId = Guid.NewGuid();
 			this._prefix = new Uri(String.Format(CultureInfo.InvariantCulture, BaseUriFormat, port, this.UniqueId));
-			this._listener.Prefixes.Add(this._prefix.AbsoluteUri.Replace("http://localhost:", "http://*:"));
+			this._listener.Prefixes.Add(this._prefix.AbsoluteUri);
 		}
 
 		/// <summary>
