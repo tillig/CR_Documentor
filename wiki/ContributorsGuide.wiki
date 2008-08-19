@@ -112,3 +112,26 @@ This sounds like a lot of work, but there's a lot of benefit to doing it in this
   * *The trunk build will never be broken.* You can check partially-completed things into your task branch but you won't be breaking the trunk.
   * *Issue work is quantifiable.* If we want to see what work went into fixing a particular issue, we can look in Subversion and it's easy to tell. It also means if a particular fix breaks something, we can roll that changeset out.
   * *We can use the merges to the trunk as a way to figure out what's new* (and put that in the readme).
+
+Here is a simple batch script for creating an issue branch (create-issue-branch.bat):
+{{{
+@echo off
+if "%1" == "" goto :help
+
+@echo on
+svn mkdir https://cr-documentor.googlecode.com/svn/branches/issue/%1 -m "Created folder for issue %1."
+svn mkdir https://cr-documentor.googlecode.com/svn/branches/issue/%1/tags -m "Created tag folder for issue %1."
+svn mkdir https://cr-documentor.googlecode.com/svn/branches/issue/%1/tags/source -m "Created folder for issue %1 source tags."
+svn mkdir https://cr-documentor.googlecode.com/svn/branches/issue/%1/tags/task -m "Created folder for issue %1 task tags."
+svn copy https://cr-documentor.googlecode.com/svn/trunk https://cr-documentor.googlecode.com/svn/branches/issue/%1/tags/source/branchpoint -m "Created branchpoint for issue %1 codeline."
+svn copy https://cr-documentor.googlecode.com/svn/branches/issue/%1/tags/source/branchpoint https://cr-documentor.googlecode.com/svn/branches/issue/%1/dev -m "Created codeline for issue %1."
+@echo off
+echo Done. Switch working task copy to https://cr-documentor.googlecode.com/svn/branches/issue/%1/dev
+
+goto :eof
+
+:help
+echo create-issue-branch - Create a CR_Documentor issue branch.
+echo Syntax: create-issue-branch [issue#]
+echo Example: create-issue-branch 11
+}}}
