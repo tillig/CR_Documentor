@@ -53,6 +53,9 @@ namespace CR_Documentor.Options
 		private System.Windows.Forms.RadioButton rbIncludeRelative;
 		private System.Windows.Forms.RadioButton rbIncludeAbsolute;
 		private System.Windows.Forms.RadioButton rbIncludeNone;
+		private System.Windows.Forms.GroupBox grpServerOptions;
+		private System.Windows.Forms.Label lblServerPort;
+		private System.Windows.Forms.NumericUpDown portNumber;
 
 		private System.ComponentModel.Container components = null;
 
@@ -268,9 +271,12 @@ namespace CR_Documentor.Options
 			this.rbPreviewStyleSandcastle = new System.Windows.Forms.RadioButton();
 			this.rbPreviewStyleNDoc13 = new System.Windows.Forms.RadioButton();
 			this.grpIncludes = new System.Windows.Forms.GroupBox();
-			this.rbIncludeNone = new System.Windows.Forms.RadioButton();
-			this.rbIncludeAbsolute = new System.Windows.Forms.RadioButton();
 			this.rbIncludeRelative = new System.Windows.Forms.RadioButton();
+			this.rbIncludeAbsolute = new System.Windows.Forms.RadioButton();
+			this.rbIncludeNone = new System.Windows.Forms.RadioButton();
+			this.grpServerOptions = new System.Windows.Forms.GroupBox();
+			this.lblServerPort = new System.Windows.Forms.Label();
+			this.portNumber = new System.Windows.Forms.NumericUpDown();
 			this.grpDocTagCompat.SuspendLayout();
 			this.grpUnrecognizedTags.SuspendLayout();
 			this.grpFormatOptions.SuspendLayout();
@@ -278,6 +284,8 @@ namespace CR_Documentor.Options
 			this.grpDisplay.SuspendLayout();
 			this.grpPreviewStyle.SuspendLayout();
 			this.grpIncludes.SuspendLayout();
+			this.grpServerOptions.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.portNumber)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -421,12 +429,12 @@ namespace CR_Documentor.Options
 			this.grpIncludes.Name = "grpIncludes";
 			this.grpIncludes.TabStop = false;
 			// 
-			// rbIncludeNone
+			// rbIncludeRelative
 			// 
-			resources.ApplyResources(this.rbIncludeNone, "rbIncludeNone");
-			this.rbIncludeNone.Name = "rbIncludeNone";
-			this.rbIncludeNone.TabStop = true;
-			this.rbIncludeNone.UseVisualStyleBackColor = true;
+			resources.ApplyResources(this.rbIncludeRelative, "rbIncludeRelative");
+			this.rbIncludeRelative.Name = "rbIncludeRelative";
+			this.rbIncludeRelative.TabStop = true;
+			this.rbIncludeRelative.UseVisualStyleBackColor = true;
 			// 
 			// rbIncludeAbsolute
 			// 
@@ -435,15 +443,49 @@ namespace CR_Documentor.Options
 			this.rbIncludeAbsolute.TabStop = true;
 			this.rbIncludeAbsolute.UseVisualStyleBackColor = true;
 			// 
-			// rbIncludeRelative
+			// rbIncludeNone
 			// 
-			resources.ApplyResources(this.rbIncludeRelative, "rbIncludeRelative");
-			this.rbIncludeRelative.Name = "rbIncludeRelative";
-			this.rbIncludeRelative.TabStop = true;
-			this.rbIncludeRelative.UseVisualStyleBackColor = true;
+			resources.ApplyResources(this.rbIncludeNone, "rbIncludeNone");
+			this.rbIncludeNone.Name = "rbIncludeNone";
+			this.rbIncludeNone.TabStop = true;
+			this.rbIncludeNone.UseVisualStyleBackColor = true;
+			// 
+			// grpServerOptions
+			// 
+			this.grpServerOptions.Controls.Add(this.portNumber);
+			this.grpServerOptions.Controls.Add(this.lblServerPort);
+			resources.ApplyResources(this.grpServerOptions, "grpServerOptions");
+			this.grpServerOptions.Name = "grpServerOptions";
+			this.grpServerOptions.TabStop = false;
+			// 
+			// lblServerPort
+			// 
+			resources.ApplyResources(this.lblServerPort, "lblServerPort");
+			this.lblServerPort.Name = "lblServerPort";
+			// 
+			// portNumber
+			// 
+			resources.ApplyResources(this.portNumber, "portNumber");
+			this.portNumber.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+			this.portNumber.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.portNumber.Name = "portNumber";
+			this.portNumber.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// DocumentorOptions
 			// 
+			this.Controls.Add(this.grpServerOptions);
 			this.Controls.Add(this.grpIncludes);
 			this.Controls.Add(this.grpPreviewStyle);
 			this.Controls.Add(this.grpDisplay);
@@ -459,6 +501,9 @@ namespace CR_Documentor.Options
 			this.grpPreviewStyle.ResumeLayout(false);
 			this.grpIncludes.ResumeLayout(false);
 			this.grpIncludes.PerformLayout();
+			this.grpServerOptions.ResumeLayout(false);
+			this.grpServerOptions.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.portNumber)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 			this.ResumeLayout(false);
 
