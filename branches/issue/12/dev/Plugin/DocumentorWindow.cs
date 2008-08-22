@@ -75,11 +75,6 @@ namespace CR_Documentor
 		private WebServer _webServer = null;
 
 		/// <summary>
-		/// The default port the web server will listen on for preview requests.
-		/// </summary>
-		private const UInt16 WebServerPort = 11235;
-
-		/// <summary>
 		/// URL to the wiki page explaining the reasons the web server might fail to start.
 		/// </summary>
 		private const string ServerStartupErrorUrl = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
@@ -141,23 +136,25 @@ namespace CR_Documentor
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+			// InitializePlugIn happens right after InitializeComponent,
+			// and then we resume construction here. Note that the Controls
+			// collection is empty to start with, so we could clear out the
+			// controls here and we'd be OK.
 			this.SuspendLayout();
 
 			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LogPrefix);
 			try
 			{
 				InitializeWebServer();
+
 				// Create the controls for the form
 				Log.Send("Building controls.");
 				this._toolBar = new ToolBar();
 				this._previewer = new DocumentationControl(this._webServer);
 
-				// Refresh the options
-				// Right now we do some manipulation of the controls during the
-				// refresh of settings. This will make it difficult to change the
-				// web server information based on config later. Maybe we need to
-				// separate the load of settings from the update of control behavior.
-				RefreshSettings();
+				this.UpdateControlsFromOptions();
+				this.UpdatePreviewFromOptions();
 
 				// Set doc control view info
 				Log.Send("Setting browser properties.");
@@ -174,7 +171,6 @@ namespace CR_Documentor
 				ImageList imgList = new ImageList();
 				bool showIcons = LoadIcons(imgList);
 				CreateToolbar(imgList, showIcons);
-
 
 				// Add the toolbar
 				this.Controls.Add(this._toolBar);
@@ -199,7 +195,6 @@ namespace CR_Documentor
 
 
 		#endregion
-
 
 		#region Overrides
 
@@ -366,7 +361,17 @@ namespace CR_Documentor
 			Log.Enter(ImageType.Options, "{0}Options changed.", LogPrefix);
 			try
 			{
-				RefreshSettings();
+				UpdatePreviewFromOptions();
+				UpdateControlsFromOptions();
+
+				// TODO: We need to restart the server and point the browser to the new location.
+				// Do we need to trash the DocumentationControl and start a new one?
+				// Should this "initialize the window" bit be the same here as it is in plugin construction?
+				// Check out the constructor for a discussion on what happens there -
+				// it may be that we can just clear out all of the controls and
+				// re-create everything fairly simply in the same way that happens
+				// during the constructor.
+
 				RefreshPreview();
 			}
 			finally
@@ -446,8 +451,21 @@ namespace CR_Documentor
 			try
 			{
 				// Get the web server ready
+				OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
+				if (this._webServer != null)
+				{
+					if (this._webServer.Port == options.ServerPort)
+					{
+						// Already on the specified port - don't restart.
+						return;
+					}
+					// Not on the right port; shut the existing server down.
+					this._webServer.Stop();
+					this._webServer.Dispose();
+					this._webServer = null;
+				}
 				Log.Send("Starting web server.");
-				this._webServer = new WebServer(WebServerPort);
+				this._webServer = new WebServer(options.ServerPort);
 				this._webServer.Start();
 			}
 			catch (Exception ex)
@@ -470,13 +488,22 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Refreshes the settings from the options window.
+		/// Updates control states based on settings from the options window.
 		/// </summary>
-		public void RefreshSettings()
+		public void UpdateControlsFromOptions()
+		{
+			Log.Send("Updating control options from storage.");
+			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
+			this._toolBar.Visible = options.ShowToolbar;
+		}
+
+		/// <summary>
+		/// Updates the current preview based on settings from the options window.
+		/// </summary>
+		public void UpdatePreviewFromOptions()
 		{
 			Log.Send("Updating transform options from storage.");
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
-			this._toolBar.Visible = options.ShowToolbar;
 
 			// Load the appropriate transformation engine based on new settings
 			Type transformType = typeof(CR_Documentor.Transformation.MSDN.Engine);
@@ -505,7 +532,6 @@ namespace CR_Documentor
 			transformer.Options = options;
 			this.Previewer.Transformer = transformer;
 		}
-
 
 		/// <summary>
 		/// Refreshes the content of the documentor window
