@@ -55,7 +55,7 @@ namespace CR_Documentor.Options
 		private System.Windows.Forms.RadioButton rbIncludeNone;
 		private System.Windows.Forms.GroupBox grpServerOptions;
 		private System.Windows.Forms.Label lblServerPort;
-		private System.Windows.Forms.NumericUpDown portNumber;
+		private System.Windows.Forms.NumericUpDown serverPort;
 
 		private System.ComponentModel.Container components = null;
 
@@ -276,7 +276,7 @@ namespace CR_Documentor.Options
 			this.rbIncludeNone = new System.Windows.Forms.RadioButton();
 			this.grpServerOptions = new System.Windows.Forms.GroupBox();
 			this.lblServerPort = new System.Windows.Forms.Label();
-			this.portNumber = new System.Windows.Forms.NumericUpDown();
+			this.serverPort = new System.Windows.Forms.NumericUpDown();
 			this.grpDocTagCompat.SuspendLayout();
 			this.grpUnrecognizedTags.SuspendLayout();
 			this.grpFormatOptions.SuspendLayout();
@@ -285,7 +285,7 @@ namespace CR_Documentor.Options
 			this.grpPreviewStyle.SuspendLayout();
 			this.grpIncludes.SuspendLayout();
 			this.grpServerOptions.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.portNumber)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.serverPort)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -452,7 +452,7 @@ namespace CR_Documentor.Options
 			// 
 			// grpServerOptions
 			// 
-			this.grpServerOptions.Controls.Add(this.portNumber);
+			this.grpServerOptions.Controls.Add(this.serverPort);
 			this.grpServerOptions.Controls.Add(this.lblServerPort);
 			resources.ApplyResources(this.grpServerOptions, "grpServerOptions");
 			this.grpServerOptions.Name = "grpServerOptions";
@@ -465,19 +465,19 @@ namespace CR_Documentor.Options
 			// 
 			// portNumber
 			// 
-			resources.ApplyResources(this.portNumber, "portNumber");
-			this.portNumber.Maximum = new decimal(new int[] {
+			resources.ApplyResources(this.serverPort, "portNumber");
+			this.serverPort.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
-			this.portNumber.Minimum = new decimal(new int[] {
+			this.serverPort.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-			this.portNumber.Name = "portNumber";
-			this.portNumber.Value = new decimal(new int[] {
+			this.serverPort.Name = "portNumber";
+			this.serverPort.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -503,7 +503,7 @@ namespace CR_Documentor.Options
 			this.grpIncludes.PerformLayout();
 			this.grpServerOptions.ResumeLayout(false);
 			this.grpServerOptions.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.portNumber)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.serverPort)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 			this.ResumeLayout(false);
 
@@ -586,6 +586,7 @@ namespace CR_Documentor.Options
 			{
 				this._options.UnrecognizedTagHandlingMethod = UnrecognizedTagHandlingMethod.RenderContents;
 			}
+			this._options.ServerPort = Convert.ToUInt16(this.serverPort.Value);
 		}
 
 		/// <summary>
@@ -668,6 +669,8 @@ namespace CR_Documentor.Options
 					Debug.WriteLine("Unexpected value for unrecognized tag handling method: " + this._options.UnrecognizedTagHandlingMethod.ToString());
 					break;
 			}
+
+			this.serverPort.Value = this._options.ServerPort;
 
 			this.Invalidate();
 		}
