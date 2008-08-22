@@ -45,9 +45,10 @@ namespace CR_Documentor.Server
 			{
 				throw new NotSupportedException("The HttpListener class is not supported on this operating system.");
 			}
+			this.Port = port;
 			this._listener = new HttpListener();
 			this.UniqueId = Guid.NewGuid();
-			this._prefix = new Uri(String.Format(CultureInfo.InvariantCulture, BaseUriFormat, port, this.UniqueId));
+			this._prefix = new Uri(String.Format(CultureInfo.InvariantCulture, BaseUriFormat, this.Port, this.UniqueId));
 			this._listener.Prefixes.Add(this._prefix.AbsoluteUri);
 		}
 
@@ -68,6 +69,14 @@ namespace CR_Documentor.Server
 		/// if not.
 		/// </value>
 		public virtual bool IsListening { get; private set; }
+
+		/// <summary>
+		/// Gets the port that the server was initialized with.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.UInt16"/> with the port this server is listening on.
+		/// </value>
+		public virtual UInt16 Port { get; private set; }
 
 		/// <summary>
 		/// Gets the Uniform Resource Indicator (URI) prefix handled by this
