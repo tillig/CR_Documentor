@@ -535,7 +535,7 @@ namespace CR_Documentor.Options
 		protected virtual void SyncOptionsFromForm()
 		{
 			this._options.ConvertCodeTabsToSpaces = this.chkTabsToSpaces.Checked;
-			this._options.ConvertCodeTabsToSpacesNum = Convert.ToInt32(this.numSpacesPerTab.Value);
+			this._options.ConvertCodeTabsToSpacesNum = Convert.ToUInt16(this.numSpacesPerTab.Value);
 			if (this.rbPreviewStyleNDoc13.Checked)
 			{
 				this._options.PreviewStyle = OptionSet.BuildStoredTypeName(typeof(CR_Documentor.Transformation.MSDN.Engine));
