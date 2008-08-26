@@ -136,15 +136,17 @@ namespace CR_Documentor
 			{
 				InitializeWebServer();
 
-				// Create the controls for the form
-				Log.Send("Building controls.");
-				this._toolBar = new ToolBar();
+				// Build the documentation preview control.
+				Log.Send("Building preview control.");
+				if (this._previewer != null && this.Controls.Contains(this._previewer))
+				{
+					Log.Send("Removing existing preview control.");
+					this.Controls.Remove(this._previewer);
+					this._previewer.Dispose();
+					this._previewer = null;
+				}
 				this._previewer = new DocumentationControl(this._webServer);
-
-				this.UpdateToolbarFromOptions();
 				this.UpdatePreviewFromOptions();
-
-				// Set doc control view info
 				Log.Send("Setting browser properties.");
 				this._previewer.Dock = DockStyle.Fill;
 				this._previewer.Location = new System.Drawing.Point(0, 0);
@@ -154,13 +156,15 @@ namespace CR_Documentor
 				this._previewer.Text = "documentor";
 				this.Controls.Add(this._previewer);
 
-				// Create the toolbar ImageList
+				// Create the toolbar. The toolbar needs to be added after the
+				// preview window or it ends up covering the top bit of the browser.
+				Log.Send("Building toolbar.");
+				this._toolBar = new ToolBar();
+				this.UpdateToolbarFromOptions();
 				Log.Send("Building toolbar image list.");
 				ImageList imgList = new ImageList();
 				bool showIcons = LoadIcons(imgList);
-				CreateToolbar(imgList, showIcons);
-
-				// Add the toolbar
+				SetupToolbar(imgList, showIcons);
 				this.Controls.Add(this._toolBar);
 
 				Log.Send("Construction complete.");
@@ -390,7 +394,7 @@ namespace CR_Documentor
 		/// </summary>
 		/// <param name="imgList">The list of images containing the icons for the tool buttons.</param>
 		/// <param name="showIcons"><see langword="true" /> to show icons on the buttons, <see langword="false" /> to show text.</param>
-		private void CreateToolbar(ImageList imgList, bool showIcons)
+		private void SetupToolbar(ImageList imgList, bool showIcons)
 		{
 			// Create the toolbar
 			Log.Send("Setting toolbar properties.");
