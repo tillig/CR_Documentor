@@ -97,18 +97,6 @@ namespace CR_Documentor
 		#region DocumentorWindow Properties
 
 		/// <summary>
-		/// Gets the control that contains the browser/preview.
-		/// </summary>
-		/// <value>A <see cref="CR_Documentor.Controls.DocumentationControl"/> that is the document previewer.</value>
-		public DocumentationControl Previewer
-		{
-			get
-			{
-				return this._previewer;
-			}
-		}
-
-		/// <summary>
 		/// Gets a <see cref="System.Boolean"/> indicating if the tool window is currently visible.
 		/// </summary>
 		/// <value>
@@ -153,7 +141,7 @@ namespace CR_Documentor
 				this._toolBar = new ToolBar();
 				this._previewer = new DocumentationControl(this._webServer);
 
-				this.UpdateControlsFromOptions();
+				this.UpdateToolbarFromOptions();
 				this.UpdatePreviewFromOptions();
 
 				// Set doc control view info
@@ -362,7 +350,7 @@ namespace CR_Documentor
 			try
 			{
 				UpdatePreviewFromOptions();
-				UpdateControlsFromOptions();
+				UpdateToolbarFromOptions();
 
 				// TODO: We need to restart the server and point the browser to the new location.
 				// Do we need to trash the DocumentationControl and start a new one?
@@ -488,9 +476,9 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Updates control states based on settings from the options window.
+		/// Updates the toolbar options based on settings from the options window.
 		/// </summary>
-		public void UpdateControlsFromOptions()
+		public void UpdateToolbarFromOptions()
 		{
 			Log.Send("Updating control options from storage.");
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
@@ -530,7 +518,7 @@ namespace CR_Documentor
 				transformer = new Transformation.MSDN.Engine();
 			}
 			transformer.Options = options;
-			this.Previewer.Transformer = transformer;
+			this._previewer.Transformer = transformer;
 		}
 
 		/// <summary>
