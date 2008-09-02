@@ -126,15 +126,13 @@ namespace CR_Documentor
 			InitializeComponent();
 
 			// InitializePlugIn happens right after InitializeComponent,
-			// and then we resume construction here. Note that the Controls
-			// collection is empty to start with, so we could clear out the
-			// controls here and we'd be OK.
+			// and then we resume construction here.
 			this.SuspendLayout();
 
 			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LogPrefix);
 			try
 			{
-				InitializeWebServer();
+				StartWebServer();
 				RebuildPreviewControl();
 
 				// Create the toolbar. The toolbar needs to be added after the
@@ -337,7 +335,7 @@ namespace CR_Documentor
 				// won't get updated with the proper URL when the web server port
 				// gets updated.
 
-				InitializeWebServer();
+				StartWebServer();
 				RebuildPreviewControl();
 				UpdatePreviewFromOptions();
 				UpdateToolbarFromOptions();
@@ -415,19 +413,33 @@ namespace CR_Documentor
 		/// <summary>
 		/// Creates (or re-creates) the preview control and adds it to the control hierarchy.
 		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// If the preview control does not already exist, it is created and added
+		/// to the control hierarchy. If it does exist, and it is not listening
+		/// to the current web server instance, it will be removed and re-created,
+		/// then inserted back into the control hierarcy. If it exists and is
+		/// already listening to the proper web server instance, there will be
+		/// no change and no rebuild.
+		/// </para>
+		/// </remarks>
 		private void RebuildPreviewControl()
 		{
-			// Build the documentation preview control.
-			Log.Send("Building preview control.");
 			int controlIndex = -1;
 			if (this._previewer != null && this.Controls.Contains(this._previewer))
 			{
+				if (this._previewer.WebServer == this._webServer)
+				{
+					Log.Send("Preview control already pointing at the correct web server instance. Skipping rebuild.");
+					return;
+				}
 				Log.Send("Removing existing preview control.");
 				controlIndex = this.Controls.IndexOf(this._previewer);
 				this.Controls.Remove(this._previewer);
 				this._previewer.Dispose();
 				this._previewer = null;
 			}
+			Log.Send("Building preview control.");
 			this._previewer = new DocumentationControl(this._webServer);
 			this.UpdatePreviewFromOptions();
 			Log.Send("Setting browser properties.");
@@ -448,9 +460,16 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Starts up the internal web server.
+		/// Starts up the internal web server based on the user's options.
 		/// </summary>
-		private void InitializeWebServer()
+		/// <remarks>
+		/// <para>
+		/// The web server will start if it is not already started, and will restart
+		/// if the options specified by the user for the server (e.g., port to
+		/// listen on) are different than what the web server is currently using.
+		/// </para>
+		/// </remarks>
+		private void StartWebServer()
 		{
 			try
 			{
