@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!--
+		* Standard build = msbuild Default.proj
+		* Release build = msbuild Default.proj /p:Configuration=Release
+	-->
+	<PropertyGroup>
+		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+		<BuildDir>..\build</BuildDir>
+		<BuildBinDir>$(BuildDir)\bin</BuildBinDir>
+		<BuildDocDir>$(BuildDir)\doc</BuildDocDir>
+		<BuildDocTempDir>$(BuildDocDir)\temp</BuildDocTempDir>
+		<BuildLogDir>$(BuildDir)\log</BuildLogDir>
+		<BuildPackageDir>$(BuildDir)\package</BuildPackageDir>
+		<!-- Set GenerateReflectionData to true if you want to rebuild the Sandcastle reflection data -->
+		<!-- (It takes a long time, so you probably only want to do it once.) -->
+		<GenerateReflectionData Condition="'$(GenerateReflectionData)' == ''">false</GenerateReflectionData>
+	</PropertyGroup>
+	<ItemGroup>
+		<CleanFolders Include="$(BuildDir)"/>
+		<CleanFolders Include="Plugin\bin"/>
+		<CleanFolders Include="Plugin\obj"/>
+		<CleanFolders Include="DocTest\bin"/>
+		<CleanFolders Include="DocTest\obj"/>
+		<CleanFolders Include="DocTestVB\bin"/>
+		<CleanFolders Include="DocTestVB\obj"/>
+		<CleanFolders Include="CR_Documentor.Test\bin"/>
+		<CleanFolders Include="CR_Documentor.Test\obj"/>
+		<CleanFolders Include="TestResults"/>
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<Target Name="All">
+		<CallTarget Targets="Clean;Compile;Test"/>
+		<CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/>
+		<Message Text="Build complete."/>
+	</Target>
+	<Target Name="Compile">
+		<Message Text="Creating build output folder hierarchy..."/>
+		<MakeDir Directories="$(BuildDir);$(BuildBinDir);$(BuildDocDir);$(BuildLogDir)"/>
+		<Message Text="Compiling CR_Documentor plugin..."/>
+		<MSBuild Projects="CR_Documentor.sln" Properties="Configuration=$(Configuration)"/>
+		<CreateItem Include="Plugin\bin\$(Configuration)\**">
+			<Output TaskParameter="Include" ItemName="BuildOutput"/>
+		</CreateItem>
+		<CreateItem Include="DocTest\bin\$(Configuration)\**;DocTestVB\bin\$(Configuration)\**">
+			<Output TaskParameter="Include" ItemName="BuildOutput"/>
+		</CreateItem>
+		<Message Text="Copying test documentation assemblies to build output area..."/>
+		<Copy SourceFiles="@(BuildOutput)" DestinationFolder="$(BuildBinDir)"/>
+		<Message Text="Plugin compiled."/>
+	</Target>
+	<Target Name="Clean">
+		<Message Text="Removing compilation artifact folders..."/>
+		<RemoveDir Directories="@(CleanFolders)"/>
+		<Delete Files="@(CleanFiles)"/>
+		<Message Text="Clean complete."/>
+	</Target>
+	<Target Name="Doc">
+		<CreateItem Include="$(BuildBinDir)\*.dll">
+			<Output ItemName="AssembliesToDocument" TaskParameter="Include"/>
+		</CreateItem>
+		<Message Text="Building Sandcastle Prototype reflection data..."/>
+		<MSBuild Projects="Build\FxReflection.proj" Properties="PresentationStyle=prototype" Condition="'$(GenerateReflectionData)' == 'true'"/>
+		<MSBuild Projects="Build\SandcastlePrototype.proj" Targets="Doc" Properties="AssemblyPath=%(AssembliesToDocument.FullPath);AssemblyName=%(AssembliesToDocument.Filename);TempDir=..\$(BuildDocTempDir);OutputDir=..\$(BuildDocDir);DocXmlPath=..\$(BuildBinDir)\%(AssembliesToDocument.Filename).xml"/>
+	</Target>
+	<Target Name="Test">
+		<CreateProperty Value="$(BuildLogDir)\TestResults.trx">
+			<Output PropertyName="UnitTestResultsFile" TaskParameter="Value"/>
+		</CreateProperty>
+		<Delete Files="$(UnitTestResultsFile)"/>
+		<Exec Command="mstest.exe /noisolation /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
+	</Target>
+	<Target Name="Package">
+		<MakeDir Directories="$(BuildPackageDir)"/>
+		<GetAssemblyIdentity AssemblyFiles="$(BuildBinDir)\CR_Documentor.dll">
+			<Output ItemName="AssemblyIdentities" TaskParameter="Assemblies"/>
+		</GetAssemblyIdentity>
+		<CreateProperty Value="%(AssemblyIdentities.Version)">
+			<Output PropertyName="Version" TaskParameter="Value"/>
+		</CreateProperty>
+		<CreateItem Include="$(BuildBinDir)\CR_Documentor.dll;readme.html">
+			<Output ItemName="BinaryPackageFiles" TaskParameter="Include"/>
+		</CreateItem>
+		<Zip Files="@(BinaryPackageFiles)" ZipFileName="$(BuildPackageDir)\CR_Documentor-$(Version).zip" Flatten="true"/>
+	</Target>
+</Project>
