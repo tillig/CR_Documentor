@@ -87,13 +87,13 @@ namespace CR_Documentor.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the web server instance serving the documentation preview.
+		/// Gets the web server instance serving the documentation preview.
 		/// </summary>
 		/// <value>
 		/// A <see cref="CR_Documentor.Server.WebServer"/> that will serve up
 		/// preview content to the browser.
 		/// </value>
-		public virtual WebServer WebServer { get; set; }
+		public virtual WebServer WebServer { get; private set; }
 
 		/// <summary>
 		/// Performs <see langword="static" /> member initialization for the <see cref="DocumentationControl"/> class.

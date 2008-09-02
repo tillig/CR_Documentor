@@ -75,11 +75,6 @@ namespace CR_Documentor
 		private WebServer _webServer = null;
 
 		/// <summary>
-		/// The default port the web server will listen on for preview requests.
-		/// </summary>
-		private const UInt16 WebServerPort = 11235;
-
-		/// <summary>
 		/// URL to the wiki page explaining the reasons the web server might fail to start.
 		/// </summary>
 		private const string ServerStartupErrorUrl = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
@@ -100,18 +95,6 @@ namespace CR_Documentor
 
 
 		#region DocumentorWindow Properties
-
-		/// <summary>
-		/// Gets the control that contains the browser/preview.
-		/// </summary>
-		/// <value>A <see cref="CR_Documentor.Controls.DocumentationControl"/> that is the document previewer.</value>
-		public DocumentationControl Previewer
-		{
-			get
-			{
-				return this._previewer;
-			}
-		}
 
 		/// <summary>
 		/// Gets a <see cref="System.Boolean"/> indicating if the tool window is currently visible.
@@ -141,42 +124,26 @@ namespace CR_Documentor
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+
+			// InitializePlugIn happens right after InitializeComponent,
+			// and then we resume construction here.
 			this.SuspendLayout();
 
 			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LogPrefix);
 			try
 			{
-				InitializeWebServer();
-				// Create the controls for the form
-				Log.Send("Building controls.");
+				StartWebServer();
+				RebuildPreviewControl();
+
+				// Create the toolbar. The toolbar needs to be added after the
+				// preview window or it ends up covering the top bit of the browser.
+				Log.Send("Building toolbar.");
 				this._toolBar = new ToolBar();
-				this._previewer = new DocumentationControl(this._webServer);
-
-				// Refresh the options
-				// Right now we do some manipulation of the controls during the
-				// refresh of settings. This will make it difficult to change the
-				// web server information based on config later. Maybe we need to
-				// separate the load of settings from the update of control behavior.
-				RefreshSettings();
-
-				// Set doc control view info
-				Log.Send("Setting browser properties.");
-				this._previewer.Dock = DockStyle.Fill;
-				this._previewer.Location = new System.Drawing.Point(0, 0);
-				this._previewer.Name = "documentor";
-				this._previewer.Size = new System.Drawing.Size(400, 150);
-				this._previewer.TabIndex = 0;
-				this._previewer.Text = "documentor";
-				this.Controls.Add(this._previewer);
-
-				// Create the toolbar ImageList
+				this.UpdateToolbarFromOptions();
 				Log.Send("Building toolbar image list.");
 				ImageList imgList = new ImageList();
 				bool showIcons = LoadIcons(imgList);
-				CreateToolbar(imgList, showIcons);
-
-
-				// Add the toolbar
+				SetupToolbar(imgList, showIcons);
 				this.Controls.Add(this._toolBar);
 
 				Log.Send("Construction complete.");
@@ -197,9 +164,7 @@ namespace CR_Documentor
 			this.ResumeLayout(false);
 		}
 
-
 		#endregion
-
 
 		#region Overrides
 
@@ -213,11 +178,11 @@ namespace CR_Documentor
 			this.WindowHide += new EventHandler(DocumentorWindow_WindowHide);
 			this.WindowShow += new EventHandler(DocumentorWindow_WindowShow);
 
-			this._events.LanguageElementActivated += new LanguageElementActivatedEventHandler(events_LanguageElementActivated);
-			this._events.AfterParse += new AfterParseEventHandler(events_AfterParse);
-			this._events.AfterClosingSolution += new DefaultHandler(events_AfterClosingSolution);
-			this._events.SolutionOpened += new DefaultHandler(events_SolutionOpened);
-			this._events.DocumentClosing += new DocumentEventHandler(events_DocumentClosing);
+			this._events.LanguageElementActivated += new LanguageElementActivatedEventHandler(RefreshPreviewDefaultEventHandler);
+			this._events.AfterParse += new AfterParseEventHandler(RefreshPreviewDefaultEventHandler);
+			this._events.AfterClosingSolution += new DefaultHandler(RefreshPreviewDefaultEventHandler);
+			this._events.SolutionOpened += new DefaultHandler(RefreshPreviewDefaultEventHandler);
+			this._events.DocumentClosing += new DocumentEventHandler(RefreshPreviewDefaultEventHandler);
 			this._events.OptionsChanged += new OptionsChangedEventHandler(events_OptionsChanged);
 			this._events.BeginShutdown += new DefaultHandler(events_BeginShutdown);
 
@@ -302,53 +267,18 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Handles the <c>LanguageElementActivated</c> event by refreshing the preview window.
+		/// Handles any event by refreshing the preview window.
 		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.LanguageElementActivatedEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_LanguageElementActivated(LanguageElementActivatedEventArgs ea)
+		private void RefreshPreviewDefaultEventHandler()
 		{
 			RefreshPreview();
 		}
 
 		/// <summary>
-		/// Handles the <c>AfterParse</c> event by refreshing the preview window.
+		/// Handles any event by refreshing the preview window.
 		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.AfterParseEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_AfterParse(AfterParseEventArgs ea)
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>AfterClosingSolution</c> event by refreshing the preview window.
-		/// </summary>
-		private void events_AfterClosingSolution()
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>SolutionOpened</c> event by refreshing the preview window.
-		/// </summary>
-		private void events_SolutionOpened()
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>DocumentClosing</c> event by refreshing the preview window.
-		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.DocumentEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_DocumentClosing(DocumentEventArgs ea)
+		/// <param name="e">An <see cref="System.EventArgs" /> that contains the event data.</param>
+		private void RefreshPreviewDefaultEventHandler(EventArgs e)
 		{
 			RefreshPreview();
 		}
@@ -366,7 +296,14 @@ namespace CR_Documentor
 			Log.Enter(ImageType.Options, "{0}Options changed.", LogPrefix);
 			try
 			{
-				RefreshSettings();
+				// Things have to happen in exactly this order or the preview control
+				// won't get updated with the proper URL when the web server port
+				// gets updated.
+
+				StartWebServer();
+				RebuildPreviewControl();
+				UpdatePreviewFromOptions();
+				UpdateToolbarFromOptions();
 				RefreshPreview();
 			}
 			finally
@@ -397,7 +334,7 @@ namespace CR_Documentor
 		/// </summary>
 		/// <param name="imgList">The list of images containing the icons for the tool buttons.</param>
 		/// <param name="showIcons"><see langword="true" /> to show icons on the buttons, <see langword="false" /> to show text.</param>
-		private void CreateToolbar(ImageList imgList, bool showIcons)
+		private void SetupToolbar(ImageList imgList, bool showIcons)
 		{
 			// Create the toolbar
 			Log.Send("Setting toolbar properties.");
@@ -439,15 +376,84 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Starts up the internal web server.
+		/// Creates (or re-creates) the preview control and adds it to the control hierarchy.
 		/// </summary>
-		private void InitializeWebServer()
+		/// <remarks>
+		/// <para>
+		/// If the preview control does not already exist, it is created and added
+		/// to the control hierarchy. If it does exist, and it is not listening
+		/// to the current web server instance, it will be removed and re-created,
+		/// then inserted back into the control hierarcy. If it exists and is
+		/// already listening to the proper web server instance, there will be
+		/// no change and no rebuild.
+		/// </para>
+		/// </remarks>
+		private void RebuildPreviewControl()
+		{
+			int controlIndex = -1;
+			if (this._previewer != null && this.Controls.Contains(this._previewer))
+			{
+				if (this._previewer.WebServer == this._webServer)
+				{
+					Log.Send("Preview control already pointing at the correct web server instance. Skipping rebuild.");
+					return;
+				}
+				Log.Send("Removing existing preview control.");
+				controlIndex = this.Controls.IndexOf(this._previewer);
+				this.Controls.Remove(this._previewer);
+				this._previewer.Dispose();
+				this._previewer = null;
+			}
+			Log.Send("Building preview control.");
+			this._previewer = new DocumentationControl(this._webServer);
+			this.UpdatePreviewFromOptions();
+			Log.Send("Setting browser properties.");
+			this._previewer.Dock = DockStyle.Fill;
+			this._previewer.Location = new System.Drawing.Point(0, 0);
+			this._previewer.Name = "documentor";
+			this._previewer.Size = new System.Drawing.Size(400, 150);
+			this._previewer.TabIndex = 0;
+			this._previewer.Text = "documentor";
+			this.Controls.Add(this._previewer);
+			if (controlIndex >= 0)
+			{
+				// Put the rebuilt previewer back exactly where it was before.
+				// This is necessary because otherwise the top gets hidden by
+				// the toolbar.
+				this.Controls.SetChildIndex(this._previewer, controlIndex);
+			}
+		}
+
+		/// <summary>
+		/// Starts up the internal web server based on the user's options.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// The web server will start if it is not already started, and will restart
+		/// if the options specified by the user for the server (e.g., port to
+		/// listen on) are different than what the web server is currently using.
+		/// </para>
+		/// </remarks>
+		private void StartWebServer()
 		{
 			try
 			{
 				// Get the web server ready
+				OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
+				if (this._webServer != null)
+				{
+					if (this._webServer.Port == options.ServerPort)
+					{
+						// Already on the specified port - don't restart.
+						return;
+					}
+					// Not on the right port; shut the existing server down.
+					this._webServer.Stop();
+					this._webServer.Dispose();
+					this._webServer = null;
+				}
 				Log.Send("Starting web server.");
-				this._webServer = new WebServer(WebServerPort);
+				this._webServer = new WebServer(options.ServerPort);
 				this._webServer.Start();
 			}
 			catch (Exception ex)
@@ -470,13 +476,22 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Refreshes the settings from the options window.
+		/// Updates the toolbar options based on settings from the options window.
 		/// </summary>
-		public void RefreshSettings()
+		public void UpdateToolbarFromOptions()
+		{
+			Log.Send("Updating control options from storage.");
+			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
+			this._toolBar.Visible = options.ShowToolbar;
+		}
+
+		/// <summary>
+		/// Updates the current preview based on settings from the options window.
+		/// </summary>
+		public void UpdatePreviewFromOptions()
 		{
 			Log.Send("Updating transform options from storage.");
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
-			this._toolBar.Visible = options.ShowToolbar;
 
 			// Load the appropriate transformation engine based on new settings
 			Type transformType = typeof(CR_Documentor.Transformation.MSDN.Engine);
@@ -503,9 +518,8 @@ namespace CR_Documentor
 				transformer = new Transformation.MSDN.Engine();
 			}
 			transformer.Options = options;
-			this.Previewer.Transformer = transformer;
+			this._previewer.Transformer = transformer;
 		}
-
 
 		/// <summary>
 		/// Refreshes the content of the documentor window

@@ -11,9 +11,6 @@ namespace CR_Documentor.Options
 	/// </summary>
 	public class OptionSet
 	{
-
-		#region OptionSet Variables
-
 		#region Constants
 
 		#region Section: Document Tag Compatibility
@@ -81,7 +78,7 @@ namespace CR_Documentor.Options
 		/// <summary>
 		/// The default number of spaces to use when replacing tabs with spaces.
 		/// </summary>
-		public const int DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM = 4;
+		public const UInt16 DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM = 4;
 
 		/// <summary>
 		/// The key storing whether or not duplicate "see cref" links should be removed.
@@ -143,65 +140,26 @@ namespace CR_Documentor.Options
 
 		#endregion
 
+		#region Section: Server Options
+
+		/// <summary>
+		/// The section that will contain the server options.
+		/// </summary>
+		public const string SECTION_SERVEROPTIONS = "ServerOptions";
+
+		/// <summary>
+		/// The key storing the port number the preview server listens on.
+		/// </summary>
+		public const string KEY_SERVEROPTIONS_PORT = "Port";
+
+		/// <summary>
+		/// The default value for the server port.
+		/// </summary>
+		public const UInt16 DEFAULT_SERVEROPTIONS_PORT = 11235;
+
 		#endregion
 
-		#region Instance
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.ConvertCodeTabsToSpaces" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private bool _convertCodeTabsToSpaces = DEFAULT_FORMATOPTIONS_CODETABSTOSPACES;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.ConvertCodeTabsToSpacesNum" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private int _convertCodeTabsToSpacesNum = DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.PreviewStyle" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private string _previewStyle = DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.ProcessDuplicateSeeLinks" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private bool _processDuplicateSeeLinks = DEFAULT_FORMATOPTIONS_PROCESSDUPLICATESEELINKS;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.ProcessIncludes" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private IncludeProcessing _processIncludes = DEFAULT_FORMATOPTIONS_PROCESSINCLUDES;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.RecognizedTags" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private StringCollection _recognizedTags = new StringCollection();
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.ShowToolbar" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private bool _showToolbar = DEFAULT_DISPLAYOPTIONS_SHOWTOOLBAR;
+		#endregion
 
 		/// <summary>
 		/// Internal storage for the
@@ -209,43 +167,17 @@ namespace CR_Documentor.Options
 		/// property.
 		/// </summary>
 		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private TagCompatibilityLevel _tagCompatibilityLevel = DEFAULT_DOCTAGCOMPAT_COMPATLEVEL;
-
-		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Options.OptionSet.UnrecognizedTagHandlingMethod" />
-		/// property.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Options.OptionSet" />
-		private UnrecognizedTagHandlingMethod _unrecognizedTagHandlingMethod = DEFAULT_UNRECOGNIZEDTAGS_HANDLING;
-
-		#endregion
-
-		#endregion
-
-
-
-		#region OptionSet Properties
+		private TagCompatibilityLevel _tagCompatibilityLevel;
 
 		/// <summary>
 		/// Gets or sets a <see cref="Boolean"/> indicating whether tabs in code
 		/// blocks get replaced with spaces.
 		/// </summary>
 		/// <value>True if tabs in code blocks should be replaced with spaces; false otherwise.</value>
-		public virtual bool ConvertCodeTabsToSpaces
-		{
-			get
-			{
-				return _convertCodeTabsToSpaces;
-			}
-			set
-			{
-				_convertCodeTabsToSpaces = value;
-			}
-		}
+		public virtual bool ConvertCodeTabsToSpaces { get; set; }
 
 		/// <summary>
-		/// Gets or sets a <see cref="System.Int32"/> with the number of spaces that replace
+		/// Gets or sets a <see cref="System.UInt16"/> with the number of spaces that replace
 		/// tabs in code blocks.
 		/// </summary>
 		/// <value>
@@ -259,24 +191,7 @@ namespace CR_Documentor.Options
 		/// This property may not be set to less than zero.
 		/// </para>
 		/// </remarks>
-		public virtual int ConvertCodeTabsToSpacesNum
-		{
-			get
-			{
-				return _convertCodeTabsToSpacesNum;
-			}
-			set
-			{
-				if (value >= 0)
-				{
-					_convertCodeTabsToSpacesNum = value;
-				}
-				else
-				{
-					_convertCodeTabsToSpacesNum = 0;
-				}
-			}
-		}
+		public virtual UInt16 ConvertCodeTabsToSpacesNum { get; set; }
 
 		/// <summary>
 		/// Gets or sets the style the preview window should render in.
@@ -284,17 +199,7 @@ namespace CR_Documentor.Options
 		/// <value>
 		/// A <see cref="System.String"/> with the preview window style descriptor.
 		/// </value>
-		public virtual string PreviewStyle
-		{
-			get
-			{
-				return _previewStyle;
-			}
-			set
-			{
-				_previewStyle = value;
-			}
-		}
+		public virtual string PreviewStyle { get; set; }
 
 		/// <summary>
 		/// Gets or sets a <see cref="System.Boolean"/> indicating whether duplicate
@@ -306,17 +211,7 @@ namespace CR_Documentor.Options
 		/// If duplicate cref links are removed, they are replaced by bold text.
 		/// </para>
 		/// </remarks>
-		public virtual bool ProcessDuplicateSeeLinks
-		{
-			get
-			{
-				return _processDuplicateSeeLinks;
-			}
-			set
-			{
-				_processDuplicateSeeLinks = value;
-			}
-		}
+		public virtual bool ProcessDuplicateSeeLinks { get; set; }
 
 		/// <summary>
 		/// Gets or sets a <see cref="Boolean"/> indicating whether included documentation
@@ -326,17 +221,7 @@ namespace CR_Documentor.Options
 		/// <see langword="true" /> if included doc should actually be read in and
 		/// included; <see langword="false" /> otherwise.
 		/// </value>
-		public virtual IncludeProcessing ProcessIncludes
-		{
-			get
-			{
-				return _processIncludes;
-			}
-			set
-			{
-				_processIncludes = value;
-			}
-		}
+		public virtual IncludeProcessing ProcessIncludes { get; set; }
 
 		/// <summary>
 		/// Gets the current collection of recognized tags based on the tag compatibility
@@ -344,13 +229,16 @@ namespace CR_Documentor.Options
 		/// </summary>
 		/// <value>A <see cref="System.Collections.Specialized.StringCollection"/> with the list of recognized tags.</value>
 		/// <seealso cref="CR_Documentor.Options.OptionSet.TagCompatibilityLevel" />
-		public virtual StringCollection RecognizedTags
-		{
-			get
-			{
-				return _recognizedTags;
-			}
-		}
+		public virtual StringCollection RecognizedTags { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the port the web server listens on.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.UInt16"/> with the port the internal preview web
+		/// server should listen on.
+		/// </value>
+		public virtual UInt16 ServerPort { get; set; }
 
 		/// <summary>
 		/// Gets or sets the indicator of whether the documentor window toolbar should be
@@ -360,17 +248,7 @@ namespace CR_Documentor.Options
 		/// A <see cref="System.Boolean"/> indicating the visibility preference for the
 		/// documentor window toolbar.
 		/// </value>
-		public virtual bool ShowToolbar
-		{
-			get
-			{
-				return _showToolbar;
-			}
-			set
-			{
-				_showToolbar = value;
-			}
-		}
+		public virtual bool ShowToolbar { get; set; }
 
 		/// <summary>
 		/// Gets or sets the <see cref="CR_Documentor.Options.TagCompatibilityLevel"/>
@@ -401,39 +279,26 @@ namespace CR_Documentor.Options
 		/// A <see cref="CR_Documentor.Options.UnrecognizedTagHandlingMethod"/> with the current
 		/// unrecognized tag handling method.
 		/// </value>
-		public virtual UnrecognizedTagHandlingMethod UnrecognizedTagHandlingMethod
-		{
-			get
-			{
-				return _unrecognizedTagHandlingMethod;
-			}
-			set
-			{
-				_unrecognizedTagHandlingMethod = value;
-			}
-		}
-
-		#endregion
-
-
-
-		#region OptionSet Implementation
-
-		#region Constructors
+		public virtual UnrecognizedTagHandlingMethod UnrecognizedTagHandlingMethod { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OptionSet"/> class.
 		/// </summary>
 		public OptionSet()
 		{
-			RebuildRecognizedTags();
+			this.ConvertCodeTabsToSpaces = DEFAULT_FORMATOPTIONS_CODETABSTOSPACES;
+			this.ConvertCodeTabsToSpacesNum = DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM;
+			this.PreviewStyle = DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR;
+			this.ProcessDuplicateSeeLinks = DEFAULT_FORMATOPTIONS_PROCESSDUPLICATESEELINKS;
+			this.ProcessIncludes = DEFAULT_FORMATOPTIONS_PROCESSINCLUDES;
+			this.RecognizedTags = new StringCollection();
+			this.ServerPort = DEFAULT_SERVEROPTIONS_PORT;
+			this.ShowToolbar = DEFAULT_DISPLAYOPTIONS_SHOWTOOLBAR;
+			this.UnrecognizedTagHandlingMethod = DEFAULT_UNRECOGNIZEDTAGS_HANDLING;
+
+			// Set the tag compatibility level which will automatically rebuild the recognized tag list.
+			this.TagCompatibilityLevel = DEFAULT_DOCTAGCOMPAT_COMPATLEVEL;
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region Static
 
 		/// <summary>
 		/// Builds a type name that can be stored and used in a <see cref="System.Type.GetType(string)"/> call.
@@ -465,6 +330,7 @@ namespace CR_Documentor.Options
 		/// <returns>An <see cref="OptionSet"/> with the settings from storage.</returns>
 		public static OptionSet GetOptionSetFromStorage(DecoupledStorage storage)
 		{
+			// TODO: Build some safe extensions around reading values from storage so we don't have this redundant code.
 			OptionSet retVal = new OptionSet();
 			try
 			{
@@ -492,7 +358,7 @@ namespace CR_Documentor.Options
 			}
 			try
 			{
-				retVal.ConvertCodeTabsToSpacesNum = storage.ReadInt32(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACESNUM, DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM);
+				retVal.ConvertCodeTabsToSpacesNum = Convert.ToUInt16(storage.ReadInt32(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACESNUM, DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM));
 			}
 			catch (Exception ex)
 			{
@@ -516,6 +382,14 @@ namespace CR_Documentor.Options
 			}
 			try
 			{
+				retVal.ServerPort = Convert.ToUInt16(storage.ReadInt32(SECTION_SERVEROPTIONS, KEY_SERVEROPTIONS_PORT, DEFAULT_SERVEROPTIONS_PORT));
+			}
+			catch (Exception ex)
+			{
+				Log.SendException(String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
+			}
+			try
+			{
 				retVal.ShowToolbar = storage.ReadBoolean(SECTION_DISPLAYOPTIONS, KEY_DISPLAYOPTIONS_SHOWTOOLBAR, DEFAULT_DISPLAYOPTIONS_SHOWTOOLBAR);
 			}
 			catch (Exception ex)
@@ -533,20 +407,16 @@ namespace CR_Documentor.Options
 			return retVal;
 		}
 
-		#endregion
-
-		#region Instance
-
 		// TODO: Should I even bother with tag compatibility?  Is it even used?  Maybe it should be entirely tied to the rendering engine?
 		/// <summary>
 		/// Rebuilds the list of recognized tags based on the current tag compatibility level.
 		/// </summary>
 		protected virtual void RebuildRecognizedTags()
 		{
-			_recognizedTags.Clear();
+			this.RecognizedTags.Clear();
 
 			// Add the common MSDN tags
-			_recognizedTags.AddRange(new string[]{
+			this.RecognizedTags.AddRange(new string[]{
 													 "c",
 													 "code",
 													 "description",
@@ -574,7 +444,7 @@ namespace CR_Documentor.Options
 			// Add the NDoc tags
 			if (_tagCompatibilityLevel == TagCompatibilityLevel.NDoc1_3)
 			{
-				_recognizedTags.AddRange(new string[]{
+				this.RecognizedTags.AddRange(new string[]{
 														 "block",
 														 "event",
 														 "exclude",
@@ -589,7 +459,7 @@ namespace CR_Documentor.Options
 			// Add the Sandcastle tags (Sandcastle explicitly recognizes HTML)
 			else if (_tagCompatibilityLevel == TagCompatibilityLevel.Sandcastle)
 			{
-				_recognizedTags.AddRange(new string[]{
+				this.RecognizedTags.AddRange(new string[]{
 														 "exclude",
 														 "note",
 														 "overloads",
@@ -646,13 +516,8 @@ namespace CR_Documentor.Options
 			storage.WriteEnum(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_PROCESSINCLUDES, this.ProcessIncludes);
 			storage.WriteBoolean(SECTION_DISPLAYOPTIONS, KEY_DISPLAYOPTIONS_SHOWTOOLBAR, this.ShowToolbar);
 			storage.WriteString(SECTION_PREVIEWSTYLE, KEY_PREVIEWSTYLE_STYLEDESCRIPTOR, this.PreviewStyle);
+			storage.WriteInt32(SECTION_SERVEROPTIONS, KEY_SERVEROPTIONS_PORT, this.ServerPort);
 			storage.UpdateStorage();
 		}
-
-		#endregion
-
-		#endregion
-
-		#endregion
 	}
 }

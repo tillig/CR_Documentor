@@ -222,12 +222,12 @@
     <Compile Include="Options\DocumentorOptions.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Options\Enums.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Options\IncludeProcessing.cs" />
     <Compile Include="Options\OptionSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Options\TagCompatibilityLevel.cs" />
+    <Compile Include="Options\UnrecognizedTagHandlingMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector\MemberKey.cs" />
     <Compile Include="Reflector\TypeInformation.cs" />
