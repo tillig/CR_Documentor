@@ -178,11 +178,11 @@ namespace CR_Documentor
 			this.WindowHide += new EventHandler(DocumentorWindow_WindowHide);
 			this.WindowShow += new EventHandler(DocumentorWindow_WindowShow);
 
-			this._events.LanguageElementActivated += new LanguageElementActivatedEventHandler(events_LanguageElementActivated);
-			this._events.AfterParse += new AfterParseEventHandler(events_AfterParse);
-			this._events.AfterClosingSolution += new DefaultHandler(events_AfterClosingSolution);
-			this._events.SolutionOpened += new DefaultHandler(events_SolutionOpened);
-			this._events.DocumentClosing += new DocumentEventHandler(events_DocumentClosing);
+			this._events.LanguageElementActivated += new LanguageElementActivatedEventHandler(RefreshPreviewDefaultEventHandler);
+			this._events.AfterParse += new AfterParseEventHandler(RefreshPreviewDefaultEventHandler);
+			this._events.AfterClosingSolution += new DefaultHandler(RefreshPreviewDefaultEventHandler);
+			this._events.SolutionOpened += new DefaultHandler(RefreshPreviewDefaultEventHandler);
+			this._events.DocumentClosing += new DocumentEventHandler(RefreshPreviewDefaultEventHandler);
 			this._events.OptionsChanged += new OptionsChangedEventHandler(events_OptionsChanged);
 			this._events.BeginShutdown += new DefaultHandler(events_BeginShutdown);
 
@@ -267,53 +267,18 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Handles the <c>LanguageElementActivated</c> event by refreshing the preview window.
+		/// Handles any event by refreshing the preview window.
 		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.LanguageElementActivatedEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_LanguageElementActivated(LanguageElementActivatedEventArgs ea)
+		private void RefreshPreviewDefaultEventHandler()
 		{
 			RefreshPreview();
 		}
 
 		/// <summary>
-		/// Handles the <c>AfterParse</c> event by refreshing the preview window.
+		/// Handles any event by refreshing the preview window.
 		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.AfterParseEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_AfterParse(AfterParseEventArgs ea)
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>AfterClosingSolution</c> event by refreshing the preview window.
-		/// </summary>
-		private void events_AfterClosingSolution()
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>SolutionOpened</c> event by refreshing the preview window.
-		/// </summary>
-		private void events_SolutionOpened()
-		{
-			RefreshPreview();
-		}
-
-		/// <summary>
-		/// Handles the <c>DocumentClosing</c> event by refreshing the preview window.
-		/// </summary>
-		/// <param name="ea">
-		/// An <see cref="DevExpress.CodeRush.Core.DocumentEventArgs"/>
-		/// that contains the event data.
-		/// </param>
-		private void events_DocumentClosing(DocumentEventArgs ea)
+		/// <param name="e">An <see cref="System.EventArgs" /> that contains the event data.</param>
+		private void RefreshPreviewDefaultEventHandler(EventArgs e)
 		{
 			RefreshPreview();
 		}
