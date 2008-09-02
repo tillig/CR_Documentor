@@ -88,6 +88,13 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
+		public void Port_Initialized()
+		{
+			WebServer server = new WebServer(TestServerPort);
+			Assert.AreEqual(TestServerPort, server.Port, "The port value should be initialized by construction.");
+		}
+
+		[TestMethod]
 		public void Prefix_CR_DocumentorIsSecondSegment()
 		{
 			WebServer server = new WebServer(TestServerPort);

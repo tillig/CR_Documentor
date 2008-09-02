@@ -193,7 +193,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpDocTagCompat.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="rbDocTagSandcastle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -319,7 +319,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpUnrecognizedTags.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="rbUTRenderContents.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -511,7 +511,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpFormatOptions.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="chkProcessDuplicateSeeLinks.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -679,7 +679,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpDisplay.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="chkShowToolbar.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -754,7 +754,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpPreviewStyle.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="rbPreviewStyleSandcastle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -808,6 +808,66 @@
     <value>grpPreviewStyle</value>
   </data>
   <data name="&gt;&gt;rbPreviewStyleNDoc13.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Name" xml:space="preserve">
+    <value>rbIncludeRelative</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Name" xml:space="preserve">
+    <value>rbIncludeAbsolute</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Name" xml:space="preserve">
+    <value>rbIncludeNone</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="grpIncludes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 316</value>
+  </data>
+  <data name="grpIncludes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 100</value>
+  </data>
+  <data name="grpIncludes.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="grpIncludes.Text" xml:space="preserve">
+    <value>Process &lt;include /&gt; Tags</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Name" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="rbIncludeRelative.AutoSize" type="System.Boolean, mscorlib">
@@ -891,28 +951,76 @@
   <data name="&gt;&gt;rbIncludeNone.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="grpIncludes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 316</value>
+  <data name="portNumber.Location" type="System.Drawing.Point, System.Drawing">
+    <value>151, 13</value>
   </data>
-  <data name="grpIncludes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 100</value>
+  <data name="portNumber.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 20</value>
   </data>
-  <data name="grpIncludes.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="portNumber.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="grpIncludes.Text" xml:space="preserve">
-    <value>Process &lt;include /&gt; Tags</value>
+  <data name="&gt;&gt;portNumber.Name" xml:space="preserve">
+    <value>portNumber</value>
   </data>
-  <data name="&gt;&gt;grpIncludes.Name" xml:space="preserve">
-    <value>grpIncludes</value>
+  <data name="&gt;&gt;portNumber.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;grpIncludes.Type" xml:space="preserve">
+  <data name="&gt;&gt;portNumber.Parent" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;portNumber.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblServerPort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblServerPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="lblServerPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 13</value>
+  </data>
+  <data name="lblServerPort.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblServerPort.Text" xml:space="preserve">
+    <value>Run preview server on port:</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Name" xml:space="preserve">
+    <value>lblServerPort</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Parent" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpServerOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 143</value>
+  </data>
+  <data name="grpServerOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 47</value>
+  </data>
+  <data name="grpServerOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="grpServerOptions.Text" xml:space="preserve">
+    <value>Preview Web Server</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.Name" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;grpIncludes.Parent" xml:space="preserve">
+  <data name="&gt;&gt;grpServerOptions.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;grpIncludes.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;grpServerOptions.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
