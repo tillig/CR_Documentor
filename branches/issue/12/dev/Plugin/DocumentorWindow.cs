@@ -135,26 +135,7 @@ namespace CR_Documentor
 			try
 			{
 				InitializeWebServer();
-
-				// Build the documentation preview control.
-				Log.Send("Building preview control.");
-				if (this._previewer != null && this.Controls.Contains(this._previewer))
-				{
-					Log.Send("Removing existing preview control.");
-					this.Controls.Remove(this._previewer);
-					this._previewer.Dispose();
-					this._previewer = null;
-				}
-				this._previewer = new DocumentationControl(this._webServer);
-				this.UpdatePreviewFromOptions();
-				Log.Send("Setting browser properties.");
-				this._previewer.Dock = DockStyle.Fill;
-				this._previewer.Location = new System.Drawing.Point(0, 0);
-				this._previewer.Name = "documentor";
-				this._previewer.Size = new System.Drawing.Size(400, 150);
-				this._previewer.TabIndex = 0;
-				this._previewer.Text = "documentor";
-				this.Controls.Add(this._previewer);
+				RebuildPreviewControl();
 
 				// Create the toolbar. The toolbar needs to be added after the
 				// preview window or it ends up covering the top bit of the browser.
@@ -184,7 +165,6 @@ namespace CR_Documentor
 
 			this.ResumeLayout(false);
 		}
-
 
 		#endregion
 
@@ -353,17 +333,14 @@ namespace CR_Documentor
 			Log.Enter(ImageType.Options, "{0}Options changed.", LogPrefix);
 			try
 			{
+				// Things have to happen in exactly this order or the preview control
+				// won't get updated with the proper URL when the web server port
+				// gets updated.
+
+				InitializeWebServer();
+				RebuildPreviewControl();
 				UpdatePreviewFromOptions();
 				UpdateToolbarFromOptions();
-
-				// TODO: We need to restart the server and point the browser to the new location.
-				// Do we need to trash the DocumentationControl and start a new one?
-				// Should this "initialize the window" bit be the same here as it is in plugin construction?
-				// Check out the constructor for a discussion on what happens there -
-				// it may be that we can just clear out all of the controls and
-				// re-create everything fairly simply in the same way that happens
-				// during the constructor.
-
 				RefreshPreview();
 			}
 			finally
@@ -433,6 +410,41 @@ namespace CR_Documentor
 				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
 			}
 			this._toolBar.Buttons.Add(tbb);
+		}
+
+		/// <summary>
+		/// Creates (or re-creates) the preview control and adds it to the control hierarchy.
+		/// </summary>
+		private void RebuildPreviewControl()
+		{
+			// Build the documentation preview control.
+			Log.Send("Building preview control.");
+			int controlIndex = -1;
+			if (this._previewer != null && this.Controls.Contains(this._previewer))
+			{
+				Log.Send("Removing existing preview control.");
+				controlIndex = this.Controls.IndexOf(this._previewer);
+				this.Controls.Remove(this._previewer);
+				this._previewer.Dispose();
+				this._previewer = null;
+			}
+			this._previewer = new DocumentationControl(this._webServer);
+			this.UpdatePreviewFromOptions();
+			Log.Send("Setting browser properties.");
+			this._previewer.Dock = DockStyle.Fill;
+			this._previewer.Location = new System.Drawing.Point(0, 0);
+			this._previewer.Name = "documentor";
+			this._previewer.Size = new System.Drawing.Size(400, 150);
+			this._previewer.TabIndex = 0;
+			this._previewer.Text = "documentor";
+			this.Controls.Add(this._previewer);
+			if (controlIndex >= 0)
+			{
+				// Put the rebuilt previewer back exactly where it was before.
+				// This is necessary because otherwise the top gets hidden by
+				// the toolbar.
+				this.Controls.SetChildIndex(this._previewer, controlIndex);
+			}
 		}
 
 		/// <summary>
