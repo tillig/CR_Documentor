@@ -15,21 +15,24 @@ namespace DocTest.Integration
 		/// Standard text tests:
 		/// </para>
 		/// <para>
-		/// Encoded characters that should display as literals:
-		/// &lt; &apos; &quot; &amp; &gt;
+		/// HTML tag inserted in doc: &lt;faketag /&gt;.
 		/// </para>
 		/// <para>
-		/// Unencoded characters that are optionally encoded: " '
+		/// Encoded characters that should display as literals:
+		/// &lt; &#xe1; &gt; &apos; &quot; &amp;
+		/// </para>
+		/// <para>
+		/// Unencoded characters that are optionally encoded: " ' á
 		/// </para>
 		/// <para>
 		/// Code block tests:
 		/// </para>
 		/// <code>
 		/// Encoded characters that should display as literals:
-		/// &lt; &apos; &quot; &amp; &gt;
+		/// &lt; &#xe1; &apos; &quot; &amp; &gt;
 		/// </code>
 		/// <code>
-		/// Unencoded characters that are optionally encoded: " '
+		/// Unencoded characters that are optionally encoded: " ' á
 		/// </code>
 		/// </remarks>
 		public void HtmlEncoding()
