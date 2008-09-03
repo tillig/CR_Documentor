@@ -47,5 +47,26 @@ namespace DocTest.Integration
 		public void HtmlEncoding()
 		{
 		}
+
+		/// <summary>
+		/// This method illustrates usage of Unicode characters.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// Arabic: العربية
+		/// </para>
+		/// <para>
+		/// Chinese: 中国
+		/// </para>
+		/// <para>
+		/// Russian: Русский
+		/// </para>
+		/// <para>
+		/// Spanish: Español
+		/// </para>
+		/// </remarks>
+		public void Unicode()
+		{
+		}
 	}
 }
