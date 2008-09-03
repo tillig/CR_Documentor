@@ -25,11 +25,14 @@ namespace DocTest.Integration
 		/// Unencoded characters that are optionally encoded: " ' á
 		/// </para>
 		/// <para>
-		/// CDATA block: <![CDATA[< á > ' " &]]>
+		/// <![CDATA[CDATA block: < á > ' " &]]>
 		/// </para>
 		/// <para>
 		/// Code block tests:
 		/// </para>
+		/// <code>
+		/// HTML tag inserted in doc: &lt;faketag /&gt;.
+		/// </code>
 		/// <code>
 		/// Encoded characters that should display as literals:
 		/// &lt; &#xe1; &apos; &quot; &amp; &gt;
@@ -38,7 +41,7 @@ namespace DocTest.Integration
 		/// Unencoded characters that are optionally encoded: " ' á
 		/// </code>
 		/// <code>
-		/// CDATA block: <![CDATA[< á > ' " &]]>
+		/// <![CDATA[CDATA block: < á > ' " &]]>
 		/// </code>
 		/// </remarks>
 		public void HtmlEncoding()
