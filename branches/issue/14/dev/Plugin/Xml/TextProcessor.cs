@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Security;
 using System.Xml;
+using System.Web;
 
 namespace CR_Documentor.Xml
 {
@@ -54,7 +55,7 @@ namespace CR_Documentor.Xml
 			XmlText text = node as XmlText;
 			if (text != null)
 			{
-				writer.Write(text.InnerText);
+				writer.Write(HttpUtility.HtmlEncode(text.InnerText));
 				return;
 			}
 
@@ -64,7 +65,7 @@ namespace CR_Documentor.Xml
 			XmlCDataSection cdatasection = node as XmlCDataSection;
 			if (cdatasection != null)
 			{
-				writer.Write(SecurityElement.Escape(cdatasection.InnerText));
+				writer.Write(HttpUtility.HtmlEncode(cdatasection.InnerText));
 			}
 		}
 
