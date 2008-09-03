@@ -25,6 +25,9 @@ namespace DocTest.Integration
 		/// Unencoded characters that are optionally encoded: " ' á
 		/// </para>
 		/// <para>
+		/// CDATA block: <![CDATA[< á > ' " &]]>
+		/// </para>
+		/// <para>
 		/// Code block tests:
 		/// </para>
 		/// <code>
@@ -33,6 +36,9 @@ namespace DocTest.Integration
 		/// </code>
 		/// <code>
 		/// Unencoded characters that are optionally encoded: " ' á
+		/// </code>
+		/// <code>
+		/// CDATA block: <![CDATA[< á > ' " &]]>
 		/// </code>
 		/// </remarks>
 		public void HtmlEncoding()
