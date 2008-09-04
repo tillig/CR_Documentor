@@ -1,5 +1,5 @@
 using System;
-using System.Security;
+using System.Web;
 using System.Xml;
 
 using CR_Documentor.Reflector;
@@ -158,11 +158,11 @@ namespace CR_Documentor.Transformation.MSDN
 			string outputCode = "";
 			if (escaped == "true")
 			{
-				outputCode = SecurityElement.Escape(e.Element.InnerXml);
+				outputCode = HttpUtility.HtmlEncode(e.Element.InnerXml);
 			}
 			else
 			{
-				outputCode = SecurityElement.Escape(e.Element.InnerText);
+				outputCode = HttpUtility.HtmlEncode(e.Element.InnerText);
 			}
 			if (this.Options.ConvertCodeTabsToSpaces)
 			{
@@ -655,7 +655,7 @@ namespace CR_Documentor.Transformation.MSDN
 		private void Preliminary(object sender, CommentMatchEventArgs e)
 		{
 			this.Writer.Write("<p class='topicstatus'>");
-			string message = SecurityElement.Escape(e.Element.InnerText);
+			string message = HttpUtility.HtmlEncode(e.Element.InnerText);
 			if (message == "")
 			{
 				message = "[This is preliminary documentation and subject to change.]";
@@ -729,7 +729,7 @@ namespace CR_Documentor.Transformation.MSDN
 				string text = e.Element.InnerText;
 				if (text != "")
 				{
-					text = SecurityElement.Escape(text);
+					text = HttpUtility.HtmlEncode(text);
 				}
 				else
 				{
@@ -763,11 +763,11 @@ namespace CR_Documentor.Transformation.MSDN
 				string text = e.Element.InnerText;
 				if (text != "")
 				{
-					this.Writer.Write(SecurityElement.Escape(text));
+					this.Writer.Write(HttpUtility.HtmlEncode(text));
 				}
 				else
 				{
-					this.Writer.Write(SecurityElement.Escape(href));
+					this.Writer.Write(HttpUtility.HtmlEncode(href));
 				}
 				this.Writer.Write("</a>");
 			}
@@ -790,7 +790,7 @@ namespace CR_Documentor.Transformation.MSDN
 				string text = e.Element.InnerText;
 				if (text != "")
 				{
-					this.Writer.Write(SecurityElement.Escape(text));
+					this.Writer.Write(HttpUtility.HtmlEncode(text));
 				}
 				else
 				{
@@ -809,11 +809,11 @@ namespace CR_Documentor.Transformation.MSDN
 				string text = e.Element.InnerText;
 				if (text != "")
 				{
-					this.Writer.Write(SecurityElement.Escape(text));
+					this.Writer.Write(HttpUtility.HtmlEncode(text));
 				}
 				else
 				{
-					this.Writer.Write(SecurityElement.Escape(href));
+					this.Writer.Write(HttpUtility.HtmlEncode(href));
 				}
 				this.Writer.Write("</a>");
 			}
@@ -992,8 +992,8 @@ namespace CR_Documentor.Transformation.MSDN
 		private string ProcessCrefTypeParameters(string cref)
 		{
 			string language = this.CodeTarget.Document.Language;
-			string open = SecurityElement.Escape(Statement.TypeParamListOpener[language]);
-			string close = SecurityElement.Escape(Statement.TypeParamListCloser[language]);
+			string open = HttpUtility.HtmlEncode(Statement.TypeParamListOpener[language]);
+			string close = HttpUtility.HtmlEncode(Statement.TypeParamListCloser[language]);
 			string processed = cref.Replace("{", open).Replace("}", close);
 			return processed;
 		}

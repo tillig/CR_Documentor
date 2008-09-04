@@ -17,23 +17,10 @@ namespace CR_Documentor
 	/// </summary>
 	public static class CommentParser
 	{
-
-		#region CommentParser Variables
-
-		#region Constants
-
 		/// <summary>
 		/// The name of an element containing an error message to be displayed.
 		/// </summary>
 		private const string ErrorNodeElementName = "CR_DOCUMENTOR_ERROR";
-
-		#endregion
-
-		#endregion
-
-
-
-		#region CommentParser Properties
 
 		/// <summary>
 		/// Gets the XML document comment prefix used for the current language.
@@ -52,14 +39,6 @@ namespace CR_Documentor
 				return retVal;
 			}
 		}
-
-		#endregion
-
-
-
-		#region CommentParser Implementation
-
-		#region Methods
 
 		/// <summary>
 		/// Creates a document that only contains a single error node with a message.
@@ -376,10 +355,5 @@ namespace CR_Documentor
 				includeParent.RemoveChild(includeItem);
 			}
 		}
-
-		#endregion
-
-		#endregion
-
 	}
 }

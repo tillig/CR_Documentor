@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Security;
+using System.Web;
 using System.Xml;
 
 namespace CR_Documentor.Xml
@@ -10,7 +10,6 @@ namespace CR_Documentor.Xml
 	/// </summary>
 	public static class TextProcessor
 	{
-
 		/// <summary>
 		/// Echoes attributes that are found on a given element to a <see cref="System.IO.TextWriter"/>.
 		/// </summary>
@@ -54,7 +53,7 @@ namespace CR_Documentor.Xml
 			XmlText text = node as XmlText;
 			if (text != null)
 			{
-				writer.Write(text.InnerText);
+				writer.Write(HttpUtility.HtmlEncode(text.InnerText));
 				return;
 			}
 
@@ -64,11 +63,8 @@ namespace CR_Documentor.Xml
 			XmlCDataSection cdatasection = node as XmlCDataSection;
 			if (cdatasection != null)
 			{
-				writer.Write(SecurityElement.Escape(cdatasection.InnerText));
+				writer.Write(HttpUtility.HtmlEncode(cdatasection.InnerText));
 			}
 		}
-
-
-
 	}
 }
