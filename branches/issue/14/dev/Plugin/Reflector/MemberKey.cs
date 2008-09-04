@@ -17,58 +17,71 @@ namespace CR_Documentor.Reflector
 	/// </summary>
 	public sealed class MemberKey
 	{
-		private string prefix;
-		private string namespaceName;
-		private string type;
-		private string name;
-		private string parameters;
+		private string _prefix = "T:";
+		private string _namespaceName = string.Empty;
+		private string _type = string.Empty;
+		private string _name = string.Empty;
+		private string _parameters = string.Empty;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CR_Documentor.Reflector.MemberKey" /> class.
+		/// </summary>
+		/// <param name="memberKey">
+		/// A <see cref="System.String"/> containing the member key to parse into components.
+		/// </param>
+		/// <remarks>
+		/// <para>
+		/// Member keys are things that show up in "cref" attributes, like
+		/// "MyNamespace.MyTypeName" or "M:Foo.Bar.Baz" or "Alpha.Beta.Gamma(string, int)".
+		/// </para>
+		/// </remarks>
 		private MemberKey(string memberKey)
 		{
-			this.prefix = string.Empty;
-			this.namespaceName = string.Empty;
-			this.type = string.Empty;
-			this.name = string.Empty;
-			this.parameters = string.Empty;
-
-			this.prefix = "T:";
 			if ((memberKey.Length >= 2) && (memberKey[1] == ':'))
 			{
-				this.prefix = memberKey.Substring(0, 2);
+				this._prefix = memberKey.Substring(0, 2);
 				memberKey = memberKey.Substring(2);
+			}
+			else if (memberKey.IndexOf(':') >= 0)
+			{
+				memberKey = memberKey.Substring(memberKey.IndexOf(':') + 1);
 			}
 
 			int bracket = memberKey.IndexOf('(');
 			if (bracket != -1)
 			{
-				this.parameters = memberKey.Substring(bracket).Replace('@', '&');
+				this._parameters = memberKey.Substring(bracket).Replace('@', '&');
 				memberKey = memberKey.Substring(0, bracket);
 			}
 
-			this.namespaceName = memberKey;
-			if (this.prefix != "N:")
+			this._namespaceName = memberKey;
+			if (this._prefix != "N:")
 			{
 				string str1 = memberKey;
 				int dot1 = memberKey.LastIndexOf('.');
 				if (dot1 != -1)
 				{
-					this.namespaceName = memberKey.Substring(0, dot1);
+					this._namespaceName = memberKey.Substring(0, dot1);
 					str1 = memberKey.Substring(dot1 + 1);
-				}
-
-				if (this.prefix == "T:")
-				{
-					this.type = str1;
 				}
 				else
 				{
-					this.name = str1.Replace('#', '.');
+					this._namespaceName = string.Empty;
+				}
 
-					int dot2 = this.namespaceName.LastIndexOf('.');
+				if (this._prefix == "T:")
+				{
+					this._type = str1;
+				}
+				else
+				{
+					this._name = str1.Replace('#', '.');
+
+					int dot2 = this._namespaceName.LastIndexOf('.');
 					if (dot2 != -1)
 					{
-						this.type = this.namespaceName.Substring(dot2 + 1);
-						this.namespaceName = this.namespaceName.Substring(0, dot2);
+						this._type = this._namespaceName.Substring(dot2 + 1);
+						this._namespaceName = this._namespaceName.Substring(0, dot2);
 					}
 				}
 			}
@@ -82,23 +95,15 @@ namespace CR_Documentor.Reflector
 		public static string GetName(string memberKey)
 		{
 			MemberKey description = new MemberKey(memberKey);
-
-			if (description.prefix.Length == 0)
+			switch (description._prefix)
 			{
-				return string.Empty;
+				case "N:":
+					return description._namespaceName;
+				case "T:":
+					return description._type;
+				default:
+					return description._name;
 			}
-
-			if (description.prefix == "N:")
-			{
-				return description.namespaceName;
-			}
-
-			if (description.prefix == "T:")
-			{
-				return description.type;
-			}
-
-			return description.name;
 		}
 
 		/// <summary>
@@ -110,27 +115,27 @@ namespace CR_Documentor.Reflector
 		{
 			MemberKey memberKey = new MemberKey(memberName);
 
-			if (memberKey.prefix == "N:")
+			if (memberKey._prefix == "N:")
 			{
-				return memberKey.namespaceName;
+				return memberKey._namespaceName;
 			}
 
-			string type = (memberKey.namespaceName.Length > 0) ? (memberKey.namespaceName + "." + memberKey.type) : memberKey.type;
+			string type = (memberKey._namespaceName.Length > 0) ? (memberKey._namespaceName + "." + memberKey._type) : memberKey._type;
 
-			switch (memberKey.prefix)
+			switch (memberKey._prefix)
 			{
 				case "T:":
 					return type;
 
 				case "M:":
-					return type + "." + memberKey.name + ((memberKey.parameters.Length == 0) ? "()" : memberKey.parameters);
+					return type + "." + memberKey._name + ((memberKey._parameters.Length == 0) ? "()" : memberKey._parameters);
 
 				case "P:":
-					return type + "." + memberKey.name + memberKey.parameters;
+					return type + "." + memberKey._name + memberKey._parameters;
 
 				case "E:":
 				case "F:":
-					return type + "." + memberKey.name;
+					return type + "." + memberKey._name;
 			}
 
 			return string.Empty;
