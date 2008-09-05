@@ -30,3 +30,4 @@ http://cr-documentor.googlecode.com/svn/site/screenshots/options_dialog.png
     * _Process, allow relative/absolute file paths_: Process <include /> tags and actually include the documentation. Allow both absolute paths and relative paths. ("Relative" means "relative to the source code document location.")
   * *Toolbar Visibility*: Show or hide the toolbar that appears in the CR_Documentor preview window.
   * *Preview Style*: Choose the style of the documentation preview. Choices include classic MSDN/NDoc 1.3 style and Sandcastle "Prototype" style.
+  * *Preview Web Server Port*: If running the internal preview web server on the default port doesn't work for you, you can change the port it listens on.
