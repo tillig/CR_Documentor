@@ -18,9 +18,26 @@ namespace CR_Documentor.Xml
 		/// <param name="xpath">
 		/// The XPath query to execute on the parent node.
 		/// </param>
-		/// <returns>True if the parent contains nodes matching the XPath query; false otherwise.</returns>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="parent" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// Thrown if <paramref name="xpath" /> is <see langword="null" /> or <see cref="System.String.Empty" />.
+		/// </exception>
+		/// <returns>
+		/// <see langword="true" /> if the parent contains nodes matching the
+		/// XPath query; <see langword="false" /> otherwise.
+		/// </returns>
 		public static bool Test(XmlNode parent, string xpath)
 		{
+			if (parent == null)
+			{
+				throw new ArgumentNullException("parent");
+			}
+			if (String.IsNullOrEmpty(xpath))
+			{
+				throw new ArgumentException("XPath expression may not be null or empty.", "xpath");
+			}
 			XmlNodeList list = parent.SelectNodes(xpath);
 			return (list.Count != 0);
 		}
@@ -34,9 +51,24 @@ namespace CR_Documentor.Xml
 		/// <param name="xpath">
 		/// The XPath query to execute on the parent node.
 		/// </param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="parent" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// Thrown if <paramref name="xpath" /> is <see langword="null" /> or <see cref="System.String.Empty" />.
+		/// </exception>
 		/// <returns>The encoded inner text of a selected node.</returns>
 		public static string ValueOf(XmlNode parent, string xpath)
 		{
+			if (parent == null)
+			{
+				throw new ArgumentNullException("parent");
+			}
+			if (String.IsNullOrEmpty(xpath))
+			{
+				throw new ArgumentException("XPath expression may not be null or empty.", "xpath");
+			}
+
 			XmlNodeList list = parent.SelectNodes(xpath);
 			if (list.Count == 1)
 			{

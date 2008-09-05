@@ -579,19 +579,19 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				{
 					this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
 				}
+
+				if (this.DocumentLanguage == Language.Basic)
+				{
+					this.Parameters("(", ")");
+				}
+				else
+				{
+					this.Parameters("[", "]");
+				}
 			}
 			else
 			{
 				this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
-			}
-
-			if (this.DocumentLanguage == Language.Basic)
-			{
-				this.Parameters("(", ")");
-			}
-			else
-			{
-				this.Parameters("[", "]");
 			}
 
 			if (this.DocumentLanguage != Language.Basic)
