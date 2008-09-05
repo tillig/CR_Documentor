@@ -1,6 +1,14 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured
 
+=2.2.0.0=
+  * Fixed Issue #10: CR_Documentor window doesn't appear when running VS2008 as standard user. Added [ServerStartupErrors info to the wiki] about security configuration and if there's any problem starting up, CR_Documentor will alert you.
+  * Fixed Issue #11: Unable to have multiple VS instances open at once.
+  * Fixed Issue #13: Set server to listen to localhost. (This should also help with the security problems seen in Issue #10.)
+  * Fixed Issue #14: HTML entities incorrectly get decoded before display.
+  * Fixed Issue #15: C# property syntax preview renders incorrectly with brackets in Sandcastle preview.
+  * Enabled the port that the internal web server listens on to be configurable through the options pages. (Issue #12)
+
 =2.1.0.0=
   * Fixed Issue #1: Changed preview so it is served up by an embedded web server instead of through manipulation of the IE DOM. This fixes the script security warning.
   * Changed the hosting of the web browser so it's using the .NET !WebBrowser control instead of hosting the ActiveX control directly.
