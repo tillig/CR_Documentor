@@ -31,3 +31,26 @@ This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word
 
 =The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).=
 This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
+
+=Standard block comments are being incorrectly parsed as XML comments.=
+If you have a block comment like this:
+
+{{{
+/***************
+ * Comment here.
+ ***************/
+public void Foo() {}
+}}}
+
+You may find that CR_Documentor attempts to render it as though it were XML doc. This is a defect with the DXCore parsing engine - if your block comment has more than one asterisk by the opening slash, it incorrectly parses it as XML doc and tells CR_Documentor it's OK to render. For example, this comment will not be considered XML doc:
+
+{{{
+/*
+ * Comment here.
+ */
+public void Foo() {}
+}}}
+
+This may cause CR_Documentor to display an error indicating the XML is invalid. (That's because it is - it's not XML at all!)
+
+A defect has been filed against DXCore to get this fixed: http://www.devexpress.com/issue=B97381
