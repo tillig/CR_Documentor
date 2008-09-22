@@ -19,3 +19,36 @@ Also, to display the preview CR_Documentor is hosting the Internet Explorer brow
 If you enable the inclusion of documentation via <include>, you may see errors telling you that the documentation couldn't be rendered for one reason or another.  This is generally caused by the specified include file not being found or the XPath selection expression not finding any nodes in the specified document.
   * If the XPath isn't finding anything, you will need to use your favorite XML tool to determine why.
   * If the file isn't found, make sure that you are specifying the correct location. Historically this required you to specify an absolute path to the included file ("C:\includes\mydoc.xml") but recent versions of the .NET compilers will locate included files relative to the source document they're being included into. Check your CR_Documentor options - you can select to allow just absolute paths or both absolute and relative. If you're using relative paths, be sure to enable that option.
+
+=Q: Why are my block comments being parsed as XML comments?=
+If you have a block comment like this:
+
+{{{
+/***************
+ * Comment here.
+ ***************/
+public void Foo() {}
+}}}
+
+You may find that CR_Documentor attempts to render it as though it were XML doc.
+
+As it turns out, this is correct behavior. The problem is in the opening line:
+
+{{{
+/***************
+}}}
+
+Per the [http://msdn.microsoft.com/en-us/vcsharp/aa336809.aspx C# 3.0 Language Specification], the character sequence `/*` indicates the beginning of a standard block comment... _but `/**` indicates the beginning of an XML documentation comment._
+
+Since the opening line starts with `/**` the DXCore parsing engine reads it, correctly per the spec, as an XML doc comment and CR_Documentor attempts to render it. If you choose to open your standard delimited block comments with a line of asterisks, you may see CR_Documentor to display an error indicating the XML is invalid. (That's because it is - it's not XML at all!)
+
+It is recommended that you follow the language spec and not open standard block comments with `/**`... but there are ways you can sort of have your cake and eat it, too. For example, rather than starting with `/**` leave a space between the two asterisks:
+
+{{{
+/* **************
+}}}
+
+Or you could use dashes instead of asterisks:
+{{{
+/*--------------
+}}}
