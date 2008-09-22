@@ -30,9 +30,7 @@ If you have a block comment like this:
 public void Foo() {}
 }}}
 
-You may find that CR_Documentor attempts to render it as though it were XML doc.
-
-As it turns out, this is correct behavior. The problem is in the opening line:
+...you may find that CR_Documentor attempts to render it as though it were XML doc. As it turns out, *this is correct behavior*. The problem is in the opening line:
 
 {{{
 /***************
