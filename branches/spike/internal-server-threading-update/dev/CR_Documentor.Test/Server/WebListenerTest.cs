@@ -32,6 +32,16 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void GetContext_DoesNotCallStopIfNotListening()
+		{
+			using (WebListenerMock server = new WebListenerMock(TestListenerPort, TestListenerUniqueId))
+			{
+				server.GetContext();
+			}
+		}
+
+		[TestMethod]
 		public void IsListening_InitialValue()
 		{
 			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))

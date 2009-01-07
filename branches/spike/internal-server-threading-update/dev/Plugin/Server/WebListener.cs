@@ -118,6 +118,25 @@ namespace CR_Documentor.Server
 		}
 
 		/// <summary>
+		/// Retrieves the next incoming request on the listener.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.Net.HttpListenerContext"/> with the incoming request.
+		/// </returns>
+		/// <exception cref="System.InvalidOperationException">
+		/// Thrown if this method is called and the listener has not been started.
+		/// </exception>
+		/// <seealso cref="System.Net.HttpListener.GetContext"/>
+		public virtual HttpListenerContext GetContext()
+		{
+			if (!this._listener.IsListening)
+			{
+				throw new InvalidOperationException("The listener must be started and listening to return a context.");
+			}
+			return this._listener.GetContext();
+		}
+
+		/// <summary>
 		/// Starts the web server listening for requests.
 		/// </summary>
 		public virtual void Start()
