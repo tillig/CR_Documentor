@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9229512A-C004-46FD-8CEE-D096C883E827}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -231,6 +231,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector\MemberKey.cs" />
     <Compile Include="Reflector\TypeInformation.cs" />
+    <Compile Include="Server\WebListener.cs" />
     <Compile Include="Server\WebServer.cs" />
     <Compile Include="Transformation\CommentMatchEventArgs.cs" />
     <Compile Include="Transformation\MSDN\Engine.cs">

@@ -81,13 +81,6 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
-		public void IsListening_Default()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			Assert.IsFalse(server.IsListening, "The server should not be listening right after construction.");
-		}
-
-		[TestMethod]
 		public void Port_Initialized()
 		{
 			WebServer server = new WebServer(TestServerPort);
@@ -98,41 +91,11 @@ namespace CR_Documentor.Test.Server
 		public void Prefix_CR_DocumentorIsSecondSegment()
 		{
 			WebServer server = new WebServer(TestServerPort);
-			string[] segments = server.Prefix.Segments;
+			string[] segments = server.Url.Segments;
 			// Get the path segment and trim the trailing slash
 			string crdSegment = segments[1];
 			crdSegment = crdSegment.Substring(0, crdSegment.Length - 1);
 			Assert.AreEqual("CR_Documentor", crdSegment, "'CR_Documentor' should be at the base of the prefix, right after the root.");
-		}
-
-		[TestMethod]
-		public void Prefix_Format()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string prefix = String.Format(WebServer.BaseUriFormat, TestServerPort, server.UniqueId);
-			Assert.AreEqual(prefix, server.Prefix.AbsoluteUri, "The prefix should be properly formatted.");
-		}
-
-		[TestMethod]
-		public void Prefix_GuidIsThirdSegment()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string[] segments = server.Prefix.Segments;
-			// Get the path segment and trim the trailing slash
-			string guidSegment = segments[2];
-			guidSegment = guidSegment.Substring(0, guidSegment.Length - 1);
-			Guid guidId = new Guid(guidSegment);
-			Assert.AreEqual(server.UniqueId, guidId, "The GUID identifier segment should be the last segment and should match the server's unique ID.");
-		}
-
-		[TestMethod]
-		public void Start_Stop_IsListening()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			server.Start();
-			Assert.IsTrue(server.IsListening, "The server should be listening after it starts.");
-			server.Stop();
-			Assert.IsFalse(server.IsListening, "The server should not be listening after it stops.");
 		}
 
 		private void ServerRequestTestBody(string initialContent, string expectedContent)
@@ -143,7 +106,7 @@ namespace CR_Documentor.Test.Server
 				server.Start();
 				for (int i = 0; i < 3; i++)
 				{
-					WebRequest request = WebRequest.Create(String.Format(WebServer.BaseUriFormat, TestServerPort, server.UniqueId));
+					WebRequest request = WebRequest.Create(String.Format(WebListener.BaseUriFormat, TestServerPort, server.UniqueId));
 					WebResponse response = request.GetResponse();
 					Stream responseStream = response.GetResponseStream();
 					StreamReader reader = new StreamReader(responseStream);

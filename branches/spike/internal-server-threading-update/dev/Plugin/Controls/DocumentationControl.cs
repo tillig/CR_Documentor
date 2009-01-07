@@ -154,7 +154,7 @@ namespace CR_Documentor.Controls
 			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
 			try
 			{
-				string url = this.WebServer.Prefix.AbsoluteUri;
+				string url = this.WebServer.Url.ToString();
 				this._browser.SafeUrls.Add(url);
 				this._browser.Navigate(url);
 			}
