@@ -30,49 +30,6 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
-		public void Content_Default()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			Assert.IsNull(server.Content, "The default content should be null.");
-		}
-
-		[TestMethod]
-		public void Content_SetEmpty()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string content = "";
-			server.Content = content;
-			Assert.AreEqual(content, server.Content, "The content should be settable to empty string.");
-		}
-
-		[TestMethod]
-		public void Content_SetNull()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string content = null;
-			server.Content = content;
-			Assert.AreEqual(content, server.Content, "The content should be settable to null.");
-		}
-
-		[TestMethod]
-		public void Content_SetHtml()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string content = "<html><head><title>Test</title></head><body><p>Test</p></body></html>";
-			server.Content = content;
-			Assert.AreEqual(content, server.Content, "The content should be settable to HTML.");
-		}
-
-		[TestMethod]
-		public void Content_SetNonHtml()
-		{
-			WebServer server = new WebServer(TestServerPort);
-			string content = "This is not HTML.";
-			server.Content = content;
-			Assert.AreEqual(content, server.Content, "The content should be settable to non-HTML.");
-		}
-
-		[TestMethod]
 		public void Dispose_CallsStop()
 		{
 			WebServerMock server = new WebServerMock(TestServerPort);
@@ -102,7 +59,7 @@ namespace CR_Documentor.Test.Server
 		{
 			using (WebServer server = new WebServer(TestServerPort))
 			{
-				server.Content = initialContent;
+				//server.Content = initialContent;
 				server.Start();
 				for (int i = 0; i < 3; i++)
 				{

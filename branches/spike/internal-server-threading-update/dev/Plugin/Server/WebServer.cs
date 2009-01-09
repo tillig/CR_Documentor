@@ -108,25 +108,6 @@ namespace CR_Documentor.Server
 		private long _runState = (long)State.Stopped;
 
 		/// <summary>
-		/// Gets or sets the content to serve to the browser.
-		/// </summary>
-		/// <value>
-		/// A <see cref="System.String"/> with the HTML to serve to the
-		/// browser on incoming requests.
-		/// </value>
-		public virtual string Content
-		{
-			get
-			{
-				throw new NotImplementedException("This needs to be removed. Handle the IncomingRequest event.");
-			}
-			set
-			{
-				throw new NotImplementedException("This needs to be removed. Handle the IncomingRequest event.");
-			}
-		}
-
-		/// <summary>
 		/// Gets the Windows forms control that owns the server.
 		/// </summary>
 		/// <value>
