@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
+using Debug = System.Diagnostics.Debug;
 
 namespace CR_Documentor.Server
 {
@@ -20,6 +23,15 @@ namespace CR_Documentor.Server
 	/// <para>
 	/// The overall structure of the server is based on some source code posted
 	/// on Planet Source Code here: <see href="http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=6314&amp;lngWId=10"/>
+	/// </para>
+	/// <para>
+	/// After instantiating an instance of the web server, optionally set the
+	/// <see cref="CR_Documentor.Server.WebServer.OwnerControl"/> property (for
+	/// servers owned by a Windows forms control), and then call the
+	/// <see cref="CR_Documentor.Server.WebServer.Start"/> method to begin listening
+	/// for requests. When you're done listening for requests, call the
+	/// <see cref="CR_Documentor.Server.WebServer.Stop"/> method to shut the
+	/// process down.
 	/// </para>
 	/// </remarks>
 	public class WebServer : IDisposable
@@ -45,15 +57,25 @@ namespace CR_Documentor.Server
 			Stopped,
 
 			/// <summary>
-			/// The server is in the process of starting or stopping.
+			/// The server is in the process of stopping.
 			/// </summary>
-			Intermediate,
+			Stopping,
+
+			/// <summary>
+			/// The server is in the process of starting.
+			/// </summary>
+			Starting,
 
 			/// <summary>
 			/// The server is started.
 			/// </summary>
 			Started
 		}
+
+		/// <summary>
+		/// The thread that contains the primary connection manager loop.
+		/// </summary>
+		private Thread _connectionManagerThread = null;
 
 		/// <summary>
 		/// The listener used for receiving and responding to HTTP requests.
@@ -66,10 +88,16 @@ namespace CR_Documentor.Server
 		private Queue<HttpListenerContext> _requestQueue = new Queue<HttpListenerContext>();
 
 		/// <summary>
+		/// The thread responsible for processing queued requests.
+		/// </summary>
+		private Thread _requestQueueHandlerThread = null;
+
+		/// <summary>
 		/// Private storage for the current run state of the server.
 		/// </summary>
 		private long _runState = (long)State.Stopped;
 
+		// TODO: Remove the Content property and actually have the preview window respond to the IncomingRequest event.
 		/// <summary>
 		/// Gets or sets the content to serve to the browser.
 		/// </summary>
@@ -153,6 +181,62 @@ namespace CR_Documentor.Server
 		}
 
 		/// <summary>
+		/// Blocks the listener so it waits for an incoming request and then adds
+		/// that request to the queue for processing.
+		/// </summary>
+		private void AddIncomingRequestToQueue()
+		{
+			try
+			{
+				HttpListenerContext context = this._listener.GetContext();
+				lock (this._requestQueue)
+				{
+					this._requestQueue.Enqueue(context);
+				}
+			}
+			catch (HttpListenerException err)
+			{
+				Log.SendException("Server exiting request handling loop.", err);
+			}
+		}
+
+		/// <summary>
+		/// Entry point for the connection manager to start listening for requests
+		/// and add incoming ones to the queue.
+		/// </summary>
+		private void ConnectionManagerThreadStart()
+		{
+			Interlocked.Exchange(ref this._runState, (long)State.Starting);
+			try
+			{
+				Log.Send("Starting web server connection manager.");
+				if (!this._listener.IsListening)
+				{
+					this._listener.Start();
+				}
+				if (this._listener.IsListening)
+				{
+					Interlocked.Exchange(ref this._runState, (long)State.Started);
+				}
+
+				ManualResetEvent requestQueueHandling = this.StartRequestQueueHandling();
+				while (RunState == State.Started)
+				{
+					this.AddIncomingRequestToQueue();
+				}
+				// Wait for the request queue handling to stop. Once it's done, we
+				// know that both incoming requests and the request handling are
+				// complete and everything's stopped.
+				requestQueueHandling.WaitOne();
+			}
+			finally
+			{
+				Log.Send("Web server connection manager stopped.");
+				Interlocked.Exchange(ref this._runState, (long)State.Stopped);
+			}
+		}
+
+		/// <summary>
 		/// Raises the event that indicates an incoming request needs to be responded to.
 		/// </summary>
 		/// <param name="context">
@@ -161,7 +245,12 @@ namespace CR_Documentor.Server
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if the <paramref name="context" /> is <see langword="null" />.
 		/// </exception>
+		/// <remarks>
+		/// Once the event has been raised and everything is said and done,
+		/// the response to the client will be closed and sent.
+		/// </remarks>
 		/// <seealso cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+		/// <seealso cref="System.Net.HttpListenerResponse.Close()"/>
 		private void RaiseIncomingRequest(HttpListenerContext context)
 		{
 			HttpRequestEventArgs e = new HttpRequestEventArgs(context);
@@ -184,16 +273,191 @@ namespace CR_Documentor.Server
 			{
 				Log.SendException("Exception in raising the incoming request event.", ex);
 			}
+			e.RequestContext.Response.Close();
 		}
 
+		/// <summary>
+		/// Entry point for the request queue handler to dequeue requests and raise
+		/// the <see cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+		/// event.
+		/// </summary>
+		/// <param name="completionEvent">
+		/// The <see cref="System.Threading.ManualResetEvent"/> that should be
+		/// set once the queue is empty and the handler is ready for shutdown.
+		/// </param>
+		private void RequestQueueHandlerThreadStart(object completionEvent)
+		{
+			try
+			{
+				HttpListenerContext context = null;
+				Log.Send("Request queue handler started.");
+
+				while (this.RunState == State.Started)
+				{
+					try
+					{
+						lock (this._requestQueue)
+						{
+							if (this._requestQueue.Count > 0)
+							{
+								context = this._requestQueue.Dequeue();
+							}
+						}
+						if (context != null)
+						{
+							this.RaiseIncomingRequest(context);
+						}
+					}
+					catch (Exception ex)
+					{
+						Log.SendException("Error in request queue handler; aborting.", ex);
+					}
+				}
+
+				lock (this._requestQueue)
+				{
+					byte[] b = Encoding.UTF8.GetBytes("<html><head><title>WebServer</title></head><body>Service shutting down.</body></html>");
+					while (this._requestQueue.Count > 0)
+					{
+						context = this._requestQueue.Dequeue();
+						context.Response.ContentType = "text/html";
+						context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+						context.Response.StatusDescription = "Service Unavailable";
+						context.Response.ContentLength64 = (long)b.Length;
+						context.Response.OutputStream.Write(b, 0, b.Length);
+						context.Response.OutputStream.Close();
+						context.Response.Close();
+					}
+				}
+			}
+			finally
+			{
+				Log.Send("Request queue handler process shut down.");
+				((ManualResetEvent)completionEvent).Set();
+			}
+		}
+
+		/// <summary>
+		/// Starts the web server and allows incoming requests to be handled.
+		/// </summary>
+		/// <exception cref="System.Threading.ThreadStateException">
+		/// Thrown if the request handling process is already running or if the
+		/// process could not be properly initialized.
+		/// </exception>
+		/// <exception cref="System.TimeoutException">
+		/// Thrown if the request handling process could not be started within 10 seconds.
+		/// </exception>
+		/// <remarks>
+		/// <para>
+		/// This method initializes and starts a thread that acts as a master
+		/// "connection manager." The connection manager thread is responsible for
+		/// two things - starting up a request queue handler (a separate thread
+		/// that raises the <see cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+		/// event for incoming requests) and adding incoming requests to a queue
+		/// to be handled.
+		/// </para>
+		/// </remarks>
 		public virtual void Start()
 		{
-			throw new NotImplementedException();
+			if (this._connectionManagerThread == null || this._connectionManagerThread.ThreadState == ThreadState.Stopped)
+			{
+				this._connectionManagerThread = new Thread(new ThreadStart(this.ConnectionManagerThreadStart));
+				this._connectionManagerThread.Name = String.Format(CultureInfo.InvariantCulture, "ConnectionManager_{0}", this.UniqueId);
+			}
+			else if (this._connectionManagerThread.ThreadState == ThreadState.Running)
+			{
+				throw new ThreadStateException("The request handling process is already running.");
+			}
+
+			// By the time we get here, we should have a pristine connection manager
+			// thread that's never been started before.
+			if (this._connectionManagerThread.ThreadState != ThreadState.Unstarted)
+			{
+				throw new ThreadStateException("The request handling process was not properly initialized so it could not be started.");
+			}
+			this._connectionManagerThread.Start();
+
+			long waitTime = DateTime.Now.Ticks + TimeSpan.TicksPerSecond * 10;
+			while (this.RunState != State.Started)
+			{
+				Thread.Sleep(100);
+				if (DateTime.Now.Ticks > waitTime)
+				{
+					throw new TimeoutException("Unable to start the request handling process.");
+				}
+			}
 		}
 
+		/// <summary>
+		/// Starts the thread that responds to incoming requests getting queued up.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.Threading.ManualResetEvent"/> that will be set
+		/// when the queue is empty and prepared for shutdown.
+		/// </returns>
+		private ManualResetEvent StartRequestQueueHandling()
+		{
+			ManualResetEvent completionEvent = new ManualResetEvent(false);
+			try
+			{
+				if (
+					this._requestQueueHandlerThread != null &&
+					(this._requestQueueHandlerThread.ThreadState != ThreadState.Unstarted || this._requestQueueHandlerThread.ThreadState != ThreadState.Stopped)
+					)
+				{
+					this._requestQueueHandlerThread.Abort();
+				}
+				this._requestQueueHandlerThread = new Thread(new ParameterizedThreadStart(this.RequestQueueHandlerThreadStart));
+				this._requestQueueHandlerThread.Name = String.Format(CultureInfo.InvariantCulture, "RequestQueueHandler_{0}", this.UniqueId);
+				this._requestQueueHandlerThread.Start(completionEvent);
+
+				long waitTime = DateTime.Now.Ticks + (30 * TimeSpan.TicksPerSecond);
+				while (this._requestQueueHandlerThread.ThreadState != ThreadState.Running)
+				{
+					Thread.Sleep(100);
+					if (DateTime.Now.Ticks > waitTime)
+					{
+						throw new TimeoutException("Unable to start the request queue handler.");
+					}
+				}
+				return completionEvent;
+			}
+			catch
+			{
+				completionEvent.Set();
+				throw;
+			}
+			finally
+			{
+				Debug.Assert(this._requestQueueHandlerThread.ThreadState == ThreadState.Running);
+			}
+		}
+
+		/// <summary>
+		/// Stops the web server from handling incoming requests.
+		/// </summary>
+		/// <exception cref="System.TimeoutException">
+		/// Thrown if the request handling process could not be stopped within 10 seconds.
+		/// </exception>
 		public virtual void Stop()
 		{
-			throw new NotImplementedException();
+			Interlocked.Exchange(ref this._runState, (long)State.Stopping);
+			if (this._listener.IsListening)
+			{
+				// Stopping the listener should abort the AddIncomingRequestToQueue
+				// method and allow the ConnectionManagerThreadStart sequence to
+				// end, which sets the RunState to Stopped.
+				this._listener.Stop();
+			}
+			long waitTime = DateTime.Now.Ticks + TimeSpan.TicksPerSecond * 10;
+			while (this.RunState != State.Stopped)
+			{
+				Thread.Sleep(100);
+				if (DateTime.Now.Ticks > waitTime)
+				{
+					throw new TimeoutException("Unable to stop the web server process.");
+				}
+			}
 		}
 
 		public virtual void Dispose()
