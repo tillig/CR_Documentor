@@ -30,9 +30,10 @@ namespace CR_Documentor.Test.Server
 		}
 
 		[TestMethod]
-		public void Dispose_CallsStop()
+		public void Dispose_CallsStopIfStarted()
 		{
 			WebServerMock server = new WebServerMock(TestServerPort);
+			server.Start();
 			server.Dispose();
 			Assert.IsTrue(server.StopCalled, "The Stop method should be called during disposal.");
 		}
@@ -40,27 +41,32 @@ namespace CR_Documentor.Test.Server
 		[TestMethod]
 		public void Port_Initialized()
 		{
-			WebServer server = new WebServer(TestServerPort);
-			Assert.AreEqual(TestServerPort, server.Port, "The port value should be initialized by construction.");
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				Assert.AreEqual(TestServerPort, server.Port, "The port value should be initialized by construction.");
+			}
 		}
 
 		[TestMethod]
 		public void Prefix_CR_DocumentorIsSecondSegment()
 		{
-			WebServer server = new WebServer(TestServerPort);
-			string[] segments = server.Url.Segments;
-			// Get the path segment and trim the trailing slash
-			string crdSegment = segments[1];
-			crdSegment = crdSegment.Substring(0, crdSegment.Length - 1);
-			Assert.AreEqual("CR_Documentor", crdSegment, "'CR_Documentor' should be at the base of the prefix, right after the root.");
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				string[] segments = server.Url.Segments;
+				// Get the path segment and trim the trailing slash
+				string crdSegment = segments[1];
+				crdSegment = crdSegment.Substring(0, crdSegment.Length - 1);
+				Assert.AreEqual("CR_Documentor", crdSegment, "'CR_Documentor' should be at the base of the prefix, right after the root.");
+			}
 		}
 
 		private void ServerRequestTestBody(string initialContent, string expectedContent)
 		{
 			using (WebServer server = new WebServer(TestServerPort))
 			{
-				//server.Content = initialContent;
 				server.Start();
+				WebRequestController controller = new WebRequestController(initialContent);
+				server.IncomingRequest += controller.RequestEventHandler;
 				for (int i = 0; i < 3; i++)
 				{
 					WebRequest request = WebRequest.Create(String.Format(WebListener.BaseUriFormat, TestServerPort, server.UniqueId));
@@ -71,7 +77,21 @@ namespace CR_Documentor.Test.Server
 					Assert.AreEqual(expectedContent, responseContent, "The expected content was not returned by the server.");
 					response.Close();
 				}
+				server.IncomingRequest -= controller.RequestEventHandler;
 				server.Stop();
+			}
+		}
+
+		private class WebRequestController
+		{
+			public string ContentToServe { get; private set; }
+			public WebRequestController(string contentToServe)
+			{
+				this.ContentToServe = contentToServe;
+			}
+			public void RequestEventHandler(object sender, HttpRequestEventArgs e)
+			{
+				ResponseWriter.WriteHtml(e.RequestContext, this.ContentToServe);
 			}
 		}
 

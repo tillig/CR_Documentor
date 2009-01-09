@@ -21,13 +21,7 @@ namespace CR_Documentor.Server
 	/// incoming request.
 	/// </para>
 	/// <para>
-	/// The overall structure of the server is based on some source code posted
-	/// on Planet Source Code here: <see href="http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=6314&amp;lngWId=10"/>
-	/// </para>
-	/// <para>
-	/// After instantiating an instance of the web server, optionally set the
-	/// <see cref="CR_Documentor.Server.WebServer.OwnerControl"/> property (for
-	/// servers owned by a Windows forms control), and then call the
+	/// After instantiating an instance of the web server, call the
 	/// <see cref="CR_Documentor.Server.WebServer.Start"/> method to begin listening
 	/// for requests. When you're done listening for requests, call the
 	/// <see cref="CR_Documentor.Server.WebServer.Stop"/> method to shut the
@@ -88,34 +82,9 @@ namespace CR_Documentor.Server
 		private WebListener _listener = null;
 
 		/// <summary>
-		/// The queue of incoming requests that needs to be handled.
-		/// </summary>
-		private Queue<HttpListenerContext> _requestQueue = new Queue<HttpListenerContext>();
-
-		/// <summary>
-		/// Semaphore indicating activity in the request queue.
-		/// </summary>
-		private Mutex _requestQueueAvailable = new Mutex();
-
-		/// <summary>
-		/// The thread responsible for processing queued requests.
-		/// </summary>
-		private Thread _requestQueueHandlerThread = null;
-
-		/// <summary>
 		/// Private storage for the current run state of the server.
 		/// </summary>
 		private long _runState = (long)State.Stopped;
-
-		/// <summary>
-		/// Gets the Windows forms control that owns the server.
-		/// </summary>
-		/// <value>
-		/// A <see cref="System.Windows.Forms.Control"/> that "owns" the server.
-		/// This control will be used when invoking events so threading occurs
-		/// correctly.
-		/// </value>
-		public virtual Control OwnerControl { get; set; }
 
 		/// <summary>
 		/// Gets the port that the server was initialized with.
@@ -190,34 +159,6 @@ namespace CR_Documentor.Server
 		}
 
 		/// <summary>
-		/// Blocks the listener so it waits for an incoming request and then adds
-		/// that request to the queue for processing.
-		/// </summary>
-		private void AddIncomingRequestToQueue()
-		{
-			try
-			{
-				HttpListenerContext context = this._listener.GetContext();
-				try
-				{
-					this._requestQueueAvailable.WaitOne();
-					lock (this._requestQueue)
-					{
-						this._requestQueue.Enqueue(context);
-					}
-				}
-				finally
-				{
-					this._requestQueueAvailable.ReleaseMutex();
-				}
-			}
-			catch (HttpListenerException err)
-			{
-				Log.SendException("Server exiting request handling loop.", err);
-			}
-		}
-
-		/// <summary>
 		/// Entry point for the connection manager to start listening for requests
 		/// and add incoming ones to the queue.
 		/// </summary>
@@ -236,15 +177,19 @@ namespace CR_Documentor.Server
 					Interlocked.Exchange(ref this._runState, (long)State.Started);
 				}
 
-				ManualResetEvent requestQueueHandling = this.StartRequestQueueHandling();
-				while (RunState == State.Started)
+				try
 				{
-					this.AddIncomingRequestToQueue();
+					while (RunState == State.Started)
+					{
+						HttpListenerContext context = this._listener.GetContext();
+						this.RaiseIncomingRequest(context);
+					}
 				}
-				// Wait for the request queue handling to stop. Once it's done, we
-				// know that both incoming requests and the request handling are
-				// complete and everything's stopped.
-				requestQueueHandling.WaitOne();
+				catch (HttpListenerException)
+				{
+					// This will occur when the listener gets shut down.
+					// Just swallow it and move on.
+				}
 			}
 			finally
 			{
@@ -283,11 +228,6 @@ namespace CR_Documentor.Server
 					// themselves up.
 					this.Stop();
 				}
-				if (this._requestQueueHandlerThread != null)
-				{
-					this._requestQueueHandlerThread.Abort();
-					this._requestQueueHandlerThread = null;
-				}
 				if (this._connectionManagerThread != null)
 				{
 					this._connectionManagerThread.Abort();
@@ -315,99 +255,16 @@ namespace CR_Documentor.Server
 		private void RaiseIncomingRequest(HttpListenerContext context)
 		{
 			HttpRequestEventArgs e = new HttpRequestEventArgs(context);
-			Control owner = this.OwnerControl;
 			try
 			{
 				if (this.IncomingRequest != null)
 				{
-					if (owner != null)
-					{
-						owner.BeginInvoke(this.IncomingRequest, this, e);
-					}
-					else
-					{
-						this.IncomingRequest.BeginInvoke(this, e, null, null);
-					}
+					this.IncomingRequest.BeginInvoke(this, e, null, null);
 				}
 			}
 			catch (Exception ex)
 			{
 				Log.SendException("Exception in raising the incoming request event.", ex);
-			}
-			e.RequestContext.Response.Close();
-		}
-
-		/// <summary>
-		/// Entry point for the request queue handler to dequeue requests and raise
-		/// the <see cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
-		/// event.
-		/// </summary>
-		/// <param name="completionEvent">
-		/// The <see cref="System.Threading.ManualResetEvent"/> that should be
-		/// set once the queue is empty and the handler is ready for shutdown.
-		/// </param>
-		private void RequestQueueHandlerThreadStart(object completionEvent)
-		{
-			try
-			{
-				HttpListenerContext context = null;
-				Log.Send("Request queue handler started.");
-
-				while (this.RunState == State.Started)
-				{
-					try
-					{
-						this._requestQueueAvailable.WaitOne();
-						lock (this._requestQueue)
-						{
-							if (this._requestQueue.Count > 0)
-							{
-								context = this._requestQueue.Dequeue();
-							}
-						}
-						if (context != null)
-						{
-							this.RaiseIncomingRequest(context);
-						}
-					}
-					catch (Exception ex)
-					{
-						Log.SendException("Error in request queue handler; aborting.", ex);
-					}
-					finally
-					{
-						this._requestQueueAvailable.ReleaseMutex();
-					}
-				}
-
-				try
-				{
-					this._requestQueueAvailable.WaitOne();
-					lock (this._requestQueue)
-					{
-						byte[] b = Encoding.UTF8.GetBytes("<html><head><title>WebServer</title></head><body>Service shutting down.</body></html>");
-						while (this._requestQueue.Count > 0)
-						{
-							context = this._requestQueue.Dequeue();
-							context.Response.ContentType = "text/html";
-							context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
-							context.Response.StatusDescription = "Service Unavailable";
-							context.Response.ContentLength64 = (long)b.Length;
-							context.Response.OutputStream.Write(b, 0, b.Length);
-							context.Response.OutputStream.Close();
-							context.Response.Close();
-						}
-					}
-				}
-				finally
-				{
-					this._requestQueueAvailable.ReleaseMutex();
-				}
-			}
-			finally
-			{
-				Log.Send("Request queue handler process shut down.");
-				((ManualResetEvent)completionEvent).Set();
 			}
 		}
 
@@ -463,39 +320,6 @@ namespace CR_Documentor.Server
 		}
 
 		/// <summary>
-		/// Starts the thread that responds to incoming requests getting queued up.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.Threading.ManualResetEvent"/> that will be set
-		/// when the queue is empty and prepared for shutdown.
-		/// </returns>
-		private ManualResetEvent StartRequestQueueHandling()
-		{
-			ManualResetEvent completionEvent = new ManualResetEvent(false);
-			if (
-				this._requestQueueHandlerThread != null &&
-				(this._requestQueueHandlerThread.ThreadState != ThreadState.Unstarted || this._requestQueueHandlerThread.ThreadState != ThreadState.Stopped)
-				)
-			{
-				this._requestQueueHandlerThread.Abort();
-			}
-			this._requestQueueHandlerThread = new Thread(new ParameterizedThreadStart(this.RequestQueueHandlerThreadStart));
-			this._requestQueueHandlerThread.Name = String.Format(CultureInfo.InvariantCulture, "RequestQueueHandler_{0}", this.UniqueId);
-			this._requestQueueHandlerThread.Start(completionEvent);
-
-			long waitTime = DateTime.Now.Ticks + (30 * TimeSpan.TicksPerSecond);
-			while (this._requestQueueHandlerThread.ThreadState != ThreadState.Running)
-			{
-				Thread.Sleep(100);
-				if (DateTime.Now.Ticks > waitTime)
-				{
-					throw new TimeoutException("Unable to start the request queue handler.");
-				}
-			}
-			return completionEvent;
-		}
-
-		/// <summary>
 		/// Stops the web server from handling incoming requests.
 		/// </summary>
 		/// <exception cref="System.TimeoutException">
@@ -522,9 +346,7 @@ namespace CR_Documentor.Server
 				}
 			}
 
-			// By the time we get here, both threads should be stopped.
 			this._connectionManagerThread = null;
-			this._requestQueueHandlerThread = null;
 		}
 	}
 }

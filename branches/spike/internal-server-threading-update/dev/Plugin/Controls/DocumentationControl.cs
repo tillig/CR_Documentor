@@ -123,7 +123,6 @@ namespace CR_Documentor.Controls
 				throw new ArgumentNullException("previewServer");
 			}
 			this.WebServer = previewServer;
-			this.WebServer.OwnerControl = this;
 			this.WebServer.IncomingRequest += new EventHandler<HttpRequestEventArgs>(WebServer_IncomingRequest);
 			this.TabStop = false;
 			this.Dock = DockStyle.Fill;
