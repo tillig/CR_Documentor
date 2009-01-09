@@ -78,6 +78,11 @@ namespace CR_Documentor.Server
 		private Thread _connectionManagerThread = null;
 
 		/// <summary>
+		/// Flag indicating whether the object has been disposed or not.
+		/// </summary>
+		private bool _disposed = false;
+
+		/// <summary>
 		/// The listener used for receiving and responding to HTTP requests.
 		/// </summary>
 		private WebListener _listener = null;
@@ -86,6 +91,11 @@ namespace CR_Documentor.Server
 		/// The queue of incoming requests that needs to be handled.
 		/// </summary>
 		private Queue<HttpListenerContext> _requestQueue = new Queue<HttpListenerContext>();
+
+		/// <summary>
+		/// Semaphore indicating activity in the request queue.
+		/// </summary>
+		private Mutex _requestQueueAvailable = new Mutex();
 
 		/// <summary>
 		/// The thread responsible for processing queued requests.
@@ -97,7 +107,6 @@ namespace CR_Documentor.Server
 		/// </summary>
 		private long _runState = (long)State.Stopped;
 
-		// TODO: Remove the Content property and actually have the preview window respond to the IncomingRequest event.
 		/// <summary>
 		/// Gets or sets the content to serve to the browser.
 		/// </summary>
@@ -105,7 +114,17 @@ namespace CR_Documentor.Server
 		/// A <see cref="System.String"/> with the HTML to serve to the
 		/// browser on incoming requests.
 		/// </value>
-		public virtual string Content { get; set; }
+		public virtual string Content
+		{
+			get
+			{
+				throw new NotImplementedException("This needs to be removed. Handle the IncomingRequest event.");
+			}
+			set
+			{
+				throw new NotImplementedException("This needs to be removed. Handle the IncomingRequest event.");
+			}
+		}
 
 		/// <summary>
 		/// Gets the Windows forms control that owns the server.
@@ -181,6 +200,15 @@ namespace CR_Documentor.Server
 		}
 
 		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the
+		/// <see cref="WebServer"/> is reclaimed by garbage collection.
+		/// </summary>
+		~WebServer()
+		{
+			this.Dispose(false);
+		}
+
+		/// <summary>
 		/// Blocks the listener so it waits for an incoming request and then adds
 		/// that request to the queue for processing.
 		/// </summary>
@@ -189,9 +217,17 @@ namespace CR_Documentor.Server
 			try
 			{
 				HttpListenerContext context = this._listener.GetContext();
-				lock (this._requestQueue)
+				try
 				{
-					this._requestQueue.Enqueue(context);
+					this._requestQueueAvailable.WaitOne();
+					lock (this._requestQueue)
+					{
+						this._requestQueue.Enqueue(context);
+					}
+				}
+				finally
+				{
+					this._requestQueueAvailable.ReleaseMutex();
 				}
 			}
 			catch (HttpListenerException err)
@@ -234,6 +270,50 @@ namespace CR_Documentor.Server
 				Log.Send("Web server connection manager stopped.");
 				Interlocked.Exchange(ref this._runState, (long)State.Stopped);
 			}
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public virtual void Dispose()
+		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources
+		/// </summary>
+		/// <param name="disposing">
+		/// <see langword="true"/> to release both managed and unmanaged resources;
+		/// <see langword="false"/> to release only unmanaged resources.
+		/// </param>
+		private void Dispose(bool disposing)
+		{
+			if (this._disposed)
+			{
+				return;
+			}
+			if (disposing)
+			{
+				if (this.RunState != State.Stopped)
+				{
+					// This shuts down the web listener and lets threads clean
+					// themselves up.
+					this.Stop();
+				}
+				if (this._requestQueueHandlerThread != null)
+				{
+					this._requestQueueHandlerThread.Abort();
+					this._requestQueueHandlerThread = null;
+				}
+				if (this._connectionManagerThread != null)
+				{
+					this._connectionManagerThread.Abort();
+					this._connectionManagerThread = null;
+				}
+			}
+			this._disposed = true;
 		}
 
 		/// <summary>
@@ -296,6 +376,7 @@ namespace CR_Documentor.Server
 				{
 					try
 					{
+						this._requestQueueAvailable.WaitOne();
 						lock (this._requestQueue)
 						{
 							if (this._requestQueue.Count > 0)
@@ -312,22 +393,34 @@ namespace CR_Documentor.Server
 					{
 						Log.SendException("Error in request queue handler; aborting.", ex);
 					}
+					finally
+					{
+						this._requestQueueAvailable.ReleaseMutex();
+					}
 				}
 
-				lock (this._requestQueue)
+				try
 				{
-					byte[] b = Encoding.UTF8.GetBytes("<html><head><title>WebServer</title></head><body>Service shutting down.</body></html>");
-					while (this._requestQueue.Count > 0)
+					this._requestQueueAvailable.WaitOne();
+					lock (this._requestQueue)
 					{
-						context = this._requestQueue.Dequeue();
-						context.Response.ContentType = "text/html";
-						context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
-						context.Response.StatusDescription = "Service Unavailable";
-						context.Response.ContentLength64 = (long)b.Length;
-						context.Response.OutputStream.Write(b, 0, b.Length);
-						context.Response.OutputStream.Close();
-						context.Response.Close();
+						byte[] b = Encoding.UTF8.GetBytes("<html><head><title>WebServer</title></head><body>Service shutting down.</body></html>");
+						while (this._requestQueue.Count > 0)
+						{
+							context = this._requestQueue.Dequeue();
+							context.Response.ContentType = "text/html";
+							context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+							context.Response.StatusDescription = "Service Unavailable";
+							context.Response.ContentLength64 = (long)b.Length;
+							context.Response.OutputStream.Write(b, 0, b.Length);
+							context.Response.OutputStream.Close();
+							context.Response.Close();
+						}
 					}
+				}
+				finally
+				{
+					this._requestQueueAvailable.ReleaseMutex();
 				}
 			}
 			finally
@@ -398,39 +491,27 @@ namespace CR_Documentor.Server
 		private ManualResetEvent StartRequestQueueHandling()
 		{
 			ManualResetEvent completionEvent = new ManualResetEvent(false);
-			try
+			if (
+				this._requestQueueHandlerThread != null &&
+				(this._requestQueueHandlerThread.ThreadState != ThreadState.Unstarted || this._requestQueueHandlerThread.ThreadState != ThreadState.Stopped)
+				)
 			{
-				if (
-					this._requestQueueHandlerThread != null &&
-					(this._requestQueueHandlerThread.ThreadState != ThreadState.Unstarted || this._requestQueueHandlerThread.ThreadState != ThreadState.Stopped)
-					)
-				{
-					this._requestQueueHandlerThread.Abort();
-				}
-				this._requestQueueHandlerThread = new Thread(new ParameterizedThreadStart(this.RequestQueueHandlerThreadStart));
-				this._requestQueueHandlerThread.Name = String.Format(CultureInfo.InvariantCulture, "RequestQueueHandler_{0}", this.UniqueId);
-				this._requestQueueHandlerThread.Start(completionEvent);
+				this._requestQueueHandlerThread.Abort();
+			}
+			this._requestQueueHandlerThread = new Thread(new ParameterizedThreadStart(this.RequestQueueHandlerThreadStart));
+			this._requestQueueHandlerThread.Name = String.Format(CultureInfo.InvariantCulture, "RequestQueueHandler_{0}", this.UniqueId);
+			this._requestQueueHandlerThread.Start(completionEvent);
 
-				long waitTime = DateTime.Now.Ticks + (30 * TimeSpan.TicksPerSecond);
-				while (this._requestQueueHandlerThread.ThreadState != ThreadState.Running)
+			long waitTime = DateTime.Now.Ticks + (30 * TimeSpan.TicksPerSecond);
+			while (this._requestQueueHandlerThread.ThreadState != ThreadState.Running)
+			{
+				Thread.Sleep(100);
+				if (DateTime.Now.Ticks > waitTime)
 				{
-					Thread.Sleep(100);
-					if (DateTime.Now.Ticks > waitTime)
-					{
-						throw new TimeoutException("Unable to start the request queue handler.");
-					}
+					throw new TimeoutException("Unable to start the request queue handler.");
 				}
-				return completionEvent;
 			}
-			catch
-			{
-				completionEvent.Set();
-				throw;
-			}
-			finally
-			{
-				Debug.Assert(this._requestQueueHandlerThread.ThreadState == ThreadState.Running);
-			}
+			return completionEvent;
 		}
 
 		/// <summary>
@@ -441,12 +522,13 @@ namespace CR_Documentor.Server
 		/// </exception>
 		public virtual void Stop()
 		{
+			// Setting the runstate to something other than "started" and
+			// stopping the listener should abort the AddIncomingRequestToQueue
+			// method and allow the ConnectionManagerThreadStart sequence to
+			// end, which sets the RunState to Stopped.
 			Interlocked.Exchange(ref this._runState, (long)State.Stopping);
 			if (this._listener.IsListening)
 			{
-				// Stopping the listener should abort the AddIncomingRequestToQueue
-				// method and allow the ConnectionManagerThreadStart sequence to
-				// end, which sets the RunState to Stopped.
 				this._listener.Stop();
 			}
 			long waitTime = DateTime.Now.Ticks + TimeSpan.TicksPerSecond * 10;
@@ -458,11 +540,10 @@ namespace CR_Documentor.Server
 					throw new TimeoutException("Unable to stop the web server process.");
 				}
 			}
-		}
 
-		public virtual void Dispose()
-		{
-			throw new NotImplementedException();
+			// By the time we get here, both threads should be stopped.
+			this._connectionManagerThread = null;
+			this._requestQueueHandlerThread = null;
 		}
 	}
 }
