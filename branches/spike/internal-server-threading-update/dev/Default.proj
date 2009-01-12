@@ -70,7 +70,7 @@
 		</CreateProperty>
 		<Delete Files="$(UnitTestResultsFile)"/>
 		<TypeMockStart/>
-		<Exec Command="mstest.exe /noisolation /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
+		<Exec Command="mstest.exe /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
 		<CallTarget Targets="Test-Finally"/>
 		<OnError ExecuteTargets="Test-Finally"/>
 	</Target>
