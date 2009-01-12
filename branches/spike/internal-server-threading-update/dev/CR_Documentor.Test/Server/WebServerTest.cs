@@ -8,6 +8,7 @@ using TypeMock;
 namespace CR_Documentor.Test.Server
 {
 	[TestClass]
+	[VerifyMocks]
 	public class WebServerTest
 	{
 		private const UInt16 TestServerPort = 22334;
@@ -23,6 +24,18 @@ namespace CR_Documentor.Test.Server
 			server.Start();
 			server.Dispose();
 			// If Stop isn't called, the mock expectation will fail.
+		}
+
+		[TestMethod]
+		public void Dispose_DoesNotCallStopIfNotStarted()
+		{
+			WebServer server = new WebServer(TestServerPort);
+			using (RecordExpectations recorder = RecorderManager.StartRecording())
+			{
+				server.Stop();
+				recorder.FailWhenCalled();
+			}
+			server.Dispose();
 		}
 
 		[TestMethod]
@@ -74,6 +87,15 @@ namespace CR_Documentor.Test.Server
 				server.Start();
 				server.Stop();
 				Assert.AreEqual(WebServer.State.Stopped, server.RunState, "The run state of the server should be Stopped once the service has stopped.");
+			}
+		}
+
+		[TestMethod]
+		public void UniqueId_Initialized()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				Assert.AreNotEqual(Guid.Empty, server.UniqueId, "The unique ID value should be initialized by construction.");
 			}
 		}
 
