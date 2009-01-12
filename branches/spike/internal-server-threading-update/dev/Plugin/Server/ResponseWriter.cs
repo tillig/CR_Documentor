@@ -14,8 +14,15 @@ namespace CR_Documentor.Server
 		/// </summary>
 		/// <param name="context">The incoming request context.</param>
 		/// <param name="html">The HTML to respond with.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="context" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteHtml(HttpListenerContext context, string html)
 		{
+			if (context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
 			HttpListenerResponse response = context.Response;
 			string content = String.IsNullOrEmpty(html) ? "&nbsp;" : html;
 			byte[] buffer = Encoding.UTF8.GetBytes(content);
