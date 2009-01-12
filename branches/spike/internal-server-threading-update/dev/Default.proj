@@ -1,9 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<!--
 		* Standard build = msbuild Default.proj
 		* Release build = msbuild Default.proj /p:Configuration=Release
 	-->
+	<Import Project="$(ProgramFiles)\Typemock\Isolator\5.1\TypeMock.MSBuild.Tasks"/>
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<BuildDir>..\build</BuildDir>
@@ -68,7 +69,13 @@
 			<Output PropertyName="UnitTestResultsFile" TaskParameter="Value"/>
 		</CreateProperty>
 		<Delete Files="$(UnitTestResultsFile)"/>
+		<TypeMockStart/>
 		<Exec Command="mstest.exe /noisolation /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
+		<CallTarget Targets="Test-Finally"/>
+		<OnError ExecuteTargets="Test-Finally"/>
+	</Target>
+	<Target Name="Test-Finally">
+		<TypeMockStop/>
 	</Target>
 	<Target Name="Package">
 		<MakeDir Directories="$(BuildPackageDir)"/>
