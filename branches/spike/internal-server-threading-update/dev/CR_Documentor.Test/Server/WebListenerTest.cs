@@ -1,108 +1,140 @@
 ﻿using System;
+using System.Net;
 using CR_Documentor.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TypeMock;
 
 namespace CR_Documentor.Test.Server
 {
 	[TestClass]
+	[VerifyMocks]
 	public class WebListenerTest
 	{
 		private const UInt16 TestListenerPort = 22334;
 		private static readonly Guid TestListenerUniqueId = Guid.NewGuid();
 
 		[TestMethod]
+		[ExpectedException(typeof(System.NotSupportedException))]
+		public void Ctor_HttpListenerNotSupported()
+		{
+			using (RecordExpectations recorder = RecorderManager.StartRecording())
+			{
+				bool dummy = HttpListener.IsSupported;
+				recorder.Return(false);
+			}
+			WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId);
+		}
+
+		[TestMethod]
 		public void Dispose_CallsStopIfListening()
 		{
-			using (WebListenerMock server = new WebListenerMock(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				server.Start();
-				server.Dispose();
-				Assert.IsTrue(server.StopCalled, "The Stop method should be called during disposal if the listener had started.");
+				using (RecordExpectations recorder = RecorderManager.StartRecording())
+				{
+					listener.Stop();
+					recorder.CallOriginal();
+				}
+				listener.Start();
+				listener.Dispose();
 			}
 		}
 
 		[TestMethod]
 		public void Dispose_DoesNotCallStopIfNotListening()
 		{
-			using (WebListenerMock server = new WebListenerMock(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				server.Dispose();
-				Assert.IsFalse(server.StopCalled, "The Stop method should not be called during disposal if the listener wasn't listening.");
+				using (RecordExpectations recorder = RecorderManager.StartRecording())
+				{
+					listener.Stop();
+					recorder.FailWhenCalled();
+				}
+				listener.Dispose();
 			}
 		}
 
 		[TestMethod]
 		[ExpectedException(typeof(InvalidOperationException))]
-		public void GetContext_DoesNotCallStopIfNotListening()
+		public void GetContext_FailsToGetContextIfNotListening()
 		{
-			using (WebListenerMock server = new WebListenerMock(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				server.GetContext();
+				listener.GetContext();
+			}
+		}
+
+		[TestMethod]
+		public void GetContext_RetrievesContextIfListening()
+		{
+			HttpListenerContext expectedContext = RecorderManager.CreateMockedObject<HttpListenerContext>();
+			using (RecordExpectations recorder = RecorderManager.StartRecording())
+			{
+				HttpListener dummyInternalListener = new HttpListener();
+				dummyInternalListener.Prefixes.Add(null);
+				bool dummyListening = dummyInternalListener.IsListening;
+				recorder.Return(true);
+				dummyInternalListener.GetContext();
+				recorder.Return(expectedContext);
+			}
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
+			{
+				HttpListenerContext actualContext = listener.GetContext();
+				Assert.AreSame(expectedContext, actualContext, "The context was not retrieved even though the listener was running.");
 			}
 		}
 
 		[TestMethod]
 		public void IsListening_InitialValue()
 		{
-			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				Assert.IsFalse(server.IsListening, "The listener should not be listening until it's been started.");
+				Assert.IsFalse(listener.IsListening, "The listener should not be listening until it's been started.");
 			}
 		}
 
 		[TestMethod]
 		public void IsListening_Started()
 		{
-			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				server.Start();
-				Assert.IsTrue(server.IsListening, "The listener should be listening after it's been started.");
+				listener.Start();
+				Assert.IsTrue(listener.IsListening, "The listener should be listening after it's been started.");
 			}
 		}
 
 		[TestMethod]
 		public void IsListening_Stopped()
 		{
-			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				server.Start();
-				server.Stop();
-				Assert.IsFalse(server.IsListening, "The listener should not be listening after it's been stopped.");
+				listener.Start();
+				listener.Stop();
+				Assert.IsFalse(listener.IsListening, "The listener should not be listening after it's been stopped.");
 			}
 		}
 
 		[TestMethod]
 		public void Prefix_Format()
 		{
-			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
 				string prefix = String.Format(WebListener.BaseUriFormat, TestListenerPort, TestListenerUniqueId);
-				Assert.AreEqual(prefix, server.Prefix.AbsoluteUri, "The prefix should be properly formatted.");
+				Assert.AreEqual(prefix, listener.Prefix.AbsoluteUri, "The prefix should be properly formatted.");
 			}
 		}
 
 		[TestMethod]
 		public void Prefix_GuidIsThirdSegment()
 		{
-			using (WebListener server = new WebListener(TestListenerPort, TestListenerUniqueId))
+			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				string[] segments = server.Prefix.Segments;
+				string[] segments = listener.Prefix.Segments;
 				// Get the path segment and trim the trailing slash
 				string guidSegment = segments[2];
 				guidSegment = guidSegment.Substring(0, guidSegment.Length - 1);
 				Guid guidId = new Guid(guidSegment);
 				Assert.AreEqual(TestListenerUniqueId, guidId, "The GUID identifier segment should be the last segment and should match the server's unique ID.");
-			}
-		}
-
-		private class WebListenerMock : WebListener
-		{
-			public WebListenerMock(UInt16 port, Guid uniqueId) : base(port, uniqueId) { }
-			public bool StopCalled { get; set; }
-			public override void Stop()
-			{
-				this.StopCalled = true;
-				base.Stop();
 			}
 		}
 	}
