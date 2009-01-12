@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Net;
+using TypeMock;
 
 namespace CR_Documentor.Test.Server
 {
@@ -12,30 +13,16 @@ namespace CR_Documentor.Test.Server
 		private const UInt16 TestServerPort = 22334;
 
 		[TestMethod]
-		public void AsyncListenThreadStart_EmptyContent()
-		{
-			this.ServerRequestTestBody("", "&nbsp;");
-		}
-
-		[TestMethod]
-		public void AsyncListenThreadStart_NullContent()
-		{
-			this.ServerRequestTestBody(null, "&nbsp;");
-		}
-
-		[TestMethod]
-		public void AsyncListenThreadStart_ServesContent()
-		{
-			this.ServerRequestTestBody("expected content", "expected content");
-		}
-
-		[TestMethod]
 		public void Dispose_CallsStopIfStarted()
 		{
-			WebServerMock server = new WebServerMock(TestServerPort);
+			WebServer server = new WebServer(TestServerPort);
+			using (RecordExpectations recorder = RecorderManager.StartRecording())
+			{
+				server.Stop();
+			}
 			server.Start();
 			server.Dispose();
-			Assert.IsTrue(server.StopCalled, "The Stop method should be called during disposal.");
+			// If Stop isn't called, the mock expectation will fail.
 		}
 
 		[TestMethod]
@@ -58,6 +45,56 @@ namespace CR_Documentor.Test.Server
 				crdSegment = crdSegment.Substring(0, crdSegment.Length - 1);
 				Assert.AreEqual("CR_Documentor", crdSegment, "'CR_Documentor' should be at the base of the prefix, right after the root.");
 			}
+		}
+
+		[TestMethod]
+		public void RunState_InitialValue()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				Assert.AreEqual(WebServer.State.Stopped, server.RunState, "The initial run state of the server should be Stopped.");
+			}
+		}
+
+		[TestMethod]
+		public void RunState_Started()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				server.Start();
+				Assert.AreEqual(WebServer.State.Started, server.RunState, "The run state of the server should be Started once the service has started.");
+			}
+		}
+
+		[TestMethod]
+		public void RunState_Stopped()
+		{
+			using (WebServer server = new WebServer(TestServerPort))
+			{
+				server.Start();
+				server.Stop();
+				Assert.AreEqual(WebServer.State.Stopped, server.RunState, "The run state of the server should be Stopped once the service has stopped.");
+			}
+		}
+
+		#region Integration (Full Round-Trip) Tests
+
+		[TestMethod]
+		public void Integration_EmptyContent()
+		{
+			this.ServerRequestTestBody("", "&nbsp;");
+		}
+
+		[TestMethod]
+		public void Integration_NullContent()
+		{
+			this.ServerRequestTestBody(null, "&nbsp;");
+		}
+
+		[TestMethod]
+		public void Integration_ServesContent()
+		{
+			this.ServerRequestTestBody("expected content", "expected content");
 		}
 
 		private void ServerRequestTestBody(string initialContent, string expectedContent)
@@ -95,15 +132,6 @@ namespace CR_Documentor.Test.Server
 			}
 		}
 
-		private class WebServerMock : WebServer
-		{
-			public WebServerMock(UInt16 port) : base(port) { }
-			public bool StopCalled { get; set; }
-			public override void Stop()
-			{
-				this.StopCalled = true;
-				base.Stop();
-			}
-		}
+		#endregion
 	}
 }
