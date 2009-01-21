@@ -14,14 +14,12 @@ namespace CR_Documentor.Controls
 	/// Marries the transformation engine with the browser to display documentation.
 	/// </summary>
 	/// <remarks>
-	/// <para>
 	/// Uses the <see cref="CR_Documentor.Transformation.TransformEngine"/> class to transform the
 	/// XML documentation into HTML and then renders it in a <see cref="CR_Documentor.Controls.Browser"/>
 	/// control.
-	/// </para>
 	/// </remarks>
-	/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
-	/// <seealso cref="CR_Documentor.Controls.Browser" />
+	/// <seealso cref="CR_Documentor.Transformation.TransformEngine"/>
+	/// <seealso cref="CR_Documentor.Controls.Browser"/>
 	public class DocumentationControl : Control
 	{
 		/// <summary>
@@ -55,6 +53,16 @@ namespace CR_Documentor.Controls
 		private static readonly System.Xml.XmlDocument DefaultDocument;
 
 		/// <summary>
+		/// Gets or sets the preview content.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.String"/> that should be used as the content
+		/// for preview requests. Generally this is HTML that will be displayed
+		/// in the browser.
+		/// </value>
+		private string PreviewContent { get; set; }
+
+		/// <summary>
 		/// Gets or sets the transformation engine.
 		/// </summary>
 		/// <value>
@@ -75,7 +83,7 @@ namespace CR_Documentor.Controls
 					Log.Enter(ImageType.Method, "Transformation engine updated. Refreshing browser.");
 					try
 					{
-						this.WebServer.Content = _transformer.GetHtmlPage(DefaultBodyMessage);
+						this.PreviewContent = _transformer.GetHtmlPage(DefaultBodyMessage);
 						this.RefreshBrowser();
 					}
 					finally
@@ -115,6 +123,7 @@ namespace CR_Documentor.Controls
 				throw new ArgumentNullException("previewServer");
 			}
 			this.WebServer = previewServer;
+			this.WebServer.IncomingRequest += new EventHandler<HttpRequestEventArgs>(WebServer_IncomingRequest);
 			this.TabStop = false;
 			this.Dock = DockStyle.Fill;
 			this._browser.TabStop = false;
@@ -154,7 +163,7 @@ namespace CR_Documentor.Controls
 			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
 			try
 			{
-				string url = this.WebServer.Prefix.AbsoluteUri;
+				string url = this.WebServer.Url.ToString();
 				this._browser.SafeUrls.Add(url);
 				this._browser.Navigate(url);
 			}
@@ -217,7 +226,7 @@ namespace CR_Documentor.Controls
 				Log.Enter(ImageType.Method, "Refreshing browser with new content.");
 				try
 				{
-					this.WebServer.Content = this._transformer.ToString();
+					this.PreviewContent = this._transformer.ToString();
 					this.RefreshBrowser();
 				}
 				finally
@@ -265,6 +274,16 @@ namespace CR_Documentor.Controls
 				this._isRefreshing = true;
 				this._browser.Refresh();
 			}
+		}
+
+		/// <summary>
+		/// Handles the IncomingRequest event of the current web server.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
+		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
+		{
+			ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
 		}
 
 		/// <summary>

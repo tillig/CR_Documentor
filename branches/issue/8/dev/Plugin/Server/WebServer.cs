@@ -1,74 +1,90 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
+using Debug = System.Diagnostics.Debug;
 
 namespace CR_Documentor.Server
 {
 	/// <summary>
 	/// Simple web server to provide content to the preview window.
 	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// This server is used to internally serve requests from the hosted browser
+	/// in the preview window. By handling the <see cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+	/// event, the HTML content can be written to the response stream for a given
+	/// incoming request.
+	/// </para>
+	/// <para>
+	/// After instantiating an instance of the web server, call the
+	/// <see cref="CR_Documentor.Server.WebServer.Start"/> method to begin listening
+	/// for requests. When you're done listening for requests, call the
+	/// <see cref="CR_Documentor.Server.WebServer.Stop"/> method to shut the
+	/// process down.
+	/// </para>
+	/// </remarks>
 	public class WebServer : IDisposable
 	{
 		/// <summary>
-		/// The base format for the URI that the web server will listen for. Takes two parameters - the port to listen on and the GUID identifier.
+		/// Raised when an incoming request is received from the web server.
 		/// </summary>
-		public const string BaseUriFormat = "http://localhost:{0}/CR_Documentor/{1:D}/";
+		/// <remarks>
+		/// Handle this event and write to the <see cref="System.Net.HttpListenerResponse"/>
+		/// on the <see cref="CR_Documentor.Server.HttpRequestEventArgs.RequestContext"/>
+		/// to respond to incoming requests.
+		/// </remarks>
+		public event EventHandler<HttpRequestEventArgs> IncomingRequest = null;
 
 		/// <summary>
-		/// Flag indicating the <see cref="CR_Documentor.Server.WebServer.Dispose()"/> method has been called.
+		/// Enumeration of possible run states for the web server.
+		/// </summary>
+		public enum State
+		{
+			/// <summary>
+			/// The server is stopped.
+			/// </summary>
+			Stopped,
+
+			/// <summary>
+			/// The server is in the process of stopping.
+			/// </summary>
+			Stopping,
+
+			/// <summary>
+			/// The server is in the process of starting.
+			/// </summary>
+			Starting,
+
+			/// <summary>
+			/// The server is started.
+			/// </summary>
+			Started
+		}
+
+		/// <summary>
+		/// The thread that contains the primary connection manager loop.
+		/// </summary>
+		private Thread _connectionManagerThread = null;
+
+		/// <summary>
+		/// Flag indicating whether the object has been disposed or not.
 		/// </summary>
 		private bool _disposed = false;
 
 		/// <summary>
-		/// The listener that will serve incoming requests.
+		/// The listener used for receiving and responding to HTTP requests.
 		/// </summary>
-		private HttpListener _listener = null;
+		private WebListener _listener = null;
 
 		/// <summary>
-		/// The prefix the server is listening to requests on.
+		/// Private storage for the current run state of the server.
 		/// </summary>
-		private Uri _prefix = null;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="WebServer"/> class.
-		/// </summary>
-		/// <exception cref="System.NotSupportedException">
-		/// The <see cref="System.Net.HttpListener"/> is not supported on this
-		/// operating system.
-		/// </exception>
-		public WebServer(UInt16 port)
-		{
-			if (!HttpListener.IsSupported)
-			{
-				throw new NotSupportedException("The HttpListener class is not supported on this operating system.");
-			}
-			this.Port = port;
-			this._listener = new HttpListener();
-			this.UniqueId = Guid.NewGuid();
-			this._prefix = new Uri(String.Format(CultureInfo.InvariantCulture, BaseUriFormat, this.Port, this.UniqueId));
-			this._listener.Prefixes.Add(this._prefix.AbsoluteUri);
-		}
-
-		/// <summary>
-		/// Gets or sets the HTML content to return for any request.
-		/// </summary>
-		/// <value>
-		/// A <see cref="System.String"/> with the complete HTML page to return
-		/// for any request.
-		/// </value>
-		public virtual string Content { get; set; }
-
-		/// <summary>
-		/// Gets a value indicating if the server is listening for requests.
-		/// </summary>
-		/// <value>
-		/// <see langword="true" /> if the server is listening, <see langword="false" />
-		/// if not.
-		/// </value>
-		public virtual bool IsListening { get; private set; }
+		private long _runState = (long)State.Stopped;
 
 		/// <summary>
 		/// Gets the port that the server was initialized with.
@@ -79,18 +95,17 @@ namespace CR_Documentor.Server
 		public virtual UInt16 Port { get; private set; }
 
 		/// <summary>
-		/// Gets the Uniform Resource Indicator (URI) prefix handled by this
-		/// server.
+		/// Gets the current run state of the server.
 		/// </summary>
 		/// <value>
-		/// A <see cref="System.Uri"/> indicating the base location for requests
-		/// that this server is configured to handle.
+		/// A <see cref="CR_Documentor.Server.WebServer.State"/> indicating the current
+		/// run state of the server.
 		/// </value>
-		public virtual Uri Prefix
+		public State RunState
 		{
 			get
 			{
-				return this._prefix;
+				return (State)Interlocked.Read(ref _runState);
 			}
 		}
 
@@ -99,129 +114,92 @@ namespace CR_Documentor.Server
 		/// </summary>
 		/// <value>
 		/// A <see cref="System.Guid"/> that uniquely identifies this server instance.
-		/// Will show up in the <see cref="CR_Documentor.Server.WebServer.Prefix"/>
-		/// that the server listens on.
 		/// </value>
 		public virtual Guid UniqueId { get; private set; }
 
 		/// <summary>
-		/// Loops and listens for a request. Responds with the <see cref="CR_Documentor.Server.WebServer.Content"/>.
+		/// Gets the URL that the server is listening on.
 		/// </summary>
-		private void AsyncListenThreadStart()
+		/// <value>
+		/// A <see cref="System.Uri"/> with the base URL that requests will
+		/// get handled on for this server.
+		/// </value>
+		public virtual Uri Url
 		{
-			// DXCore might die on finalization if logging happens
-			// during the shutdown and the timing is *just wrong*
-			// so we try/catch around log statements here, swallow the exceptions,
-			// and move on. It seems to be because of thread synchronization
-			// issues.
-			while (this.IsListening)
+			get
 			{
-				try
-				{
-					// GetContext blocks until it gets a request, but will throw
-					// an HttpListenerException if you call Stop on the listener
-					// while it's waiting. The "while(this.IsListening)" loop
-					// is a double-check to make sure if we don't get the exception
-					// we'll still exit.
-					HttpListenerContext context = this._listener.GetContext();
-
-					// When we start serving other things - images, etc. - we'll need to get the request info.
-					// HttpListenerRequest request = context.Request;
-
-					try
-					{
-						Log.Enter(ImageType.Method, "Preview server handling request.");
-					}
-					catch
-					{
-					}
-					try
-					{
-						// Respond to the request by passing the content back.
-						HttpListenerResponse response = context.Response;
-						string content = String.IsNullOrEmpty(this.Content) ? "&nbsp;" : this.Content;
-						byte[] buffer = Encoding.UTF8.GetBytes(content);
-						response.ContentLength64 = buffer.Length;
-						try
-						{
-							Log.Send(String.Format("Sending {0} bytes of content.", response.ContentLength64));
-						}
-						catch
-						{
-						}
-						response.ContentEncoding = Encoding.UTF8;
-						response.OutputStream.Write(buffer, 0, buffer.Length);
-						response.OutputStream.Close();
-					}
-					finally
-					{
-						try
-						{
-							Log.Exit();
-						}
-						catch
-						{
-						}
-					}
-				}
-				catch (HttpListenerException err)
-				{
-					try
-					{
-						Log.SendException("Server exiting request handling loop.", err);
-					}
-					catch
-					{
-					}
-					break;
-				}
+				return new Uri(this._listener.Prefix.AbsoluteUri);
 			}
 		}
 
 		/// <summary>
-		/// Starts the web server listening for requests.
+		/// Initializes a new instance of the <see cref="WebServer"/> class.
 		/// </summary>
-		public virtual void Start()
+		/// <param name="port">
+		/// The port that should be listened to for incoming requests.
+		/// </param>
+		/// <exception cref="System.NotSupportedException">
+		/// The <see cref="System.Net.HttpListener"/> is not supported on this
+		/// operating system.
+		/// </exception>
+		public WebServer(UInt16 port)
 		{
-			if (this.IsListening)
-			{
-				return;
-			}
-			this._listener.Start();
-			new ThreadStart(this.AsyncListenThreadStart).BeginInvoke(null, null);
-			this.IsListening = true;
-			foreach (object p in this._listener.Prefixes)
-			{
-				Log.Send(String.Format("Server listening for requests on {0}", p));
-			}
+			this.Port = port;
+			this.UniqueId = Guid.NewGuid();
+			this._listener = new WebListener(this.Port, this.UniqueId);
 		}
 
 		/// <summary>
-		/// Stops the web server listening for requests.
+		/// Releases unmanaged resources and performs other cleanup operations before the
+		/// <see cref="WebServer"/> is reclaimed by garbage collection.
 		/// </summary>
-		public virtual void Stop()
+		~WebServer()
 		{
-			if (!this.IsListening)
-			{
-				return;
-			}
-			this.IsListening = false;
-			this._listener.Stop();
+			this.Dispose(false);
+		}
+
+		/// <summary>
+		/// Entry point for the connection manager to start listening for requests
+		/// and add incoming ones to the queue.
+		/// </summary>
+		private void ConnectionManagerThreadStart()
+		{
+			Interlocked.Exchange(ref this._runState, (long)State.Starting);
 			try
 			{
-				Log.Send("Server stopped.");
+				Log.Send("Starting web server connection manager.");
+				if (!this._listener.IsListening)
+				{
+					this._listener.Start();
+				}
+				if (this._listener.IsListening)
+				{
+					Interlocked.Exchange(ref this._runState, (long)State.Started);
+				}
+
+				try
+				{
+					while (RunState == State.Started)
+					{
+						HttpListenerContext context = this._listener.GetContext();
+						this.RaiseIncomingRequest(context);
+					}
+				}
+				catch (HttpListenerException)
+				{
+					// This will occur when the listener gets shut down.
+					// Just swallow it and move on.
+				}
 			}
-			catch
+			finally
 			{
-				// If this happens in the finalizer, DXCore might already
-				// have finalized the log so we need to swallow any exceptions
-				// here and move on.
+				Log.Send("Web server connection manager stopped.");
+				Interlocked.Exchange(ref this._runState, (long)State.Stopped);
 			}
 		}
 
 		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing,
-		/// or resetting unmanaged resources.
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
 		public virtual void Dispose()
 		{
@@ -233,8 +211,8 @@ namespace CR_Documentor.Server
 		/// Releases unmanaged and - optionally - managed resources
 		/// </summary>
 		/// <param name="disposing">
-		/// <see langword="true" /> to release both managed and unmanaged resources;
-		/// <see langword="false" /> to release only unmanaged resources.
+		/// <see langword="true"/> to release both managed and unmanaged resources;
+		/// <see langword="false"/> to release only unmanaged resources.
 		/// </param>
 		private void Dispose(bool disposing)
 		{
@@ -244,19 +222,131 @@ namespace CR_Documentor.Server
 			}
 			if (disposing)
 			{
-				this.Stop();
-				this._listener = null;
+				if (this.RunState != State.Stopped)
+				{
+					// This shuts down the web listener and lets threads clean
+					// themselves up.
+					this.Stop();
+				}
+				if (this._connectionManagerThread != null)
+				{
+					this._connectionManagerThread.Abort();
+					this._connectionManagerThread = null;
+				}
 			}
 			this._disposed = true;
 		}
 
 		/// <summary>
-		/// Releases unmanaged resources and performs other cleanup operations before the
-		/// <see cref="WebServer"/> is reclaimed by garbage collection.
+		/// Raises the event that indicates an incoming request needs to be responded to.
 		/// </summary>
-		~WebServer()
+		/// <param name="context">
+		/// The incoming request context that will be passed along to the event handlers.
+		/// </param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if the <paramref name="context" /> is <see langword="null" />.
+		/// </exception>
+		/// <remarks>
+		/// Once the event has been raised and everything is said and done,
+		/// the response to the client will be closed and sent.
+		/// </remarks>
+		/// <seealso cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+		/// <seealso cref="System.Net.HttpListenerResponse.Close()"/>
+		private void RaiseIncomingRequest(HttpListenerContext context)
 		{
-			this.Dispose(false);
+			HttpRequestEventArgs e = new HttpRequestEventArgs(context);
+			try
+			{
+				if (this.IncomingRequest != null)
+				{
+					this.IncomingRequest.BeginInvoke(this, e, null, null);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.SendException("Exception in raising the incoming request event.", ex);
+			}
+		}
+
+		/// <summary>
+		/// Starts the web server and allows incoming requests to be handled.
+		/// </summary>
+		/// <exception cref="System.Threading.ThreadStateException">
+		/// Thrown if the request handling process is already running or if the
+		/// process could not be properly initialized.
+		/// </exception>
+		/// <exception cref="System.TimeoutException">
+		/// Thrown if the request handling process could not be started within 10 seconds.
+		/// </exception>
+		/// <remarks>
+		/// <para>
+		/// This method initializes and starts a thread that acts as a master
+		/// "connection manager." The connection manager thread is responsible for
+		/// two things - starting up a request queue handler (a separate thread
+		/// that raises the <see cref="CR_Documentor.Server.WebServer.IncomingRequest"/>
+		/// event for incoming requests) and adding incoming requests to a queue
+		/// to be handled.
+		/// </para>
+		/// </remarks>
+		public virtual void Start()
+		{
+			if (this._connectionManagerThread == null || this._connectionManagerThread.ThreadState == ThreadState.Stopped)
+			{
+				this._connectionManagerThread = new Thread(new ThreadStart(this.ConnectionManagerThreadStart));
+				this._connectionManagerThread.Name = String.Format(CultureInfo.InvariantCulture, "ConnectionManager_{0}", this.UniqueId);
+			}
+			else if (this._connectionManagerThread.ThreadState == ThreadState.Running)
+			{
+				throw new ThreadStateException("The request handling process is already running.");
+			}
+
+			// By the time we get here, we should have a pristine connection manager
+			// thread that's never been started before.
+			if (this._connectionManagerThread.ThreadState != ThreadState.Unstarted)
+			{
+				throw new ThreadStateException("The request handling process was not properly initialized so it could not be started.");
+			}
+			this._connectionManagerThread.Start();
+
+			long waitTime = DateTime.Now.Ticks + TimeSpan.TicksPerSecond * 10;
+			while (this.RunState != State.Started)
+			{
+				Thread.Sleep(100);
+				if (DateTime.Now.Ticks > waitTime)
+				{
+					throw new TimeoutException("Unable to start the request handling process.");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Stops the web server from handling incoming requests.
+		/// </summary>
+		/// <exception cref="System.TimeoutException">
+		/// Thrown if the request handling process could not be stopped within 10 seconds.
+		/// </exception>
+		public virtual void Stop()
+		{
+			// Setting the runstate to something other than "started" and
+			// stopping the listener should abort the AddIncomingRequestToQueue
+			// method and allow the ConnectionManagerThreadStart sequence to
+			// end, which sets the RunState to Stopped.
+			Interlocked.Exchange(ref this._runState, (long)State.Stopping);
+			if (this._listener.IsListening)
+			{
+				this._listener.Stop();
+			}
+			long waitTime = DateTime.Now.Ticks + TimeSpan.TicksPerSecond * 10;
+			while (this.RunState != State.Stopped)
+			{
+				Thread.Sleep(100);
+				if (DateTime.Now.Ticks > waitTime)
+				{
+					throw new TimeoutException("Unable to stop the web server process.");
+				}
+			}
+
+			this._connectionManagerThread = null;
 		}
 	}
 }
