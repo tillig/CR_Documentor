@@ -60,8 +60,8 @@ This will unlock that port for Everyone.
 
 = Error #183 (0xB7): Listener Already Exists =
 
-This error means that something is already listening on the port/URI that CR_Documentor wants to listen to. Since two things can't listen to the same thing at the same time, the server can't start. This is currently seen if you try to start two instances of Visual Studio at the same time, both with CR_Documentor windows open.
+This error means that something is already listening on the port/URI that CR_Documentor wants to listen to. Since two things can't listen to the same thing at the same time, the server can't start.
 
-Issue #11 has been resolved and enables multiple VS instances to use CR_Documentor simultaneously. It will appear in the next release after 2.1.0.0. Version 2.1.0.0 does not support multiple VS instances.
+If you see this when you have two or more Visual Studio instances open, you are probably using an old version of the plugin. This issue was resolved (Issue #11) as of version 2.2.1.0.
 
-You may also see this issue if you already have a web server or some other service already listening on port 11235. Issue #12 has been filed to allow you to configure which port CR_Documentor listens on so you can change it and remove the conflict. Until then, assuming you only have one instance of Visual Studio running, you may need to stop the other service to allow CR_Documentor to run.
+If you see it with just one Visual Studio window open, it means you already have something listening on the CR_Documentor default port of port 11235. You can change the port that CR_Documentor uses for its internal web server in the Options dialog.
