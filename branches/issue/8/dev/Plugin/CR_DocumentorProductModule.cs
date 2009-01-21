@@ -134,7 +134,7 @@ namespace CR_Documentor
 		{
 			get
 			{
-				return "http://www.paraesthesia.com";
+				return "http://cr-documentor.googlecode.com";
 			}
 		}
 
