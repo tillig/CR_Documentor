@@ -9,22 +9,12 @@ namespace CR_Documentor.Transformation
 	public sealed class CommentMatchEventArgs : EventArgs
 	{
 		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Transformation.CommentMatchEventArgs.Element" />
-		/// property.
-		/// </summary>
-        private XmlElement _element;
-
-		/// <summary>
 		/// Gets the XML element matched in the comments.
 		/// </summary>
 		/// <value>
 		/// A <see cref="System.Xml.XmlElement"/> from a doc comment.
 		/// </value>
-		public XmlElement Element
-		{
-			get { return _element; }
-		}
+		public XmlElement Element { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> class.
@@ -39,7 +29,7 @@ namespace CR_Documentor.Transformation
 			{
 				throw new ArgumentNullException("element");
 			}
-			this._element = element;
+			this.Element = element;
 		}
 	}
 }
