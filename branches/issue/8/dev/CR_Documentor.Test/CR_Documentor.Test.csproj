@@ -66,6 +66,7 @@
     <Compile Include="Server\ResponseWriterTest.cs" />
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
+    <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
