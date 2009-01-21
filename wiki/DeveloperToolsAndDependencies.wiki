@@ -5,5 +5,6 @@ To build the CR_Documentor source, you'll need...
 
   * Visual Studio 2008.
   * [http://www.devexpress.com/Downloads/NET/IDETools/DXCore/ DXCore] 3.0.8.0 or later installed in the default location. Plugins will go in: `$(ProgramFiles)\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins`
-  * [http://msbuildtasks.tigris.org/ MSBuild Community Tasks]
-  * [http://codeplex.com/Sandcastle Sandcastle]
+  * [http://msbuildtasks.tigris.org/ MSBuild Community Tasks].
+  * [http://codeplex.com/Sandcastle Sandcastle].
+  * [http://www.typemock.com Typemock Isolator 5.1.0.0] - You will need to [http://www.typemock.com/free_open_source_license_form.php request a free open-source developer license].
