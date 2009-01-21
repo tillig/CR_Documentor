@@ -1,6 +1,9 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured
 
+=2.2.1.0=
+  * Fixed Issue #8: Unit tests for internal web server hang on unpredictable basis. This also seems to have fixed a reported issue where the internal preview freezes and requires a Visual Studio restart.
+
 =2.2.0.0=
   * Fixed Issue #10: CR_Documentor window doesn't appear when running VS2008 as standard user. Added [ServerStartupErrors info to the wiki] about security configuration and if there's any problem starting up, CR_Documentor will alert you.
   * Fixed Issue #11: Unable to have multiple VS instances open at once.
