@@ -64,4 +64,4 @@ This error means that something is already listening on the port/URI that CR_Doc
 
 If you see this when you have two or more Visual Studio instances open, you are probably using an old version of the plugin. This issue was resolved (Issue #11) as of version 2.2.1.0.
 
-If you see it with just one Visual Studio window open, it means you already have something listening on the CR_Documentor default port of port 11235. You can change the port that CR_Documentor uses for its internal web server in the Options dialog.
+If you see it with just one Visual Studio window open, it means you already have something listening on the CR_Documentor default port of port 11235. You can change the port that CR_Documentor uses for its internal web server in the ConfigurationOptions dialog.
