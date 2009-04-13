@@ -3,8 +3,10 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using DevExpress.CodeRush.Common;
 
-[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, "Documentor")]
-[assembly: DXCoreProductAttribute(typeof(CR_Documentor.CR_DocumentorProductModule))]
+[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, "CR_Documentor")]
+[assembly: DXCoreProduct(typeof(CR_Documentor.CR_DocumentorProductModule))]
+[assembly: DXCoreAuthorizedAssembly(LoadAuthorization.AllProducts)]
+
 [assembly: ComVisible(false)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum)]
 
