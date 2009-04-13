@@ -10,8 +10,6 @@ namespace CR_Documentor
 	public sealed class CR_DocumentorProductModule : ProductModule
 	{
 
-		#region CR_DocumentorProductModule Variables
-
 		/// <summary>
 		/// Contains the assembly copyright information.
 		/// </summary>
@@ -25,18 +23,12 @@ namespace CR_Documentor
 		/// <summary>
 		/// Contains the minimum supported version of DXCore that is required.
 		/// </summary>
-		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(3, 0, 8, 0);
+		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(9, 1, 2, 0);
 
 		/// <summary>
 		/// Contains the current version of the assembly.
 		/// </summary>
 		private static DevExpress.CodeRush.Common.Version __version;
-
-		#endregion
-
-
-
-		#region CR_DocumentorProductModule Properties
 
 		/// <summary>
 		/// Gets the first copyright line.
@@ -92,6 +84,20 @@ namespace CR_Documentor
 			get
 			{
 				return __minEngineVersion;
+			}
+		}
+
+		/// <summary>
+		/// Gets the type of product this is.
+		/// </summary>
+		/// <value>
+		/// Always returns <see cref="DevExpress.CodeRush.Common.ModuleTypes.Free"/>.
+		/// </value>
+		public override ModuleTypes ModuleType
+		{
+			get
+			{
+				return ModuleTypes.Free;
 			}
 		}
 
@@ -152,12 +158,6 @@ namespace CR_Documentor
 			}
 		}
 
-		#endregion
-
-
-
-		#region CR_DocumentorProductModule Implementation
-
 		/// <summary>
 		/// Initializes <see langword="static" /> properties of the <see cref="CR_Documentor.CR_DocumentorProductModule" /> class.
 		/// </summary>
@@ -174,6 +174,13 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
+		/// Builds the product module definition.
+		/// </summary>
+		protected override void BuildDefenition()
+		{
+		}
+
+		/// <summary>
 		/// Gets the image to display in the "About" box.
 		/// </summary>
 		/// <returns>A <see cref="System.Drawing.Image"/> with the product logo.</returns>
@@ -182,9 +189,5 @@ namespace CR_Documentor
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
 			return new System.Drawing.Bitmap(current.GetManifestResourceStream("CR_Documentor.Resources.CR_DocumentorProductModule.bmp"));
 		}
-
-
-		#endregion
-
 	}
 }
