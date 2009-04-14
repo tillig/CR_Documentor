@@ -187,7 +187,7 @@ namespace CR_Documentor
 		public override System.Drawing.Image GetImage()
 		{
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
-			return new System.Drawing.Bitmap(current.GetManifestResourceStream("CR_Documentor.Resources.CR_DocumentorProductModule.bmp"));
+			return new System.Drawing.Bitmap(current.GetManifestResourceStream("CR_Documentor.Resources.CR_DocumentorProductModule.png"));
 		}
 	}
 }
