@@ -1,14 +1,19 @@
 using System;
 using System.Reflection;
+using CR_Documentor.Properties;
 using DevExpress.CodeRush.Common;
 
-namespace CR_Documentor
+namespace CR_Documentor.ProductModule
 {
 	/// <summary>
 	/// Product module for CR_Documentor.  Allows participation in the "About" box for DXCore.
 	/// </summary>
-	public sealed class CR_DocumentorProductModule : ProductModule
+	public sealed class CR_DocumentorProductModule : DevExpress.CodeRush.Common.ProductModule
 	{
+		/// <summary>
+		/// Path to the embedded resource that is the graphic for the "About" box.
+		/// </summary>
+		private const string ProductGraphicPath = "CR_Documentor.ProductModule.CR_DocumentorProductModule.png";
 
 		/// <summary>
 		/// Contains the assembly copyright information.
@@ -68,7 +73,7 @@ namespace CR_Documentor
 		{
 			get
 			{
-				return new Guid("B9F61C10-8741-4aca-8833-7D9FF65F33FC");
+				return ProductConstants.ProductModuleId;
 			}
 		}
 
@@ -111,7 +116,7 @@ namespace CR_Documentor
 		{
 			get
 			{
-				return "CR_Documentor";
+				return ProductConstants.PlugInName;
 			}
 		}
 
@@ -159,9 +164,8 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Initializes <see langword="static" /> properties of the <see cref="CR_Documentor.CR_DocumentorProductModule" /> class.
+		/// Initializes <see langword="static" /> properties of the <see cref="CR_Documentor.ProductModule.CR_DocumentorProductModule" /> class.
 		/// </summary>
-		/// <seealso cref="CR_Documentor.CR_DocumentorProductModule" />
 		static CR_DocumentorProductModule()
 		{
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
@@ -178,6 +182,7 @@ namespace CR_Documentor
 		/// </summary>
 		protected override void BuildDefenition()
 		{
+			this.DefinePlugIn(ProductConstants.PlugInAssemblyName);
 		}
 
 		/// <summary>
@@ -187,7 +192,7 @@ namespace CR_Documentor
 		public override System.Drawing.Image GetImage()
 		{
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
-			return new System.Drawing.Bitmap(current.GetManifestResourceStream("CR_Documentor.Resources.CR_DocumentorProductModule.png"));
+			return new System.Drawing.Bitmap(current.GetManifestResourceStream(ProductGraphicPath));
 		}
 	}
 }

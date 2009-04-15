@@ -187,7 +187,8 @@
     <Compile Include="Controls\DocumentationControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CR_DocumentorProductModule.cs">
+    <Compile Include="Properties\ProductConstants.cs" />
+    <Compile Include="ProductModule\CR_DocumentorProductModule.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DocumentorContextMenu.cs">
@@ -238,7 +239,7 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
-    <EmbeddedResource Include="Resources\CR_DocumentorProductModule.png" />
+    <EmbeddedResource Include="ProductModule\CR_DocumentorProductModule.png" />
     <EmbeddedResource Include="DocumentorContextMenu.resx">
       <DependentUpon>DocumentorContextMenu.cs</DependentUpon>
       <SubType>Designer</SubType>
