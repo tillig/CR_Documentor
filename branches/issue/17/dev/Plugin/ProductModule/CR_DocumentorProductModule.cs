@@ -121,6 +121,20 @@ namespace CR_Documentor.ProductModule
 		}
 
 		/// <summary>
+		/// Gets the set of programming languages this product supports.
+		/// </summary>
+		/// <value>
+		/// Supports: "CSharp", "Basic", "C/C++"
+		/// </value>
+		public override string[] SupportedLanguages
+		{
+			get
+			{
+				return new string[] { "CSharp", "Basic", "C/C++" };
+			}
+		}
+
+		/// <summary>
 		/// Returns the product title.
 		/// </summary>
 		/// <value>
