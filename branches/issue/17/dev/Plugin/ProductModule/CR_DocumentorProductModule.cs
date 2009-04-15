@@ -171,10 +171,9 @@ namespace CR_Documentor.ProductModule
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
 			System.Version sysVersion = current.GetName().Version;
 			__version = new DevExpress.CodeRush.Common.Version(sysVersion.Major, sysVersion.Minor, sysVersion.Build, sysVersion.Revision, ReleaseType.Release);
-			AssemblyCopyrightAttribute[] copyrightAttributes = (AssemblyCopyrightAttribute[])current.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-			__copyright = copyrightAttributes[0].Copyright;
-			AssemblyDescriptionAttribute[] descriptionAttributes = (AssemblyDescriptionAttribute[])current.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-			__description = descriptionAttributes[0].Description;
+
+			__copyright = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyCopyrightAttribute>(current).Copyright;
+			__description = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyDescriptionAttribute>(current).Description;
 		}
 
 		/// <summary>

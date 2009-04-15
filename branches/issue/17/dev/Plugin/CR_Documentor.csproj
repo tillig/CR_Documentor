@@ -147,6 +147,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="ICustomAttributeProviderExtensions.cs" />
     <Compile Include="CommentParser.cs" />
     <Compile Include="ContextMenu\Button\ContextMenuButton.cs">
       <SubType>Code</SubType>
