@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="rbDocTagMSStrict.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="rbDocTagMSStrict.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 64</value>
+  </data>
+  <data name="rbDocTagMSStrict.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="rbDocTagMSStrict.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbDocTagMSStrict.Text" xml:space="preserve">
+    <value>Microsoft Tags</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagMSStrict.Name" xml:space="preserve">
+    <value>rbDocTagMSStrict</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagMSStrict.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagMSStrict.Parent" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagMSStrict.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Name" xml:space="preserve">
+    <value>rbDocTagSandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Parent" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Name" xml:space="preserve">
+    <value>rbDocTagNDoc13</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Parent" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpDocTagCompat.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 8</value>
+  </data>
+  <data name="grpDocTagCompat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 96</value>
+  </data>
+  <data name="grpDocTagCompat.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="grpDocTagCompat.Text" xml:space="preserve">
+    <value>Documentation Tag Compatibility</value>
+  </data>
+  <data name="&gt;&gt;grpDocTagCompat.Name" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;grpDocTagCompat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpDocTagCompat.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpDocTagCompat.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="rbDocTagSandcastle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbDocTagSandcastle.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 40</value>
+  </data>
+  <data name="rbDocTagSandcastle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbDocTagSandcastle.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="rbDocTagSandcastle.Text" xml:space="preserve">
+    <value>Sandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Name" xml:space="preserve">
+    <value>rbDocTagSandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.Parent" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagSandcastle.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbDocTagNDoc13.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbDocTagNDoc13.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="rbDocTagNDoc13.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbDocTagNDoc13.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rbDocTagNDoc13.Text" xml:space="preserve">
+    <value>NDoc 1.3</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Name" xml:space="preserve">
+    <value>rbDocTagNDoc13</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.Parent" xml:space="preserve">
+    <value>grpDocTagCompat</value>
+  </data>
+  <data name="&gt;&gt;rbDocTagNDoc13.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Name" xml:space="preserve">
+    <value>rbUTRenderContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Name" xml:space="preserve">
+    <value>rbUTHighlightUnknown</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Name" xml:space="preserve">
+    <value>rbUTStripTagShowContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Name" xml:space="preserve">
+    <value>rbUTHideTagAndContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="grpUnrecognizedTags.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 112</value>
+  </data>
+  <data name="grpUnrecognizedTags.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 120</value>
+  </data>
+  <data name="grpUnrecognizedTags.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="grpUnrecognizedTags.Text" xml:space="preserve">
+    <value>Unrecognized Tag Handling</value>
+  </data>
+  <data name="&gt;&gt;grpUnrecognizedTags.Name" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;grpUnrecognizedTags.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpUnrecognizedTags.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpUnrecognizedTags.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="rbUTRenderContents.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbUTRenderContents.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="rbUTRenderContents.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbUTRenderContents.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="rbUTRenderContents.Text" xml:space="preserve">
+    <value>Render Contents Directly (NDoc Style)</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Name" xml:space="preserve">
+    <value>rbUTRenderContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTRenderContents.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbUTHighlightUnknown.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbUTHighlightUnknown.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 64</value>
+  </data>
+  <data name="rbUTHighlightUnknown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbUTHighlightUnknown.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rbUTHighlightUnknown.Text" xml:space="preserve">
+    <value>Highlight Tag and Contents</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Name" xml:space="preserve">
+    <value>rbUTHighlightUnknown</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTHighlightUnknown.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbUTStripTagShowContents.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbUTStripTagShowContents.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 88</value>
+  </data>
+  <data name="rbUTStripTagShowContents.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbUTStripTagShowContents.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbUTStripTagShowContents.Text" xml:space="preserve">
+    <value>Strip Tag, Show Contents</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Name" xml:space="preserve">
+    <value>rbUTStripTagShowContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTStripTagShowContents.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="rbUTHideTagAndContents.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbUTHideTagAndContents.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 40</value>
+  </data>
+  <data name="rbUTHideTagAndContents.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbUTHideTagAndContents.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbUTHideTagAndContents.Text" xml:space="preserve">
+    <value>Hide Tag/Contents (Sandcastle Style)</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Name" xml:space="preserve">
+    <value>rbUTHideTagAndContents</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.Parent" xml:space="preserve">
+    <value>grpUnrecognizedTags</value>
+  </data>
+  <data name="&gt;&gt;rbUTHideTagAndContents.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Name" xml:space="preserve">
+    <value>chkProcessDuplicateSeeLinks</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Name" xml:space="preserve">
+    <value>lblTxt2Space2</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Name" xml:space="preserve">
+    <value>numSpacesPerTab</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Name" xml:space="preserve">
+    <value>lblTxt2Space1</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Name" xml:space="preserve">
+    <value>chkTabsToSpaces</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="grpFormatOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 240</value>
+  </data>
+  <data name="grpFormatOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 70</value>
+  </data>
+  <data name="grpFormatOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="grpFormatOptions.Text" xml:space="preserve">
+    <value>Formatting Options</value>
+  </data>
+  <data name="&gt;&gt;grpFormatOptions.Name" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;grpFormatOptions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpFormatOptions.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpFormatOptions.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="chkProcessDuplicateSeeLinks.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chkProcessDuplicateSeeLinks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 40</value>
+  </data>
+  <data name="chkProcessDuplicateSeeLinks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="chkProcessDuplicateSeeLinks.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="chkProcessDuplicateSeeLinks.Text" xml:space="preserve">
+    <value>Remove duplicate &lt;see cref&gt; links.</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Name" xml:space="preserve">
+    <value>chkProcessDuplicateSeeLinks</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;chkProcessDuplicateSeeLinks.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblTxt2Space2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblTxt2Space2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>192, 16</value>
+  </data>
+  <data name="lblTxt2Space2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 23</value>
+  </data>
+  <data name="lblTxt2Space2.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lblTxt2Space2.Text" xml:space="preserve">
+    <value>spaces.</value>
+  </data>
+  <data name="lblTxt2Space2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Name" xml:space="preserve">
+    <value>lblTxt2Space2</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="numSpacesPerTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 16</value>
+  </data>
+  <data name="numSpacesPerTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 20</value>
+  </data>
+  <data name="numSpacesPerTab.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Name" xml:space="preserve">
+    <value>numSpacesPerTab</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;numSpacesPerTab.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblTxt2Space1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblTxt2Space1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>24, 16</value>
+  </data>
+  <data name="lblTxt2Space1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 23</value>
+  </data>
+  <data name="lblTxt2Space1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lblTxt2Space1.Text" xml:space="preserve">
+    <value>Replace &lt;code&gt; tabs with</value>
+  </data>
+  <data name="lblTxt2Space1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Name" xml:space="preserve">
+    <value>lblTxt2Space1</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;lblTxt2Space1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkTabsToSpaces.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chkTabsToSpaces.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="chkTabsToSpaces.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="chkTabsToSpaces.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Name" xml:space="preserve">
+    <value>chkTabsToSpaces</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.Parent" xml:space="preserve">
+    <value>grpFormatOptions</value>
+  </data>
+  <data name="&gt;&gt;chkTabsToSpaces.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Name" xml:space="preserve">
+    <value>chkShowToolbar</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Parent" xml:space="preserve">
+    <value>grpDisplay</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="grpDisplay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 8</value>
+  </data>
+  <data name="grpDisplay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 48</value>
+  </data>
+  <data name="grpDisplay.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="grpDisplay.Text" xml:space="preserve">
+    <value>Display Options</value>
+  </data>
+  <data name="&gt;&gt;grpDisplay.Name" xml:space="preserve">
+    <value>grpDisplay</value>
+  </data>
+  <data name="&gt;&gt;grpDisplay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpDisplay.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpDisplay.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkShowToolbar.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chkShowToolbar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="chkShowToolbar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="chkShowToolbar.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="chkShowToolbar.Text" xml:space="preserve">
+    <value>Show Documentor window toolbar</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Name" xml:space="preserve">
+    <value>chkShowToolbar</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.Parent" xml:space="preserve">
+    <value>grpDisplay</value>
+  </data>
+  <data name="&gt;&gt;chkShowToolbar.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Name" xml:space="preserve">
+    <value>rbPreviewStyleSandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Parent" xml:space="preserve">
+    <value>grpPreviewStyle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Name" xml:space="preserve">
+    <value>rbPreviewStyleNDoc13</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Parent" xml:space="preserve">
+    <value>grpPreviewStyle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpPreviewStyle.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 64</value>
+  </data>
+  <data name="grpPreviewStyle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 72</value>
+  </data>
+  <data name="grpPreviewStyle.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="grpPreviewStyle.Text" xml:space="preserve">
+    <value>Preview Style</value>
+  </data>
+  <data name="&gt;&gt;grpPreviewStyle.Name" xml:space="preserve">
+    <value>grpPreviewStyle</value>
+  </data>
+  <data name="&gt;&gt;grpPreviewStyle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpPreviewStyle.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpPreviewStyle.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="rbPreviewStyleSandcastle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbPreviewStyleSandcastle.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 40</value>
+  </data>
+  <data name="rbPreviewStyleSandcastle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbPreviewStyleSandcastle.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbPreviewStyleSandcastle.Text" xml:space="preserve">
+    <value>Sandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Name" xml:space="preserve">
+    <value>rbPreviewStyleSandcastle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.Parent" xml:space="preserve">
+    <value>grpPreviewStyle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleSandcastle.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbPreviewStyleNDoc13.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbPreviewStyleNDoc13.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 16</value>
+  </data>
+  <data name="rbPreviewStyleNDoc13.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="rbPreviewStyleNDoc13.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbPreviewStyleNDoc13.Text" xml:space="preserve">
+    <value>NDoc 1.3</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Name" xml:space="preserve">
+    <value>rbPreviewStyleNDoc13</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.Parent" xml:space="preserve">
+    <value>grpPreviewStyle</value>
+  </data>
+  <data name="&gt;&gt;rbPreviewStyleNDoc13.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Name" xml:space="preserve">
+    <value>rbIncludeRelative</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Name" xml:space="preserve">
+    <value>rbIncludeAbsolute</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Name" xml:space="preserve">
+    <value>rbIncludeNone</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="grpIncludes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 316</value>
+  </data>
+  <data name="grpIncludes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 100</value>
+  </data>
+  <data name="grpIncludes.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="grpIncludes.Text" xml:space="preserve">
+    <value>Process &lt;include /&gt; Tags</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Name" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpIncludes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbIncludeRelative.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbIncludeRelative.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 68</value>
+  </data>
+  <data name="rbIncludeRelative.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 17</value>
+  </data>
+  <data name="rbIncludeRelative.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rbIncludeRelative.Text" xml:space="preserve">
+    <value>Process, allow relative/absolute file paths.</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Name" xml:space="preserve">
+    <value>rbIncludeRelative</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeRelative.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbIncludeAbsolute.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbIncludeAbsolute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 44</value>
+  </data>
+  <data name="rbIncludeAbsolute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>224, 17</value>
+  </data>
+  <data name="rbIncludeAbsolute.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbIncludeAbsolute.Text" xml:space="preserve">
+    <value>Process and allow absolute file paths only.</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Name" xml:space="preserve">
+    <value>rbIncludeAbsolute</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeAbsolute.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbIncludeNone.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbIncludeNone.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 20</value>
+  </data>
+  <data name="rbIncludeNone.Size" type="System.Drawing.Size, System.Drawing">
+    <value>173, 17</value>
+  </data>
+  <data name="rbIncludeNone.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbIncludeNone.Text" xml:space="preserve">
+    <value>Don't process &lt;include /&gt; tags.</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Name" xml:space="preserve">
+    <value>rbIncludeNone</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.Parent" xml:space="preserve">
+    <value>grpIncludes</value>
+  </data>
+  <data name="&gt;&gt;rbIncludeNone.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="portNumber.Location" type="System.Drawing.Point, System.Drawing">
+    <value>151, 13</value>
+  </data>
+  <data name="portNumber.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 20</value>
+  </data>
+  <data name="portNumber.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;portNumber.Name" xml:space="preserve">
+    <value>portNumber</value>
+  </data>
+  <data name="&gt;&gt;portNumber.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;portNumber.Parent" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;portNumber.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblServerPort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblServerPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="lblServerPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 13</value>
+  </data>
+  <data name="lblServerPort.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblServerPort.Text" xml:space="preserve">
+    <value>Run preview server on port:</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Name" xml:space="preserve">
+    <value>lblServerPort</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.Parent" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;lblServerPort.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpServerOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 143</value>
+  </data>
+  <data name="grpServerOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 47</value>
+  </data>
+  <data name="grpServerOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="grpServerOptions.Text" xml:space="preserve">
+    <value>Preview Web Server</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.Name" xml:space="preserve">
+    <value>grpServerOptions</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpServerOptions.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>DocumentorOptions</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>DevExpress.CodeRush.Core.OptionsPage, DevExpress.CodeRush.Core, Version=3.0.8.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d</value>
+  </data>
+</root>
