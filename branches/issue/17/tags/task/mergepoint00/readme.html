@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+	<title>CR_Documentor Readme</title>
+	<style type="text/css">
+	<!--
+	body
+	{
+		font-family: Arial, Helvetica, sans-serif;
+		color: black;
+		background-color: white;
+	}
+
+	h1, h2, h3
+	{
+		border-bottom: 2px solid black;
+		padding-bottom: 3px;
+		padding-top: 10px;
+	}
+
+	ul>li
+	{
+		padding-bottom: 10px;
+	}
+
+	.warning
+	{
+		font-weight: bold;
+		color: red;
+	}
+	-->
+	</style>
+</head>
+
+<body>
+
+<h1>CR_Documentor</h1>
+
+<h2>Description</h2>
+
+<p>Writing <a href="http://msdn.microsoft.com/en-us/library/b2s063f7.aspx" target="_blank">XML documentation comments</a> in .NET can be troublesome sometimes because you can&#x27;t really see what it&#x27;s going to look like - you have to compile the code, then take the extracted XML doc and feed it to a rendering engine like <a href="http://www.codeplex.com/Sandcastle" target="_blank">Sandcastle</a>, then wait for the compiled help to come out so you can read it.</p>
+
+<p>CR_Documentor is a plugin for <a href="http://www.devexpress.com/Downloads/NET/IDETools/DXCore/" target="_blank">DXCore</a> that allows you to preview what the documentation will look like when it&#x27;s rendered - in a tool window inside Visual Studio.</p>
+
+<p style="border:1px solid red;padding:5px;background-color:#ffffcc"><span class="warning">Important</span>: If you are an existing user of CR_Documentor upgrading to a new version, you may not be able to roll back to the old version.</p>
+
+<h2>License</h2>
+
+<p>Copyright 2004 CR_Documentor Contributors</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at</p>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+
+<h2>Requirements</h2>
+
+<p>This product requires <strong>DXCore for Visual Studio .NET 9.1.2.0 or later.</strong></p>
+
+<p>DXCore is a free download from Developer Express, Inc.: <a href="http://www.devexpress.com/Downloads/NET/DXCore/" target="_blank">http://www.devexpress.com/Downloads/NET/DXCore/</a></p>
+
+<h2>Installation</h2>
+
+<ol>
+<li>Make sure all instances of Visual Studio are closed.</li>
+<li>Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.  This is typically something like:<br /><code>C:\Program Files\DevExpress 2009.1\IDETools\Community\PlugIns</code></li>
+</ol>
+
+<h2><a name="Usage">Usage</a></h2>
+
+<ol>
+<li>Open an instance of Visual Studio.</li>
+<li>From the DevExpress menu, select "Tool Windows," then "Documentor."  This will show the Documentor window.</li>
+<li>When working in a source file with XML documentation, watch the Documentor window as you edit your XML comments.  It will contain a preview of what your comments will look like when rendered into end-user documentation.</li>
+</ol>
+
+<p>While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not.</p>
+
+<h2>Additional Info</h2>
+
+<p>A full feature list, version history, known issues, etc. are all available on the <a href="http://code.google.com/p/cr-documentor/" target="_blank">CR_Documentor project site</a>.</p>
+</body>
+</html>
