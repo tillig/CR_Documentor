@@ -111,40 +111,18 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxSHDocVw">
-      <Name>AxSHDocVw</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\AxSHDocVw.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.Common">
-      <Name>DevExpress.CodeRush.Common</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\CodeRush for Visual Studio .NET\2.0\Bin\DevExpress.CodeRush.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.Core">
-      <Name>DevExpress.CodeRush.Core</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\CodeRush for Visual Studio .NET\2.0\Bin\DevExpress.CodeRush.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.PlugInCore">
-      <Name>DevExpress.CodeRush.PlugInCore</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\CodeRush for Visual Studio .NET\2.0\Bin\DevExpress.CodeRush.PlugInCore.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.StructuralParser">
-      <Name>DevExpress.CodeRush.StructuralParser</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\CodeRush for Visual Studio .NET\2.0\Bin\DevExpress.CodeRush.StructuralParser.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.VSCore">
-      <Name>DevExpress.CodeRush.VSCore</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\CodeRush for Visual Studio .NET\2.0\Bin\DevExpress.CodeRush.VSCore.dll</HintPath>
-    </Reference>
+    <Reference Include="DevExpress.CodeRush.Common, Version=9.1.2.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeRush.Core, Version=9.1.2.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeRush.PlugInCore, Version=9.1.2.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeRush.StructuralParser, Version=9.1.2.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeRush.VSCore, Version=9.1.2.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
     <Reference Include="EnvDTE">
       <Name>EnvDTE</Name>
     </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.mshtml">
       <Name>Microsoft.mshtml</Name>
       <HintPath>$(ProgramFiles)\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-    </Reference>
-    <Reference Include="SHDocVw">
-      <Name>SHDocVw</Name>
-      <HintPath>$(ProgramFiles)\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\SHDocVw.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -169,6 +147,7 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="ICustomAttributeProviderExtensions.cs" />
     <Compile Include="CommentParser.cs" />
     <Compile Include="ContextMenu\Button\ContextMenuButton.cs">
       <SubType>Code</SubType>
@@ -209,7 +188,8 @@
     <Compile Include="Controls\DocumentationControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CR_DocumentorProductModule.cs">
+    <Compile Include="Properties\ProductConstants.cs" />
+    <Compile Include="ProductModule\CR_DocumentorProductModule.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DocumentorContextMenu.cs">
@@ -218,7 +198,7 @@
     <Compile Include="DocumentorWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Options\DocumentorOptions.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -260,6 +240,7 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <EmbeddedResource Include="ProductModule\CR_DocumentorProductModule.png" />
     <EmbeddedResource Include="DocumentorContextMenu.resx">
       <DependentUpon>DocumentorContextMenu.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -272,7 +253,6 @@
       <DependentUpon>DocumentorOptions.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\CR_DocumentorProductModule.bmp" />
     <EmbeddedResource Include="Resources\Printer.ico" />
     <EmbeddedResource Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\Strings.resx">
@@ -302,6 +282,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(ProgramFiles)\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins\" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(ProgramFiles)\DevExpress 2009.1\IDETools\Community\PlugIns\" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
