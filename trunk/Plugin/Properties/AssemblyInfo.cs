@@ -1,12 +1,16 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using CR_Documentor.ProductModule;
+using CR_Documentor.Properties;
 using DevExpress.CodeRush.Common;
 
-[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, "Documentor")]
-[assembly: DXCoreProductAttribute(typeof(CR_Documentor.CR_DocumentorProductModule))]
+[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, ProductConstants.PlugInName)]
+[assembly: DXCoreProduct(typeof(CR_DocumentorProductModule))]
+[assembly: DXCoreAuthorizedAssembly(LoadAuthorization.AllProducts)]
+
 [assembly: ComVisible(false)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum)]
 
-[assembly: AssemblyTitle("CR_Documentor")]
-[assembly: AssemblyDescription("CR_Documentor provides the ability to preview how XML documentation comments will render.")]
+[assembly: AssemblyTitle(ProductConstants.PlugInName)]
+[assembly: AssemblyDescription("DXCore plugin that provides the ability to preview how XML documentation comments will render.")]

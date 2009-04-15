@@ -1,16 +1,19 @@
 using System;
 using System.Reflection;
+using CR_Documentor.Properties;
 using DevExpress.CodeRush.Common;
 
-namespace CR_Documentor
+namespace CR_Documentor.ProductModule
 {
 	/// <summary>
 	/// Product module for CR_Documentor.  Allows participation in the "About" box for DXCore.
 	/// </summary>
-	public sealed class CR_DocumentorProductModule : ProductModule
+	public sealed class CR_DocumentorProductModule : DevExpress.CodeRush.Common.ProductModule
 	{
-
-		#region CR_DocumentorProductModule Variables
+		/// <summary>
+		/// Path to the embedded resource that is the graphic for the "About" box.
+		/// </summary>
+		private const string ProductGraphicPath = "CR_Documentor.ProductModule.CR_DocumentorProductModule.png";
 
 		/// <summary>
 		/// Contains the assembly copyright information.
@@ -25,18 +28,12 @@ namespace CR_Documentor
 		/// <summary>
 		/// Contains the minimum supported version of DXCore that is required.
 		/// </summary>
-		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(3, 0, 8, 0);
+		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(9, 1, 2, 0);
 
 		/// <summary>
 		/// Contains the current version of the assembly.
 		/// </summary>
 		private static DevExpress.CodeRush.Common.Version __version;
-
-		#endregion
-
-
-
-		#region CR_DocumentorProductModule Properties
 
 		/// <summary>
 		/// Gets the first copyright line.
@@ -76,7 +73,7 @@ namespace CR_Documentor
 		{
 			get
 			{
-				return new Guid("B9F61C10-8741-4aca-8833-7D9FF65F33FC");
+				return ProductConstants.ProductModuleId;
 			}
 		}
 
@@ -96,6 +93,20 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
+		/// Gets the type of product this is.
+		/// </summary>
+		/// <value>
+		/// Always returns <see cref="DevExpress.CodeRush.Common.ModuleTypes.Free"/>.
+		/// </value>
+		public override ModuleTypes ModuleType
+		{
+			get
+			{
+				return ModuleTypes.Free;
+			}
+		}
+
+		/// <summary>
 		/// Gets the product name.
 		/// </summary>
 		/// <value>
@@ -105,7 +116,7 @@ namespace CR_Documentor
 		{
 			get
 			{
-				return "CR_Documentor";
+				return ProductConstants.PlugInName;
 			}
 		}
 
@@ -152,25 +163,25 @@ namespace CR_Documentor
 			}
 		}
 
-		#endregion
-
-
-
-		#region CR_DocumentorProductModule Implementation
-
 		/// <summary>
-		/// Initializes <see langword="static" /> properties of the <see cref="CR_Documentor.CR_DocumentorProductModule" /> class.
+		/// Initializes <see langword="static" /> properties of the <see cref="CR_Documentor.ProductModule.CR_DocumentorProductModule" /> class.
 		/// </summary>
-		/// <seealso cref="CR_Documentor.CR_DocumentorProductModule" />
 		static CR_DocumentorProductModule()
 		{
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
 			System.Version sysVersion = current.GetName().Version;
 			__version = new DevExpress.CodeRush.Common.Version(sysVersion.Major, sysVersion.Minor, sysVersion.Build, sysVersion.Revision, ReleaseType.Release);
-			AssemblyCopyrightAttribute[] copyrightAttributes = (AssemblyCopyrightAttribute[])current.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-			__copyright = copyrightAttributes[0].Copyright;
-			AssemblyDescriptionAttribute[] descriptionAttributes = (AssemblyDescriptionAttribute[])current.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-			__description = descriptionAttributes[0].Description;
+
+			__copyright = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyCopyrightAttribute>(current).Copyright;
+			__description = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyDescriptionAttribute>(current).Description;
+		}
+
+		/// <summary>
+		/// Builds the product module definition.
+		/// </summary>
+		protected override void BuildDefenition()
+		{
+			this.DefinePlugIn(ProductConstants.PlugInAssemblyName);
 		}
 
 		/// <summary>
@@ -180,11 +191,7 @@ namespace CR_Documentor
 		public override System.Drawing.Image GetImage()
 		{
 			Assembly current = typeof(CR_DocumentorProductModule).Assembly;
-			return new System.Drawing.Bitmap(current.GetManifestResourceStream("CR_Documentor.Resources.CR_DocumentorProductModule.bmp"));
+			return new System.Drawing.Bitmap(current.GetManifestResourceStream(ProductGraphicPath));
 		}
-
-
-		#endregion
-
 	}
 }
