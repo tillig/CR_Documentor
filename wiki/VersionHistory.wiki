@@ -1,7 +1,12 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured
 
+=2.3.0.0=
+  * Fixed Issue #17: CR_Documentor plugin was not properly registering/displaying in DXCore v2009.1.
+  * Updated minimum DXCore requirement to v2009.1/9.1.2.
+
 =2.2.1.0=
+  * *Last version to support DXCore prior to v2009.1/9.1.2.*
   * Fixed Issue #8: Unit tests for internal web server hang on unpredictable basis. This also seems to have fixed a reported issue where the internal preview freezes and requires a Visual Studio restart.
 
 =2.2.0.0=
@@ -23,11 +28,12 @@
   * Fixed issue where updated options weren't properly reflected in the documentation preview window.
   * Fixed issue where abstract class/method documentation wasn't being rendered correctly.
   * Added proper syntax generation for generic parameters and return values on methods.
-  * CR_Documentor now appears in the "About" box for DevExpress tools.
-  * Added ability to process <include> tags that have file paths relative to the source document being previewed.
+  * CR_Documentor now appears in the "About" box for !DevExpress tools.
+  * Added ability to process `<include>` tags that have file paths relative to the source document being previewed.
   * Released plugin as open source.
 
 =1.8.2.0510=
+  * *Last version to support DXCore prior to 3.0.8 or Visual Studio 2003.*
   * Fixed rendering issue with table lists being wider than the window.
   * Fixed rendering issue where generics didn't display correctly in syntax preview.
   * Updated minimum requirement for CR_Documentor to DXCore 1.1.58. Needed for syntax preview.
@@ -35,7 +41,7 @@
   * Added CR_Documentor to the DXCore "About" box.
 
 =1.8.1.0508=
-  * Fixed bug in diagnostic logging of MouseDown event.
+  * Fixed bug in diagnostic logging of !MouseDown event.
   * Added preview of member syntax.
   * Added member title banner in preview.
 
@@ -44,8 +50,8 @@
   * Fixed bug that would display a security warning in the CR_Documentor window for VS 2005 users.  CR_Documentor now executes the preview in the "Local Intranet" security zone.
 
 =1.7.0.1201=
-  * Added the ability for documentation to be included via <include>.
-  * Added option in options window for enabling/disabling <include>.
+  * Added the ability for documentation to be included via `<include>`.
+  * Added option in options window for enabling/disabling `<include>`.
 
 =1.6.0.0909=
   * Optimized so the preview isn't being refreshed when the window isn't visible.
@@ -58,13 +64,13 @@
   * Added logging to the DXCore "Messages" window.
   * Fixed bug where nested lists weren't rendering correctly.
   * Optimized context menu creation.
-  * Optimized handling of XmlDocuments for faster rendering in preview window.
+  * Optimized handling of !XmlDocuments for faster rendering in preview window.
   * Updated parser error handling to more accurately display information about the location of errors in XML comments.  (Errors now show approximate line/character locations in relation to the source document as well as in relation to the XML comment begin/end.)
   * Fixed bug where attributes on unrecognized tags weren't passing through to be rendered.
 
 =1.3.0.0228=
   * Added option to replace tabs in code blocks with spaces.
-  * Added option to remove duplicate links in major sections (<summary>, <remarks>, etc.) to avoid "link noise."  Links will be replaced with bold text.
+  * Added option to remove duplicate links in major sections (`<summary>`, `<remarks>`, etc.) to avoid "link noise."  Links will be replaced with bold text.
   * Added context menu for inserting XML doc comment templates.
   * Added context menu for embedding selections in XML doc comment templates.
   * Added context menu for XML encoding selected text.
@@ -78,8 +84,8 @@
   * Added support for use of "style" and "align" attribute on "para" and "note" tags.
   * Fixed issue where code and other text containing encoded XML entities would not properly render.
   * Fixed placeholder support for "include" tag at top level of documentation.
-  * Added language word expansions when using "<see langword="..." />" tags.
-  * Fixed issue where empty tags might potentially render twice ("<br />" would become "<br><br>").
+  * Added language word expansions when using "`<see langword="..." />`" tags.
+  * Fixed issue where empty tags might potentially render twice ("`<br />`" would become "`<br><br>`").
 
 =1.1.0.1220=
   * Updated tag handling for NDoc 1.3 tags.  Added options page for configuration of tag recognition level and unhandled tag rendering method.
