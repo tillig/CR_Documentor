@@ -43,7 +43,7 @@ namespace CR_Documentor.Transformation.MSDN
 			if (this._baseHtml == null)
 			{
 				// Lazy-initialize the base HTML. Doesn't matter if it's thread-safe.
-				this._baseHtml = EmbeddedResource.ReadEmbeddedResourceString(System.Reflection.Assembly.GetExecutingAssembly(), ResourceBaseHtmlDocument);
+				this._baseHtml = AssemblyExtensions.ReadEmbeddedResourceString(System.Reflection.Assembly.GetExecutingAssembly(), ResourceBaseHtmlDocument);
 			}
 			return this._baseHtml;
 		}

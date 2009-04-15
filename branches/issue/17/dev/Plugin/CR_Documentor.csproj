@@ -198,7 +198,7 @@
     <Compile Include="DocumentorWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Options\DocumentorOptions.cs">
       <SubType>UserControl</SubType>
     </Compile>
