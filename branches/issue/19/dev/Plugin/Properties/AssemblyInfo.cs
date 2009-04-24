@@ -5,7 +5,7 @@ using CR_Documentor.ProductModule;
 using CR_Documentor.Properties;
 using DevExpress.CodeRush.Common;
 
-[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, ProductConstants.PlugInName)]
+[assembly: DXCoreAssembly(DXCoreAssemblyType.PlugIn, ProductConstants.PlugInName, PlugInLoadType.StartUp)]
 [assembly: DXCoreProduct(typeof(CR_DocumentorProductModule))]
 [assembly: DXCoreAuthorizedAssembly(LoadAuthorization.AllProducts)]
 
