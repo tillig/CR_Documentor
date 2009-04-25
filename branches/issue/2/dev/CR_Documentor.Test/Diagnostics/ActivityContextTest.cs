@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CR_Documentor.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
 namespace CR_Documentor.Test.Diagnostics
 {
@@ -74,6 +74,16 @@ namespace CR_Documentor.Test.Diagnostics
 			public void Exit()
 			{
 				this.ExitCallCount++;
+			}
+
+			public void Write(LogLevel level, string message)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void Write(LogLevel level, string message, Exception error)
+			{
+				throw new NotImplementedException();
 			}
 		}
 	}

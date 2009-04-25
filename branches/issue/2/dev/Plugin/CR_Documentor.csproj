@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="Diagnostics\ActivityContext.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
+    <Compile Include="Diagnostics\LogLevel.cs" />
     <Compile Include="ICustomAttributeProviderExtensions.cs" />
     <Compile Include="CommentParser.cs" />
     <Compile Include="ContextMenu\Button\ContextMenuButton.cs">
