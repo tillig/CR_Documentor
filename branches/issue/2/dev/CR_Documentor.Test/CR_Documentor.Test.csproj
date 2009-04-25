@@ -31,22 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-		<Reference Include="DevExpress.CodeRush.Common">
-			<Name>DevExpress.CodeRush.Common</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.Core">
-			<Name>DevExpress.CodeRush.Core</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.PlugInCore">
-			<Name>DevExpress.CodeRush.PlugInCore</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.StructuralParser">
-			<Name>DevExpress.CodeRush.StructuralParser</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.VSCore">
-			<Name>DevExpress.CodeRush.VSCore</Name>
-		</Reference>
-		<Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="DevExpress.CodeRush.Common">
+      <Name>DevExpress.CodeRush.Common</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.Core">
+      <Name>DevExpress.CodeRush.Core</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.PlugInCore">
+      <Name>DevExpress.CodeRush.PlugInCore</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.StructuralParser">
+      <Name>DevExpress.CodeRush.StructuralParser</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.VSCore">
+      <Name>DevExpress.CodeRush.VSCore</Name>
+    </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
@@ -69,6 +69,7 @@
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="AssemblyExtensionsTest.cs" />
+    <Compile Include="Diagnostics\ActivityContextTest.cs" />
     <Compile Include="ICustomAttributeProviderExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector\MemberKeyTest.cs" />

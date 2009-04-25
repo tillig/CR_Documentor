@@ -111,21 +111,21 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-		<Reference Include="DevExpress.CodeRush.Common">
-			<Name>DevExpress.CodeRush.Common</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.Core">
-			<Name>DevExpress.CodeRush.Core</Name>
-		</Reference>		
+    <Reference Include="DevExpress.CodeRush.Common">
+      <Name>DevExpress.CodeRush.Common</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.Core">
+      <Name>DevExpress.CodeRush.Core</Name>
+    </Reference>
     <Reference Include="DevExpress.CodeRush.PlugInCore">
-			<Name>DevExpress.CodeRush.PlugInCore</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.StructuralParser">
-			<Name>DevExpress.CodeRush.StructuralParser</Name>
-		</Reference>
-		<Reference Include="DevExpress.CodeRush.VSCore">
-			<Name>DevExpress.CodeRush.VSCore</Name>
-		</Reference>
+      <Name>DevExpress.CodeRush.PlugInCore</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.StructuralParser">
+      <Name>DevExpress.CodeRush.StructuralParser</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.VSCore">
+      <Name>DevExpress.CodeRush.VSCore</Name>
+    </Reference>
     <Reference Include="EnvDTE">
       <Name>EnvDTE</Name>
     </Reference>
@@ -157,6 +157,8 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\ActivityContext.cs" />
+    <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="ICustomAttributeProviderExtensions.cs" />
     <Compile Include="CommentParser.cs" />
     <Compile Include="ContextMenu\Button\ContextMenuButton.cs">
