@@ -7,6 +7,8 @@ You wouldn't think that "preview XML doc comments" would really be something tha
 
 Maybe this isn't so "roadmap-ish" as much as a list of large items to keep in mind and work toward as smaller goals get accomplished. Hmmm.
 
+Note: We put a survey out in mid-April 2009. We got a relatively small number of respondents (even though we did some decent publicizing) but some of the roadmap will still be driven by the results. To see the survey, check out http://www.advancedsurvey.com/ survey 68141.
+
 = Internal Web Server =
 
 The solution to Issue #1 left us with an internal web server. We should use this to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
@@ -21,7 +23,7 @@ Things should be refactored so we can make use of unit testing and mocking as we
 
 There are several things that fall into this category that, honestly, I couldn't think of a better name for. The idea is that I want the individual preview generators to be easier to implement and maintain because, ideally, I'd like to be able to offer a way for a user to provide custom rendering handlers that allow them to better imitate their custom doc rendering process.
 
-  * *Attribute-based renering registration.* Right now each rendering engine has an abstract method it has to implement to say "method Foo handles tag Bar." Also, each rendering engine is very much hard-coded into the set of available options, so adding or removing an engine is painful. I'd like to make it all automatic and attribute-based:
+  * *Attribute-based rendering registration.* Right now each rendering engine has an abstract method it has to implement to say "method Foo handles tag Bar." Also, each rendering engine is very much hard-coded into the set of available options, so adding or removing an engine is painful. I'd like to make it all automatic and attribute-based:
     * Mark rendering engines with attributes. Registering a rendering engine with the preview control shouldn't be a manual thing that the option set and everything has to know about. It also shouldn't necessarily be entirely based on class hierarchy. Instead, the type that implements the rendering engine should be marked with an attribute that has a description (that can appear in the options dialog) and some sort of unique identifier (that will be stored in the user's option set).
     * Mark tag handling methods with attributes. Instead of registering tag handling methods in an event-handler format, mark them with an attribute like `[Tag("para")]` or some such.
   * *Unified syntax generator.* Syntax preview generation is the most painful part of the preview process, and right now there's a different syntax preview engine for each rendering engine. Let's unify this into a single syntax generator that can be styled in a custom fashion through CSS. Then each engine could provide custom CSS instead of a full engine.
