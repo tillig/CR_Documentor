@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using CR_Documentor.Diagnostics;
+using DevExpress.DXCore.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TypeMock;
-using DevExpress.DXCore.Threading;
-using System.Collections.Generic;
-using System.Collections;
 
 namespace CR_Documentor.Test.Diagnostics
 {

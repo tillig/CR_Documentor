@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DevExpress.DXCore.Threading;
 using System.Reflection;
+using DevExpress.DXCore.Threading;
 
 namespace CR_Documentor.Diagnostics
 {
