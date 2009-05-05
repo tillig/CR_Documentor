@@ -12,6 +12,20 @@ namespace CR_Documentor.Test.Diagnostics
 	[VerifyMocks]
 	public class LoggerTest
 	{
+		[TestInitialize]
+		public void TestInitialize()
+		{
+			// Set up calls to SynchronizationManager so they will pass in a unit
+			// test environment.
+			DynamicReturnValue beginInvoke = new DynamicReturnValue(SynchronizationManagerBeginInvoke);
+			using (RecordExpectations recorder = RecorderManager.StartRecording())
+			{
+				IAsyncResult dummyResult = SynchronizationManager.BeginInvoke(null, null);
+				recorder.Return(beginInvoke);
+				recorder.RepeatAlways();
+			}
+		}
+
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Ctor_NullLogOwner()
@@ -29,18 +43,6 @@ namespace CR_Documentor.Test.Diagnostics
 		[TestMethod]
 		public void Enter_EntersLog()
 		{
-			string changed = null;
-			WriteLogMessageHandler del = delegate(string s)
-			{
-				changed = s;
-			};
-			// TODO: Figure out why the SynchronizationManager is blocking and not executing.
-			// As it stands, the log test below doesn't pass because the SyncManager isn't actually executing anything.
-			IAsyncResult result = SynchronizationManager.BeginInvoke(del, new object[] { "changed" });
-			//IAsyncResult result = del.BeginInvoke("changed", null, null);
-			result.AsyncWaitHandle.WaitOne();
-			Assert.AreEqual("changed", changed);
-
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			string message = "Entry message.";
 			logger.Enter(message);
@@ -68,5 +70,27 @@ namespace CR_Documentor.Test.Diagnostics
 				LogMessages.Add(entry);
 			}
 		}
+
+		// The SynchronizationManager static class in DXCore can't run outside a
+		// DXCore environment. This DynamicReturnValue method can be used to swap
+		// calls to the SynchronizationManager for unit testing purposes.
+		//
+		// Note that in our version we are blocking on the wait handle so the call
+		// finishes. This doesn't happen in real SynchronizationManager calls, but
+		// since we're trying to test the results of the call and we don't want
+		// to Thread.Sleep in every test while we wait, we'll just make the call
+		// synchronously.
+
+		private static IAsyncResult SynchronizationManagerBeginInvoke(object[] parameters, object context)
+		{
+			Delegate exec = parameters[0] as Delegate;
+			SynchronizationManagerMethodCall call = delegate(object[] callParams) { return exec.DynamicInvoke(callParams); };
+			object[] paramArray = parameters[1] as object[];
+			IAsyncResult result = call.BeginInvoke(paramArray, null, null);
+			result.AsyncWaitHandle.WaitOne();
+			return result;
+		}
+
+		private delegate object SynchronizationManagerMethodCall(object[] parameters);
 	}
 }
