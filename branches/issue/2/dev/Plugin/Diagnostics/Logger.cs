@@ -38,6 +38,26 @@ namespace CR_Documentor.Diagnostics
 		private VoidHandler _exit;
 
 		/// <summary>
+		/// Delegate for writing error messages to the log.
+		/// </summary>
+		private MessageHandler _sendError;
+
+		/// <summary>
+		/// Delegate for writing exceptions to the log.
+		/// </summary>
+		private ExceptionHandler _sendException;
+
+		/// <summary>
+		/// Delegate for writing informational messages to the log.
+		/// </summary>
+		private MessageHandler _sendMsg;
+
+		/// <summary>
+		/// Delegate for writing warning messages to the log.
+		/// </summary>
+		private MessageHandler _sendWarning;
+
+		/// <summary>
 		/// Format for log messages - {0} is the log owner type name; {1} is the message.
 		/// </summary>
 		public const string MessageFormat = "CR_Documentor [{0}]: {1}";
@@ -113,19 +133,55 @@ namespace CR_Documentor.Diagnostics
 		}
 
 		/// <summary>
+		/// Gets a public <see langword="static" /> method from the internal log object.
+		/// </summary>
+		/// <param name="methodName">The name of the method to get.</param>
+		/// <param name="parameterTypes">The type(s) of parameters it accepts.</param>
+		/// <returns>
+		/// A reference to the public <see langword="static" /> method on the internal
+		/// log object.
+		/// </returns>
+		private MethodInfo GetPluginLogTypeMethod(string methodName, Type[] parameterTypes)
+		{
+			return this.PluginLogType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static, null, parameterTypes, null);
+		}
+
+		/// <summary>
 		/// Initializes delegates to write things to the internal DXCore log.
 		/// </summary>
 		private void InitializeLoggingDelegates()
 		{
-			MethodInfo enterMethod = this.PluginLogType.GetMethod("Enter", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string) }, null);
+			Type[] stringParameter = new Type[] { typeof(string) };
+			MethodInfo enterMethod = this.GetPluginLogTypeMethod("Enter", stringParameter);
 			this._enter = delegate(string message)
 			{
 				enterMethod.Invoke(null, new object[] { message });
 			};
-			MethodInfo exitMethod = this.PluginLogType.GetMethod("Exit", BindingFlags.Public | BindingFlags.Static, null, System.Type.EmptyTypes, null);
+			MethodInfo sendMsgMethod = this.GetPluginLogTypeMethod("SendMsg", stringParameter);
+			this._sendMsg = delegate(string message)
+			{
+				sendMsgMethod.Invoke(null, new object[] { message });
+			};
+			MethodInfo sendWarningMethod = this.GetPluginLogTypeMethod("SendWarning", stringParameter);
+			this._sendWarning = delegate(string message)
+			{
+				sendWarningMethod.Invoke(null, new object[] { message });
+			};
+			MethodInfo sendErrorMethod = this.GetPluginLogTypeMethod("SendError", stringParameter);
+			this._sendError = delegate(string message)
+			{
+				sendErrorMethod.Invoke(null, new object[] { message });
+			};
+
+			MethodInfo exitMethod = this.GetPluginLogTypeMethod("Exit", System.Type.EmptyTypes);
 			this._exit = delegate()
 			{
 				exitMethod.Invoke(null, null);
+			};
+			MethodInfo sendExceptionMethod = this.GetPluginLogTypeMethod("SendException", new Type[] { typeof(Exception) });
+			this._sendException = delegate(Exception err)
+			{
+				sendExceptionMethod.Invoke(null, new object[] { err });
 			};
 		}
 
@@ -134,9 +190,36 @@ namespace CR_Documentor.Diagnostics
 		/// </summary>
 		/// <param name="level">The level the message should appear at.</param>
 		/// <param name="message">The message to write.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="message" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// Thrown if <paramref name="message" /> is <see cref="System.String.Empty" />.
+		/// </exception>
 		public virtual void Write(LogLevel level, string message)
 		{
-			throw new NotImplementedException();
+			if (message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+			if (message.Length == 0)
+			{
+				throw new ArgumentException("Message may not be empty.", "message");
+			}
+			MessageHandler levelHandler = null;
+			switch (level)
+			{
+				case LogLevel.Error:
+					levelHandler = this._sendError;
+					break;
+				case LogLevel.Info:
+					levelHandler = this._sendMsg;
+					break;
+				case LogLevel.Warn:
+					levelHandler = this._sendWarning;
+					break;
+			}
+			SynchronizationManager.BeginInvoke(levelHandler, new object[] { this.BuildMessage(message) });
 		}
 
 		/// <summary>
@@ -145,9 +228,19 @@ namespace CR_Documentor.Diagnostics
 		/// <param name="level">The level the message should appear at.</param>
 		/// <param name="message">The message to write.</param>
 		/// <param name="error">Additional error information to include with the message.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="message" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// Thrown if <paramref name="message" /> is <see cref="System.String.Empty" />.
+		/// </exception>
 		public virtual void Write(LogLevel level, string message, Exception error)
 		{
-			throw new NotImplementedException();
+			this.Write(level, message);
+			if (error != null)
+			{
+				SynchronizationManager.BeginInvoke(this._sendException, new object[] { error });
+			}
 		}
 	}
 }
