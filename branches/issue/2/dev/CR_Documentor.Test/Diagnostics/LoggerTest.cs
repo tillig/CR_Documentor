@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using CR_Documentor.Diagnostics;
 using DevExpress.DXCore.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,6 +54,17 @@ namespace CR_Documentor.Test.Diagnostics
 		}
 
 		[TestMethod]
+		public void Enter_MessageFormat()
+		{
+			TestLogger logger = new TestLogger(typeof(LoggerTest));
+			string message = "Entry message.";
+			logger.Enter(message);
+			DictionaryEntry entry = TestInternalLog.LogMessages[0];
+			string expected = this.BuildExpectedMessage(message);
+			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
+		}
+
+		[TestMethod]
 		public void Exit_ExitsLog()
 		{
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
@@ -60,6 +72,12 @@ namespace CR_Documentor.Test.Diagnostics
 			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
 			DictionaryEntry entry = TestInternalLog.LogMessages[0];
 			Assert.AreEqual("Exit", entry.Key, "The wrong internal log method was called.");
+		}
+
+		private string BuildExpectedMessage(string message)
+		{
+			string expected = String.Format(CultureInfo.InvariantCulture, Logger.MessageFormat, typeof(LoggerTest).Name, message);
+			return expected;
 		}
 
 		private class TestLogger : Logger

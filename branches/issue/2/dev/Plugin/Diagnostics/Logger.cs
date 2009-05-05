@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using DevExpress.DXCore.Threading;
 
@@ -83,12 +84,24 @@ namespace CR_Documentor.Diagnostics
 		}
 
 		/// <summary>
+		/// Builds a complete, formatted log message.
+		/// </summary>
+		/// <param name="message">The content of the message.</param>
+		/// <returns>
+		/// A message containing the proper prefixes/suffixes for log entry.
+		/// </returns>
+		private string BuildMessage(string message)
+		{
+			return String.Format(CultureInfo.InvariantCulture, MessageFormat, this.LogOwner.Name, message);
+		}
+
+		/// <summary>
 		/// Writes a message to the log and indents the log so subsequent messages appear as "children."
 		/// </summary>
 		/// <param name="message">The message to write to the log.</param>
 		public virtual void Enter(string message)
 		{
-			SynchronizationManager.BeginInvoke(this._enter, new object[] { message });
+			SynchronizationManager.BeginInvoke(this._enter, new object[] { this.BuildMessage(message) });
 		}
 
 		/// <summary>
