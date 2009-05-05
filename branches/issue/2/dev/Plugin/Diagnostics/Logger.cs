@@ -5,26 +5,36 @@ using DevExpress.DXCore.Threading;
 namespace CR_Documentor.Diagnostics
 {
 	/// <summary>
-	/// Delegate for writing a log message to the internal DXCore log.
-	/// </summary>
-	/// <param name="message">The message to write to the log.</param>
-	public delegate void WriteLogMessageHandler(string message);
-
-	/// <summary>
-	/// Delegate for writing an exception to the internal DXCore log.
-	/// </summary>
-	/// <param name="error">The <see cref="System.Exception"/> to write to the log.</param>
-	public delegate void WriteLogExceptionHandler(Exception error);
-
-	/// <summary>
 	/// Base class for log object implementations.
 	/// </summary>
 	public abstract class Logger : ILog
 	{
 		/// <summary>
+		/// Delegate for writing a log message to the internal DXCore log.
+		/// </summary>
+		/// <param name="message">The message to write to the log.</param>
+		private delegate void MessageHandler(string message);
+
+		/// <summary>
+		/// Delegate for writing an exception to the internal DXCore log.
+		/// </summary>
+		/// <param name="error">The <see cref="System.Exception"/> to write to the log.</param>
+		private delegate void ExceptionHandler(Exception error);
+
+		/// <summary>
+		/// Delegate for calling a no-parameter method on the internal DXCore log.
+		/// </summary>
+		private delegate void VoidHandler();
+
+		/// <summary>
 		/// Delegate for indenting the log.
 		/// </summary>
-		private WriteLogMessageHandler _enter;
+		private MessageHandler _enter;
+
+		/// <summary>
+		/// Delegate for outdenting the log.
+		/// </summary>
+		private VoidHandler _exit;
 
 		/// <summary>
 		/// Format for log messages - {0} is the log owner type name; {1} is the message.
@@ -86,7 +96,7 @@ namespace CR_Documentor.Diagnostics
 		/// </summary>
 		public virtual void Exit()
 		{
-			throw new NotImplementedException();
+			SynchronizationManager.BeginInvoke(this._exit, new object[] { });
 		}
 
 		/// <summary>
@@ -98,6 +108,11 @@ namespace CR_Documentor.Diagnostics
 			this._enter = delegate(string message)
 			{
 				enterMethod.Invoke(null, new object[] { message });
+			};
+			MethodInfo exitMethod = this.PluginLogType.GetMethod("Exit", BindingFlags.Public | BindingFlags.Static, null, System.Type.EmptyTypes, null);
+			this._exit = delegate()
+			{
+				exitMethod.Invoke(null, null);
 			};
 		}
 
