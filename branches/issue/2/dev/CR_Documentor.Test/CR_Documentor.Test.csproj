@@ -71,6 +71,7 @@
     <Compile Include="AssemblyExtensionsTest.cs" />
     <Compile Include="Diagnostics\ActivityContextTest.cs" />
     <Compile Include="Diagnostics\LoggerTest.cs" />
+    <Compile Include="Diagnostics\LogManagerTest.cs" />
     <Compile Include="Diagnostics\MenuLoggerTest.cs" />
     <Compile Include="Diagnostics\SynchronizationManagerMock.cs" />
     <Compile Include="Diagnostics\ToolWindowLoggerTest.cs" />
