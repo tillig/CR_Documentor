@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Specialized;
-
+using CR_Documentor.Diagnostics;
 using DevExpress.CodeRush.Core;
-using DevExpress.CodeRush.Diagnostics.ToolWindows;
 
 namespace CR_Documentor.Options
 {
@@ -11,6 +10,11 @@ namespace CR_Documentor.Options
 	/// </summary>
 	public class OptionSet
 	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(OptionSet));
+
 		#region Constants
 
 		#region Section: Document Tag Compatibility
@@ -338,7 +342,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read TagCompatibilityLevel from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read TagCompatibilityLevel from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -346,7 +350,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read UnrecognizedTagHandlingMethod from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read UnrecognizedTagHandlingMethod from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -354,7 +358,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ConvertCodeTabsToSpaces from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpaces from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -362,7 +366,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -370,7 +374,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ProcessDuplicateSeeLinks from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ProcessDuplicateSeeLinks from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -378,7 +382,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ProcessIncludes from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ProcessIncludes from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -386,7 +390,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -394,7 +398,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read ShowToolbar from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read ShowToolbar from options. Defaulting."), ex);
 			}
 			try
 			{
@@ -402,7 +406,7 @@ namespace CR_Documentor.Options
 			}
 			catch (Exception ex)
 			{
-				Log.SendException(String.Format("Unable to read PreviewStyle from options. Defaulting."), ex);
+				Log.Write(LogLevel.Error, String.Format("Unable to read PreviewStyle from options. Defaulting."), ex);
 			}
 			return retVal;
 		}

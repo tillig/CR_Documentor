@@ -1,11 +1,9 @@
 using System;
 using System.Windows.Forms;
 using System.Xml;
-
+using CR_Documentor.Diagnostics;
 using CR_Documentor.Server;
 using CR_Documentor.Transformation;
-
-using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.StructuralParser;
 
 namespace CR_Documentor.Controls
@@ -22,6 +20,11 @@ namespace CR_Documentor.Controls
 	/// <seealso cref="CR_Documentor.Controls.Browser"/>
 	public class DocumentationControl : Control
 	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentationControl));
+
 		/// <summary>
 		/// The browser that will display rendered documentation.
 		/// </summary>
@@ -80,15 +83,10 @@ namespace CR_Documentor.Controls
 				_transformer = value;
 				if (_transformer != null)
 				{
-					Log.Enter(ImageType.Method, "Transformation engine updated. Refreshing browser.");
-					try
+					using (ActivityContext context = new ActivityContext(Log, "Transformation engine updated. Refreshing browser."))
 					{
 						this.PreviewContent = _transformer.GetHtmlPage(DefaultBodyMessage);
 						this.RefreshBrowser();
-					}
-					finally
-					{
-						Log.Exit();
 					}
 				}
 			}
@@ -147,7 +145,7 @@ namespace CR_Documentor.Controls
 		/// </remarks>
 		private void Browser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
 		{
-			Log.Send(String.Format("CR_Documentor browser updating: {0} of {1}.", e.CurrentProgress, e.MaximumProgress));
+			Log.Write(LogLevel.Info, String.Format("CR_Documentor browser updating: {0} of {1}.", e.CurrentProgress, e.MaximumProgress));
 			if (this._isRefreshing && e.CurrentProgress == e.MaximumProgress)
 			{
 				this._isRefreshing = false;
@@ -160,16 +158,11 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		private void NavigateToInitialPage()
 		{
-			Log.Enter(ImageType.Method, "Initializing browser and navigating to initial page.");
-			try
+			using (ActivityContext context = new ActivityContext(Log, "Initializing browser and navigating to initial page."))
 			{
 				string url = this.WebServer.Url.ToString();
 				this._browser.SafeUrls.Add(url);
 				this._browser.Navigate(url);
-			}
-			finally
-			{
-				Log.Exit();
 			}
 		}
 
@@ -178,7 +171,7 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		public virtual void Print()
 		{
-			Log.Send("Printing documentation preview.");
+			Log.Write(LogLevel.Info, "Printing documentation preview.");
 			this._browser.ShowPrintDialog();
 		}
 
@@ -223,15 +216,10 @@ namespace CR_Documentor.Controls
 			// Refresh if there was a change
 			if (refresh)
 			{
-				Log.Enter(ImageType.Method, "Refreshing browser with new content.");
-				try
+				using (ActivityContext context = new ActivityContext(Log, "Refreshing browser with new content."))
 				{
 					this.PreviewContent = this._transformer.ToString();
 					this.RefreshBrowser();
-				}
-				finally
-				{
-					Log.Exit();
 				}
 			}
 		}
