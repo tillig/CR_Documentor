@@ -1,43 +1,32 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
 using System.Resources;
 using System.Windows.Forms;
-using DevExpress.CodeRush.Core;
-using DevExpress.CodeRush.Menus;
-using DevExpress.CodeRush.Diagnostics.Menus;
-using DevExpress.CodeRush.PlugInCore;
-using DevExpress.CodeRush.StructuralParser;
-
-using CR_Documentor.Options;
 using CR_Documentor.ContextMenu;
 using CR_Documentor.ContextMenu.Button;
 using CR_Documentor.ContextMenu.Popup;
+using CR_Documentor.Diagnostics;
+using CR_Documentor.Options;
+using DevExpress.CodeRush.Core;
+using DevExpress.CodeRush.Menus;
+using DevExpress.CodeRush.PlugInCore;
 
-namespace CR_Documentor {
+namespace CR_Documentor
+{
 	/// <summary>
 	/// Provides context-sensitive help for creating and editing XML document comments.
 	/// </summary>
-	public class DocumentorContextMenu: StandardPlugIn {
-
-		#region DocumentorContextMenu Variables
-
-		#region Constants
+	public class DocumentorContextMenu : StandardPlugIn
+	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentorContextMenu));
 
 		/// <summary>
 		/// Standard context requiring "Any Selection."
 		/// </summary>
 		protected const DXCoreContext.SelectionContext AnySelection = DXCoreContext.SelectionContext.LineFragment | DXCoreContext.SelectionContext.WholeLine | DXCoreContext.SelectionContext.MultiLines;
-
-		/// <summary>
-		/// Prefix for log messages generated in this module.
-		/// </summary>
-		private const string LOG_PREFIX = "CR_Documentor Context Menu: ";
-
-		#endregion
-
-		#region Instance
 
 		/// <summary>
 		/// Object providing VS events to act on.
@@ -69,24 +58,20 @@ namespace CR_Documentor {
 		/// </summary>
 		private Collection<ContextMenuItem> children = new Collection<ContextMenuItem>();
 
-		#endregion
-
-		#endregion
-
-
-
-		#region DocumentorContextMenu Properties
-
 		/// <summary>
 		/// Gets or sets the <see cref="OptionSet"/> associated with this plugin.
 		/// </summary>
 		/// <value>A <see cref="OptionSet"/> with rendering options.</value>
-		public virtual OptionSet Options{
-			get {
+		public virtual OptionSet Options
+		{
+			get
+			{
 				return options;
 			}
-			set{
-				if(value != null){
+			set
+			{
+				if (value != null)
+				{
 					options = value;
 				}
 			}
@@ -99,7 +84,8 @@ namespace CR_Documentor {
 		/// <value>A <see cref="System.Collections.ObjectModel.Collection{T}"/> with the menu items.</value>
 		public virtual Collection<ContextMenuItem> Children
 		{
-			get {
+			get
+			{
 				return children;
 			}
 		}
@@ -108,29 +94,25 @@ namespace CR_Documentor {
 		/// Gets the XML document comment prefix used for the current language (not including any whitespace).
 		/// </summary>
 		/// <value>A <see cref="System.String"/> with the doc comment prefix.</value>
-		public static string CommentPrefix {
-			get {
+		public static string CommentPrefix
+		{
+			get
+			{
 				LanguageExtensionBase lActiveLanguage = CodeRush.Language.ActiveExtension;
 				string retVal = "///";
-				if(lActiveLanguage != null){
+				if (lActiveLanguage != null)
+				{
 					retVal = lActiveLanguage.XMLDocCommentBegin;
 				}
 				return retVal;
 			}
 		}
 
-		#endregion
-
-
-
-		#region DocumentorContextMenu Implementation
-
-		#region Constructors
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DocumentorContextMenu"/> class.
 		/// </summary>
-		public DocumentorContextMenu() {
+		public DocumentorContextMenu()
+		{
 			// Required for Windows.Forms Class Composition Designer support
 			InitializeComponent();
 
@@ -138,14 +120,11 @@ namespace CR_Documentor {
 			RefreshSettings();
 		}
 
-		#endregion
-
-		#region Overrides
-
 		/// <summary>
 		/// Performs initialization functions.
 		/// </summary>
-		public override void InitializePlugIn() {
+		public override void InitializePlugIn()
+		{
 			base.InitializePlugIn();
 
 			// Create resource manager for string localization.
@@ -163,19 +142,17 @@ namespace CR_Documentor {
 		/// <summary>
 		/// Performs finalization functions.
 		/// </summary>
-		public override void FinalizePlugIn() {
+		public override void FinalizePlugIn()
+		{
 			base.FinalizePlugIn();
 		}
-
-		#endregion
-
-		#region Event Handlers
 
 		/// <summary>
 		/// Handles the options changed event.  Refreshes options from storage.
 		/// </summary>
 		/// <param name="ea">Event args.</param>
-		private void crEvents_OptionsChanged(OptionsChangedEventArgs ea) {
+		private void crEvents_OptionsChanged(OptionsChangedEventArgs ea)
+		{
 			this.RefreshSettings();
 		}
 
@@ -183,52 +160,53 @@ namespace CR_Documentor {
 		/// Handles a mouse down event in the code editor.
 		/// </summary>
 		/// <param name="ea">Event args.</param>
-		private void crEvents_EditorMouseDown(EditorMouseEventArgs ea) {
+		private void crEvents_EditorMouseDown(EditorMouseEventArgs ea)
+		{
 			// Check to see if this is a right-mouse-click - don't handle non-right buttons
-			if(ea.Button != MouseButtons.Right){
+			if (ea.Button != MouseButtons.Right)
+			{
 				return;
 			}
 
 			// It's the right mouse button - rebuild the context menu
-			try {
-				// Get the editor context menu
-				MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
+			// Get the editor context menu
+			MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
 
-				// Clear the XML doc context menu
-				if(this.contextMenu != null){
-					// Clear all items
-					foreach(ContextMenuItem item in this.Children){
-						if(item is ContextMenuPopup){
-							((ContextMenuPopup)item).ClearItems();
-						}
+			// Clear the XML doc context menu
+			if (this.contextMenu != null)
+			{
+				// Clear all items
+				foreach (ContextMenuItem item in this.Children)
+				{
+					if (item is ContextMenuPopup)
+					{
+						((ContextMenuPopup)item).ClearItems();
 					}
-
-					// Remove the items in descending order so the item
-					// collection doesn't reorder on you mid-removal.
-					for(int i = this.contextMenu.Count - 1; i >= 0; i--){
-						if(this.contextMenu[i] != null){
-							this.contextMenu[i].Delete();
-						}
-					}
-
-					// Delete the menu itself
-					this.contextMenu.Delete();
-					this.contextMenu = null;
 				}
 
-				// Add the context menu to the editor context menu.
-				this.contextMenu = editorContextMenu.AddPopup();
-				this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
-
-				// Rebuild the context menu
-				foreach(ContextMenuItem item in this.Children){
-					item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
+				// Remove the items in descending order so the item
+				// collection doesn't reorder on you mid-removal.
+				for (int i = this.contextMenu.Count - 1; i >= 0; i--)
+				{
+					if (this.contextMenu[i] != null)
+					{
+						this.contextMenu[i].Delete();
+					}
 				}
 
+				// Delete the menu itself
+				this.contextMenu.Delete();
+				this.contextMenu = null;
 			}
-			finally {
-				// The processing for this request is complete.
-				Log.Exit(ImageType.Info, "{0}MouseDown Complete", LOG_PREFIX);
+
+			// Add the context menu to the editor context menu.
+			this.contextMenu = editorContextMenu.AddPopup();
+			this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
+
+			// Rebuild the context menu
+			foreach (ContextMenuItem item in this.Children)
+			{
+				item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
 			}
 		}
 
@@ -237,41 +215,41 @@ namespace CR_Documentor {
 		/// </summary>
 		/// <param name="sender">The button being clicked.</param>
 		/// <param name="e">Event arguments.</param>
-		private void contextMenuButton_Click(object sender, MenuButtonClickEventArgs e) {
+		private void contextMenuButton_Click(object sender, MenuButtonClickEventArgs e)
+		{
 			// Find the item with the corresponding tag
 			ContextMenuButton selected = null;
 			string tagToFind = e.Button.Tag;
-			Log.Enter(ImageType.Info, "{0}Button [{1}]", LOG_PREFIX, tagToFind);
-			try{
-				foreach(ContextMenuItem item in this.Children){
-					if(item is ContextMenuButton){
-						if(((ContextMenuButton)item).Tag == tagToFind){
+			using (ActivityContext context = new ActivityContext(Log, String.Format("Handling button [{0}].", tagToFind)))
+			{
+				foreach (ContextMenuItem item in this.Children)
+				{
+					if (item is ContextMenuButton)
+					{
+						if (((ContextMenuButton)item).Tag == tagToFind)
+						{
 							selected = (ContextMenuButton)item;
 							break;
 						}
 					}
-					else if(item is ContextMenuPopup){
+					else if (item is ContextMenuPopup)
+					{
 						selected = ((ContextMenuPopup)item).GetButtonByTag(tagToFind);
-						if(selected != null){
+						if (selected != null)
+						{
 							break;
 						}
 					}
 				}
 
 				// Execute the item
-				if(selected != null){
-					Log.Send(String.Format("Found button of type [{0}]; executing.", selected.GetType().Name));
+				if (selected != null)
+				{
+					Log.Write(LogLevel.Info, String.Format("Found button of type [{0}]; executing.", selected.GetType().Name));
 					selected.Execute();
 				}
 			}
-			finally{
-				Log.Exit();
-			}
 		}
-
-		#endregion
-
-		#region Methods
 
 		/// <summary>
 		/// Adds the primary template blocks to the parent popup.
@@ -280,30 +258,36 @@ namespace CR_Documentor {
 		/// <param name="tag">The tag for the added submenu.</param>
 		/// <param name="caption">The caption for the added submenu.</param>
 		/// <param name="embed"><see langword="true" /> to embed a selection; <see langword="false"/> to replace the selection.</param>
-		protected virtual void AddPrimaryBlocks(ContextMenuPopup popup, string tag, string caption, bool embed){
+		protected virtual void AddPrimaryBlocks(ContextMenuPopup popup, string tag, string caption, bool embed)
+		{
 			ContextMenuPopup subPopup = null;
 			ContextMenuItem item = null;
 
 			string replacement = "";
-			if(embed){
+			if (embed)
+			{
 				replacement = TextTemplateContextMenuButton.TEXT_REPLACEMENT;
 			}
 
 			// Primary Blocks
 			subPopup = MenuBuilder.NewPopup(popup, tag, caption);
-			if(this.Options.RecognizedTags.Contains("summary")){
+			if (this.Options.RecognizedTags.Contains("summary"))
+			{
 				// <summary>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Summary",
 					String.Format("\n<summary>\n{0}\n</summary>\n", replacement),
 					"<summary />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(!embed){
+			if (!embed)
+			{
 				// Threadsafety doesn't take any content
-				if(this.Options.RecognizedTags.Contains("threadsafety")){
+				if (this.Options.RecognizedTags.Contains("threadsafety"))
+				{
 					// <threadsafety>
 					item = MenuBuilder.NewTemplateButton(subPopup,
 						tag + "ThreadSafety",
@@ -311,93 +295,111 @@ namespace CR_Documentor {
 						"<threadsafety />");
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("param")){
+			if (this.Options.RecognizedTags.Contains("param"))
+			{
 				// <param>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Param",
 					String.Format("\n<param name=\"\">{0}</param>\n", replacement),
 					"<param />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("returns")){
+			if (this.Options.RecognizedTags.Contains("returns"))
+			{
 				// <returns>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Returns",
 					String.Format("\n<returns>\n{0}\n</returns>\n", replacement),
 					"<returns />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("value")){
+			if (this.Options.RecognizedTags.Contains("value"))
+			{
 				// <value>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Value",
 					String.Format("\n<value>\n{0}\n</value>\n", replacement),
 					"<value />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("remarks")){
+			if (this.Options.RecognizedTags.Contains("remarks"))
+			{
 				// <remarks>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Remarks",
 					String.Format("\n<remarks>\n{0}\n</remarks>\n", replacement),
 					"<remarks />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("event")){
+			if (this.Options.RecognizedTags.Contains("event"))
+			{
 				// <event>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Event",
 					String.Format("\n<event cref=\"\">\n{0}\n</event>\n", replacement),
 					"<event />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("exception")){
+			if (this.Options.RecognizedTags.Contains("exception"))
+			{
 				// <exception>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Exception",
 					String.Format("\n<exception cref=\"\">\n{0}\n</exception>\n", replacement),
 					"<exception />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("example") && this.Options.RecognizedTags.Contains("code")){
+			if (this.Options.RecognizedTags.Contains("example") && this.Options.RecognizedTags.Contains("code"))
+			{
 				// <example><code /></example>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Example",
 					String.Format("\n<example>\n{0}\n<code>\n</code>\n</example>\n", replacement),
 					"<example />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("permission")){
+			if (this.Options.RecognizedTags.Contains("permission"))
+			{
 				// <permission>
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "Permission",
 					String.Format("\n<permission cref=\"\">\n{0}\n</permission>\n", replacement),
 					"<permission />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, AnySelection);
 				}
 			}
-			if(this.Options.RecognizedTags.Contains("seealso")){
+			if (this.Options.RecognizedTags.Contains("seealso"))
+			{
 				// <seealso cref="" />
 				item = MenuBuilder.NewTemplateButton(subPopup,
 					tag + "SeeAlsoCref",
 					String.Format("\n<seealso cref=\"{0}\" />\n", replacement),
 					"<seealso cref=\"\" />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
 				}
 				// <seealso href="" />
@@ -405,27 +407,32 @@ namespace CR_Documentor {
 					tag + "SeeAlsoHref",
 					String.Format("\n<seealso href=\"{0}\" />\n", replacement),
 					"<seealso href=\"\" />");
-				if(embed){
+				if (embed)
+				{
 					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
 				}
 			}
-			if(!embed){
+			if (!embed)
+			{
 				// Obsolete, Preliminary and Include don't take content
-				if(this.Options.RecognizedTags.Contains("preliminary")){
+				if (this.Options.RecognizedTags.Contains("preliminary"))
+				{
 					// <preliminary>
 					item = MenuBuilder.NewTemplateButton(subPopup,
 						tag + "Preliminary",
 						"\n<preliminary />\n",
 						"<preliminary />");
 				}
-				if(this.Options.RecognizedTags.Contains("obsolete")){
+				if (this.Options.RecognizedTags.Contains("obsolete"))
+				{
 					// <obsolete>
 					item = MenuBuilder.NewTemplateButton(subPopup,
 						tag + "Obsolete",
 						"\n<obsolete />\n",
 						"<obsolete />");
 				}
-				if(this.Options.RecognizedTags.Contains("include")){
+				if (this.Options.RecognizedTags.Contains("include"))
+				{
 					// <include>
 					item = MenuBuilder.NewTemplateButton(subPopup,
 						tag + "Include",
@@ -438,11 +445,11 @@ namespace CR_Documentor {
 		/// <summary>
 		/// Creates the list of items available in the context menu.
 		/// </summary>
-		protected virtual void CreateContextMenuItems(){
-			Log.Enter(ImageType.Info, "{0}Creating context menu items.", LOG_PREFIX);
-
-			try{
-
+		protected virtual void CreateContextMenuItems()
+		{
+			// TODO: Refactor this method. It's far too long.
+			using (ActivityContext context = new ActivityContext(Log, "Creating context menu items."))
+			{
 				this.Children.Clear();
 
 				ContextMenuPopup popup = null;
@@ -456,7 +463,8 @@ namespace CR_Documentor {
 				popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
 
 				// <see ...>
-				if(this.Options.RecognizedTags.Contains("see")){
+				if (this.Options.RecognizedTags.Contains("see"))
+				{
 					subPopup = MenuBuilder.NewPopup(popup, "See", "<see ... />");
 					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeCref", "<see cref=\"\" />");
 					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordTrue", "<see langword=\"true\" />");
@@ -469,7 +477,8 @@ namespace CR_Documentor {
 					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeHref", "<see href=\"\" />");
 				}
 
-				if(this.Options.RecognizedTags.Contains("list")){
+				if (this.Options.RecognizedTags.Contains("list"))
+				{
 					// <list ...>
 					subPopup = MenuBuilder.NewPopup(popup, "List", "<list ... />");
 					// <list type="bullet">
@@ -521,7 +530,8 @@ namespace CR_Documentor {
 				popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
 
 				// Standard items
-				if(this.Options.RecognizedTags.Contains("para")){
+				if (this.Options.RecognizedTags.Contains("para"))
+				{
 					// <para>
 					item = MenuBuilder.NewTemplateButton(popup,
 						"EmbedPara",
@@ -529,8 +539,9 @@ namespace CR_Documentor {
 						"<para />");
 					this.SetSelectionRequirements(item, AnySelection);
 				}
-				if(this.Options.RecognizedTags.Contains("see") &&
-					this.Options.RecognizedTags.Contains("seealso")){
+				if (this.Options.RecognizedTags.Contains("see") &&
+					this.Options.RecognizedTags.Contains("seealso"))
+				{
 					subPopup = MenuBuilder.NewPopup(popup, "See", "<see/seealso />");
 
 					// <see cref="">
@@ -557,8 +568,9 @@ namespace CR_Documentor {
 					((TextTemplateContextMenuButton)item).ConvertSelectionToLower = true;
 					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
 				}
-				if(this.Options.RecognizedTags.Contains("code") &&
-					this.Options.RecognizedTags.Contains("c")){
+				if (this.Options.RecognizedTags.Contains("code") &&
+					this.Options.RecognizedTags.Contains("c"))
+				{
 					subPopup = MenuBuilder.NewPopup(popup, "Code", "<code />");
 
 					// <code>
@@ -575,7 +587,8 @@ namespace CR_Documentor {
 						"<c />");
 					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
 				}
-				if(this.Options.RecognizedTags.Contains("paramref")){
+				if (this.Options.RecognizedTags.Contains("paramref"))
+				{
 					// <paramref>
 					item = MenuBuilder.NewTemplateButton(popup,
 						"EmbedParamref",
@@ -585,9 +598,10 @@ namespace CR_Documentor {
 				}
 
 				// Add listheader, item
-				if(this.Options.RecognizedTags.Contains("list") &&
+				if (this.Options.RecognizedTags.Contains("list") &&
 					this.Options.RecognizedTags.Contains("listheader") &&
-					this.Options.RecognizedTags.Contains("item")){
+					this.Options.RecognizedTags.Contains("item"))
+				{
 					subPopup = MenuBuilder.NewPopup(popup, "List", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed.List"));
 					// <listheader>
 					item = MenuBuilder.NewTemplateButton(subPopup,
@@ -616,7 +630,7 @@ namespace CR_Documentor {
 				outlineButton.ShouldCollapse = false;
 				outlineButton.Tag = "ExpandXmlDocSections";
 				outlineButton.BeginGroup = true;
-				Log.Send(String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
+				Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
 				this.Children.Add(outlineButton);
 
 				// Add "Collapse all XML document sections"
@@ -624,14 +638,14 @@ namespace CR_Documentor {
 				outlineButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.OutlineCollapse");
 				outlineButton.ShouldCollapse = true;
 				outlineButton.Tag = "CollapseXmlDocSections";
-				Log.Send(String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
+				Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
 				this.Children.Add(outlineButton);
 
 				// Add "XML Encode" for selection
 				XmlEncodeButton xmlEncodeButton = new XmlEncodeButton();
 				xmlEncodeButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.XmlEncode");
 				xmlEncodeButton.Tag = "XmlEncode";
-				Log.Send(String.Format("Created XmlEncodeButton.  Tag: [{0}].", xmlEncodeButton.Tag));
+				Log.Write(LogLevel.Info, String.Format("Created XmlEncodeButton.  Tag: [{0}].", xmlEncodeButton.Tag));
 				this.Children.Add(xmlEncodeButton);
 
 				// Add "Convert to XML doc comment" for selection
@@ -639,7 +653,7 @@ namespace CR_Documentor {
 				convertToXmlDocCommentButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ConvertSelectionToXmlDocComment");
 				convertToXmlDocCommentButton.Tag = "ConvertSelectionToXmlDocComment";
 				convertToXmlDocCommentButton.Context.Add("!" + DXCoreContext.CTX_InXmlDocComment);
-				Log.Send(String.Format("Created ConvertSelectionToCommentButton.  Tag: [{0}].", convertToXmlDocCommentButton.Tag));
+				Log.Write(LogLevel.Info, String.Format("Created ConvertSelectionToCommentButton.  Tag: [{0}].", convertToXmlDocCommentButton.Tag));
 				this.Children.Add(convertToXmlDocCommentButton);
 
 				// Add "Show/Hide CR_Documentor window" option
@@ -648,11 +662,8 @@ namespace CR_Documentor {
 				visibleToggle.Caption = "CR_Documentor.DocumentorContextMenu.ToggleVisibility";
 				visibleToggle.Tag = "ToggleVisibility";
 				visibleToggle.BeginGroup = true;
-				Log.Send(String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
+				Log.Write(LogLevel.Info, String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
 				this.Children.Add(visibleToggle);
-			}
-			finally{
-				Log.Exit();
 			}
 		}
 
@@ -661,8 +672,10 @@ namespace CR_Documentor {
 		/// </summary>
 		/// <param name="item">The menu item to set the context on.</param>
 		/// <param name="context">The context the button will require.</param>
-		protected virtual void SetSelectionRequirements(ContextMenuItem item, DXCoreContext.SelectionContext context){
-			if(item is TextTemplateContextMenuButton){
+		protected virtual void SetSelectionRequirements(ContextMenuItem item, DXCoreContext.SelectionContext context)
+		{
+			if (item is TextTemplateContextMenuButton)
+			{
 				((TextTemplateContextMenuButton)item).SelectionRequirements = context;
 			}
 		}
@@ -670,14 +683,12 @@ namespace CR_Documentor {
 		/// <summary>
 		/// Refreshes the settings from the options window.
 		/// </summary>
-		protected virtual void RefreshSettings(){
-			Log.Enter(ImageType.Info, "{0}Refreshing settings.", LOG_PREFIX);
-			try{
+		protected virtual void RefreshSettings()
+		{
+			using (ActivityContext context = new ActivityContext(Log, "Refreshing settings."))
+			{
 				this.Options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
 				CreateContextMenuItems();
-			}
-			finally{
-				Log.Exit();
 			}
 		}
 
@@ -685,7 +696,8 @@ namespace CR_Documentor {
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent() {
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			this.crEvents = new DevExpress.DXCore.PlugInCore.DXCoreEvents(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.crEvents)).BeginInit();
@@ -694,9 +706,5 @@ namespace CR_Documentor {
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
 		}
-
-		#endregion
-
-		#endregion
 	}
 }
