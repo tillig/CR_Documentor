@@ -11,7 +11,7 @@ namespace CR_Documentor.ContextMenu.Button
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ContextMenuButton"/> class.
 		/// </summary>
-		public ContextMenuButton()
+		protected ContextMenuButton()
 		{
 		}
 
