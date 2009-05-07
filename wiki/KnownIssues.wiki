@@ -31,3 +31,6 @@ This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word
 
 =The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).=
 This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
+
+=CR_Documentor does not appear in the "About" box.=
+You should see CR_Documentor listed when you view the !DevExpress->About box. If you don't, make sure you're on the latest version of CR_Documentor. You may also have to close all instances of Visual Studio and delete your DXCore Loader settings folder (%!AppData%\!CodeRush for VS .NET\1.1\Settings\Loader) - these settings can get corrupted across DXCore updates and it may have cached something incorrectly. Deleting the settings will cause them to be rebuilt from scratch and will not harm your DXCore installation.
