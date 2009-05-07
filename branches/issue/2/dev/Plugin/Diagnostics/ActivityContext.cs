@@ -5,6 +5,42 @@ namespace CR_Documentor.Diagnostics
 	/// <summary>
 	/// Indicates a logical activity under which log messages might be made.
 	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// Use this class instead of <see cref="CR_Documentor.Diagnostics.ILog.Enter"/>
+	/// and <see cref="CR_Documentor.Diagnostics.ILog.Exit"/> when grouping several
+	/// log messages together in a single context.
+	/// </para>
+	/// </remarks>
+	/// <example>
+	/// <para>
+	/// This example shows a log object being retrieved, an activity context
+	/// being established, and some log messages being written in that context.
+	/// </para>
+	/// <code>
+	/// using System;
+	/// using CR_Documentor.Diagnostics;
+	/// 
+	/// namespace MyNamespace
+	/// {
+	///   public class MyClass
+	///   {
+	///     private static readonly ILog Log = LogManager.GetLogger(typeof(MyClass));
+	/// 
+	///     public int MyMethod()
+	///     {
+	///       using(ActivityContext context = new ActivityContext(Log, "Doing addition."))
+	///       {
+	///         Log.Write(LogLevel.Info, "Adding two numbers.");
+	///         int x = 1 + 2;
+	///         Log.Write(LogLevel.Info, "Finished addition.");
+	///         return x;
+	///       }
+	///     }
+	///   }
+	/// }
+	/// </code>
+	/// </example>
 	public class ActivityContext : IDisposable
 	{
 		/// <summary>
