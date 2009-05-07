@@ -15,10 +15,10 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using CR_Documentor.Controls;
+using CR_Documentor.Diagnostics;
 using CR_Documentor.Options;
 using CR_Documentor.Server;
 using DevExpress.CodeRush.Core;
-using DevExpress.CodeRush.Diagnostics.ToolWindows;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
 using XML = System.Xml;
@@ -32,7 +32,10 @@ namespace CR_Documentor
 	[Title("Documentor")]
 	public class DocumentorWindow : ToolWindowPlugIn
 	{
-		#region DocumentorWindow Variables
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentorWindow));
 
 		/// <summary>
 		/// Event provider.
@@ -65,11 +68,6 @@ namespace CR_Documentor
 		private static bool _currentlyVisible = false;
 
 		/// <summary>
-		/// Prefix for log messages generated in this module.
-		/// </summary>
-		private const string LogPrefix = "CR_Documentor: ";
-
-		/// <summary>
 		/// Internal web server used to serve up the preview content.
 		/// </summary>
 		private WebServer _webServer = null;
@@ -91,10 +89,6 @@ namespace CR_Documentor
 				ServerStartupErrorUrl
 			);
 
-		#endregion
-
-
-		#region DocumentorWindow Properties
 
 		/// <summary>
 		/// Gets a <see cref="System.Boolean"/> indicating if the tool window is currently visible.
@@ -110,13 +104,6 @@ namespace CR_Documentor
 			}
 		}
 
-		#endregion
-
-
-		#region DocumentorWindow Implementation
-
-		#region Constructors
-
 		/// <summary>
 		/// Initializes a new <see cref="DocumentorWindow"/> object.
 		/// </summary>
@@ -129,44 +116,38 @@ namespace CR_Documentor
 			// and then we resume construction here.
 			this.SuspendLayout();
 
-			Log.Enter(ImageType.Window, "{0}Constructing plugin.", LogPrefix);
-			try
+			using (ActivityContext context = new ActivityContext(Log, "Constructing plugin."))
 			{
-				StartWebServer();
-				RebuildPreviewControl();
+				try
+				{
+					StartWebServer();
+					RebuildPreviewControl();
 
-				// Create the toolbar. The toolbar needs to be added after the
-				// preview window or it ends up covering the top bit of the browser.
-				Log.Send("Building toolbar.");
-				this._toolBar = new ToolBar();
-				this.UpdateToolbarFromOptions();
-				Log.Send("Building toolbar image list.");
-				ImageList imgList = new ImageList();
-				bool showIcons = LoadIcons(imgList);
-				SetupToolbar(imgList, showIcons);
-				this.Controls.Add(this._toolBar);
+					// Create the toolbar. The toolbar needs to be added after the
+					// preview window or it ends up covering the top bit of the browser.
+					Log.Write(LogLevel.Info, "Building toolbar.");
+					this._toolBar = new ToolBar();
+					this.UpdateToolbarFromOptions();
+					Log.Write(LogLevel.Info, "Building toolbar image list.");
+					ImageList imgList = new ImageList();
+					bool showIcons = LoadIcons(imgList);
+					SetupToolbar(imgList, showIcons);
+					this.Controls.Add(this._toolBar);
 
-				Log.Send("Construction complete.");
-			}
-			catch (Exception ex)
-			{
-				Log.SendException("Error initializing CR_Documentor window.", ex);
-				throw;
-				// This last 'Throw' should cause DXCore to abandon Toolbox window creation.
-				// It would be better if we could test the facility to listen prior to entering this class constructor.
-				// However I cannot find an earlier entry point at the moment in which to test this.
-			}
-			finally
-			{
-				Log.Exit();
+					Log.Write(LogLevel.Info, "Construction complete.");
+				}
+				catch (Exception ex)
+				{
+					Log.Write(LogLevel.Error, "Error initializing CR_Documentor window.", ex);
+					throw;
+					// This last 'Throw' should cause DXCore to abandon Toolbox window creation.
+					// It would be better if we could test the facility to listen prior to entering this class constructor.
+					// However I cannot find an earlier entry point at the moment in which to test this.
+				}
 			}
 
 			this.ResumeLayout(false);
 		}
-
-		#endregion
-
-		#region Overrides
 
 		/// <summary>
 		/// Initializes the plugin by setting event handlers, etc.
@@ -195,16 +176,12 @@ namespace CR_Documentor
 		/// </summary>
 		public override void FinalizePlugIn()
 		{
-			Log.Send("Stopping web server.");
+			Log.Write(LogLevel.Info, "Stopping web server.");
 			this._webServer.Stop();
 			this._webServer.Dispose();
-			Log.Send("Web server stopped.");
+			Log.Write(LogLevel.Info, "Web server stopped.");
 			base.FinalizePlugIn();
 		}
-
-		#endregion
-
-		#region Event Handlers
 
 		/// <summary>
 		/// Handles the click event for toolbar buttons.
@@ -214,8 +191,7 @@ namespace CR_Documentor
 		private void ToolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			string tag = e.Button.Tag.ToString();
-			Log.Enter(ImageType.Info, "{0}Handling toolbar button click for tag [{1}].", LogPrefix, tag);
-			try
+			using (ActivityContext context = new ActivityContext(Log, String.Format("Handling toolbar button click for tag [{0}].", tag)))
 			{
 				switch (tag)
 				{
@@ -223,17 +199,13 @@ namespace CR_Documentor
 						this._previewer.Print();
 						break;
 					case "Settings":
-						Log.Send("Showing CR_Documentor options.");
+						Log.Write(LogLevel.Info, "Showing CR_Documentor options.");
 						DocumentorOptions.Show();
 						break;
 					default:
-						Log.SendWarning("Unhandled button tag: " + tag);
+						Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
 						break;
 				}
-			}
-			finally
-			{
-				Log.Exit();
 			}
 		}
 
@@ -293,8 +265,7 @@ namespace CR_Documentor
 		/// </param>
 		private void events_OptionsChanged(OptionsChangedEventArgs ea)
 		{
-			Log.Enter(ImageType.Options, "{0}Options changed.", LogPrefix);
-			try
+			using (ActivityContext context = new ActivityContext(Log, "Options changed."))
 			{
 				// Things have to happen in exactly this order or the preview control
 				// won't get updated with the proper URL when the web server port
@@ -305,10 +276,6 @@ namespace CR_Documentor
 				UpdatePreviewFromOptions();
 				UpdateToolbarFromOptions();
 				RefreshPreview();
-			}
-			finally
-			{
-				Log.Exit();
 			}
 		}
 
@@ -323,12 +290,6 @@ namespace CR_Documentor
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
-		#region Instance
-
 		/// <summary>
 		/// Sets up the toolbar with the appropriate icons during window initialization.
 		/// </summary>
@@ -337,7 +298,7 @@ namespace CR_Documentor
 		private void SetupToolbar(ImageList imgList, bool showIcons)
 		{
 			// Create the toolbar
-			Log.Send("Setting toolbar properties.");
+			Log.Write(LogLevel.Info, "Setting toolbar properties.");
 			this._toolBar.ButtonClick += new ToolBarButtonClickEventHandler(ToolBar_ButtonClick);
 			this._toolBar.ImageList = imgList;
 			this._toolBar.Appearance = ToolBarAppearance.Flat;
@@ -395,19 +356,19 @@ namespace CR_Documentor
 			{
 				if (this._previewer.WebServer == this._webServer)
 				{
-					Log.Send("Preview control already pointing at the correct web server instance. Skipping rebuild.");
+					Log.Write(LogLevel.Info, "Preview control already pointing at the correct web server instance. Skipping rebuild.");
 					return;
 				}
-				Log.Send("Removing existing preview control.");
+				Log.Write(LogLevel.Info, "Removing existing preview control.");
 				controlIndex = this.Controls.IndexOf(this._previewer);
 				this.Controls.Remove(this._previewer);
 				this._previewer.Dispose();
 				this._previewer = null;
 			}
-			Log.Send("Building preview control.");
+			Log.Write(LogLevel.Info, "Building preview control.");
 			this._previewer = new DocumentationControl(this._webServer);
 			this.UpdatePreviewFromOptions();
-			Log.Send("Setting browser properties.");
+			Log.Write(LogLevel.Info, "Setting browser properties.");
 			this._previewer.Dock = DockStyle.Fill;
 			this._previewer.Location = new System.Drawing.Point(0, 0);
 			this._previewer.Name = "documentor";
@@ -452,13 +413,13 @@ namespace CR_Documentor
 					this._webServer.Dispose();
 					this._webServer = null;
 				}
-				Log.Send("Starting web server.");
+				Log.Write(LogLevel.Info, "Starting web server.");
 				this._webServer = new WebServer(options.ServerPort);
 				this._webServer.Start();
 			}
 			catch (Exception ex)
 			{
-				Log.SendException("Error starting CR_Documentor web server.", ex);
+				Log.Write(LogLevel.Error, "Error starting CR_Documentor web server.", ex);
 				String innerMessage = ex.Message;
 				if (ex is HttpListenerException)
 				{
@@ -480,7 +441,7 @@ namespace CR_Documentor
 		/// </summary>
 		public void UpdateToolbarFromOptions()
 		{
-			Log.Send("Updating control options from storage.");
+			Log.Write(LogLevel.Info, "Updating control options from storage.");
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
 			this._toolBar.Visible = options.ShowToolbar;
 		}
@@ -490,7 +451,7 @@ namespace CR_Documentor
 		/// </summary>
 		public void UpdatePreviewFromOptions()
 		{
-			Log.Send("Updating transform options from storage.");
+			Log.Write(LogLevel.Info, "Updating transform options from storage.");
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
 
 			// Load the appropriate transformation engine based on new settings
@@ -501,7 +462,7 @@ namespace CR_Documentor
 			}
 			catch (Exception err)
 			{
-				Log.SendException(String.Format("Unable to load specified preview style [{0}].  Defaulting to [CR_Documentor.Transformation.MSDN.Engine, CR_Documentor].", options.PreviewStyle), err);
+				Log.Write(LogLevel.Error, String.Format("Unable to load specified preview style [{0}].  Defaulting to [CR_Documentor.Transformation.MSDN.Engine, CR_Documentor].", options.PreviewStyle), err);
 			}
 
 			Transformation.TransformEngine transformer = null;
@@ -511,7 +472,7 @@ namespace CR_Documentor
 			}
 			catch (Exception err)
 			{
-				Log.SendException(String.Format("Unable to instantiate preview style [{0}].", transformType.AssemblyQualifiedName), err);
+				Log.Write(LogLevel.Error, String.Format("Unable to instantiate preview style [{0}].", transformType.AssemblyQualifiedName), err);
 			}
 			if (transformer == null)
 			{
@@ -573,10 +534,6 @@ namespace CR_Documentor
 			base.Dispose(disposing);
 		}
 
-		#endregion
-
-		#region Design-time Support
-
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -599,10 +556,6 @@ namespace CR_Documentor
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
 		}
-
-		#endregion
-
-		#region Static
 
 		/// <summary>
 		/// Shows the Documentor window.
@@ -698,15 +651,9 @@ namespace CR_Documentor
 			}
 			catch (Exception err)
 			{
-				Log.SendException(String.Format("{0}Error loading icons for toolbar. Not showing icons.", LogPrefix), err);
+				Log.Write(LogLevel.Error, "Error loading icons for toolbar. Not showing icons.", err);
 				return false;
 			}
 		}
-
-		#endregion
-
-		#endregion
-
-		#endregion
 	}
 }

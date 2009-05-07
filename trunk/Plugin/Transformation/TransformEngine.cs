@@ -10,6 +10,7 @@ using CR_Documentor.Options;
 using CR_Documentor.Xml;
 
 using SP = DevExpress.CodeRush.StructuralParser;
+using CR_Documentor.Diagnostics;
 
 namespace CR_Documentor.Transformation
 {
@@ -18,10 +19,10 @@ namespace CR_Documentor.Transformation
 	/// </summary>
 	public abstract class TransformEngine
 	{
-
-		#region TransformEngine Variables
-
-		#region Constants
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TransformEngine));
 
 		/// <summary>
 		/// Text that appears in the base HTML document that will be replaced with the documentation preview body.
@@ -32,10 +33,6 @@ namespace CR_Documentor.Transformation
 		/// Constant used in registering a "default handler" for comment tags.  Sort of like a "default" case in a switch statement.
 		/// </summary>
 		protected const string DefaultCommentHandlerKey = "__default";
-
-		#endregion
-
-		#region Instance
 
 		/// <summary>
 		/// Contains the signature of the current code target to render.
@@ -88,14 +85,6 @@ namespace CR_Documentor.Transformation
 		/// </summary>
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
 		private StringWriter _writer = null;
-
-		#endregion
-
-		#endregion
-
-
-
-		#region TransformEngine Properties
 
 		/// <summary>
 		/// Gets or sets the <see cref="DevExpress.CodeRush.StructuralParser.LanguageElement"/>
@@ -262,14 +251,6 @@ namespace CR_Documentor.Transformation
 			}
 		}
 
-		#endregion
-
-
-
-		#region TransformEngine Implementation
-
-		#region Constructors
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.TransformEngine" /> class.
 		/// </summary>
@@ -278,10 +259,6 @@ namespace CR_Documentor.Transformation
 		{
 			this.RegisterCommentTagHandlers();
 		}
-
-		#endregion
-
-		#region Abstracts
 
 		/// <summary>
 		/// Gets the base HTML document that the browser preview window will
@@ -335,10 +312,6 @@ namespace CR_Documentor.Transformation
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
 		protected abstract void RegisterCommentTagHandlers();
 
-		#endregion
-
-		#region Overrides
-
 		/// <summary>
 		/// Executes the translation process and creates a string with the final HTML for
 		/// the rendered help page.
@@ -362,12 +335,6 @@ namespace CR_Documentor.Transformation
 			}
 			return this.GetHtmlPage(body);
 		}
-
-		#endregion
-
-		#region Methods
-
-		#region Instance
 
 		/// <summary>
 		/// Adds a rendering handler for rendering a specific comment block.
@@ -719,18 +686,12 @@ namespace CR_Documentor.Transformation
 			}
 			if (defaulted.Count == 0)
 			{
-				DevExpress.CodeRush.Diagnostics.ToolWindows.Log.SendMsg("All recognized tags have handlers.");
+				Log.Write(LogLevel.Info, "All recognized tags have handlers.");
 			}
 			else
 			{
-				DevExpress.CodeRush.Diagnostics.ToolWindows.Log.SendMsg("The following recognized tags will be passed through or are handled implicitly: {0}", String.Join(", ", defaulted.ToArray()));
+				Log.Write(LogLevel.Info, String.Format("The following recognized tags will be passed through or are handled implicitly: {0}", String.Join(", ", defaulted.ToArray())));
 			}
 		}
-
-		#endregion
-
-		#endregion
-
-		#endregion
 	}
 }

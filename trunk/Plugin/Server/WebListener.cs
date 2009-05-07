@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
-using DevExpress.CodeRush.Diagnostics.ToolWindows;
+using CR_Documentor.Diagnostics;
 
 namespace CR_Documentor.Server
 {
@@ -10,6 +10,11 @@ namespace CR_Documentor.Server
 	/// </summary>
 	public class WebListener : IDisposable
 	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(WebListener));
+
 		/// <summary>
 		/// The base format for the URI that the web server will listen for. Takes two parameters - the port to listen on and the GUID identifier.
 		/// </summary>
@@ -144,7 +149,7 @@ namespace CR_Documentor.Server
 			this._listener.Start();
 			foreach (object p in this._listener.Prefixes)
 			{
-				Log.Send(String.Format("Listener listening for requests on {0}", p));
+				Log.Write(LogLevel.Info, String.Format("Listener listening for requests on {0}", p));
 			}
 		}
 
@@ -156,7 +161,7 @@ namespace CR_Documentor.Server
 			this._listener.Stop();
 			try
 			{
-				Log.Send("Listener stopped.");
+				Log.Write(LogLevel.Info, "Listener stopped.");
 			}
 			catch
 			{

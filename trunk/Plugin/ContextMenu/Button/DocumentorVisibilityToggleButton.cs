@@ -1,5 +1,5 @@
 using System;
-using DevExpress.CodeRush.Diagnostics.Menus;
+using CR_Documentor.Diagnostics;
 
 namespace CR_Documentor.ContextMenu.Button
 {
@@ -8,6 +8,11 @@ namespace CR_Documentor.ContextMenu.Button
 	/// </summary>
 	public class DocumentorVisibilityToggleButton : ContextMenuButton
 	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentorVisibilityToggleButton));
+
 		/// <summary>
 		/// Gets or sets a resource manager for string lookup.
 		/// </summary>
@@ -44,39 +49,30 @@ namespace CR_Documentor.ContextMenu.Button
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DocumentorVisibilityToggleButton"/> class.
-		/// </summary>
-		public DocumentorVisibilityToggleButton()
-		{
-		}
-
-		/// <summary>
 		/// Toggles the visibility of the Documentor tool window.
 		/// </summary>
 		public override void Execute()
 		{
-			Log.Enter(ImageType.Info, "Toggling visibility of CR_Documentor window.");
-			try
+			using (ActivityContext context = new ActivityContext(Log, "Toggling visibility of CR_Documentor window."))
 			{
-				if (DocumentorWindow.CurrentlyVisible)
+				try
 				{
-					Log.Send("Hiding CR_Documentor window.");
-					DocumentorWindow.HideWindow();
+					if (DocumentorWindow.CurrentlyVisible)
+					{
+						Log.Write(LogLevel.Info, "Hiding window.");
+						DocumentorWindow.HideWindow();
+					}
+					else
+					{
+						Log.Write(LogLevel.Info, "Showing window.");
+						DocumentorWindow.ShowWindow();
+					}
+					Log.Write(LogLevel.Info, "Visibility toggle complete.");
 				}
-				else
+				catch (Exception err)
 				{
-					Log.Send("Showing CR_Documentor window.");
-					DocumentorWindow.ShowWindow();
+					Log.Write(LogLevel.Error, "Error while toggling window visibility.", err);
 				}
-				Log.Send("Visibility toggle complete.");
-			}
-			catch (Exception err)
-			{
-				Log.SendException(err);
-			}
-			finally
-			{
-				Log.Exit();
 			}
 		}
 	}

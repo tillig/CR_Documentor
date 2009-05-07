@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using DevExpress.CodeRush.Diagnostics.ToolWindows;
+using CR_Documentor.Diagnostics;
 using Debug = System.Diagnostics.Debug;
 
 namespace CR_Documentor.Server
@@ -30,6 +30,11 @@ namespace CR_Documentor.Server
 	/// </remarks>
 	public class WebServer : IDisposable
 	{
+		/// <summary>
+		/// Log entry handler.
+		/// </summary>
+		private static readonly ILog Log = LogManager.GetLogger(typeof(WebServer));
+
 		/// <summary>
 		/// Raised when an incoming request is received from the web server.
 		/// </summary>
@@ -167,7 +172,7 @@ namespace CR_Documentor.Server
 			Interlocked.Exchange(ref this._runState, (long)State.Starting);
 			try
 			{
-				Log.Send("Starting web server connection manager.");
+				Log.Write(LogLevel.Info, "Starting web server connection manager.");
 				if (!this._listener.IsListening)
 				{
 					this._listener.Start();
@@ -193,7 +198,7 @@ namespace CR_Documentor.Server
 			}
 			finally
 			{
-				Log.Send("Web server connection manager stopped.");
+				Log.Write(LogLevel.Info, "Web server connection manager stopped.");
 				Interlocked.Exchange(ref this._runState, (long)State.Stopped);
 			}
 		}
@@ -264,7 +269,7 @@ namespace CR_Documentor.Server
 			}
 			catch (Exception ex)
 			{
-				Log.SendException("Exception in raising the incoming request event.", ex);
+				Log.Write(LogLevel.Error, "Exception in raising the incoming request event.", ex);
 			}
 		}
 
