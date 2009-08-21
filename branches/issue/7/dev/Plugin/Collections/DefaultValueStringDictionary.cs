@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 
-namespace CR_Documentor.Transformation.Syntax
+namespace CR_Documentor.Collections
 {
 	/// <summary>
 	/// A <see cref="System.Collections.Specialized.StringDictionary"/> that provides
@@ -11,13 +11,14 @@ namespace CR_Documentor.Transformation.Syntax
 	public class DefaultValueStringDictionary : StringDictionary
 	{
 		/// <summary>
-		/// Internal storage for the
-		/// <see cref="CR_Documentor.Transformation.Syntax.DefaultValueStringDictionary.DefaultValue" />
-		/// property.
+		/// Initializes a new instance of the <see cref="DefaultValueStringDictionary"/> class.
 		/// </summary>
-		/// <seealso cref="CR_Documentor.Transformation.Syntax.DefaultValueStringDictionary" />
-        private string _defaultValue = "";
-		
+		public DefaultValueStringDictionary()
+			: base()
+		{
+			this.DefaultValue = "";
+		}
+
 		/// <summary>
 		/// Gets or sets the default return value for the dictionary.
 		/// </summary>
@@ -25,24 +26,14 @@ namespace CR_Documentor.Transformation.Syntax
 		/// A <see cref="System.String"/> that will be returned if the dictionary
 		/// is queried for a key that doesn't exist.  Defaults to <see cref="System.String.Empty"/>.
 		/// </value>
-		public virtual string DefaultValue
-		{
-			get
-			{
-				return _defaultValue;
-			}
-			set
-			{
-				_defaultValue = value;
-			}
-		}
+		public virtual string DefaultValue { get; set; }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.String"/> with the specified key.
 		/// </summary>
 		/// <value>
 		/// The <see cref="System.String"/> value that corresponds to the specified
-		/// key, or <see cref="CR_Documentor.Transformation.Syntax.DefaultValueStringDictionary.DefaultValue"/>
+		/// key, or <see cref="CR_Documentor.Collections.DefaultValueStringDictionary.DefaultValue"/>
 		/// if the key is not found.
 		/// </value>
 		public override string this[string key]

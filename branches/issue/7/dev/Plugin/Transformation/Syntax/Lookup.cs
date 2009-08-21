@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using CR_Documentor.Collections;
 using CR_Documentor.Transformation.Syntax;
 using SP = DevExpress.CodeRush.StructuralParser;
 

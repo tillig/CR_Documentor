@@ -69,6 +69,7 @@
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
     <Compile Include="AssemblyExtensionsTest.cs" />
+    <Compile Include="Collections\DefaultValueStringDictionaryTest.cs" />
     <Compile Include="Diagnostics\ActivityContextTest.cs" />
     <Compile Include="Diagnostics\LoggerTest.cs" />
     <Compile Include="Diagnostics\LogManagerTest.cs" />
