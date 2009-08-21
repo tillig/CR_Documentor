@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using CR_Documentor.Collections;
 using CR_Documentor.Transformation.Syntax;
 using SP = DevExpress.CodeRush.StructuralParser;
 
@@ -80,7 +81,6 @@ namespace CR_Documentor.Transformation.Syntax
 			// Language display names
 			LanguageName = new DefaultValueStringDictionary();
 			LanguageName.Add(Language.Basic, "Visual Basic");
-			LanguageName.Add(Language.C, "Managed C++");
 			LanguageName.Add(Language.CSharp, "C#");
 			LanguageName.DefaultValue = "--";
 		}
@@ -195,33 +195,6 @@ namespace CR_Documentor.Transformation.Syntax
 			return retVal;
 		}
 
-
-		/// <summary>
-		/// Gets C/C++ garbage collection type information.
-		/// </summary>
-		/// <param name="element">
-		/// The member to determine the garbage collection info for.
-		/// </param>
-		/// <returns>
-		/// A language-specific garbage collector qualification.
-		/// </returns>
-		public static string GCTypeQualifier(SP.AccessSpecifiedElement element)
-		{
-			string retVal = "";
-			if (element.Document.Language == Language.C)
-			{
-				if (element is SP.Struct)
-				{
-					retVal = "value";
-				}
-				else if (element is SP.Class)
-				{
-					retVal = "ref";
-				}
-			}
-			return retVal;
-		}
-
 		/// <summary>
 		/// Resolves the name of a given method.
 		/// </summary>
@@ -324,8 +297,6 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					case Language.Basic:
 						return "Interface";
-					case Language.C:
-						return "interface class";
 					default:
 						return "interface";
 				}
@@ -346,8 +317,6 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					case Language.Basic:
 						return "Enum";
-					case Language.C:
-						return "enum class";
 					default:
 						return "enum";
 				}
@@ -397,8 +366,6 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					case Language.Basic:
 						return "ReadOnly";
-					case Language.C:
-						return "const";
 					default:
 						return "readonly";
 				}
@@ -504,25 +471,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </returns>
 		public static string Visibility(string documentLanguage, SP.MemberVisibility visibility)
 		{
-			if (documentLanguage == Language.C)
-			{
-				switch (visibility)
-				{
-					case SP.MemberVisibility.Public:
-						return "public";
-					case SP.MemberVisibility.Private:
-						return "private";
-					case SP.MemberVisibility.Protected:
-						return "protected";
-					case SP.MemberVisibility.ProtectedInternal:
-						return "public private";
-					case SP.MemberVisibility.Internal:
-						return "protected private";
-					default:
-						return "/* unknown */";
-				}
-			}
-			else if (documentLanguage == Language.Basic)
+			if (documentLanguage == Language.Basic)
 			{
 				switch (visibility)
 				{

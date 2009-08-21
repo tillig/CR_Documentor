@@ -15,10 +15,8 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 		private const string CssClassIdentifier = "identifier";
 		private const string CssClassParameter = "parameter";
 
-		#region SyntaxGenerator Abstract Implementations
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.MSDN.SyntaxGenerator" /> class.
+		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.SandcastlePrototype.SyntaxGenerator" /> class.
 		/// </summary>
 		/// <param name="element">The element to generate the syntax preview for.</param>
 		/// <param name="writer">The writer to output the syntax preview to.</param>
@@ -39,67 +37,71 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			// Start the signature box
 			this.Writer.Write("<div id=\"syntaxBlocks\"><div class=\"code\"><pre>");
 
-			// Write attributes
-			this.Attributes();
-
-			// Call the correct syntax this.Writer
-			if (this.Element is SP.Enumeration)
+			if (this.DocumentLanguage != Language.Basic && this.DocumentLanguage != Language.CSharp)
 			{
-				this.Enumeration();
-			}
-			else if (this.Element is SP.Class)
-			{
-				this.Class();
-			}
-			else if (this.Element is SP.DelegateDefinition)
-			{
-				this.Delegate();
-			}
-
-			else if (this.Element is SP.Method)
-			{
-				SP.Method method = (SP.Method)this.Element;
-				if (method.IsConstructor)
-				{
-					this.Constructor();
-				}
-				else if (method.IsClassOperator)
-				{
-					this.Operator();
-				}
-				else if (method.IsDestructor)
-				{
-					this.Destructor();
-				}
-				else
-				{
-					this.Method();
-				}
-			}
-			else if (this.Element is SP.Property)
-			{
-				this.Property();
-			}
-			else if (this.Element is SP.Event)
-			{
-				this.Event();
-			}
-			else if (this.Element is SP.BaseVariable)
-			{
-				this.Field();
+				this.Writer.Write("[Language not supported for syntax preview.]");
 			}
 			else
 			{
-				this.Writer.Write("[This object has no individual syntax.]");
+
+				// Write attributes
+				this.Attributes();
+
+				// Call the correct syntax this.Writer
+				if (this.Element is SP.Enumeration)
+				{
+					this.Enumeration();
+				}
+				else if (this.Element is SP.Class)
+				{
+					this.Class();
+				}
+				else if (this.Element is SP.DelegateDefinition)
+				{
+					this.Delegate();
+				}
+
+				else if (this.Element is SP.Method)
+				{
+					SP.Method method = (SP.Method)this.Element;
+					if (method.IsConstructor)
+					{
+						this.Constructor();
+					}
+					else if (method.IsClassOperator)
+					{
+						this.Operator();
+					}
+					else if (method.IsDestructor)
+					{
+						this.Destructor();
+					}
+					else
+					{
+						this.Method();
+					}
+				}
+				else if (this.Element is SP.Property)
+				{
+					this.Property();
+				}
+				else if (this.Element is SP.Event)
+				{
+					this.Event();
+				}
+				else if (this.Element is SP.BaseVariable)
+				{
+					this.Field();
+				}
+				else
+				{
+					this.Writer.Write("[This object has no individual syntax.]");
+				}
 			}
 
 			// Done - close the signature box
 			this.Writer.Write("</pre></div></div>");
 		}
-
-		#endregion
-
-		#region Object Types
 
 		/// <summary>
 		/// Writes attribute information.
@@ -135,21 +137,11 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 		/// </summary>
 		private void Class()
 		{
-			if (this.DocumentLanguage == Language.C)
-			{
-				this.TypeParameters();
-			}
 			if (this.Element.IsNew)
 			{
 				this.WriteSpan(CssClassKeyword, Keyword.New[this.DocumentLanguage]);
 			}
 			this.WriteSpan(CssClassKeyword, Lookup.Visibility(this.Element));
-			if (this.DocumentLanguage == Language.C)
-			{
-				this.WriteSpan(CssClassKeyword, Lookup.GCTypeQualifier(this.Element));
-				this.WriteSpan(CssClassKeyword, Lookup.ElementType(this.Element));
-				this.WriteSpan(CssClassIdentifier, this.Element.Name);
-			}
 			if (this.Element.IsStatic)
 			{
 				this.WriteSpan(CssClassKeyword, Keyword.StaticClass[this.DocumentLanguage]);
@@ -165,13 +157,10 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 					this.WriteSpan(CssClassKeyword, Keyword.Sealed[this.DocumentLanguage]);
 				}
 			}
-			if (this.DocumentLanguage != Language.C)
-			{
-				this.WriteSpan(CssClassKeyword, Lookup.ElementType(this.Element));
-				this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
-				this.TypeParameters();
-				this.Writer.Write(" ");
-			}
+			this.WriteSpan(CssClassKeyword, Lookup.ElementType(this.Element));
+			this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
+			this.TypeParameters();
+			this.Writer.Write(" ");
 			// TODO: Write the inheritance/implements chain.
 		}
 
@@ -214,10 +203,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			}
 			this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
 			this.Parameters("(", ")");
-			if (this.DocumentLanguage == Language.C && this.ElementMemberType.IndexOf("[") >= 0)
-			{
-				this.Writer.Write(" []");
-			}
 			if (this.DocumentLanguage == Language.Basic)
 			{
 				this.ReturnType();
@@ -284,23 +269,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			{
 				// TODO: Handle VB parameterized events with generated event handler types.
 				this.ReturnType();
-			}
-			else if (this.DocumentLanguage == Language.C)
-			{
-				// TODO: Figure a better way to write the C++ add/remove methods for events.
-				this.Writer.WriteLine("{<br />");
-				this.Writer.Write("\t");
-				this.WriteSpan(CssClassKeyword, "void add");
-				this.Writer.Write("(");
-				this.WriteLink(HttpUtility.HtmlEncode(this.ElementMemberType));
-				this.WriteSpan(CssClassParameter, "value", "", "");
-				this.Writer.WriteLine(");<br />");
-				this.WriteSpan(CssClassKeyword, "void remove");
-				this.Writer.Write("(");
-				this.WriteLink(HttpUtility.HtmlEncode(this.ElementMemberType));
-				this.WriteSpan(CssClassParameter, "value", "", "");
-				this.Writer.WriteLine(");<br />");
-				this.Writer.Write("}");
 			}
 		}
 
@@ -426,10 +394,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				{
 					this.WriteLink(memberType);
 				}
-				if (this.DocumentLanguage == Language.C)
-				{
-					this.Writer.Write("^");
-				}
 			}
 			this.WriteSpan(CssClassKeyword, Lookup.ElementType(this.Element));
 			if (isCast)
@@ -441,10 +405,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				else
 				{
 					this.WriteSpan(CssClassIdentifier, "CType");
-				}
-				if (this.DocumentLanguage == Language.C)
-				{
-					this.Writer.Write("^");
 				}
 			}
 			else
@@ -515,10 +475,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 					this.WriteSpan(CssClassKeyword, "As");
 				}
 				this.WriteLink(HttpUtility.HtmlEncode(parameter.ParamType), "", "");
-				if (this.DocumentLanguage == Language.C)
-				{
-					this.Writer.Write("^");
-				}
 				if (!isBasic)
 				{
 					this.Writer.Write(" ");
@@ -571,10 +527,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				{
 					this.WriteSpan(CssClassKeyword, "this", "", "");
 				}
-				else if (this.DocumentLanguage == Language.C)
-				{
-					this.WriteSpan(CssClassKeyword, "default", "", "");
-				}
 				else
 				{
 					this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
@@ -600,27 +552,13 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				this.Writer.Write("{ ");
 				if (property.Getter != null)
 				{
-					if (this.DocumentLanguage == Language.C)
-					{
-						this.Writer.Write("<br />\t");
-					}
 					this.WriteSpan(CssClassKeyword, "get", "", "");
-					// TODO: C++ lists parameters inline for the getter.
 					this.Writer.Write("; ");
 				}
 				if (property.Setter != null)
 				{
-					if (this.DocumentLanguage == Language.C)
-					{
-						this.Writer.Write("<br />\t");
-					}
 					this.WriteSpan(CssClassKeyword, "set", "", "");
-					// TODO: C++ lists parameters inline for the setter.
 					this.Writer.Write("; ");
-				}
-				if (this.DocumentLanguage == Language.C)
-				{
-					this.Writer.Write("<br />");
 				}
 				this.Writer.Write("}");
 			}
@@ -675,12 +613,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			}
 
 			bool isBasic = this.DocumentLanguage == Language.Basic;
-			bool isC = this.DocumentLanguage == Language.C;
-
-			if (isC)
-			{
-				this.WriteSpan(CssClassKeyword, "generic", "", "");
-			}
 
 			this.Writer.Write(HttpUtility.HtmlEncode(Statement.TypeParamListOpener[this.DocumentLanguage]));
 			bool constraintsExist = false;
@@ -708,14 +640,7 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 
 			if (!isBasic && constraintsExist)
 			{
-				if (isC)
-				{
-					this.Writer.Write("<br />");
-				}
-				else
-				{
-					this.Writer.Write(" ");
-				}
+				this.Writer.Write(" ");
 				this.WriteSpan(CssClassKeyword, "where");
 
 				// Constraints for non-basic languages.
@@ -723,10 +648,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				{
 					SP.TypeParameter parameter = typeParams[i];
 					this.TypeParameterConstraints(parameter);
-				}
-				if (isC)
-				{
-					this.Writer.Write("<br />");
 				}
 			}
 		}
@@ -877,8 +798,5 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				this.Writer.Write(post);
 			}
 		}
-
-		#endregion
-
 	}
 }

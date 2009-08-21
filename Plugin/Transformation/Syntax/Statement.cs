@@ -1,4 +1,5 @@
 using System;
+using CR_Documentor.Collections;
 using CR_Documentor.Transformation.Syntax;
 
 namespace CR_Documentor.Transformation.Syntax
