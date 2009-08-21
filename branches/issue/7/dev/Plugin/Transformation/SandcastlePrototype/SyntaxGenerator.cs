@@ -18,7 +18,7 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 		#region SyntaxGenerator Abstract Implementations
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.MSDN.SyntaxGenerator" /> class.
+		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.SandcastlePrototype.SyntaxGenerator" /> class.
 		/// </summary>
 		/// <param name="element">The element to generate the syntax preview for.</param>
 		/// <param name="writer">The writer to output the syntax preview to.</param>
@@ -39,58 +39,66 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			// Start the signature box
 			this.Writer.Write("<div id=\"syntaxBlocks\"><div class=\"code\"><pre>");
 
-			// Write attributes
-			this.Attributes();
-
-			// Call the correct syntax this.Writer
-			if (this.Element is SP.Enumeration)
+			if (this.DocumentLanguage != Language.Basic && this.DocumentLanguage != Language.CSharp)
 			{
-				this.Enumeration();
-			}
-			else if (this.Element is SP.Class)
-			{
-				this.Class();
-			}
-			else if (this.Element is SP.DelegateDefinition)
-			{
-				this.Delegate();
-			}
-
-			else if (this.Element is SP.Method)
-			{
-				SP.Method method = (SP.Method)this.Element;
-				if (method.IsConstructor)
-				{
-					this.Constructor();
-				}
-				else if (method.IsClassOperator)
-				{
-					this.Operator();
-				}
-				else if (method.IsDestructor)
-				{
-					this.Destructor();
-				}
-				else
-				{
-					this.Method();
-				}
-			}
-			else if (this.Element is SP.Property)
-			{
-				this.Property();
-			}
-			else if (this.Element is SP.Event)
-			{
-				this.Event();
-			}
-			else if (this.Element is SP.BaseVariable)
-			{
-				this.Field();
+				this.Writer.Write("[Language not supported for syntax preview.]");
 			}
 			else
 			{
-				this.Writer.Write("[This object has no individual syntax.]");
+
+				// Write attributes
+				this.Attributes();
+
+				// Call the correct syntax this.Writer
+				if (this.Element is SP.Enumeration)
+				{
+					this.Enumeration();
+				}
+				else if (this.Element is SP.Class)
+				{
+					this.Class();
+				}
+				else if (this.Element is SP.DelegateDefinition)
+				{
+					this.Delegate();
+				}
+
+				else if (this.Element is SP.Method)
+				{
+					SP.Method method = (SP.Method)this.Element;
+					if (method.IsConstructor)
+					{
+						this.Constructor();
+					}
+					else if (method.IsClassOperator)
+					{
+						this.Operator();
+					}
+					else if (method.IsDestructor)
+					{
+						this.Destructor();
+					}
+					else
+					{
+						this.Method();
+					}
+				}
+				else if (this.Element is SP.Property)
+				{
+					this.Property();
+				}
+				else if (this.Element is SP.Event)
+				{
+					this.Event();
+				}
+				else if (this.Element is SP.BaseVariable)
+				{
+					this.Field();
+				}
+				else
+				{
+					this.Writer.Write("[This object has no individual syntax.]");
+				}
 			}
 
 			// Done - close the signature box

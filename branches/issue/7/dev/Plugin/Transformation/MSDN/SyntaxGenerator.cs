@@ -34,65 +34,71 @@ namespace CR_Documentor.Transformation.MSDN
 		{
 			// Start the signature box
 			this.Writer.Write("<div class='syntax'>");
-
-			// Write pre-syntax info
-			this.PreSyntax();
-
-			// Can't write unsafe doc for Basic
-			if (this.DocumentLanguage == Language.Basic && this.Element.IsUnsafe)
+			if (this.DocumentLanguage != Language.Basic && this.DocumentLanguage != Language.CSharp)
 			{
-				this.Writer.Write("<p>Unsafe elements cannot be documented in VB.</p>");
-				this.Writer.Write("</div>");
-				return;
-			}
-
-			// Write attributes
-			this.Attributes();
-
-			// Call the correct syntax this.Writer
-			if (this.Element is SP.Enumeration)
-			{
-				this.Enumeration();
-			}
-			else if (this.Element is SP.Class)
-			{
-				this.Class();
-			}
-			else if (this.Element is SP.DelegateDefinition)
-			{
-				this.Delegate();
-			}
-			else if (this.Element is SP.Method)
-			{
-				SP.Method method = (SP.Method)this.Element;
-				if (method.IsConstructor)
-				{
-					this.Constructor();
-				}
-				else if (method.IsClassOperator)
-				{
-					this.Operator();
-				}
-				else
-				{
-					this.Method();
-				}
-			}
-			else if (this.Element is SP.Property)
-			{
-				this.Property();
-			}
-			else if (this.Element is SP.Event)
-			{
-				this.Event();
-			}
-			else if (this.Element is SP.BaseVariable)
-			{
-				this.Field();
+				this.Writer.Write("[Language not supported for syntax preview.]");
 			}
 			else
 			{
-				this.Writer.Write("[This object has no individual syntax.]");
+				// Write pre-syntax info
+				this.PreSyntax();
+
+				// Can't write unsafe doc for Basic
+				if (this.DocumentLanguage == Language.Basic && this.Element.IsUnsafe)
+				{
+					this.Writer.Write("<p>Unsafe elements cannot be documented in VB.</p>");
+					this.Writer.Write("</div>");
+					return;
+				}
+
+				// Write attributes
+				this.Attributes();
+
+				// Call the correct syntax this.Writer
+				if (this.Element is SP.Enumeration)
+				{
+					this.Enumeration();
+				}
+				else if (this.Element is SP.Class)
+				{
+					this.Class();
+				}
+				else if (this.Element is SP.DelegateDefinition)
+				{
+					this.Delegate();
+				}
+				else if (this.Element is SP.Method)
+				{
+					SP.Method method = (SP.Method)this.Element;
+					if (method.IsConstructor)
+					{
+						this.Constructor();
+					}
+					else if (method.IsClassOperator)
+					{
+						this.Operator();
+					}
+					else
+					{
+						this.Method();
+					}
+				}
+				else if (this.Element is SP.Property)
+				{
+					this.Property();
+				}
+				else if (this.Element is SP.Event)
+				{
+					this.Event();
+				}
+				else if (this.Element is SP.BaseVariable)
+				{
+					this.Field();
+				}
+				else
+				{
+					this.Writer.Write("[This object has no individual syntax.]");
+				}
 			}
 
 			// Done - close the signature box
