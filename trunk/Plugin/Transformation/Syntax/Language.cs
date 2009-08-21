@@ -13,11 +13,6 @@ namespace CR_Documentor.Transformation.Syntax
 		public const string CSharp = "CSharp";
 
 		/// <summary>
-		/// Language identifier: C, C++
-		/// </summary>
-		public const string C = "C/C++";
-
-		/// <summary>
 		/// Language identifier: Visual Basic
 		/// </summary>
 		public const string Basic = "Basic";
