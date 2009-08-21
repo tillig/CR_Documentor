@@ -11,8 +11,6 @@ namespace CR_Documentor.Transformation.MSDN
 	/// </summary>
 	public class SyntaxGenerator : CR_Documentor.Transformation.Syntax.SyntaxGenerator
 	{
-		#region SyntaxGenerator Abstract Implementations
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.MSDN.SyntaxGenerator" /> class.
 		/// </summary>
@@ -105,10 +103,6 @@ namespace CR_Documentor.Transformation.MSDN
 			this.Writer.Write("</div>");
 		}
 
-		#endregion
-
-		#region Header/Footer
-
 		/// <summary>
 		/// Writes pre-syntax object signature information.
 		/// </summary>
@@ -126,10 +120,6 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write(String.Format(destructorPreSyntax, "C++"));
 			}
 		}
-
-		#endregion
-
-		#region Object Types
 
 		/// <summary>
 		/// Writes attribute information.
@@ -811,11 +801,6 @@ namespace CR_Documentor.Transformation.MSDN
 			{
 				this.Writer.Write("}");
 			}
-
 		}
-
-		#endregion
-
-
 	}
 }

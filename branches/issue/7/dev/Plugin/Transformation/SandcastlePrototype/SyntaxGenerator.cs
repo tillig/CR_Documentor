@@ -15,8 +15,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 		private const string CssClassIdentifier = "identifier";
 		private const string CssClassParameter = "parameter";
 
-		#region SyntaxGenerator Abstract Implementations
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.SandcastlePrototype.SyntaxGenerator" /> class.
 		/// </summary>
@@ -104,10 +102,6 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 			// Done - close the signature box
 			this.Writer.Write("</pre></div></div>");
 		}
-
-		#endregion
-
-		#region Object Types
 
 		/// <summary>
 		/// Writes attribute information.
@@ -804,8 +798,5 @@ namespace CR_Documentor.Transformation.SandcastlePrototype
 				this.Writer.Write(post);
 			}
 		}
-
-		#endregion
-
 	}
 }
