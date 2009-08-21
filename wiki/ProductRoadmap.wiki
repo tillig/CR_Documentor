@@ -9,17 +9,17 @@ Maybe this isn't so "roadmap-ish" as much as a list of large items to keep in mi
 
 Note: We put a survey out in mid-April 2009. We got a relatively small number of respondents (even though we did some decent publicizing) but some of the roadmap will still be driven by the results. To see the survey, check out http://www.advancedsurvey.com/ survey 68141.
 
-= Internal Web Server =
+= Overall Goals =
 
-The solution to Issue #1 left us with an internal web server. We should use this to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
+There are a few things that aren't specific features but general aspects of the system that need to be improved.
 
-= Testability =
+== Increase Testability ==
 
 At version 2.0.0.0, there really are no unit tests - there are live integration tests, but nothing that can run in an automated fashion. The code was never really written with testability in mind.
 
 Things should be refactored so we can make use of unit testing and mocking as well as the DXTestRunner plugin (as needed) to provide more automated testing.
 
-= Internal Flexibility =
+== Internal Flexibility ==
 
 There are several things that fall into this category that, honestly, I couldn't think of a better name for. The idea is that I want the individual preview generators to be easier to implement and maintain because, ideally, I'd like to be able to offer a way for a user to provide custom rendering handlers that allow them to better imitate their custom doc rendering process.
 
@@ -30,11 +30,17 @@ There are several things that fall into this category that, honestly, I couldn't
   * *Design pattern overhaul.* This sounds like one of those architects who says, "we need more design patterns" but doesn't know what that means. Actually, what I mean by this is that there are a lot of opportunities to make things more flexible and testable by applying some better patterns in pretty obvious places. Creating the instance of the selected rendering engine, for example, is a _Factory_ pattern waiting to happen. Testability in many areas could be improved with some _Inversion of Control_ and better _Separation of Concerns_. Places that would very obviously benefit from a better pattern - let's do that refactor and make it clean.
   * *No more "tag compatibility levels."* Now that there are multiple players in the rendering field, it's less an issue of what list of tags are "approved" so much as "does the rendering engine support the tag or not?" The "tag compatibility level" option should go, and if a rendering engine doesn't have a registered handler for a given tag, that's when it should be considered "unsupported."
 
-= More Inline Writing Help =
+= Larger Features for Upcoming Releases =
+
+== Richer Previews with the Internal Web Server ==
+
+The solution to Issue #1 left us with an internal web server. We should use this to provide richer previews that include embedded images/icons, and the default HTML would be easier to update directly from the original source (e.g., Sandcastle) than it is now.
+
+== More Inline Writing Help ==
 
 It's great to provide a preview, but some additional help in authoring the comments (beyond the expandable templates) would be welcome, too. Spell checking, grammar checking, error messages for missing documentation, etc.
 
-= Better Upgrade Experience =
+== Better Upgrade Experience ==
 
 As we add/remove options, the upgrade experience and the fault tolerance of reading/writing settings needs to be better. If someone finds a showstopper defect, they need to be able to roll back to the previous version safely. That's not currently possible - it's a one-way move.
 
