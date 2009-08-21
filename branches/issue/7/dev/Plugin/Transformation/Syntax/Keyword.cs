@@ -141,7 +141,6 @@ namespace CR_Documentor.Transformation.Syntax
 			Out = new DefaultValueStringDictionary();
 			Out.Add(Language.Basic, "ByRef");
 			Out.Add(Language.CSharp, "out");
-			Out.Add(Language.C, "*");
 
 			// Override keyword
 			Override = new DefaultValueStringDictionary();
@@ -156,13 +155,11 @@ namespace CR_Documentor.Transformation.Syntax
 			// Property keyword
 			Property = new DefaultValueStringDictionary();
 			Property.Add(Language.Basic, "Property");
-			Property.Add(Language.C, "property");
 
 			// Ref keyword
 			Ref = new DefaultValueStringDictionary();
 			Ref.Add(Language.Basic, "ByRef");
 			Ref.Add(Language.CSharp, "ref");
-			Ref.Add(Language.C, "*");
 
 			// ReadOnly keyword
 			ReadOnly = new DefaultValueStringDictionary();
@@ -176,7 +173,6 @@ namespace CR_Documentor.Transformation.Syntax
 			// Static class keyword
 			StaticClass = new DefaultValueStringDictionary();
 			StaticClass.Add(Language.Basic, "NotInheritable");
-			StaticClass.Add(Language.C, "abstract sealed");
 			StaticClass.DefaultValue = "static";
 
 			// Static member keyword

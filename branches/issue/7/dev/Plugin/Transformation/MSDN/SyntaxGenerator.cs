@@ -180,10 +180,6 @@ namespace CR_Documentor.Transformation.MSDN
 		private void Class()
 		{
 			this.Writer.Write("<b>");
-			if (this.DocumentLanguage == Language.C)
-			{
-				this.TypeParameters();
-			}
 			if (this.Element.IsNew)
 			{
 				this.Writer.Write(Keyword.New[this.DocumentLanguage]);
@@ -191,15 +187,6 @@ namespace CR_Documentor.Transformation.MSDN
 			}
 			this.Writer.Write(Lookup.Visibility(this.Element));
 			this.Writer.Write(" ");
-			if (this.DocumentLanguage == Language.C)
-			{
-				this.Writer.Write(Lookup.GCTypeQualifier(this.Element));
-				this.Writer.Write(" ");
-				this.Writer.Write(Lookup.ElementType(this.Element));
-				this.Writer.Write(" ");
-				this.Writer.Write(this.Element.Name);
-				this.Writer.Write(" ");
-			}
 			if (this.Element.IsStatic)
 			{
 				this.Writer.Write(Keyword.StaticClass[this.DocumentLanguage]);
@@ -219,13 +206,10 @@ namespace CR_Documentor.Transformation.MSDN
 				}
 			}
 
-			if (this.DocumentLanguage != Language.C)
-			{
-				this.Writer.Write(Lookup.ElementType(this.Element));
-				this.Writer.Write(" ");
-				this.Writer.Write(this.Element.Name);
-				this.TypeParameters();
-			}
+			this.Writer.Write(Lookup.ElementType(this.Element));
+			this.Writer.Write(" ");
+			this.Writer.Write(this.Element.Name);
+			this.TypeParameters();
 			// TODO: Write the inheritance/implements chain.
 			// <xsl:template match="structure | interface | class" mode="derivation">
 			this.Writer.Write("</b>");
@@ -272,10 +256,6 @@ namespace CR_Documentor.Transformation.MSDN
 			}
 			this.Writer.Write(this.Element.Name);
 			this.Parameters("(", ")");
-			if (this.DocumentLanguage == Language.C && this.ElementMemberType.IndexOf("[") >= 0)
-			{
-				this.Writer.Write(" []");
-			}
 			if (this.DocumentLanguage == Language.Basic)
 			{
 				this.ReturnType();
@@ -337,10 +317,6 @@ namespace CR_Documentor.Transformation.MSDN
 				this.ReturnType();
 				this.Writer.Write(" ");
 			}
-			else if (this.DocumentLanguage == Language.C && this.ElementMemberType.IndexOf("[") >= 0)
-			{
-				this.Writer.Write("  __gc[]");
-			}
 			this.Writer.Write(Statement.End[this.DocumentLanguage]);
 			this.Writer.Write("</b>");
 		}
@@ -374,10 +350,6 @@ namespace CR_Documentor.Transformation.MSDN
 			{
 				this.ReturnType();
 				this.Writer.Write(" ");
-			}
-			else if (this.DocumentLanguage == Language.C && this.ElementMemberType.IndexOf("[") >= 0)
-			{
-				this.Writer.Write("  __gc[]");
 			}
 
 			SP.Expression initializer = null;
@@ -438,7 +410,7 @@ namespace CR_Documentor.Transformation.MSDN
 		private void Method()
 		{
 			SP.Method method = (SP.Method)this.Element;
-			if (method.IsDestructor && (this.DocumentLanguage == Language.CSharp || this.DocumentLanguage == Language.C))
+			if (method.IsDestructor && this.DocumentLanguage == Language.CSharp)
 			{
 				// Handle destructors differently than other methods
 				this.Writer.Write("<b>");
@@ -496,10 +468,6 @@ namespace CR_Documentor.Transformation.MSDN
 
 				this.ReturnType();
 			}
-			else if (this.DocumentLanguage == Language.C && this.ElementMemberType.IndexOf("[") >= 0)
-			{
-				this.Writer.Write("  __gc[]");
-			}
 			this.Writer.Write(Statement.End[this.DocumentLanguage]);
 			this.Writer.Write("</b>");
 		}
@@ -512,7 +480,7 @@ namespace CR_Documentor.Transformation.MSDN
 			SP.Method method = (SP.Method)this.Element;
 
 			string parentType = HttpUtility.HtmlEncode(this.Element.GetParentClassInterfaceOrStruct().Name);
-			if (this.DocumentLanguage == Language.CSharp || this.DocumentLanguage == Language.C)
+			if (this.DocumentLanguage == Language.CSharp)
 			{
 				this.Writer.Write("<b>");
 				this.MemberSyntaxProlog();
@@ -534,10 +502,6 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write(" ");
 				this.Writer.Write(this.Element.Name);
 				this.Parameters("(", ")");
-				if (this.DocumentLanguage == Language.C && parentType.IndexOf("[") >= 0)
-				{
-					this.Writer.Write("  __gc[]");
-				}
 				this.Writer.Write("</b>");
 			}
 			else if (this.DocumentLanguage == Language.Basic)
@@ -628,10 +592,6 @@ namespace CR_Documentor.Transformation.MSDN
 					this.Writer.Write(" = ");
 					this.Writer.Write(parameter.DefaultValue);
 				}
-				if (this.DocumentLanguage == Language.C && parameter.ParamType.IndexOf("[") >= 0)
-				{
-					this.Writer.Write(" __gc[]");
-				}
 
 				// Next param
 				if (i + 1 < count)
@@ -720,52 +680,6 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write(" } ");
 				this.Writer.Write("</b>");
 			}
-			else if (this.DocumentLanguage == Language.C)
-			{
-				// syntax-map line 285
-				this.Writer.Write("<b>");
-				if (getter != null)
-				{
-					this.MemberSyntaxProlog();
-					this.Writer.Write(" __property ");
-					this.ReturnType();
-					this.Writer.Write("get_");
-					this.Writer.Write(this.Element.Name);
-					this.Parameters("(", ")");
-					if (this.ElementMemberType.IndexOf("[") >= 0)
-					{
-						this.Writer.Write(" __gc[]");
-					}
-					this.Writer.Write(";");
-				}
-				if (getter != null && setter != null)
-				{
-					this.Writer.Write("<br />");
-				}
-				if (setter != null)
-				{
-					this.MemberSyntaxProlog();
-					this.Writer.Write(" __property void set_");
-					this.Writer.Write(this.Element.Name);
-					this.Writer.Write("(");
-					if (parameterCount > 0)
-					{
-						this.Parameters("", "");
-						this.Writer.Write("   ");
-					}
-					this.ReturnType();
-					if (this.ElementMemberType.IndexOf("[") >= 0)
-					{
-						this.Writer.Write(" __gc[]");
-					}
-					if (parameterCount > 0)
-					{
-						this.Writer.Write("newValue<br />");
-					}
-					this.Writer.Write(");");
-				}
-				this.Writer.Write("</b>");
-			}
 			else
 			{
 				this.Writer.Write("[Language not supported.]");
@@ -812,12 +726,6 @@ namespace CR_Documentor.Transformation.MSDN
 			}
 
 			bool isBasic = this.DocumentLanguage == Language.Basic;
-			bool isC = this.DocumentLanguage == Language.C;
-
-			if (isC)
-			{
-				this.Writer.Write("generic");
-			}
 
 			this.Writer.Write(HttpUtility.HtmlEncode(Statement.TypeParamListOpener[this.DocumentLanguage]));
 			bool constraintsExist = false;
@@ -845,25 +753,13 @@ namespace CR_Documentor.Transformation.MSDN
 
 			if (!isBasic && constraintsExist)
 			{
-				if (isC)
-				{
-					this.Writer.Write("<br />");
-				}
-				else
-				{
-					this.Writer.Write(" ");
-				}
-				this.Writer.Write("where ");
+				this.Writer.Write(" where ");
 
 				// Constraints for non-basic languages.
 				for (int i = 0; i < parameterCount; i++)
 				{
 					SP.TypeParameter parameter = typeParams[i];
 					this.TypeParameterConstraints(parameter);
-				}
-				if (isC)
-				{
-					this.Writer.Write("<br />");
 				}
 			}
 		}
