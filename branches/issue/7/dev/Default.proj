@@ -21,8 +21,8 @@
 		<CleanFolders Include="$(BuildDir)"/>
 		<CleanFolders Include="Plugin\bin"/>
 		<CleanFolders Include="Plugin\obj"/>
-		<CleanFolders Include="DocTest\bin"/>
-		<CleanFolders Include="DocTest\obj"/>
+		<CleanFolders Include="DocTestCS\bin"/>
+		<CleanFolders Include="DocTestCS\obj"/>
 		<CleanFolders Include="DocTestVB\bin"/>
 		<CleanFolders Include="DocTestVB\obj"/>
 		<CleanFolders Include="CR_Documentor.Test\bin"/>
@@ -43,7 +43,7 @@
 		<CreateItem Include="Plugin\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
-		<CreateItem Include="DocTest\bin\$(Configuration)\**;DocTestVB\bin\$(Configuration)\**">
+		<CreateItem Include="DocTestCS\bin\$(Configuration)\**;DocTestVB\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
 		<Message Text="Copying test documentation assemblies to build output area..."/>
