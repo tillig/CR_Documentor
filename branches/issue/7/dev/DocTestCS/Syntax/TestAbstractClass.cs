@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocTest.Syntax
+namespace DocTestCS.Syntax
 {
 	/// <summary>
 	/// Abstract class used in testing syntax generation.

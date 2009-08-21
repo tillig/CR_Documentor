@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Integration
+namespace DocTestCS.Integration
 {
 	/// <example>
 	/// Example stuff.
@@ -340,13 +340,13 @@ namespace DocTest.Integration
 		/// Commented out to avoid build warnings. Uncomment when testing.
 		/// -->
 		/// <!-- include file='.\include.xml' path='doc/members/member[@name="M:Relative.Include"]/*'/ -->
-		/// <!-- include file='C:\Documents and Settings\tillig\My Documents\Visual Studio 2008\Projects\CR_Documentor\dev\DocTest\Integration\include.xml' path='doc/members/member[@name="M:Absolute.Include"]/*'/ -->
+		/// <!-- include file='C:\Documents and Settings\tillig\My Documents\Visual Studio 2008\Projects\CR_Documentor\dev\DocTestCS\Integration\include.xml' path='doc/members/member[@name="M:Absolute.Include"]/*'/ -->
 		/// <summary>
 		/// <list type="bullet">
 		/// <item>
 		/// <term>Here's an included bit of doc embedded in the description:</term>
 		/// <description>
-		/// <!-- include file='C:\Documents and Settings\tillig\My Documents\Visual Studio 2008\Projects\CR_Documentor\dev\DocTest\Integration\include.xml' path='doc/members/member[@name="M:Absolute.Include"]/remarks/text()[position() = 1]'/ -->
+		/// <!-- include file='C:\Documents and Settings\tillig\My Documents\Visual Studio 2008\Projects\CR_Documentor\dev\DocTestCS\Integration\include.xml' path='doc/members/member[@name="M:Absolute.Include"]/remarks/text()[position() = 1]'/ -->
 		/// </description>
 		/// </item>
 		/// </list>

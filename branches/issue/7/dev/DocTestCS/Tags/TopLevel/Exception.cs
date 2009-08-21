@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Tags.TopLevel
+namespace DocTestCS.Tags.TopLevel
 {
 	/// <summary>
 	/// This class tests the 'exception' tag.

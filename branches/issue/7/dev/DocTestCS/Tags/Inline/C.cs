@@ -1,14 +1,17 @@
 using System;
 
-namespace DocTest.Tags.Inline {
+namespace DocTestCS.Tags.Inline
+{
 	/// <summary>
 	/// This is <c>inline code</c> in a class summary.
 	/// </summary>
-	public class C {
+	public class C
+	{
 		/// <summary>
 		/// This is <c>inline code</c> in a method summary.
 		/// </summary>
-		public void Method(){
+		public void Method()
+		{
 		}
 	}
 }

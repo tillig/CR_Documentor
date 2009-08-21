@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocTest.Integration
+namespace DocTestCS.Integration
 {
 	/// <summary>
 	/// Class used for testing encoding/display issues.

@@ -1,17 +1,20 @@
 using System;
 
-namespace DocTest.Tags.Inline {
+namespace DocTestCS.Tags.Inline
+{
 	/// <summary>
 	/// This class tests the 'note' tag.
 	/// </summary>
-	public class Note {
+	public class Note
+	{
 		/// <summary>
 		/// This is a 'caution' note:
 		/// <note type=" caution">
 		/// Caution note text.
 		/// </note>
 		/// </summary>
-		public void Caution(){
+		public void Caution()
+		{
 		}
 
 		/// <summary>
@@ -20,7 +23,8 @@ namespace DocTest.Tags.Inline {
 		/// Implementation note text.
 		/// </note>
 		/// </summary>
-		public void ImplementNotes(){
+		public void ImplementNotes()
+		{
 		}
 
 		/// <summary>
@@ -29,7 +33,8 @@ namespace DocTest.Tags.Inline {
 		/// Inherit info note text.
 		/// </note>
 		/// </summary>
-		public void InheritInfo(){
+		public void InheritInfo()
+		{
 		}
 	}
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Tags.TopLevel.ThreadSafety
+namespace DocTestCS.Tags.TopLevel.ThreadSafety
 {
 	/// <summary>
 	/// This class tests the 'threadsafety' tag (static=false, instance=true).

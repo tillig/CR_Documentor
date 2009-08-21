@@ -1,13 +1,13 @@
 using System;
 using System.Xml.Serialization;
 
-namespace DocTest.Syntax
+namespace DocTestCS.Syntax
 {
 	/// <summary>
 	/// Enum used in testing syntax generation.
 	/// </summary>
 	[Flags]
-	[XmlRoot("root", DataType="string")]
+	[XmlRoot("root", DataType = "string")]
 	public enum TestEnum : long
 	{
 		/// <summary>

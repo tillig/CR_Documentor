@@ -5,5 +5,5 @@ using System.Security.Permissions;
 [assembly: ComVisible(false)]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum)]
 
-[assembly: AssemblyTitle("DocTest")]
+[assembly: AssemblyTitle("DocTestCS")]
 [assembly: AssemblyDescription("C# code for testing the XML doc comment preview.")]

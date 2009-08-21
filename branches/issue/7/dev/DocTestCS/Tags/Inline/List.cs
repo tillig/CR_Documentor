@@ -1,10 +1,12 @@
 using System;
 
-namespace DocTest.Tags.Inline {
+namespace DocTestCS.Tags.Inline
+{
 	/// <summary>
 	/// This class tests the 'list' tag.
 	/// </summary>
-	public class List {
+	public class List
+	{
 		#region Bullet
 
 		/// <summary>
@@ -24,7 +26,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletHeader(){
+		public void BulletHeader()
+		{
 		}
 
 		/// <summary>
@@ -40,7 +43,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletNoHeader(){
+		public void BulletNoHeader()
+		{
 		}
 
 		/// <summary>
@@ -54,7 +58,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletDescriptionOnly(){
+		public void BulletDescriptionOnly()
+		{
 		}
 
 		/// <summary>
@@ -68,9 +73,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletTermOnly(){
+		public void BulletTermOnly()
+		{
 		}
-		
+
 		/// <summary>
 		/// Bulleted list with a nested list in the term:
 		/// <list type="bullet">
@@ -95,9 +101,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletNestedTerm(){
+		public void BulletNestedTerm()
+		{
 		}
-		
+
 		/// <summary>
 		/// Bulleted list with a nested list in the description:
 		/// <list type="bullet">
@@ -122,7 +129,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void BulletNestedDescription(){
+		public void BulletNestedDescription()
+		{
 		}
 
 		#endregion
@@ -146,7 +154,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberHeader(){
+		public void NumberHeader()
+		{
 		}
 
 		/// <summary>
@@ -162,7 +171,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberNoHeader(){
+		public void NumberNoHeader()
+		{
 		}
 
 		/// <summary>
@@ -176,7 +186,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberDescriptionOnly(){
+		public void NumberDescriptionOnly()
+		{
 		}
 
 		/// <summary>
@@ -190,9 +201,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberTermOnly(){
+		public void NumberTermOnly()
+		{
 		}
-		
+
 		/// <summary>
 		/// Numbered list with a nested list in the term:
 		/// <list type="number">
@@ -217,9 +229,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberNestedTerm(){
+		public void NumberNestedTerm()
+		{
 		}
-		
+
 		/// <summary>
 		/// Numbered list with a nested list in the description:
 		/// <list type="number">
@@ -244,7 +257,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void NumberNestedDescription(){
+		public void NumberNestedDescription()
+		{
 		}
 
 		#endregion
@@ -268,7 +282,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableHeader(){
+		public void TableHeader()
+		{
 		}
 
 		/// <summary>
@@ -284,7 +299,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableNoHeader(){
+		public void TableNoHeader()
+		{
 		}
 
 		/// <summary>
@@ -298,7 +314,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableDescriptionOnly(){
+		public void TableDescriptionOnly()
+		{
 		}
 
 		/// <summary>
@@ -312,9 +329,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableTermOnly(){
+		public void TableTermOnly()
+		{
 		}
-		
+
 		/// <summary>
 		/// Table with a nested list in the term:
 		/// <list type="table">
@@ -339,9 +357,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableNestedTerm(){
+		public void TableNestedTerm()
+		{
 		}
-		
+
 		/// <summary>
 		/// Table with a nested list in the description:
 		/// <list type="table">
@@ -366,7 +385,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void TableNestedDescription(){
+		public void TableNestedDescription()
+		{
 		}
 
 		#endregion
@@ -390,7 +410,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionHeader(){
+		public void DefinitionHeader()
+		{
 		}
 
 		/// <summary>
@@ -406,7 +427,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionNoHeader(){
+		public void DefinitionNoHeader()
+		{
 		}
 
 		/// <summary>
@@ -420,7 +442,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionDescriptionOnly(){
+		public void DefinitionDescriptionOnly()
+		{
 		}
 
 		/// <summary>
@@ -434,9 +457,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionTermOnly(){
+		public void DefinitionTermOnly()
+		{
 		}
-		
+
 		/// <summary>
 		/// Definition list with a nested list in the term:
 		/// <list type="definition">
@@ -461,9 +485,10 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionNestedTerm(){
+		public void DefinitionNestedTerm()
+		{
 		}
-		
+
 		/// <summary>
 		/// Definition list with a nested list in the description:
 		/// <list type="definition">
@@ -488,7 +513,8 @@ namespace DocTest.Tags.Inline {
 		/// </item>
 		/// </list>
 		/// </summary>
-		public void DefinitionNestedDescription(){
+		public void DefinitionNestedDescription()
+		{
 		}
 
 		#endregion

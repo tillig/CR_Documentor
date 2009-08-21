@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Syntax
+namespace DocTestCS.Syntax
 {
 	/// <summary>
 	/// Class used in testing syntax generation.
@@ -98,8 +98,8 @@ namespace DocTest.Syntax
 				return "";
 			}
 			set
-            {
-            }
+			{
+			}
 		}
 
 		/// <summary>
@@ -119,8 +119,8 @@ namespace DocTest.Syntax
 		public string PropertyWriteOnly
 		{
 			set
-            {
-            }
+			{
+			}
 		}
 
 		/// <summary>

@@ -1,10 +1,12 @@
 using System;
 
-namespace DocTest.Tags.Inline {
+namespace DocTestCS.Tags.Inline
+{
 	/// <summary>
 	/// This class tests the 'para' tag.
 	/// </summary>
-	public class Para {
+	public class Para
+	{
 		/// <summary>
 		/// <para>
 		/// This is the first paragraph in the summary.
@@ -13,7 +15,8 @@ namespace DocTest.Tags.Inline {
 		/// This is the second paragraph in the summary.
 		/// </para>
 		/// </summary>
-		public void Standard(){
+		public void Standard()
+		{
 		}
 
 		/// <summary>
@@ -24,7 +27,8 @@ namespace DocTest.Tags.Inline {
 		/// This is a VB-only paragraph.
 		/// </para>
 		/// </summary>
-		public void Lang(){
+		public void Lang()
+		{
 		}
 
 		/// <summary>
@@ -38,7 +42,8 @@ namespace DocTest.Tags.Inline {
 		/// This is a C#-only paragraph.
 		/// </para>
 		/// </summary>
-		public void Mixed(){
+		public void Mixed()
+		{
 		}
 	}
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DocTest.Tags.Inline
+namespace DocTestCS.Tags.Inline
 {
 	/// <summary>
 	/// This class tests the 'typeparamref' tag.

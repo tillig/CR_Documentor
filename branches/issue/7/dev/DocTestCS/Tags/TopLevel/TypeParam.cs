@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DocTest.Tags.TopLevel
+namespace DocTestCS.Tags.TopLevel
 {
 	/// <summary>
 	/// This class tests the 'typeparam' tag.

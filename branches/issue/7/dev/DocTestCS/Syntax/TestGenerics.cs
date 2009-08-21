@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DocTest.Syntax
+namespace DocTestCS.Syntax
 {
 	/// <summary>
 	/// Class used in testing syntax generation for generics. Class definition

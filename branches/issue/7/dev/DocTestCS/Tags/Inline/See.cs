@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Tags.Inline
+namespace DocTestCS.Tags.Inline
 {
 	/// <summary>
 	/// This class tests the 'see' tag: <see cref="System.String" />.

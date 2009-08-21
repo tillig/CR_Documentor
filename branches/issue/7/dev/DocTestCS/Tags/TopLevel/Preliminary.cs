@@ -1,6 +1,6 @@
 using System;
 
-namespace DocTest.Tags.TopLevel
+namespace DocTestCS.Tags.TopLevel
 {
 	/// <preliminary>
 	/// This is class-level specified preliminary text.

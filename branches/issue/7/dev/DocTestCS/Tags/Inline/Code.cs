@@ -1,20 +1,23 @@
 using System;
 
-namespace DocTest.Tags.Inline {
+namespace DocTestCS.Tags.Inline
+{
 	/// <summary>
 	/// This is a block of code in a class summary:
 	/// <code>
 	/// This is the code.
 	/// </code>
 	/// </summary>
-	public class Code {
+	public class Code
+	{
 		/// <summary>
 		/// This is a block of code in a method summary with an 'escaped' attribute:
 		/// <code escaped="true">
 		/// This is the code.  It has an "<element />" in it.
 		/// </code>
 		/// </summary>
-		public void CodeEscaped(){
+		public void CodeEscaped()
+		{
 		}
 
 		/// <summary>
@@ -23,7 +26,8 @@ namespace DocTest.Tags.Inline {
 		/// This is the code.
 		/// </code>
 		/// </summary>
-		public void CodeLang(){
+		public void CodeLang()
+		{
 		}
 
 		/// <summary>
@@ -32,7 +36,8 @@ namespace DocTest.Tags.Inline {
 		/// This is the code.  It has an "<element />" in it.
 		/// </code>
 		/// </summary>
-		public void CodeEscapedLang(){
+		public void CodeEscapedLang()
+		{
 		}
 	}
 }
