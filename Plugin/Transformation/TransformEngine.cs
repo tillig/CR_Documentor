@@ -574,12 +574,22 @@ namespace CR_Documentor.Transformation
 		/// </remarks>
 		protected void RenderElementSummary(SP.LanguageElement element)
 		{
-			if (element == null)
+			if (element == null || !element.HasDocument)
 			{
 				this.Writer.Write("&nbsp;");
 				return;
 			}
-			SP.XmlDocComment comment = CommentParser.GetXmlDocComment(element.PreviousNode);
+
+			// Walk back node to node until we hit the comment. This is important
+			// in situations like enums where an enum member might also have an
+			// attribute we need to skip over before we get to the comment.
+			SP.LanguageElement commentNode = element.PreviousNode;
+			while (commentNode != null && !(commentNode is SP.XmlDocComment))
+			{
+				commentNode = commentNode.PreviousNode;
+			}
+
+			SP.XmlDocComment comment = CommentParser.GetXmlDocComment(commentNode);
 			if (comment != null)
 			{
 				System.Xml.XmlDocument document = CommentParser.ParseXmlCommentToXmlDocument(comment, "Parse error at line {0}, character {1} of source document.  XML Parse Error Message: {2}", "Error: {0}");

@@ -18,6 +18,7 @@ namespace DocTestCS.Syntax
 		/// <summary>
 		/// Second value.
 		/// </summary>
+		[XmlEnum]
 		Value2
 	}
 }

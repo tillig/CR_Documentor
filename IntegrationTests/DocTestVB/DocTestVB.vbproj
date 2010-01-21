@@ -105,7 +105,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.vb">
+    <Compile Include="..\..\AssemblyVersion.vb">
       <Link>My Project\AssemblyVersion.vb</Link>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />

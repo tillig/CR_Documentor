@@ -21,12 +21,12 @@
 		<CleanFolders Include="$(BuildDir)"/>
 		<CleanFolders Include="Plugin\bin"/>
 		<CleanFolders Include="Plugin\obj"/>
-		<CleanFolders Include="DocTestCpp\bin"/>
-		<CleanFolders Include="DocTestCpp\obj"/>
-		<CleanFolders Include="DocTestCS\bin"/>
-		<CleanFolders Include="DocTestCS\obj"/>
-		<CleanFolders Include="DocTestVB\bin"/>
-		<CleanFolders Include="DocTestVB\obj"/>
+		<CleanFolders Include="IntegrationTests\DocTestCpp\bin"/>
+		<CleanFolders Include="IntegrationTests\DocTestCpp\obj"/>
+		<CleanFolders Include="IntegrationTests\DocTestCS\bin"/>
+		<CleanFolders Include="IntegrationTests\DocTestCS\obj"/>
+		<CleanFolders Include="IntegrationTests\DocTestVB\bin"/>
+		<CleanFolders Include="IntegrationTests\DocTestVB\obj"/>
 		<CleanFolders Include="CR_Documentor.Test\bin"/>
 		<CleanFolders Include="CR_Documentor.Test\obj"/>
 		<CleanFolders Include="TestResults"/>
@@ -41,11 +41,11 @@
 		<Message Text="Creating build output folder hierarchy..."/>
 		<MakeDir Directories="$(BuildDir);$(BuildBinDir);$(BuildDocDir);$(BuildLogDir)"/>
 		<Message Text="Compiling CR_Documentor plugin..."/>
-		<MSBuild Projects="CR_Documentor.sln" Properties="Configuration=$(Configuration)"/>
+		<MSBuild Projects="CR_Documentor.sln;IntegrationTests.sln" Properties="Configuration=$(Configuration)"/>
 		<CreateItem Include="Plugin\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
-		<CreateItem Include="DocTestCpp\bin\$(Configuration)\**;DocTestCS\bin\$(Configuration)\**;DocTestVB\bin\$(Configuration)\**">
+		<CreateItem Include="IntegrationTests\DocTestCpp\bin\$(Configuration)\**;IntegrationTests\DocTestCS\bin\$(Configuration)\**;IntegrationTests\DocTestVB\bin\$(Configuration)\**">
 			<Output TaskParameter="Include" ItemName="BuildOutput"/>
 		</CreateItem>
 		<Message Text="Copying test documentation assemblies to build output area..."/>
