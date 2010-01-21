@@ -19,6 +19,8 @@ namespace DocTestCS.Syntax
 		/// Second value.
 		/// </summary>
 		[XmlEnum]
-		Value2
+		Value2,
+
+		Value3 // No documentation - should render the member but no summary when class doc is viewed.
 	}
 }

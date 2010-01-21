@@ -17,6 +17,8 @@ Namespace Syntax
 		''' </summary>
 		Value2
 
+		Value3
+
 	End Enum
 
 End Namespace
