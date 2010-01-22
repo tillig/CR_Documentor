@@ -73,6 +73,11 @@ namespace CR_Documentor
 		private WebServer _webServer = null;
 
 		/// <summary>
+		/// Indicates whether the rendering engine should be paused (and not refresh automatically).
+		/// </summary>
+		private bool _pauseRendering = false;
+
+		/// <summary>
 		/// URL to the wiki page explaining the reasons the web server might fail to start.
 		/// </summary>
 		private const string ServerStartupErrorUrl = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
@@ -200,11 +205,16 @@ namespace CR_Documentor
 				switch (tag)
 				{
 					case "Print":
+						Log.Write(LogLevel.Info, "Printing CR_Documentor page.");
 						this._previewer.Print();
 						break;
 					case "Settings":
 						Log.Write(LogLevel.Info, "Showing CR_Documentor options.");
 						DocumentorOptions.Show();
+						break;
+					case "Pause":
+						this._pauseRendering = e.Button.Pushed;
+						Log.Write(LogLevel.Info, "CR_Documentor rendering is " + (this._pauseRendering ? "" : "un") + "paused.");
 						break;
 					default:
 						Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
