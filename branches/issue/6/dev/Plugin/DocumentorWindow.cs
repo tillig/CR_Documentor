@@ -215,6 +215,7 @@ namespace CR_Documentor
 					case "Pause":
 						this._pauseRendering = e.Button.Pushed;
 						Log.Write(LogLevel.Info, "CR_Documentor rendering is " + (this._pauseRendering ? "" : "un") + "paused.");
+						this.RefreshPreview(); // No-op if we've paused, but will automatically update if we've unpaused.
 						break;
 					default:
 						Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
