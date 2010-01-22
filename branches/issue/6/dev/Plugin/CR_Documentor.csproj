@@ -257,6 +257,7 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <EmbeddedResource Include="Resources\Pause.ico" />
     <EmbeddedResource Include="ProductModule\CR_DocumentorProductModule.png" />
     <EmbeddedResource Include="DocumentorContextMenu.resx">
       <DependentUpon>DocumentorContextMenu.cs</DependentUpon>
