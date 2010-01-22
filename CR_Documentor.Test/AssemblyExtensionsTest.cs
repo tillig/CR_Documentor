@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,7 +8,43 @@ namespace CR_Documentor.Test
 	[TestClass]
 	public class AssemblyExtensionsTest
 	{
-		private const string ResourcePath = "CR_Documentor.Test.AssemblyExtensionsTest.ReadEmbeddedResourceString.txt";
+		private const string ResourceIconPath = "CR_Documentor.Test.AssemblyExtensionsTest.ReadEmbeddedResourceIcon.ico";
+		private const string ResourceStringPath = "CR_Documentor.Test.AssemblyExtensionsTest.ReadEmbeddedResourceString.txt";
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void ReadEmbeddedResourceIcon_EmptyPath()
+		{
+			AssemblyExtensions.ReadEmbeddedResourceIcon(typeof(AssemblyExtensionsTest).Assembly, "");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void ReadEmbeddedResourceIcon_NullAssembly()
+		{
+			AssemblyExtensions.ReadEmbeddedResourceIcon(null, ResourceIconPath);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void ReadEmbeddedResourceIcon_NullPath()
+		{
+			AssemblyExtensions.ReadEmbeddedResourceIcon(typeof(AssemblyExtensionsTest).Assembly, null);
+		}
+
+		[TestMethod]
+		public void ReadEmbeddedResourceIcon_ResourceFound()
+		{
+			Icon icon = AssemblyExtensions.ReadEmbeddedResourceIcon(typeof(AssemblyExtensionsTest).Assembly, ResourceIconPath);
+			Assert.IsNotNull(icon, "The icon was not read.");
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void ReadEmbeddedResourceIcon_ResourceNotFound()
+		{
+			AssemblyExtensions.ReadEmbeddedResourceIcon(typeof(AssemblyExtensionsTest).Assembly, "NoSuchPath");
+		}
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]
@@ -20,7 +57,7 @@ namespace CR_Documentor.Test
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ReadEmbeddedResourceString_NullAssembly()
 		{
-			AssemblyExtensions.ReadEmbeddedResourceString(null, ResourcePath);
+			AssemblyExtensions.ReadEmbeddedResourceString(null, ResourceStringPath);
 		}
 
 		[TestMethod]
@@ -33,7 +70,7 @@ namespace CR_Documentor.Test
 		[TestMethod]
 		public void ReadEmbeddedResourceString_ResourceFound()
 		{
-			string content = AssemblyExtensions.ReadEmbeddedResourceString(typeof(AssemblyExtensionsTest).Assembly, ResourcePath);
+			string content = AssemblyExtensions.ReadEmbeddedResourceString(typeof(AssemblyExtensionsTest).Assembly, ResourceStringPath);
 			Assert.AreEqual("content", content, "The content read was not correct.");
 		}
 

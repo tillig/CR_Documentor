@@ -73,6 +73,11 @@ namespace CR_Documentor
 		private WebServer _webServer = null;
 
 		/// <summary>
+		/// Indicates whether the rendering engine should be paused (and not refresh automatically).
+		/// </summary>
+		private bool _pauseRendering = false;
+
+		/// <summary>
 		/// URL to the wiki page explaining the reasons the web server might fail to start.
 		/// </summary>
 		private const string ServerStartupErrorUrl = "http://code.google.com/p/cr-documentor/wiki/ServerStartupErrors";
@@ -130,8 +135,12 @@ namespace CR_Documentor
 					this.UpdateToolbarFromOptions();
 					Log.Write(LogLevel.Info, "Building toolbar image list.");
 					ImageList imgList = new ImageList();
-					bool showIcons = LoadIcons(imgList);
-					SetupToolbar(imgList, showIcons);
+
+					System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
+					SetupToolbar(imgList);
 					this.Controls.Add(this._toolBar);
 
 					Log.Write(LogLevel.Info, "Construction complete.");
@@ -196,11 +205,17 @@ namespace CR_Documentor
 				switch (tag)
 				{
 					case "Print":
+						Log.Write(LogLevel.Info, "Printing CR_Documentor page.");
 						this._previewer.Print();
 						break;
 					case "Settings":
 						Log.Write(LogLevel.Info, "Showing CR_Documentor options.");
 						DocumentorOptions.Show();
+						break;
+					case "Pause":
+						this._pauseRendering = e.Button.Pushed;
+						Log.Write(LogLevel.Info, "CR_Documentor rendering is " + (this._pauseRendering ? "" : "un") + "paused.");
+						this.RefreshPreview(); // No-op if we've paused, but will automatically update if we've unpaused.
 						break;
 					default:
 						Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
@@ -294,8 +309,7 @@ namespace CR_Documentor
 		/// Sets up the toolbar with the appropriate icons during window initialization.
 		/// </summary>
 		/// <param name="imgList">The list of images containing the icons for the tool buttons.</param>
-		/// <param name="showIcons"><see langword="true" /> to show icons on the buttons, <see langword="false" /> to show text.</param>
-		private void SetupToolbar(ImageList imgList, bool showIcons)
+		private void SetupToolbar(ImageList imgList)
 		{
 			// Create the toolbar
 			Log.Write(LogLevel.Info, "Setting toolbar properties.");
@@ -304,36 +318,35 @@ namespace CR_Documentor
 			this._toolBar.Appearance = ToolBarAppearance.Flat;
 			this._toolBar.TextAlign = ToolBarTextAlign.Right;
 
-			// Add the toolbar buttons
-			ToolBarButton tbb = null;
+			this._toolBar.Buttons.Add(this.BuildToolbarButton(0, "Print", "CR_Documentor.DocumentorWindow.ToolBar.Print"));
+			this._toolBar.Buttons.Add(this.BuildToolbarButton(1, "Settings", "CR_Documentor.DocumentorWindow.ToolBar.Settings"));
+			ToolBarButton pause = this.BuildToolbarButton(2, "Pause", "CR_Documentor.DocumentorWindow.ToolBar.Pause");
+			pause.Style = ToolBarButtonStyle.ToggleButton;
+			this._toolBar.Buttons.Add(pause);
+		}
 
-			// Print button
-			tbb = new ToolBarButton();
-			tbb.Tag = "Print";
-			if (showIcons)
+		/// <summary>
+		/// Builds a single button for the main toolbar.
+		/// </summary>
+		/// <param name="imageIndex">The index in the image list for the icon, or -1 for text-only.</param>
+		/// <param name="tag">The tag for the button so we know what command to execute when it's pressed.</param>
+		/// <param name="resourcePath">The path to the embedded resource text to display on the button.</param>
+		/// <returns>A button that can be added to the main toolbar.</returns>
+		private ToolBarButton BuildToolbarButton(int imageIndex, string tag, string resourcePath)
+		{
+			ToolBarButton tbb = new ToolBarButton();
+			string text = this._resourceManager.GetString(resourcePath);
+			tbb.ImageIndex = imageIndex;
+			tbb.Tag = tag;
+			if (imageIndex >= 0)
 			{
-				tbb.ImageIndex = 0;
-				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+				tbb.ToolTipText = text;
 			}
 			else
 			{
-				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Print");
+				tbb.Text = text;
 			}
-			this._toolBar.Buttons.Add(tbb);
-
-			// Settings button
-			tbb = new ToolBarButton();
-			tbb.Tag = "Settings";
-			if (showIcons)
-			{
-				tbb.ImageIndex = 1;
-				tbb.ToolTipText = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-			}
-			else
-			{
-				tbb.Text = this._resourceManager.GetString("CR_Documentor.DocumentorWindow.ToolBar.Settings");
-			}
-			this._toolBar.Buttons.Add(tbb);
+			return tbb;
 		}
 
 		/// <summary>
@@ -487,7 +500,7 @@ namespace CR_Documentor
 		/// </summary>
 		protected void RefreshPreview()
 		{
-			if (!DocumentorWindow.CurrentlyVisible)
+			if (!DocumentorWindow.CurrentlyVisible || this._pauseRendering)
 			{
 				return;
 			}
@@ -576,26 +589,6 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
-		/// Extracts icons from a file.
-		/// </summary>
-		/// <param name="lpszFile">The file to extract icons from.</param>
-		/// <param name="nIconIndex">The index of the icon to start extraction at.</param>
-		/// <param name="phIconLarge">The large version of the icon (out)</param>
-		/// <param name="phIconSmall">The small version of the icon (out)</param>
-		/// <param name="nIcons">The number of icons to retrieve.</param>
-		/// <returns>0 for success; HRESULT code for failure.</returns>
-		[DllImport("Shell32", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-		internal extern static int ExtractIconEx(
-			[MarshalAs(UnmanagedType.LPTStr)]
-			string lpszFile,       //size of the icon
-			int nIconIndex,        //index of the icon
-			//(in case we have more
-			//then 1 icon in the file
-			IntPtr[] phIconLarge,  //32x32 icon
-			IntPtr[] phIconSmall,  //16x16 icon
-			int nIcons);           //how many to get
-
-		/// <summary>
 		/// Loads the set of toolbar icons into an image list.
 		/// </summary>
 		/// <param name="imgList">The list to populate with icons.</param>
@@ -604,49 +597,9 @@ namespace CR_Documentor
 		{
 			try
 			{
-				Icon icon = null;
-				System.IO.Stream iconStream = null;
 				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-
-				// Get the printer icon
-				try
-				{
-					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Printer.ico");
-					if (iconStream == null)
-					{
-						throw new IOException("Unable to load printer icon from embedded resources.");
-					}
-					icon = new Icon(iconStream);
-					imgList.Images.Add(icon);
-				}
-				finally
-				{
-					if (iconStream != null)
-					{
-						iconStream.Close();
-						iconStream = null;
-					}
-				}
-
-				// Get the settings icon
-				try
-				{
-					iconStream = asm.GetManifestResourceStream("CR_Documentor.Resources.Settings.ico");
-					if (iconStream == null)
-					{
-						throw new IOException("Unable to load settings icon from embedded resources.");
-					}
-					icon = new Icon(iconStream);
-					imgList.Images.Add(icon);
-				}
-				finally
-				{
-					if (iconStream != null)
-					{
-						iconStream.Close();
-						iconStream = null;
-					}
-				}
+				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
+				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
 				return true;
 			}
 			catch (Exception err)
