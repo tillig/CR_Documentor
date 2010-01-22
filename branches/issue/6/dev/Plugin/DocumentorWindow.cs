@@ -131,20 +131,11 @@ namespace CR_Documentor
 					Log.Write(LogLevel.Info, "Building toolbar image list.");
 					ImageList imgList = new ImageList();
 
-					bool showIcons = true;
-					try
-					{
-						System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
-						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
-						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
-					}
-					catch (ArgumentException)
-					{
-						showIcons = false;
-					}
-
-					SetupToolbar(imgList, showIcons);
+					System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
+					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
+					SetupToolbar(imgList);
 					this.Controls.Add(this._toolBar);
 
 					Log.Write(LogLevel.Info, "Construction complete.");
@@ -307,8 +298,7 @@ namespace CR_Documentor
 		/// Sets up the toolbar with the appropriate icons during window initialization.
 		/// </summary>
 		/// <param name="imgList">The list of images containing the icons for the tool buttons.</param>
-		/// <param name="showIcons"><see langword="true" /> to show icons on the buttons, <see langword="false" /> to show text.</param>
-		private void SetupToolbar(ImageList imgList, bool showIcons)
+		private void SetupToolbar(ImageList imgList)
 		{
 			// Create the toolbar
 			Log.Write(LogLevel.Info, "Setting toolbar properties.");
@@ -317,9 +307,11 @@ namespace CR_Documentor
 			this._toolBar.Appearance = ToolBarAppearance.Flat;
 			this._toolBar.TextAlign = ToolBarTextAlign.Right;
 
-			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 0 : -1, "Print", "CR_Documentor.DocumentorWindow.ToolBar.Print"));
-			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 1 : -1, "Settings", "CR_Documentor.DocumentorWindow.ToolBar.Settings"));
-			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 2 : -1, "Pause", "CR_Documentor.DocumentorWindow.ToolBar.Pause"));
+			this._toolBar.Buttons.Add(this.BuildToolbarButton(0, "Print", "CR_Documentor.DocumentorWindow.ToolBar.Print"));
+			this._toolBar.Buttons.Add(this.BuildToolbarButton(1, "Settings", "CR_Documentor.DocumentorWindow.ToolBar.Settings"));
+			ToolBarButton pause = this.BuildToolbarButton(2, "Pause", "CR_Documentor.DocumentorWindow.ToolBar.Pause");
+			pause.Style = ToolBarButtonStyle.ToggleButton;
+			this._toolBar.Buttons.Add(pause);
 		}
 
 		/// <summary>
