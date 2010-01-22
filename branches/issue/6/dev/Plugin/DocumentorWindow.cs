@@ -499,7 +499,7 @@ namespace CR_Documentor
 		/// </summary>
 		protected void RefreshPreview()
 		{
-			if (!DocumentorWindow.CurrentlyVisible)
+			if (!DocumentorWindow.CurrentlyVisible || this._pauseRendering)
 			{
 				return;
 			}
