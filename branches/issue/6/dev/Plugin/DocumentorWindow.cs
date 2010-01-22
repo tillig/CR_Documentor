@@ -137,6 +137,7 @@ namespace CR_Documentor
 						System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
 						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
 						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
+						imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
 					}
 					catch (ArgumentException)
 					{
@@ -318,6 +319,7 @@ namespace CR_Documentor
 
 			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 0 : -1, "Print", "CR_Documentor.DocumentorWindow.ToolBar.Print"));
 			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 1 : -1, "Settings", "CR_Documentor.DocumentorWindow.ToolBar.Settings"));
+			this._toolBar.Buttons.Add(this.BuildToolbarButton(showIcons ? 2 : -1, "Pause", "CR_Documentor.DocumentorWindow.ToolBar.Pause"));
 		}
 
 		/// <summary>
