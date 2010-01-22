@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Drawing;
 
 namespace CR_Documentor
 {
@@ -10,6 +11,41 @@ namespace CR_Documentor
 	public static class AssemblyExtensions
 	{
 		// TODO: When we target .NET 3.5, convert these to real extension methods.
+
+		/// <summary>
+		/// Loads an embedded icon from 
+		/// </summary>
+		/// <param name="assembly">The assembly that contains the icon.</param>
+		/// <param name="resourcePath">The path to the embedded icon resource.</param>
+		/// <returns>
+		/// The <see cref="System.Drawing.Icon"/> loaded from the 
+		/// </returns>
+		public static Icon ReadEmbeddedResourceIcon(Assembly assembly, string resourcePath)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException("assembly");
+			}
+			if (resourcePath == null)
+			{
+				throw new ArgumentNullException("resourcePath");
+			}
+			if (resourcePath == "")
+			{
+				throw new ArgumentException("Path to embedded resource to read may not be empty.", "resourcePath");
+			}
+
+			using (Stream stm = assembly.GetManifestResourceStream(resourcePath))
+			{
+				if (stm == null)
+				{
+					throw new ArgumentException("Unable to load icon from embedded resources: " + resourcePath);
+				}
+				Icon icon = new Icon(stm);
+				stm.Close();
+				return icon;
+			}
+		}
 
 		/// <summary>
 		/// Reads an embedded resource string from an assembly.
@@ -53,6 +89,7 @@ namespace CR_Documentor
 				using (StreamReader sreader = new StreamReader(stm))
 				{
 					string retVal = sreader.ReadToEnd();
+					sreader.Close();
 					return retVal;
 				}
 			}
