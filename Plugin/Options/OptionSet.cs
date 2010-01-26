@@ -33,7 +33,7 @@ namespace CR_Documentor.Options
 		/// <summary>
 		/// The default value for the documentation compatibility level.
 		/// </summary>
-		public const TagCompatibilityLevel DEFAULT_DOCTAGCOMPAT_COMPATLEVEL = TagCompatibilityLevel.NDoc1_3;
+		public const TagCompatibilityLevel DEFAULT_DOCTAGCOMPAT_COMPATLEVEL = TagCompatibilityLevel.Sandcastle;
 
 		#endregion
 
@@ -53,7 +53,7 @@ namespace CR_Documentor.Options
 		/// <summary>
 		/// The default value for the unrecognized tag handling method.
 		/// </summary>
-		public const UnrecognizedTagHandlingMethod DEFAULT_UNRECOGNIZEDTAGS_HANDLING = UnrecognizedTagHandlingMethod.RenderContents;
+		public const UnrecognizedTagHandlingMethod DEFAULT_UNRECOGNIZEDTAGS_HANDLING = UnrecognizedTagHandlingMethod.HideTagAndContents;
 
 		#endregion
 
@@ -140,7 +140,7 @@ namespace CR_Documentor.Options
 		/// <summary>
 		/// The default value for the style descriptor.
 		/// </summary>
-		public static readonly string DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR = OptionSet.BuildStoredTypeName(typeof(CR_Documentor.Transformation.MSDN.Engine));
+		public static readonly string DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR = OptionSet.BuildStoredTypeName(typeof(CR_Documentor.Transformation.SandcastlePrototype.Engine));
 
 		#endregion
 

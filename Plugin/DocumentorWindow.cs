@@ -468,14 +468,14 @@ namespace CR_Documentor
 			OptionSet options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
 
 			// Load the appropriate transformation engine based on new settings
-			Type transformType = typeof(CR_Documentor.Transformation.MSDN.Engine);
+			Type transformType = typeof(CR_Documentor.Transformation.SandcastlePrototype.Engine);
 			try
 			{
 				transformType = Type.GetType(options.PreviewStyle, true);
 			}
 			catch (Exception err)
 			{
-				Log.Write(LogLevel.Error, String.Format("Unable to load specified preview style [{0}].  Defaulting to [CR_Documentor.Transformation.MSDN.Engine, CR_Documentor].", options.PreviewStyle), err);
+				Log.Write(LogLevel.Error, String.Format("Unable to load specified preview style [{0}].  Defaulting to [CR_Documentor.Transformation.SandcastlePrototype.Engine, CR_Documentor].", options.PreviewStyle), err);
 			}
 
 			Transformation.TransformEngine transformer = null;
@@ -489,7 +489,7 @@ namespace CR_Documentor
 			}
 			if (transformer == null)
 			{
-				transformer = new Transformation.MSDN.Engine();
+				transformer = new Transformation.SandcastlePrototype.Engine();
 			}
 			transformer.Options = options;
 			this._previewer.Transformer = transformer;
