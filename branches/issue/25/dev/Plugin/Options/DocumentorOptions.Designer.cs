@@ -88,8 +88,8 @@ namespace CR_Documentor.Options
 			this.rbIncludeAbsolute = new System.Windows.Forms.RadioButton();
 			this.rbIncludeNone = new System.Windows.Forms.RadioButton();
 			this.grpServerOptions = new System.Windows.Forms.GroupBox();
-			this.lblServerPort = new System.Windows.Forms.Label();
 			this.serverPort = new System.Windows.Forms.NumericUpDown();
+			this.lblServerPort = new System.Windows.Forms.Label();
 			this.grpDocTagCompat.SuspendLayout();
 			this.grpUnrecognizedTags.SuspendLayout();
 			this.grpFormatOptions.SuspendLayout();
@@ -271,14 +271,9 @@ namespace CR_Documentor.Options
 			this.grpServerOptions.Name = "grpServerOptions";
 			this.grpServerOptions.TabStop = false;
 			// 
-			// lblServerPort
+			// serverPort
 			// 
-			resources.ApplyResources(this.lblServerPort, "lblServerPort");
-			this.lblServerPort.Name = "lblServerPort";
-			// 
-			// portNumber
-			// 
-			resources.ApplyResources(this.serverPort, "portNumber");
+			resources.ApplyResources(this.serverPort, "serverPort");
 			this.serverPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -289,15 +284,21 @@ namespace CR_Documentor.Options
             0,
             0,
             0});
-			this.serverPort.Name = "portNumber";
+			this.serverPort.Name = "serverPort";
 			this.serverPort.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
 			// 
+			// lblServerPort
+			// 
+			resources.ApplyResources(this.lblServerPort, "lblServerPort");
+			this.lblServerPort.Name = "lblServerPort";
+			// 
 			// DocumentorOptions
 			// 
+			resources.ApplyResources(this, "$this");
 			this.Controls.Add(this.grpServerOptions);
 			this.Controls.Add(this.grpIncludes);
 			this.Controls.Add(this.grpPreviewStyle);
@@ -307,11 +308,14 @@ namespace CR_Documentor.Options
 			this.Controls.Add(this.grpDocTagCompat);
 			this.Name = "DocumentorOptions";
 			this.grpDocTagCompat.ResumeLayout(false);
+			this.grpDocTagCompat.PerformLayout();
 			this.grpUnrecognizedTags.ResumeLayout(false);
+			this.grpUnrecognizedTags.PerformLayout();
 			this.grpFormatOptions.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.numSpacesPerTab)).EndInit();
 			this.grpDisplay.ResumeLayout(false);
 			this.grpPreviewStyle.ResumeLayout(false);
+			this.grpPreviewStyle.PerformLayout();
 			this.grpIncludes.ResumeLayout(false);
 			this.grpIncludes.PerformLayout();
 			this.grpServerOptions.ResumeLayout(false);
