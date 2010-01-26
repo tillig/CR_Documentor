@@ -129,7 +129,7 @@ namespace CR_Documentor.Controls
 			this._browser.ProgressChanged += new WebBrowserProgressChangedEventHandler(Browser_ProgressChanged);
 			this.Controls.Add(this._browser);
 			// Setting the transformation engine will refresh/initialize the browser.
-			this.Transformer = new CR_Documentor.Transformation.MSDN.Engine();
+			this.Transformer = new CR_Documentor.Transformation.SandcastlePrototype.Engine();
 		}
 
 		/// <summary>
