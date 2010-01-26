@@ -219,6 +219,9 @@
     <Compile Include="Options\DocumentorOptions.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Options\DocumentorOptions.Designer.cs">
+      <DependentUpon>DocumentorOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Options\IncludeProcessing.cs" />
     <Compile Include="Options\OptionSet.cs">
       <SubType>Code</SubType>
