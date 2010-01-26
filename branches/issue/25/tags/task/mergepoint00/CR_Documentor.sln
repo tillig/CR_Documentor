@@ -1,0 +1,62 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CR_Documentor", "Plugin\CR_Documentor.csproj", "{9229512A-C004-46FD-8CEE-D096C883E827}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51EEFFC5-A69C-4C62-9683-83D8E4162F17}"
+	ProjectSection(SolutionItems) = preProject
+		AssemblyVersion.cs = AssemblyVersion.cs
+		AssemblyVersion.vb = AssemblyVersion.vb
+		Default.proj = Default.proj
+		readme.html = readme.html
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CR_Documentor.Test", "CR_Documentor.Test\CR_Documentor.Test.csproj", "{63B82EFB-4D5C-4967-AB9D-729CEF225A06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Doc Test Assemblies|Any CPU = Doc Test Assemblies|Any CPU
+		Doc Test Assemblies|Mixed Platforms = Doc Test Assemblies|Mixed Platforms
+		Doc Test Assemblies|Win32 = Doc Test Assemblies|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Any CPU.ActiveCfg = Doc Test Assemblies|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Any CPU.Build.0 = Doc Test Assemblies|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Mixed Platforms.ActiveCfg = Doc Test Assemblies|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Mixed Platforms.Build.0 = Doc Test Assemblies|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Win32.ActiveCfg = Doc Test Assemblies|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Win32.ActiveCfg = Release|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Any CPU.Build.0 = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Mixed Platforms.Build.0 = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Win32.ActiveCfg = Debug|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Win32.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
