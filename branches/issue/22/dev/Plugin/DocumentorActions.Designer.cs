@@ -41,8 +41,10 @@ namespace CR_Documentor
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DocumentorActions));
 			this.collapseXmlDocComments = new DevExpress.CodeRush.Core.Action(this.components);
 			this.expandXmlDocComments = new DevExpress.CodeRush.Core.Action(this.components);
+			this.toggleDocumentorVisibility = new DevExpress.CodeRush.Core.Action(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
 			// 
 			// collapseXmlDocComments
@@ -65,8 +67,19 @@ namespace CR_Documentor
 			this.expandXmlDocComments.Image = ((System.Drawing.Bitmap)(resources.GetObject("expandXmlDocComments.Image")));
 			this.expandXmlDocComments.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
 			this.expandXmlDocComments.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.expandXmlDocComments_Execute);
+			// 
+			// toggleDocumentorVisibility
+			// 
+			this.toggleDocumentorVisibility.ActionName = "Toggle CR_Documentor Window";
+			this.toggleDocumentorVisibility.ButtonText = "Toggle CR_Documentor Window";
+			this.toggleDocumentorVisibility.CommonMenu = DevExpress.CodeRush.Menus.VsCommonBar.None;
+			this.toggleDocumentorVisibility.Description = "Shows/hides the CR_Documentor tool window.";
+			this.toggleDocumentorVisibility.Image = ((System.Drawing.Bitmap)(resources.GetObject("toggleDocumentorVisibility.Image")));
+			this.toggleDocumentorVisibility.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
+			this.toggleDocumentorVisibility.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.toggleDocumentorVisibility_Execute);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
 		}
@@ -75,5 +88,6 @@ namespace CR_Documentor
 
 		private DevExpress.CodeRush.Core.Action collapseXmlDocComments;
 		private DevExpress.CodeRush.Core.Action expandXmlDocComments;
+		private DevExpress.CodeRush.Core.Action toggleDocumentorVisibility;
 	}
 }

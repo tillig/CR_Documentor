@@ -89,16 +89,77 @@ namespace CR_Documentor
 			}
 		}
 
+		/// <summary>
+		/// Toggles the visibility of the CR_Documentor window.
+		/// </summary>
+		public static void ToggleDocumentorVisibility()
+		{
+			using (ActivityContext context = new ActivityContext(Log, "Toggling visibility of CR_Documentor window."))
+			{
+				try
+				{
+					if (DocumentorWindow.CurrentlyVisible)
+					{
+						Log.Write(LogLevel.Info, "Hiding window.");
+						DocumentorWindow.HideWindow();
+					}
+					else
+					{
+						Log.Write(LogLevel.Info, "Showing window.");
+						DocumentorWindow.ShowWindow();
+					}
+					Log.Write(LogLevel.Info, "Visibility toggle complete.");
+				}
+				catch (Exception err)
+				{
+					Log.Write(LogLevel.Error, "Error while toggling window visibility.", err);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles execution of the "Collapse XML Doc Comments" action.
+		/// </summary>
+		/// <param name="ea">
+		/// The <see cref="DevExpress.CodeRush.Core.ExecuteEventArgs"/> instance
+		/// containing the event data.
+		/// </param>
 		private void collapseXmlDocComments_Execute(ExecuteEventArgs ea)
 		{
 			OutlineXmlDocSections(true);
 		}
 
+		/// <summary>
+		/// Handles execution of the "Expand XML Doc Comments" action.
+		/// </summary>
+		/// <param name="ea">
+		/// The <see cref="DevExpress.CodeRush.Core.ExecuteEventArgs"/> instance
+		/// containing the event data.
+		/// </param>
 		private void expandXmlDocComments_Execute(ExecuteEventArgs ea)
 		{
 			OutlineXmlDocSections(false);
 		}
 
+		/// <summary>
+		/// Handles execution of the "Toggle CR_Documentor Window Visibility" action.
+		/// </summary>
+		/// <param name="ea">
+		/// The <see cref="DevExpress.CodeRush.Core.ExecuteEventArgs"/> instance
+		/// containing the event data.
+		/// </param>
+		private void toggleDocumentorVisibility_Execute(ExecuteEventArgs ea)
+		{
+			ToggleDocumentorVisibility();
+		}
+
+		/// <summary>
+		/// Determines the availability of the expand/collapse XML doc comment actions.
+		/// </summary>
+		/// <param name="ea">
+		/// The <see cref="DevExpress.CodeRush.Core.QueryStatusEventArgs"/> instance
+		/// containing the event data.
+		/// </param>
 		private void toggleXmlDocComments_QueryStatus(QueryStatusEventArgs ea)
 		{
 			if (!DXCoreContext.EditingSourceFile)
@@ -110,6 +171,5 @@ namespace CR_Documentor
 				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusEnabled | EnvDTE.vsCommandStatus.vsCommandStatusSupported;
 			}
 		}
-
 	}
 }
