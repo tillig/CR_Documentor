@@ -1,16 +1,19 @@
 using System;
+using DevExpress.CodeRush.Core;
+using DevExpress.CodeRush.StructuralParser;
 
-namespace CR_Documentor.ContextMenu {
+namespace CR_Documentor
+{
 	/// <summary>
 	/// Provides constants and helpers for evaluating context.
 	/// </summary>
-	public class DXCoreContext {
-
+	public static class DXCoreContext
+	{
 		/// <summary>
 		/// Context indicating the cursor is in an XML doc comment.
 		/// </summary>
 		public const string CTX_InXmlDocComment = @"Editor\Code\InXmlDocComment";
-		
+
 		/// <summary>
 		/// Context indicating there is no selection.
 		/// </summary>
@@ -32,6 +35,37 @@ namespace CR_Documentor.ContextMenu {
 		public const string CTX_SelectionMultiLine = @"Editor\Selection\Any Selection\Multiple Lines";
 
 		/// <summary>
+		/// Context indicating the code editor is showing.
+		/// </summary>
+		public const string CTX_InCodeEditor = @"Focus\Documents\Source\Code Editor";
+
+
+		/// <summary>
+		/// Gets a value indicating whether a source file is currently being edited.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if the focus is currently in the code editor
+		/// and if the active document is a <see cref="DevExpress.CodeRush.StructuralParser.SourceFile"/>;
+		/// <see langword="false" /> otherwise.
+		/// </value>
+		public static bool EditingSourceFile
+		{
+			get
+			{
+				if (!CodeRush.Context.Satisfied(DXCoreContext.CTX_InCodeEditor, false))
+				{
+					return false;
+				}
+				TextDocument activeTextDocument = CodeRush.Documents.ActiveTextDocument;
+				if (activeTextDocument == null || activeTextDocument.FileNode == null || !(activeTextDocument.FileNode is SourceFile))
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+
+		/// <summary>
 		/// Denotes the various selection contexts that must be satisfied for this replacement
 		/// to be available.
 		/// </summary>
@@ -39,7 +73,8 @@ namespace CR_Documentor.ContextMenu {
 		/// "Or" the flags together to make a complete context.
 		/// </remarks>
 		[Flags]
-		public enum SelectionContext{
+		public enum SelectionContext
+		{
 			/// <summary>
 			/// Indicates NO selection must be selected.
 			/// </summary>
@@ -49,7 +84,7 @@ namespace CR_Documentor.ContextMenu {
 			/// Indicates a line fragment must be selected.
 			/// </summary>
 			LineFragment = 2,
-			
+
 			/// <summary>
 			/// Indicates a whole line must be selected.
 			/// </summary>
