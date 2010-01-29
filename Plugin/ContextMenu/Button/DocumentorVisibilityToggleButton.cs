@@ -53,27 +53,7 @@ namespace CR_Documentor.ContextMenu.Button
 		/// </summary>
 		public override void Execute()
 		{
-			using (ActivityContext context = new ActivityContext(Log, "Toggling visibility of CR_Documentor window."))
-			{
-				try
-				{
-					if (DocumentorWindow.CurrentlyVisible)
-					{
-						Log.Write(LogLevel.Info, "Hiding window.");
-						DocumentorWindow.HideWindow();
-					}
-					else
-					{
-						Log.Write(LogLevel.Info, "Showing window.");
-						DocumentorWindow.ShowWindow();
-					}
-					Log.Write(LogLevel.Info, "Visibility toggle complete.");
-				}
-				catch (Exception err)
-				{
-					Log.Write(LogLevel.Error, "Error while toggling window visibility.", err);
-				}
-			}
+			DocumentorActions.ToggleDocumentorVisibility();
 		}
 	}
 }

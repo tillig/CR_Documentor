@@ -102,6 +102,8 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -112,6 +114,12 @@
     </Compile>
     <Compile Include="Integration\Class1.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Integration\ContextTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Integration\ContextTestForm.Designer.cs">
+      <DependentUpon>ContextTestForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Integration\Encoding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
