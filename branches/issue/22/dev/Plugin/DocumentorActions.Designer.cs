@@ -43,10 +43,12 @@ namespace CR_Documentor
 			this.expandXmlDocComments = new DevExpress.CodeRush.Core.Action(this.components);
 			this.toggleDocumentorVisibility = new DevExpress.CodeRush.Core.Action(this.components);
 			this.xmlEncodeSelection = new DevExpress.CodeRush.Core.Action(this.components);
+			this.convertSelectionToDocComment = new DevExpress.CodeRush.Core.Action(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.xmlEncodeSelection)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.convertSelectionToDocComment)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
 			// 
 			// collapseXmlDocComments
@@ -89,10 +91,23 @@ namespace CR_Documentor
 			this.xmlEncodeSelection.Image = ((System.Drawing.Bitmap)(resources.GetObject("xmlEncodeSelection.Image")));
 			this.xmlEncodeSelection.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
 			this.xmlEncodeSelection.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.xmlEncodeSelection_Execute);
+			// 
+			// convertSelectionToDocComment
+			// 
+			this.convertSelectionToDocComment.ActionName = "Convert Selection to XML Doc Comment";
+			this.convertSelectionToDocComment.ButtonText = "Convert Selection to XML Doc Comment";
+			this.convertSelectionToDocComment.CommonMenu = DevExpress.CodeRush.Menus.VsCommonBar.None;
+			this.convertSelectionToDocComment.Description = "Converts the active whole line (single or multiple lines) selection into an XML d" +
+				"oc comment block.";
+			this.convertSelectionToDocComment.Image = ((System.Drawing.Bitmap)(resources.GetObject("convertSelectionToDocComment.Image")));
+			this.convertSelectionToDocComment.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
+			this.convertSelectionToDocComment.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.convertSelectionToDocComment_Execute);
+			this.convertSelectionToDocComment.QueryStatus += new DevExpress.CodeRush.Core.QueryStatusEventHandler(this.convertSelectionToDocComment_QueryStatus);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.xmlEncodeSelection)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.convertSelectionToDocComment)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
 		}
@@ -103,5 +118,6 @@ namespace CR_Documentor
 		private DevExpress.CodeRush.Core.Action expandXmlDocComments;
 		private DevExpress.CodeRush.Core.Action toggleDocumentorVisibility;
 		private DevExpress.CodeRush.Core.Action xmlEncodeSelection;
+		private DevExpress.CodeRush.Core.Action convertSelectionToDocComment;
 	}
 }
