@@ -118,6 +118,54 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
+		/// XML encodes the currently selected text.
+		/// </summary>
+		public static void XmlEncodeSelection()
+		{
+			using (ActivityContext context = new ActivityContext(Log, "XML encoding selected text."))
+			{
+				try
+				{
+					if (!DXCoreContext.HasActiveSelection)
+					{
+						Log.Write(LogLevel.Info, "No selection to encode.");
+						return;
+					}
+
+					// Get the full content to insert
+					Log.Write(LogLevel.Info, "XML encoding selected text.");
+					string replacement = XmlEncode(CodeRush.Selection.Text);
+
+					// Insert the content (replace any selected text)
+					CodeRush.UndoStack.BeginUpdate("XmlEncodeSelection");
+					Log.Write(LogLevel.Info, "Deleting original text.");
+					CodeRush.Selection.Delete();
+					Log.Write(LogLevel.Info, "Inserting XML encoded text.");
+					SourceRange insertedRange = CodeRush.Documents.ActiveTextDocument.InsertText(CodeRush.Caret.SourcePoint, replacement);
+					CodeRush.UndoStack.EndUpdate();
+
+					// Move to the end of the insertion
+					CodeRush.Caret.MoveTo(insertedRange.Bottom);
+					Log.Write(LogLevel.Info, "XML encode complete.");
+				}
+				catch (Exception err)
+				{
+					Log.Write(LogLevel.Error, "Error happened while XML encoding text.", err);
+				}
+			}
+		}
+
+		/// <summary>
+		/// XML encodes a string.
+		/// </summary>
+		/// <param name="toEncode">The string to encode.</param>
+		/// <returns>The string with XML entities encoded.</returns>
+		public static string XmlEncode(string toEncode)
+		{
+			return toEncode.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;");
+		}
+
+		/// <summary>
 		/// Handles execution of the "Collapse XML Doc Comments" action.
 		/// </summary>
 		/// <param name="ea">
@@ -170,6 +218,18 @@ namespace CR_Documentor
 			{
 				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusEnabled | EnvDTE.vsCommandStatus.vsCommandStatusSupported;
 			}
+		}
+
+		/// <summary>
+		/// Handles execution of the "XML Encode Selection" action.
+		/// </summary>
+		/// <param name="ea">
+		/// The <see cref="DevExpress.CodeRush.Core.ExecuteEventArgs"/> instance
+		/// containing the event data.
+		/// </param>
+		private void xmlEncodeSelection_Execute(ExecuteEventArgs ea)
+		{
+			XmlEncodeSelection();
 		}
 	}
 }

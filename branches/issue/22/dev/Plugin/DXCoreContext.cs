@@ -66,6 +66,27 @@ namespace CR_Documentor
 		}
 
 		/// <summary>
+		/// Gets a value indicating if there's an active text document and if there's
+		/// a selection in that document.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if there is an active text document and if there
+		/// is currently a selection made in that document; <see langword="false" />
+		/// otherwise.
+		/// </value>
+		public static bool HasActiveSelection
+		{
+			get
+			{
+				if (CodeRush.Documents.ActiveTextDocument == null || !CodeRush.Selection.Exists)
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+
+		/// <summary>
 		/// Denotes the various selection contexts that must be satisfied for this replacement
 		/// to be available.
 		/// </summary>

@@ -61,7 +61,7 @@ namespace CR_Documentor.ContextMenu.Button
 					// Get the full content to insert
 					Log.Write(LogLevel.Info, "XML encoding selected text.");
 					TextView.Active.Selection.ExtendToWholeLines();
-					TextView.Active.Selection.Text = this.XmlEncode(TextView.Active.Selection.Text);
+					TextView.Active.Selection.Text = DocumentorActions.XmlEncode(TextView.Active.Selection.Text);
 
 					// Tabify the selection, figure out how many tabs are at the start of
 					// each line and calculate the minimum.  Remove that many tabs from

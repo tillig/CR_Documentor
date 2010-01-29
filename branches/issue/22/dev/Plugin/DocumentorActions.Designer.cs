@@ -42,9 +42,11 @@ namespace CR_Documentor
 			this.collapseXmlDocComments = new DevExpress.CodeRush.Core.Action(this.components);
 			this.expandXmlDocComments = new DevExpress.CodeRush.Core.Action(this.components);
 			this.toggleDocumentorVisibility = new DevExpress.CodeRush.Core.Action(this.components);
+			this.xmlEncodeSelection = new DevExpress.CodeRush.Core.Action(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.xmlEncodeSelection)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
 			// 
 			// collapseXmlDocComments
@@ -77,9 +79,20 @@ namespace CR_Documentor
 			this.toggleDocumentorVisibility.Image = ((System.Drawing.Bitmap)(resources.GetObject("toggleDocumentorVisibility.Image")));
 			this.toggleDocumentorVisibility.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
 			this.toggleDocumentorVisibility.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.toggleDocumentorVisibility_Execute);
+			// 
+			// xmlEncodeSelection
+			// 
+			this.xmlEncodeSelection.ActionName = "XML Encode Selection";
+			this.xmlEncodeSelection.ButtonText = "XML Encode Selection";
+			this.xmlEncodeSelection.CommonMenu = DevExpress.CodeRush.Menus.VsCommonBar.None;
+			this.xmlEncodeSelection.Description = "Encodes special XML characters in the active selection for inclusion in XML.";
+			this.xmlEncodeSelection.Image = ((System.Drawing.Bitmap)(resources.GetObject("xmlEncodeSelection.Image")));
+			this.xmlEncodeSelection.ImageBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(254)))), ((int)(((byte)(0)))));
+			this.xmlEncodeSelection.Execute += new DevExpress.CodeRush.Core.CommandExecuteEventHandler(this.xmlEncodeSelection_Execute);
 			((System.ComponentModel.ISupportInitialize)(this.collapseXmlDocComments)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.expandXmlDocComments)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.toggleDocumentorVisibility)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.xmlEncodeSelection)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
 
 		}
@@ -89,5 +102,6 @@ namespace CR_Documentor
 		private DevExpress.CodeRush.Core.Action collapseXmlDocComments;
 		private DevExpress.CodeRush.Core.Action expandXmlDocComments;
 		private DevExpress.CodeRush.Core.Action toggleDocumentorVisibility;
+		private DevExpress.CodeRush.Core.Action xmlEncodeSelection;
 	}
 }
