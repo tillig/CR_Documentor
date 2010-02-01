@@ -1,24 +1,46 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured
 
+=2.4.0.0=
+  * New features:
+    * Issue #6: Ability to "pin" the documentation preview. There is now a "pause" button in the CR_Documentor window toolbar that allows you to pause the preview so it doesn't refresh as you navigate around. Un-pausing returns the preview to normal behavior.
+    * Issue #22: Collapsing/expanding documentation should be assignable to shortcut keys. Added assignable actions for several CR_Documentor functions:
+      * Collapse XML Doc Comments - Collapses the XML documentation comment blocks in a source file.
+      * Expand XML Doc Comments - Expands the XML documentation comment blocks in a source file.
+      * Toggle CR_Documentor Window - Shows/hides the CR_Documentor tool window.
+      * XML Encode Selection - Encodes special XML characters in the active selection for inclusion in XML.
+      * Convert Selection to XML Doc Comment - Converts the active whole line (single or multiple lines) selection into an XML doc comment block.
+  * Resolved issues:
+    * Issue #2: Message logging should be abstracted. Added a thread-safe logging wrapper so log messages will reliably appear in the message window.
+    * Issue #7: Managed C++ or C++/CLI syntax representation wrong. Removed syntax preview support for C++ because it was inaccurate and generally not being used.
+    * Issue #19: Plugin doesn't display in "About" box in DXCore 9.1.3. Fixed product module so it now displays.
+    * Issue #20: Enumeration summaries don't appear in member table when members have attributes. Fixed so enumerations properly render.
+    * Issue #25: Make Sandcastle the default rendering engine. As NDoc is no longer the preferred documentation renderer in .NET, Sandcastle has been set as the default for new users or people resetting to defaults.
+
+=2.3.0.1=
+  * *Updated minimum required DXCore version to v2009.1/9.1.3.*
+  * Issue #17: CR_Documentor plugin was not properly registering/displaying in DXCore v2009.1.
+
 =2.3.0.0=
-  * Fixed Issue #17: CR_Documentor plugin was not properly registering/displaying in DXCore v2009.1.
-  * Updated minimum DXCore requirement to v2009.1/9.1.2.
+  * *Only version to support DXCore v2009.1/9.1.2.*
+  * Issue #17: CR_Documentor plugin was not properly registering/displaying in DXCore v2009.1.
 
 =2.2.1.0=
   * *Last version to support DXCore prior to v2009.1/9.1.2.*
-  * Fixed Issue #8: Unit tests for internal web server hang on unpredictable basis. This also seems to have fixed a reported issue where the internal preview freezes and requires a Visual Studio restart.
+  * Resolved Issue #8: Unit tests for internal web server hang on unpredictable basis. This also seems to have fixed a reported issue where the internal preview freezes and requires a Visual Studio restart.
 
 =2.2.0.0=
-  * Fixed Issue #10: CR_Documentor window doesn't appear when running VS2008 as standard user. Added [ServerStartupErrors info to the wiki] about security configuration and if there's any problem starting up, CR_Documentor will alert you.
-  * Fixed Issue #11: Unable to have multiple VS instances open at once.
-  * Fixed Issue #13: Set server to listen to localhost. (This should also help with the security problems seen in Issue #10.)
-  * Fixed Issue #14: HTML entities incorrectly get decoded before display.
-  * Fixed Issue #15: C# property syntax preview renders incorrectly with brackets in Sandcastle preview.
-  * Enabled the port that the internal web server listens on to be configurable through the options pages. (Issue #12)
+  * New features:
+    * Enabled the port that the internal web server listens on to be configurable through the options pages. (Issue #12)
+  * Resolved issues:
+    * Issue #10: CR_Documentor window doesn't appear when running VS2008 as standard user. Added [ServerStartupErrors info to the wiki] about security configuration and if there's any problem starting up, CR_Documentor will alert you.
+    * Issue #11: Unable to have multiple VS instances open at once.
+    * Issue #13: Set server to listen to localhost. (This should also help with the security problems seen in Issue #10.)
+    * Issue #14: HTML entities incorrectly get decoded before display.
+    * Issue #15: C# property syntax preview renders incorrectly with brackets in Sandcastle preview.
 
 =2.1.0.0=
-  * Fixed Issue #1: Changed preview so it is served up by an embedded web server instead of through manipulation of the IE DOM. This fixes the script security warning.
+  * Issue #1: Changed preview so it is served up by an embedded web server instead of through manipulation of the IE DOM. This fixes the script security warning.
   * Changed the hosting of the web browser so it's using the .NET !WebBrowser control instead of hosting the ActiveX control directly.
   * Fixed the known issue where the CR_Documentor window stole focus on refresh.
 
