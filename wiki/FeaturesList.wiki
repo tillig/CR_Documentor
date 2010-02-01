@@ -21,6 +21,16 @@ When your cursor is inside a doc comment, you'll see all of the above options pl
 
 http://cr-documentor.googlecode.com/svn/site/screenshots/context_menu_templates.png
 
+= Assignable Hotkeys =
+
+Using the !DevExpress menu (Options -> IDE -> Shortcuts) you can bind hotkeys to several CR_Documentor actions, including:
+
+  * *Collapse XML Doc Comments* - Collapses the XML documentation comment blocks in a source file.
+  * *Expand XML Doc Comments* - Expands the XML documentation comment blocks in a source file.
+  * *Toggle CR_Documentor Window* - Shows/hides the CR_Documentor tool window.
+  * *XML Encode Selection* - Encodes special XML characters in the active selection for inclusion in XML.
+  * *Convert Selection to XML Doc Comment* - Converts the active whole line (single or multiple lines) selection into an XML doc comment block.
+
 = Configuration Options =
 
 There are several ways you can configure the behavior of CR_Documentor. See the ConfigurationOptions page for more details.
