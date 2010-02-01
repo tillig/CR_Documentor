@@ -53,7 +53,7 @@ namespace CR_Documentor.Options
 		/// <summary>
 		/// The default value for the unrecognized tag handling method.
 		/// </summary>
-		public const UnrecognizedTagHandlingMethod DEFAULT_UNRECOGNIZEDTAGS_HANDLING = UnrecognizedTagHandlingMethod.HideTagAndContents;
+		public const UnrecognizedTagHandlingMethod DEFAULT_UNRECOGNIZEDTAGS_HANDLING = UnrecognizedTagHandlingMethod.StripTagShowContents;
 
 		#endregion
 
@@ -126,6 +126,8 @@ namespace CR_Documentor.Options
 		#endregion
 
 		#region Section: Preview Style
+
+		// TODO: Consider using GUIDs or something other than type name for the preview style option value.
 
 		/// <summary>
 		/// The section that will contain the preview style options.

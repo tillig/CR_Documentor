@@ -242,8 +242,8 @@ namespace CR_Documentor.Options
 			}
 			else
 			{
-				// Default to NDoc 1.3
-				this.rbPreviewStyleNDoc13.Checked = true;
+				// Default to Sandcastle
+				this.rbPreviewStyleSandcastle.Checked = true;
 			}
 			this.chkProcessDuplicateSeeLinks.Checked = this.Options.ProcessDuplicateSeeLinks;
 			switch (this.Options.ProcessIncludes)
