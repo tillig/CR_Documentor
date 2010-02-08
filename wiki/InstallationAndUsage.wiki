@@ -8,6 +8,8 @@ To use the latest CR_Documentor, you must have...
 
 *Note*: CR_Documentor 1.8.2.0510 is the last version to support Visual Studio 2003. CR_Documentor 2.2.1.0 is the last version to support DXCore versions between 3.0.8.0 and 9.1.2.0. CR_Documentor 2.3.0.0 works only on DXCore 9.1.2.0.
 
+DXCore is a free download from !DevExpress that you can either get [http://www.devexpress.com/Products/Visual_Studio_Add-in/DXCore/ as a standalone plugin engine] or as part of the [http://www.devexpress.com/Products/Visual_Studio_Add-in/CodeRushX/ CodeRush Xpress] bundle.
+
 = Installation =
 
   * Make sure all instances of Visual Studio are closed.
