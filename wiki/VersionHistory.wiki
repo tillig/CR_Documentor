@@ -1,5 +1,5 @@
 #summary Describes the features and fixes available in each release.
-#labels Featured
+#labels Featured,Phase-Support
 
 =2.4.0.0=
   * New features:
