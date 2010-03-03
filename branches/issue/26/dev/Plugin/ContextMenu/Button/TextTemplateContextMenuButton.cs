@@ -192,7 +192,7 @@ namespace CR_Documentor.ContextMenu.Button
 					Log.Write(LogLevel.Info, "Processing beginning of insertion line.");
 
 					// Get the beginning of the insertion line
-					CodeRush.Selection.SelectRange(originalRange.Start.Line, 0, originalRange.Start.Line, originalRange.Start.Offset);
+					CodeRush.Selection.SelectRange(originalRange.Start.Line, 1, originalRange.Start.Line, originalRange.Start.Offset);
 
 					if (CodeRush.Selection.Exists)
 					{
