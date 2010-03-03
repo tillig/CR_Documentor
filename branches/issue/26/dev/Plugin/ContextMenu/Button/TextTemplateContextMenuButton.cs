@@ -134,7 +134,7 @@ namespace CR_Documentor.ContextMenu.Button
 						// Save the original selection values
 						Log.Write(LogLevel.Info, "Selection exists.  Saving selected text and active range.");
 						originalSelectedText = CodeRush.Selection.Text;
-						originalRange = CodeRush.Selection.Active.Range;
+						originalRange = CodeRush.Documents.ActiveTextView.GetSelectionRange();
 					}
 					else
 					{
