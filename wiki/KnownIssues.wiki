@@ -34,3 +34,9 @@ This generally means you don't have the minimum required version of DXCore insta
 
 =CR_Documentor does not appear in the "About" box.=
 You should see CR_Documentor listed when you view the !DevExpress->About box. If you don't, make sure you're on the latest version of CR_Documentor. You may also have to close all instances of Visual Studio and delete your DXCore Loader settings folder (%!AppData%\!CodeRush for VS .NET\1.1\Settings\Loader) - these settings can get corrupted across DXCore updates and it may have cached something incorrectly. Deleting the settings will cause them to be rebuilt from scratch and will not harm your DXCore installation.
+
+=CR_Documentor doesn't work right with DXCore 2010.1 and VS2010.=
+You may notice CR_Documentor doesn't show up if loaded in a 64-bit environment or that some of the context menu templates don't work as expected. DXCore 2010.1 has most of the kinks ironed out to work with Visual Studio 2010, but a few remain. As many issues as can be addressed by CR_Documentor are addressed; for the rest, issues have been filed with !DevExpress and should be worked out by the next release of DXCore. Corresponding issues include:
+  * CR_Documentor Issue #26
+  * [http://www.devexpress.com/Support/Center/p/B145400.aspx DevExpress Issue B145400]
+  * [http://www.devexpress.com/Support/Center/p/B145330.aspx DevExpress Issue B145330]
