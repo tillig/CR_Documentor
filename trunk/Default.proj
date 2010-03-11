@@ -4,7 +4,7 @@
 		* Standard build = msbuild Default.proj
 		* Release build = msbuild Default.proj /p:Configuration=Release
 	-->
-	<Import Project="$(ProgramFiles)\Typemock\Isolator\5.3\TypeMock.MSBuild.Tasks"/>
+	<Import Project="$(ProgramFiles)\Typemock\Isolator\6.0\TypeMock.MSBuild.Tasks"/>
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<BuildDir>..\build</BuildDir>
