@@ -1,6 +1,10 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured,Phase-Support
 
+=2.4.1.0=
+  * Resolved issues:
+    * Issue #26: Visual Studio 2010 RC/DXCore 2010.1 context menu/text replacement issues. A few minor issues remain but are DXCore issues and should be resolved in next release of DXCore.
+    * Issue #27: Language-specific CSS not activated in Sandcastle preview style. Updated so preview properly displays language-specific keywords. 
 =2.4.0.0=
   * New features:
     * Issue #6: Ability to "pin" the documentation preview. There is now a "pause" button in the CR_Documentor window toolbar that allows you to pause the preview so it doesn't refresh as you navigate around. Un-pausing returns the preview to normal behavior.
