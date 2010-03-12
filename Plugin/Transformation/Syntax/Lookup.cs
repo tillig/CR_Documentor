@@ -25,6 +25,12 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </summary>
 		public static readonly DefaultValueStringDictionary LanguageName;
 
+		/// <summary>
+		/// The value under the HTML "select" element in the banner that corresponds
+		/// to the DXCore document language.
+		/// </summary>
+		public static readonly DefaultValueStringDictionary LanguageValue;
+
 		#endregion
 
 		#endregion
@@ -83,6 +89,12 @@ namespace CR_Documentor.Transformation.Syntax
 			LanguageName.Add(Language.Basic, "Visual Basic");
 			LanguageName.Add(Language.CSharp, "C#");
 			LanguageName.DefaultValue = "--";
+
+			// Language select values
+			LanguageValue = new DefaultValueStringDictionary();
+			LanguageValue.Add(Language.Basic, "VisualBasic vb");
+			LanguageValue.Add(Language.CSharp, "CSharp cs");
+			LanguageValue.DefaultValue = "x";
 		}
 
 		#endregion
