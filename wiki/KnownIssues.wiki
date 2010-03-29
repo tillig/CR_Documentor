@@ -5,7 +5,12 @@
 
 There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker] and/or are on the ProductRoadmap. Also check the FrequentlyAskedQuestions page if you find you're having trouble.
 
-=The CR_Documentor window doesn't appear.=
+=The CR_Documentor link isn't in the list of tool windows.=
+This generally indicates that DXCore failed to load the plugin. The most common reason for this is a security restriction in Windows 7/Windows Server 2008 and later. Windows knows the plugin was downloaded from the internet and blocks some of the functionality. Right-click the CR_Documentor.dll, select "Properties," and on the "General" tab click the "Unblock" button. This will allow the plugin to load correctly.
+
+http://cr-documentor.googlecode.com/svn/site/screenshots/windows_unblock_button.png
+
+=The CR_Documentor window doesn't appear after clicking the tool window link.=
 That is, when you try to open the CR_Documentor window, it doesn't show up. This usually means that the internal web server wasn't allowed to start. You can look in your DXCore logs and see the error information. It may mean you don't have permissions (if you're running Visual Studio as a non-admin user, this may be the case) or it may be something else.
 
 There is a page describing the various ServerStartupErrors as well as workarounds where available.
