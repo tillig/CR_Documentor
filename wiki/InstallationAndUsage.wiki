@@ -15,7 +15,11 @@ DXCore is a free download from !DevExpress that you can either get [http://www.d
   * Make sure all instances of Visual Studio are closed.
   * Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.
     * In versions before DXCore 9.1, this is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
-    * In 9.1 and later, it's like: C:\Documents and Settings\YOURUSERNAME\My Documents\!DevExpress\IDE Tools\Community\!PlugIns *OR* C:\Program Files\!DevExpress 2009.1\IDETools\Community\!PlugIns
+    * In 9.1 and later, it's like:
+      * C:\Documents and Settings\YOURUSERNAME\My Documents\!DevExpress\IDE Tools\Community\!PlugIns *OR*
+      * C:\Users\YOURUSERNAME\Documents\!DevExpress\IDE Tools\Community\!PlugIns *OR*
+      * C:\Program Files\!DevExpress 2009.1\IDETools\Community\!PlugIns
+  * Right-click CR_Documentor.dll, select "Properties," and on the "General" tab, click the "Unblock" button. This is required to enable DXCore to properly execute the code in the plugin.
   * Start Visual Studio.
   * The ConfigurationOptions page explains the various ways you can configure behavior.
 
