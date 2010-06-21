@@ -399,12 +399,12 @@ namespace CR_Documentor.Transformation
 					if (this.Options.RecognizedTags.Contains(element.Name))
 					{
 						// The tag is recognized - call the appropriate handler
-						EventHandler<CommentMatchEventArgs> handler;
+						EventHandler<CommentMatchEventArgs> handler = null;
 						if (this._commentMatchEvents.ContainsKey(element.Name))
 						{
 							handler = this._commentMatchEvents[element.Name] as EventHandler<CommentMatchEventArgs>;
 						}
-						else
+						else if (this._commentMatchEvents.ContainsKey(DefaultCommentHandlerKey))
 						{
 							// No handler registered for the specific tag; get the default one.
 							handler = this._commentMatchEvents[DefaultCommentHandlerKey] as EventHandler<CommentMatchEventArgs>;
@@ -413,6 +413,10 @@ namespace CR_Documentor.Transformation
 						{
 							CommentMatchEventArgs args = new CommentMatchEventArgs(element);
 							handler(this, args);
+						}
+						else
+						{
+							Log.Write(LogLevel.Warn, String.Format("No handler found for tag '{0}' found. Verify there is a default tag handler registered.", element.Name));
 						}
 					}
 					else if (CommentParser.IsErrorNode(element))
@@ -518,6 +522,30 @@ namespace CR_Documentor.Transformation
 				sigBuilder.Append(")");
 			}
 			return sigBuilder.ToString();
+		}
+
+		/// <summary>
+		/// Passes through HTML comment tags.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
+		protected void HtmlPassThrough(object sender, CommentMatchEventArgs e)
+		{
+			this.Writer.Write("<");
+			this.Writer.Write(e.Element.Name);
+			TextProcessor.AttributePassThrough(this.Writer, e.Element);
+			if (e.Element.InnerXml == "")
+			{
+				// If the tag is empty (like "<br />") just close it
+				// Otherwise we get odd things like "<br><br>"
+				this.Writer.Write("/>");
+			}
+			else
+			{
+				this.Writer.Write(">");
+				this.ApplyTemplates(e.Element);
+				this.Writer.Write("</" + e.Element.Name + ">");
+			}
 		}
 
 		/// <summary>

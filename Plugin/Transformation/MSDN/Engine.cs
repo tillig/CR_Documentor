@@ -55,6 +55,7 @@ namespace CR_Documentor.Transformation.MSDN
 		protected override void RegisterCommentTagHandlers()
 		{
 			// TODO: Factor this into the base class - decorate handlers with attributes so we don't have to register manually.
+			this.AddCommentTagHandler(DefaultCommentHandlerKey, new EventHandler<CommentMatchEventArgs>(this.HtmlPassThrough));
 			this.AddCommentTagHandler("block", new EventHandler<CommentMatchEventArgs>(this.Block));
 			this.AddCommentTagHandler("c", new EventHandler<CommentMatchEventArgs>(this.C));
 			this.AddCommentTagHandler("code", new EventHandler<CommentMatchEventArgs>(this.Code));
