@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using DevExpress.CodeRush.StructuralParser;
+using System.IO;
+using System.Web.UI;
+using System.Web;
+using CR_Documentor.Properties;
 
 namespace CR_Documentor.Transformation.Syntax
 {
@@ -90,7 +94,25 @@ namespace CR_Documentor.Transformation.Syntax
 		 */
 
 		/// <summary>
-		/// Generates the HTML syntax preview for an element.
+		/// Gets the element being documented.
+		/// </summary>
+		/// <value>
+		/// The <see cref="DevExpress.CodeRush.StructuralParser.AccessSpecifiedElement"/>
+		/// for which a preview will be generated.
+		/// </value>
+		public AccessSpecifiedElement Element { get; private set; }
+
+		/// <summary>
+		/// Gets the preview language.
+		/// </summary>
+		/// <value>
+		/// The <see cref="CR_Documentor.Transformation.Syntax.SupportedLanguageId"/>
+		/// for which a preview will be generated.
+		/// </value>
+		public SupportedLanguageId Language { get; private set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator" /> class.
 		/// </summary>
 		/// <param name="element">
 		/// The element for which the syntax preview should be generated.
@@ -98,9 +120,37 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="language">
 		/// The programming language in which the preview should be rendered.
 		/// </param>
-		public string Generate(AccessSpecifiedElement element, SupportedLanguageId language)
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="element" /> is <see langword="null" />.
+		/// </exception>
+		public PreviewGenerator(AccessSpecifiedElement element, SupportedLanguageId language)
 		{
-			throw new NotImplementedException();
+			if (element == null)
+			{
+				throw new ArgumentNullException("element");
+			}
+			this.Element = element;
+			this.Language = language;
+		}
+
+		/// <summary>
+		/// Generates the HTML syntax preview for an element.
+		/// </summary>
+		public virtual string Generate()
+		{
+			using (StringWriter baseWriter = new StringWriter())
+			using (XhtmlTextWriter writer = new XhtmlTextWriter(baseWriter, ""))
+			{
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, "code");
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
+				if (this.Language == SupportedLanguageId.None)
+				{
+					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageNotSupported));
+				}
+				writer.RenderEndTag();
+				writer.Flush();
+				return baseWriter.ToString();
+			}
 		}
 	}
 }
