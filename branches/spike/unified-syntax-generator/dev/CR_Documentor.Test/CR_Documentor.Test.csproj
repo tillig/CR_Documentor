@@ -107,6 +107,7 @@
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
+    <Compile Include="Transformation\Syntax\LanguageTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>

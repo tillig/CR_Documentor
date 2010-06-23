@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DevExpress.CodeRush.StructuralParser;
 
 namespace CR_Documentor.Transformation.Syntax
 {
@@ -88,5 +89,18 @@ namespace CR_Documentor.Transformation.Syntax
 		 * </div>
 		 */
 
+		/// <summary>
+		/// Generates the HTML syntax preview for an element.
+		/// </summary>
+		/// <param name="element">
+		/// The element for which the syntax preview should be generated.
+		/// </param>
+		/// <param name="language">
+		/// The programming language in which the preview should be rendered.
+		/// </param>
+		public string Generate(AccessSpecifiedElement element, SupportedLanguageId language)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

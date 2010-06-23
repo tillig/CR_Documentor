@@ -10,5 +10,7 @@ namespace CR_Documentor.Test.Transformation.Syntax
 	[TestClass]
 	public class PreviewGeneratorTest
 	{
+		//[TestMethod]
+		//public void Generate_CSharp_
 	}
 }

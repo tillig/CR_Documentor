@@ -270,6 +270,7 @@
     <Compile Include="Transformation\SandcastlePrototype\SyntaxGenerator.cs" />
     <Compile Include="Collections\DefaultValueStringDictionary.cs" />
     <Compile Include="Transformation\Syntax\Keyword.cs" />
+    <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
     <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />
     <Compile Include="Transformation\Syntax\Statement.cs" />
