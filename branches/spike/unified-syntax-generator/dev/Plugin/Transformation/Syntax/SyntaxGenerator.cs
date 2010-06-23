@@ -16,6 +16,45 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </remarks>
 	public abstract class SyntaxGenerator
 	{
+		/* CSS classes for common syntax generator:
+		 * .code - wrapper around code blocks
+		 * 
+		 * Language constructs:
+		 * .attribute
+		 * .comment
+		 * .identifier
+		 * .keyword
+		 * .literal
+		 * .member
+		 * .parameter
+		 * .parameters
+		 * .typeparameter
+		 * .typeparameters
+		 * 
+		 * Sample:
+		 * <div class="code">
+		 *   <div class="attribute">[SomeAttribute]</div>
+		 *   <div class="attribute">[OtherAttribute<div class="parameters">(<div class="parameter">1</div>, <div class="parameter">b</div>=<div class="literal">2</div>)</div>]</div>
+		 *   <div class="member">
+		 *     <div class="keyword">public<div>
+		 *     <div class="keyword">abstract</div>
+		 *     <div class="keyword"><a href="#">string</a></div>
+		 *     <div class="identifier">MyMethod</div><div class="typeparameters">&lt;<div class="typeparameter">T</div>&gt;</div><div class="parameters">(<br />
+		 *     <div class="keyword">out</div> <div class="keyword"><a href="#">string</a></div> <div class="parameter">a</div>,<br />
+		 *     <div class="keyword"><a href="#">string</a></div> <div class="parameter">b</div><br />
+		 *     )</div>
+		 *   </div>
+		 * </div>
+		 * 
+		 * There will be line continuations and line breaks in places. That may
+		 * not quite be identical to how the finished product actually renders
+		 * but there's not much we can do about that since we can't get CSS
+		 * to add the special line-continuation characters in VB.
+		 * 
+		 * Since we're not generating the preview for every language all at once,
+		 * there is no need for CSS classes that are language-specific.
+		 */
+
 		/// <summary>
 		/// Internal storage for the
 		/// <see cref="CR_Documentor.Transformation.Syntax.SyntaxGenerator.Element" />
