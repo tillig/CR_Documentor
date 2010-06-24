@@ -28,6 +28,25 @@ namespace CR_Documentor.Test.Transformation.Syntax
 		}
 
 		[TestMethod]
+		public void Generate_Enumeration_Basic_Simple()
+		{
+			var element = Isolate.Fake.Instance<Enumeration>();
+			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
+			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Generate_Enumeration_CSharp_Simple()
 		{
 			var element = Isolate.Fake.Instance<Enumeration>();
