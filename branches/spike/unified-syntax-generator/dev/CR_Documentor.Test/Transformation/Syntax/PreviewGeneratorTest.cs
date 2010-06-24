@@ -28,12 +28,38 @@ namespace CR_Documentor.Test.Transformation.Syntax
 		}
 
 		[TestMethod]
+		public void Generate_Enumeration_CSharp_Simple()
+		{
+			var element = Isolate.Fake.Instance<Enumeration>();
+			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
+			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">enum</span> <span class=""identifier"">TestEnum</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Generate_LanguageNotSupported()
 		{
 			var element = Isolate.Fake.Instance<AccessSpecifiedElement>();
+
+			string expected =
+@"<div class=""code"">
+{0}
+</div>";
+			expected = String.Format(expected, Resources.PreviewGenerator_LanguageNotSupported);
+
 			var generator = new PreviewGenerator(element, SupportedLanguageId.None);
-			string preview = generator.Generate();
-			Assert.AreEqual("<div class=\"code\">" + Environment.NewLine + Resources.PreviewGenerator_LanguageNotSupported + Environment.NewLine + "</div>", preview);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
 		}
 	}
 }

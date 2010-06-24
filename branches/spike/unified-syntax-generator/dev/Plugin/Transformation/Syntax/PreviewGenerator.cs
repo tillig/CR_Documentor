@@ -25,6 +25,7 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </para>
 	/// <list type="bullet">
 	/// <item><term>.attribute</term></item>
+	/// <item><term>.attributes</term></item>
 	/// <item><term>.comment</term></item>
 	/// <item><term>.identifier</term></item>
 	/// <item><term>.keyword</term></item>
@@ -60,13 +61,15 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </para>
 	/// <code>
 	/// &lt;div class=&quot;code&quot;&gt;
-	///   &lt;div class=&quot;attribute&quot;&gt;[SomeAttribute]&lt;/div&gt;
-	///   &lt;div class=&quot;attribute&quot;&gt;[OtherAttribute&lt;div class=&quot;parameters&quot;&gt;(&lt;div class=&quot;literal&quot;&gt;1&lt;/div&gt;, &lt;div class=&quot;parameter&quot;&gt;b&lt;/div&gt;=&lt;div class=&quot;literal&quot;&gt;2&lt;/div&gt;)&lt;/div&gt;]&lt;/div&gt;
+	///   &lt;div class=&quot;attributes&quot;&gt;
+	///     &lt;div class=&quot;attribute&quot;&gt;[SomeAttribute]&lt;/div&gt;
+	///     &lt;div class=&quot;attribute&quot;&gt;[OtherAttribute&lt;div class=&quot;parameters&quot;&gt;(&lt;div class=&quot;literal&quot;&gt;1&lt;/div&gt;, &lt;div class=&quot;parameter&quot;&gt;b&lt;/div&gt;=&lt;div class=&quot;literal&quot;&gt;2&lt;/div&gt;)&lt;/div&gt;]&lt;/div&gt;
+	///   &lt;/div&gt;
 	///   &lt;div class=&quot;member&quot;&gt;
-	///     &lt;div class=&quot;keyword&quot;&gt;public&lt;div&gt;
-	///     &lt;div class=&quot;keyword&quot;&gt;abstract&lt;/div&gt;
-	///     &lt;div class=&quot;keyword&quot;&gt;&lt;a href=&quot;#&quot;&gt;string&lt;/a&gt;&lt;/div&gt;
-	///     &lt;div class=&quot;identifier&quot;&gt;MyMethod&lt;/div&gt;&lt;div class=&quot;typeparameters&quot;&gt;&amp;lt;&lt;div class=&quot;typeparameter&quot;&gt;T&lt;/div&gt;&amp;gt;&lt;/div&gt;&lt;div class=&quot;parameters&quot;&gt;(&lt;br /&gt;
+	///     &lt;span class=&quot;keyword&quot;&gt;public&lt;span&gt;
+	///     &lt;span class=&quot;keyword&quot;&gt;abstract&lt;/span&gt;
+	///     &lt;span class=&quot;keyword&quot;&gt;&lt;a href=&quot;#&quot;&gt;string&lt;/a&gt;&lt;/span&gt;
+	///     &lt;span class=&quot;identifier&quot;&gt;MyMethod&lt;/span&gt;&lt;div class=&quot;typeparameters&quot;&gt;&amp;lt;&lt;div class=&quot;typeparameter&quot;&gt;T&lt;/div&gt;&amp;gt;&lt;/div&gt;&lt;div class=&quot;parameters&quot;&gt;(&lt;br /&gt;
 	///     &lt;div class=&quot;keyword&quot;&gt;out&lt;/div&gt; &lt;div class=&quot;keyword&quot;&gt;&lt;a href=&quot;#&quot;&gt;string&lt;/a&gt;&lt;/div&gt; &lt;div class=&quot;parameter&quot;&gt;a&lt;/div&gt;,&lt;br /&gt;
 	///     &lt;div class=&quot;keyword&quot;&gt;T&lt;/div&gt; &lt;div class=&quot;parameter&quot;&gt;b&lt;/div&gt;&lt;br /&gt;
 	///     )&lt;/div&gt;
@@ -76,18 +79,19 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </example>
 	public class PreviewGenerator
 	{
-		/* 
-		 * Sample:
+		/* TODO: After all is said and done, encode this sample and update it in the XML doc above.
 		 * <div class="code">
-		 *   <div class="attribute">[SomeAttribute]</div>
-		 *   <div class="attribute">[OtherAttribute<div class="parameters">(<div class="parameter">1</div>, <div class="parameter">b</div>=<div class="literal">2</div>)</div>]</div>
+		 *   <div class="attributes">
+		 *     <div class="attribute">[SomeAttribute]</div>
+		 *     <div class="attribute">[OtherAttribute<div class="parameters">(<span class="parameter">1</span>, <span class="parameter">b</span>=<span class="literal">2</span>)</div>]</div>
+		 *   </div>
 		 *   <div class="member">
-		 *     <div class="keyword">public<div>
-		 *     <div class="keyword">abstract</div>
-		 *     <div class="keyword"><a href="#">string</a></div>
-		 *     <div class="identifier">MyMethod</div><div class="typeparameters">&lt;<div class="typeparameter">T</div>&gt;</div><div class="parameters">(<br />
-		 *     <div class="keyword">out</div> <div class="keyword"><a href="#">string</a></div> <div class="parameter">a</div>,<br />
-		 *     <div class="keyword"><a href="#">string</a></div> <div class="parameter">b</div><br />
+		 *     <span class="keyword">public<span>
+		 *     <span class="keyword">abstract</span>
+		 *     <span class="keyword"><a href="#">string</a></span>
+		 *     <span class="identifier">MyMethod</span><div class="typeparameters">&lt;<span class="typeparameter">T</span>&gt;</div><div class="parameters">(<br />
+		 *     <span class="keyword">out</span> <span class="keyword"><a href="#">string</a></span> <span class="parameter">a</span>,<br />
+		 *     <span class="keyword"><a href="#">string</a></span> <span class="parameter">b</span><br />
 		 *     )</div>
 		 *   </div>
 		 * </div>
@@ -134,6 +138,20 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for an enumeration.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Enumeration(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+		}
+
+		/// <summary>
 		/// Generates the HTML syntax preview for an element.
 		/// </summary>
 		public virtual string Generate()
@@ -147,9 +165,60 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageNotSupported));
 				}
+				else
+				{
+					writer.AddAttribute(HtmlTextWriterAttribute.Class, "member");
+					writer.RenderBeginTag(HtmlTextWriterTag.Div);
+					this.Enumeration(writer);
+					writer.RenderEndTag();
+				}
 				writer.RenderEndTag();
 				writer.Flush();
 				return baseWriter.ToString();
+			}
+		}
+
+		private void WriteDiv(HtmlTextWriter writer, string cssClass, string contents)
+		{
+			this.WriteDiv(writer, cssClass, contents, null, null);
+		}
+
+		private void WriteDiv(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
+		{
+			this.WriteTag(writer, HtmlTextWriterTag.Div, cssClass, contents, before, after);
+		}
+
+		private void WriteSpan(HtmlTextWriter writer, string cssClass, string contents)
+		{
+			this.WriteSpan(writer, cssClass, contents, null, null);
+		}
+
+		private void WriteSpan(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
+		{
+			this.WriteTag(writer, HtmlTextWriterTag.Span, cssClass, contents, before, after);
+		}
+
+		private void WriteTag(HtmlTextWriter writer, HtmlTextWriterTag tagKey, string cssClass, string contents, string before, string after)
+		{
+			if (string.IsNullOrEmpty(contents))
+			{
+				return;
+			}
+			if (before != null)
+			{
+				writer.Write(before);
+			}
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, cssClass);
+			writer.RenderBeginTag(tagKey);
+			writer.Write(HttpUtility.HtmlEncode(contents));
+			writer.RenderEndTag();
+			if (after != null)
+			{
+				writer.Write(before);
+			}
+			else
+			{
+				writer.Write(" ");
 			}
 		}
 	}

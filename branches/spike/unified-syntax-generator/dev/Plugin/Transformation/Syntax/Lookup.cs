@@ -292,12 +292,28 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </returns>
 		public static string ElementType(SP.AccessSpecifiedElement element)
 		{
-			string lang = element.Document.Language;
+			return ElementType(Language.ConvertToSupportedLanguageId(element.Document.Language), element);
+		}
+
+		/// <summary>
+		/// Resolves the language-specific keyword that defines the element.
+		/// </summary>
+		/// <param name="language">
+		/// The language in which the keyword should be returned.
+		/// </param>
+		/// <param name="element">
+		/// The member to determine the keyword for.
+		/// </param>
+		/// <returns>
+		/// A language-specific keyword for the given element.
+		/// </returns>
+		public static string ElementType(SupportedLanguageId language, SP.AccessSpecifiedElement element)
+		{
 			if (element is SP.Struct)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Structure";
 					default:
 						return "struct";
@@ -305,9 +321,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Interface)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Interface";
 					default:
 						return "interface";
@@ -315,9 +331,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Class)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Class";
 					default:
 						return "class";
@@ -325,9 +341,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Enumeration)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Enum";
 					default:
 						return "enum";
@@ -335,9 +351,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.DelegateDefinition)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						string basicVal = "Delegate ";
 						if (TypeInfo.TypeIsVoid(((SP.DelegateDefinition)element).MemberType))
 						{
@@ -354,9 +370,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Event)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Event";
 					default:
 						return "event";
@@ -364,9 +380,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Const)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Const";
 					default:
 						return "const";
@@ -374,9 +390,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.BaseVariable && element.IsReadOnly)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "ReadOnly";
 					default:
 						return "readonly";
@@ -384,9 +400,9 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (element is SP.Method && ((SP.Method)element).IsClassOperator)
 			{
-				switch (lang)
+				switch (language)
 				{
-					case Language.Basic:
+					case SupportedLanguageId.Basic:
 						return "Operator";
 					default:
 						return "operator";
@@ -483,7 +499,20 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </returns>
 		public static string Visibility(string documentLanguage, SP.MemberVisibility visibility)
 		{
-			if (documentLanguage == Language.Basic)
+			return Visibility(Language.ConvertToSupportedLanguageId(documentLanguage), visibility);
+		}
+
+		/// <summary>
+		/// Resolves the language-specific visibility keyword.
+		/// </summary>
+		/// <param name="language">The document language to return the value in.</param>
+		/// <param name="visibility">The visibility to look up.</param>
+		/// <returns>
+		/// A language-specific string that contains the visibility information.
+		/// </returns>
+		public static string Visibility(SupportedLanguageId language, SP.MemberVisibility visibility)
+		{
+			if (language == SupportedLanguageId.Basic)
 			{
 				switch (visibility)
 				{
