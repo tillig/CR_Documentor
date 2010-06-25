@@ -99,6 +99,56 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Generic_3_Basic()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("T").CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("U").CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("V").CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+(<span class=""keyword"">Of</span> <span class=""typeparameter"">T</span>, <span class=""typeparameter"">U</span>, <span class=""typeparameter"">V</span>)
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Generic_3_CSharp()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("T").CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("U").CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("V").CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+&lt;<span class=""typeparameter"">T</span>, <span class=""typeparameter"">U</span>, <span class=""typeparameter"">V</span>&gt;
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void New_Basic()
 		{
 			ClassProxy info = new ClassProxy("TestClass")

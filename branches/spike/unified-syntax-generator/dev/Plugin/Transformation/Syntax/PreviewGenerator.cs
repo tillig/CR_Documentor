@@ -347,10 +347,13 @@ namespace CR_Documentor.Transformation.Syntax
 
 			for (int i = 0; i < parameterCount; i++)
 			{
-				// TODO: Handle multiple parameters.
 				// TODO: Handle parameter constraints.
 				var parameter = typeParams[i];
 				this.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name, "", "");
+				if (i + 1 < parameterCount)
+				{
+					writer.Write(", ");
+				}
 			}
 
 			switch (this.Language)
