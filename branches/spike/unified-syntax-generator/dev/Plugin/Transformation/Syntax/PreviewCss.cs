@@ -18,6 +18,11 @@ namespace CR_Documentor.Transformation.Syntax
 		public const string Attributes = "attributes";
 
 		/// <summary>
+		/// Surrounds the entirety of rendered code.
+		/// </summary>
+		public const string Code = "code";
+
+		/// <summary>
 		/// Surrounds a comment in a preview.
 		/// </summary>
 		public const string Comment = "comment";

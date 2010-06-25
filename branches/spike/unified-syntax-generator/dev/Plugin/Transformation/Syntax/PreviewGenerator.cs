@@ -140,6 +140,10 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <summary>
 		/// Writes attribute information.
 		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
 		protected virtual void Attributes(HtmlTextWriter writer)
 		{
 			if (this.Element.AttributeCount < 1)
@@ -241,6 +245,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+			this.TypeParameters(writer);
 		}
 
 		/// <summary>
@@ -279,7 +284,7 @@ namespace CR_Documentor.Transformation.Syntax
 			using (StringWriter baseWriter = new StringWriter())
 			using (XhtmlTextWriter writer = new XhtmlTextWriter(baseWriter, ""))
 			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, "code");
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Code);
 				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 				if (this.Language == SupportedLanguageId.None)
 				{
@@ -288,7 +293,7 @@ namespace CR_Documentor.Transformation.Syntax
 				else
 				{
 					this.Attributes(writer);
-					writer.AddAttribute(HtmlTextWriterAttribute.Class, "member");
+					writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Member);
 					writer.RenderBeginTag(HtmlTextWriterTag.Div);
 					if (this.Element is Enumeration)
 					{
@@ -304,6 +309,60 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.Flush();
 				return baseWriter.ToString();
 			}
+		}
+
+		/// <summary>
+		/// Writes the type parameter information to the object signature.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void TypeParameters(HtmlTextWriter writer)
+		{
+			if (!this.Element.IsGeneric)
+			{
+				return;
+			}
+
+			var typeParams = this.Element.GenericModifier.TypeParameters;
+			int parameterCount = typeParams.Count;
+			if (parameterCount == 0)
+			{
+				return;
+			}
+
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.TypeParameters);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					writer.Write("(");
+					this.WriteSpan(writer, PreviewCss.Keyword, "Of");
+					break;
+				default:
+					writer.Write("&lt;");
+					break;
+			}
+
+			for (int i = 0; i < parameterCount; i++)
+			{
+				// TODO: Handle multiple parameters.
+				// TODO: Handle parameter constraints.
+				var parameter = typeParams[i];
+				this.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name, "", "");
+			}
+
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					writer.Write(")");
+					break;
+				default:
+					writer.Write("&gt;");
+					break;
+			}
+			writer.RenderEndTag();
 		}
 
 		private void WriteDiv(HtmlTextWriter writer, string cssClass, string contents)

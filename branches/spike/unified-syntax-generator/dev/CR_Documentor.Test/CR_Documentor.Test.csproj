@@ -109,9 +109,11 @@
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
     <Compile Include="Transformation\Syntax\LanguageTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EnumerationTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\GeneralTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeParameterProxy.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
