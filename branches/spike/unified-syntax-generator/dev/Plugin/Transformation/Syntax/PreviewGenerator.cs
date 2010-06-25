@@ -187,6 +187,20 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a class.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Class(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+		}
+
+		/// <summary>
 		/// Writes the preview for an enumeration.
 		/// </summary>
 		/// <param name="writer">
@@ -233,7 +247,14 @@ namespace CR_Documentor.Transformation.Syntax
 					this.Attributes(writer);
 					writer.AddAttribute(HtmlTextWriterAttribute.Class, "member");
 					writer.RenderBeginTag(HtmlTextWriterTag.Div);
-					this.Enumeration(writer);
+					if (this.Element is Enumeration)
+					{
+						this.Enumeration(writer);
+					}
+					else if (this.Element is Class)
+					{
+						this.Class(writer);
+					}
 					writer.RenderEndTag();
 				}
 				writer.RenderEndTag();
