@@ -138,6 +138,55 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes attribute information.
+		/// </summary>
+		protected virtual void Attributes(HtmlTextWriter writer)
+		{
+			if (this.Element.AttributeCount < 1)
+			{
+				return;
+			}
+
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Attributes);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			var attributes = this.Element.Attributes;
+			for (int i = 0; i < attributes.Count; i++)
+			{
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Attribute);
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						writer.Write("&lt;");
+						break;
+					default:
+						writer.Write("[");
+						break;
+				}
+				var attribute = (DevExpress.CodeRush.StructuralParser.Attribute)attributes[i];
+				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+				writer.RenderBeginTag(HtmlTextWriterTag.A);
+				writer.Write(attribute.Name);
+				writer.RenderEndTag();
+				//if (attribute.ArgumentCount > 0)
+				//{
+				//    this.AttributeArguments(attribute.Arguments);
+				//}
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						writer.Write("&gt; _");
+						break;
+					default:
+						writer.Write("]");
+						break;
+				}
+				writer.RenderEndTag();
+			}
+			writer.RenderEndTag();
+		}
+
+		/// <summary>
 		/// Writes the preview for an enumeration.
 		/// </summary>
 		/// <param name="writer">
@@ -181,6 +230,7 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 				else
 				{
+					this.Attributes(writer);
 					writer.AddAttribute(HtmlTextWriterAttribute.Class, "member");
 					writer.RenderBeginTag(HtmlTextWriterTag.Div);
 					this.Enumeration(writer);
