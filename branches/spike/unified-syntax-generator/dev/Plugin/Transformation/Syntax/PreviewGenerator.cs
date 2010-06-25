@@ -227,6 +227,18 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 			}
+			else if (this.Element.IsSealed)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "NotInheritable");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "sealed");
+						break;
+				}
+			}
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 		}
