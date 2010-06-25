@@ -6,16 +6,11 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 {
 	public class NamedTypeParameterConstraintProxy
 	{
-		public string StringValue { get; private set; }
+		public TypeReferenceExpression TypeReference { get; private set; }
 
 		public NamedTypeParameterConstraintProxy(string stringValue)
 		{
-			this.StringValue = stringValue;
-		}
-
-		public override string ToString()
-		{
-			return this.StringValue;
+			this.TypeReference = new TypeReferenceExpressionProxy(stringValue).CreateFakeTypeReferenceExpression();
 		}
 
 		public NamedTypeParameterConstraint CreateFakeTypeParameter()

@@ -215,6 +215,61 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Generic_Constraint_3_CSharp()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("H")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new NamedTypeParameterConstraintProxy("Attribute").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("ISerializable").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("I")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("struct").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("J")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("class").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("IList<H>").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("ICollection<H>").CreateFakeTypeParameter(),
+						new TypeParameterConstraintProxy("new()").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+&lt;<span class=""typeparameter"">H</span>, <span class=""typeparameter"">I</span>, <span class=""typeparameter"">J</span>&gt;
+</div><div class=""constraints"">
+<div class=""constraint"">
+<span class=""keyword"">where</span> <span class=""typeparameter"">H</span> : <a href=""#"">Attribute</a>, <a href=""#"">ISerializable</a>
+</div><div class=""constraint"">
+<span class=""keyword"">where</span> <span class=""typeparameter"">I</span> : <span class=""keyword"">struct</span>
+</div><div class=""constraint"">
+<span class=""keyword"">where</span> <span class=""typeparameter"">J</span> : <span class=""keyword"">class</span>, <a href=""#"">IList&lt;H&gt;</a>, <a href=""#"">ICollection&lt;H&gt;</a>, <span class=""keyword"">new()</span>
+</div>
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void New_Basic()
 		{
 			ClassProxy info = new ClassProxy("TestClass")

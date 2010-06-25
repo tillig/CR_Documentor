@@ -398,7 +398,14 @@ namespace CR_Documentor.Transformation.Syntax
 				this.WriteSpan(writer, PreviewCss.Keyword, "where");
 				this.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name);
 				writer.Write(": ");
-				this.TypeParameterConstraintValue(writer, constraints[i]);
+				for (int j = 0; j < constraintCount; j++)
+				{
+					this.TypeParameterConstraintValue(writer, constraints[j]);
+					if (j + 1 < constraintCount)
+					{
+						writer.Write(", ");
+					}
+				}
 				writer.RenderEndTag();
 			}
 			if (constraintsExist)
@@ -463,7 +470,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
 				writer.RenderBeginTag(HtmlTextWriterTag.A);
-				writer.Write(HttpUtility.HtmlEncode(constraint.ToString()));
+				writer.Write(HttpUtility.HtmlEncode(((NamedTypeParameterConstraint)constraint).TypeReference.ToString()));
 				writer.RenderEndTag();
 			}
 			else
