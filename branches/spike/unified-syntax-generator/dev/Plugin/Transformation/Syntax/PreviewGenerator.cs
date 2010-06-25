@@ -446,17 +446,17 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				writer.Write("{");
 			}
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraint);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
 			for (int j = 0; j < constraintCount; j++)
 			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraint);
-				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 				this.TypeParameterConstraintValue(writer, constraints[j]);
-				writer.RenderEndTag();
 				if (j + 1 < constraintCount)
 				{
 					writer.Write(", ");
 				}
 			}
+			writer.RenderEndTag();
 			if (constraintCount > 1)
 			{
 				writer.Write("}");
@@ -470,6 +470,15 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
 				writer.RenderBeginTag(HtmlTextWriterTag.A);
+				// TODO: Consider rendering the complete signature of the type in the constraint.
+				// While NamedTypeParameterConstraint.TypeReference gives you a
+				// reference to a Type in a constraint, if that type is generic
+				// we'd have to recursively process it and render that, too. For
+				// now, if there's a constraint like...
+				// where T : IList<Something>
+				// it will render as...
+				// where T : IList
+				// because rendering the full type in a language-specific fashion is non-trivial.
 				writer.Write(HttpUtility.HtmlEncode(((NamedTypeParameterConstraint)constraint).TypeReference.ToString()));
 				writer.RenderEndTag();
 			}

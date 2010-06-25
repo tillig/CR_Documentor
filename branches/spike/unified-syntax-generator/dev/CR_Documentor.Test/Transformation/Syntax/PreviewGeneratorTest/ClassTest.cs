@@ -215,6 +215,65 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Generic_Constraint_3_Basic()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("H")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new NamedTypeParameterConstraintProxy("Attribute").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("ISerializable").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("I")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("Structure").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			parameters.Add(new TypeParameterProxy("J")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("Class").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("IList").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("ICollection").CreateFakeTypeParameter(),
+						new TypeParameterConstraintProxy("New").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+(<span class=""keyword"">Of</span> <span class=""typeparameter"">H</span><div class=""constraints"">
+ <span class=""keyword"">As</span> {<div class=""constraint"">
+<a href=""#"">Attribute</a>, <a href=""#"">ISerializable</a>
+</div>}
+</div>, <span class=""typeparameter"">I</span><div class=""constraints"">
+ <span class=""keyword"">As</span> <div class=""constraint"">
+<span class=""keyword"">Structure</span>
+</div>
+</div>, <span class=""typeparameter"">J</span><div class=""constraints"">
+ <span class=""keyword"">As</span> {<div class=""constraint"">
+<span class=""keyword"">Class</span>, <a href=""#"">IList</a>, <a href=""#"">ICollection</a>, <span class=""keyword"">New</span>
+</div>}
+</div>)
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Generic_Constraint_3_CSharp()
 		{
 			ClassProxy info = new ClassProxy("TestClass");
@@ -239,8 +298,8 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 				Constraints = new TypeParameterConstraintCollection()
 					{
 						new TypeParameterConstraintProxy("class").CreateFakeTypeParameter(),
-						new NamedTypeParameterConstraintProxy("IList<H>").CreateFakeTypeParameter(),
-						new NamedTypeParameterConstraintProxy("ICollection<H>").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("IList").CreateFakeTypeParameter(),
+						new NamedTypeParameterConstraintProxy("ICollection").CreateFakeTypeParameter(),
 						new TypeParameterConstraintProxy("new()").CreateFakeTypeParameter()
 					}
 			}.CreateFakeTypeParameter());
@@ -258,7 +317,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div><div class=""constraint"">
 <span class=""keyword"">where</span> <span class=""typeparameter"">I</span> : <span class=""keyword"">struct</span>
 </div><div class=""constraint"">
-<span class=""keyword"">where</span> <span class=""typeparameter"">J</span> : <span class=""keyword"">class</span>, <a href=""#"">IList&lt;H&gt;</a>, <a href=""#"">ICollection&lt;H&gt;</a>, <span class=""keyword"">new()</span>
+<span class=""keyword"">where</span> <span class=""typeparameter"">J</span> : <span class=""keyword"">class</span>, <a href=""#"">IList</a>, <a href=""#"">ICollection</a>, <span class=""keyword"">new()</span>
 </div>
 </div>
 </div>
