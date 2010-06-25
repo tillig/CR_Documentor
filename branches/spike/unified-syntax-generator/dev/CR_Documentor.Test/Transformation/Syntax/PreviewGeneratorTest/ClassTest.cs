@@ -11,6 +11,48 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 	public class ClassTest
 	{
 		[TestMethod]
+		public void New_Basic()
+		{
+			ClassInfo info = new ClassInfo("TestClass")
+			{
+				IsNew = true
+			};
+			var element = this.CreateFakeClass(info);
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Shadows</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void New_CSharp()
+		{
+			ClassInfo info = new ClassInfo("TestClass")
+			{
+				IsNew = true
+			};
+			var element = this.CreateFakeClass(info);
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">new</span> <span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Simple_Basic()
 		{
 			ClassInfo info = new ClassInfo("TestClass")

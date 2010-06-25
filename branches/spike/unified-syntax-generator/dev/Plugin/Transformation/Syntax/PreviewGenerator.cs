@@ -195,7 +195,15 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Class(HtmlTextWriter writer)
 		{
+			if (this.Language == SupportedLanguageId.CSharp && this.Element.IsNew)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "new");
+			}
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			if (this.Language == SupportedLanguageId.Basic && this.Element.IsNew)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
+			}
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 		}
