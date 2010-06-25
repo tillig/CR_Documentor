@@ -204,6 +204,10 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				this.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
 			}
+			if (this.Language == SupportedLanguageId.CSharp && this.Element.IsStatic)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "static");
+			}
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 		}
