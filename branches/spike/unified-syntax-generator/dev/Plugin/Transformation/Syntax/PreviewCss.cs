@@ -28,6 +28,16 @@ namespace CR_Documentor.Transformation.Syntax
 		public const string Comment = "comment";
 
 		/// <summary>
+		/// Surrounds an individual type parameter constraint on a member.
+		/// </summary>
+		public const string Constraint = "constraint";
+
+		/// <summary>
+		/// Surrounds the complete set of type parameter constraints on a member.
+		/// </summary>
+		public const string Constraints = "constraints";
+
+		/// <summary>
 		/// Surrounds the member identifier.
 		/// </summary>
 		public const string Identifier = "identifier";
@@ -36,6 +46,16 @@ namespace CR_Documentor.Transformation.Syntax
 		/// Surrounds keywords in the preview.
 		/// </summary>
 		public const string Keyword = "keyword";
+
+		/// <summary>
+		/// Marks a code block in Visual Basic.
+		/// </summary>
+		public const string Language_Basic = "vb";
+
+		/// <summary>
+		/// Marks a code block in C#.
+		/// </summary>
+		public const string Language_CSharp = "cs";
 
 		/// <summary>
 		/// Surrounds literal values in a preview.

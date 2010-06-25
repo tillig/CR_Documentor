@@ -20,7 +20,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">MustInherit</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -41,7 +41,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">abstract</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -62,7 +62,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 (<span class=""keyword"">Of</span> <span class=""typeparameter"">T</span>)
@@ -85,7 +85,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 &lt;<span class=""typeparameter"">T</span>&gt;
@@ -110,7 +110,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 (<span class=""keyword"">Of</span> <span class=""typeparameter"">T</span>, <span class=""typeparameter"">U</span>, <span class=""typeparameter"">V</span>)
@@ -135,10 +135,76 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 &lt;<span class=""typeparameter"">T</span>, <span class=""typeparameter"">U</span>, <span class=""typeparameter"">V</span>&gt;
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Generic_Constraint_1_Basic()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("T")
+			{
+				Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("New").CreateFakeTypeParameter()
+					}
+			}.CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+(<span class=""keyword"">Of</span> <span class=""typeparameter"">T</span><div class=""constraints"">
+ <span class=""keyword"">As</span> <div class=""constraint"">
+<span class=""keyword"">New</span>
+</div>
+</div>)
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Generic_Constraint_1_CSharp()
+		{
+			ClassProxy info = new ClassProxy("TestClass");
+			var parameters = new TypeParameterCollection();
+			parameters.Add(new TypeParameterProxy("T")
+				{
+					Constraints = new TypeParameterConstraintCollection()
+					{
+						new TypeParameterConstraintProxy("new()").CreateFakeTypeParameter()
+					}
+				}.CreateFakeTypeParameter());
+			info.SetTypeParameters(parameters);
+			var element = info.CreateFakeClass();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
+&lt;<span class=""typeparameter"">T</span>&gt;
+</div><div class=""constraints"">
+<div class=""constraint"">
+<span class=""keyword"">where</span> <span class=""typeparameter"">T</span> : <span class=""keyword"">new()</span>
+</div>
 </div>
 </div>
 </div>";
@@ -158,7 +224,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Shadows</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -179,7 +245,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">new</span> <span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -200,7 +266,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">NotInheritable</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -221,7 +287,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">sealed</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -242,7 +308,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Protected Friend</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -263,7 +329,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">protected internal</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -284,7 +350,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
@@ -305,7 +371,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			var element = info.CreateFakeClass();
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">static</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>

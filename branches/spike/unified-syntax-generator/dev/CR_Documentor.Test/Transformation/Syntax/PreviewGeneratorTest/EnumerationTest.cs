@@ -27,7 +27,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.Attributes).WillReturn(list);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""attributes"">
 <div class=""attribute"">
 &lt;<a href=""#"">FlagsAttribute</a>&gt; _
@@ -59,7 +59,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.Attributes).WillReturn(list);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""attributes"">
 <div class=""attribute"">
 [<a href=""#"">FlagsAttribute</a>]
@@ -84,7 +84,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.AttributeCount).WillReturn(0);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span>
 </div>
@@ -105,7 +105,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.AttributeCount).WillReturn(0);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">enum</span> <span class=""identifier"">TestEnum</span>
 </div>
@@ -126,7 +126,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.AttributeCount).WillReturn(0);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code vb"">
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span> <span class=""keyword"">As</span> <span class=""keyword"">Int64</span>
 </div>
@@ -147,7 +147,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			Isolate.WhenCalled(() => element.AttributeCount).WillReturn(0);
 
 			string expected =
-@"<div class=""code"">
+@"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">enum</span> <span class=""identifier"">TestEnum</span> : <span class=""keyword"">Int64</span>
 </div>

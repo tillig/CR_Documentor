@@ -113,6 +113,8 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EnumerationTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\GeneralTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\NamedTypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeParameterConstraintProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeParameterProxy.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>

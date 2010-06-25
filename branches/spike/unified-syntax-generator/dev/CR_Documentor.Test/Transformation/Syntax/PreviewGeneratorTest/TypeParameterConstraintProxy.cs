@@ -4,20 +4,18 @@ using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 {
-	public class TypeParameterProxy
+	public class TypeParameterConstraintProxy
 	{
 		public string Name { get; private set; }
-		public TypeParameterConstraintCollection Constraints { get; set; }
 
-		public TypeParameterProxy(string name)
+		public TypeParameterConstraintProxy(string name)
 		{
 			this.Name = name;
-			this.Constraints = new TypeParameterConstraintCollection();
 		}
 
-		public TypeParameter CreateFakeTypeParameter()
+		public TypeParameterConstraint CreateFakeTypeParameter()
 		{
-			var element = Isolate.Fake.Instance<TypeParameter>();
+			var element = Isolate.Fake.Instance<TypeParameterConstraint>();
 			Isolate.Swap.CallsOn(element).WithCallsTo(this);
 			return element;
 		}

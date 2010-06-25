@@ -107,6 +107,26 @@ namespace CR_Documentor.Transformation.Syntax
 		public AccessSpecifiedElement Element { get; private set; }
 
 		/// <summary>
+		/// Gets a flag indicating if there are generic type parameters
+		/// to render to the preview.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>
+		/// has generic type parameters to render; <see langword="false" /> if not.
+		/// </value>
+		protected bool ElementHasGenericParameters
+		{
+			get
+			{
+				if (!this.Element.IsGeneric || this.Element.GenericModifier.TypeParameters.Count == 0)
+				{
+					return false;
+				}
+				return true;
+			}
+		}
+
+		/// <summary>
 		/// Gets the preview language.
 		/// </summary>
 		/// <value>
@@ -114,6 +134,23 @@ namespace CR_Documentor.Transformation.Syntax
 		/// for which a preview will be generated.
 		/// </value>
 		public SupportedLanguageId Language { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating if type parameter constraints get shown
+		/// inline with the parameters.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> if type parameters get shown inline
+		/// like in VB; <see langword="false" /> if they appear after the member
+		/// signature like in C#.
+		/// </value>
+		protected virtual bool ShowTypeParameterConstraintsInline
+		{
+			get
+			{
+				return this.Language == SupportedLanguageId.Basic;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator" /> class.
@@ -246,6 +283,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 			this.TypeParameters(writer);
+			this.TypeParameterConstraintsPostSignature(writer);
 		}
 
 		/// <summary>
@@ -284,7 +322,17 @@ namespace CR_Documentor.Transformation.Syntax
 			using (StringWriter baseWriter = new StringWriter())
 			using (XhtmlTextWriter writer = new XhtmlTextWriter(baseWriter, ""))
 			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Code);
+				string cssClass = PreviewCss.Code;
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						cssClass += " " + PreviewCss.Language_Basic;
+						break;
+					case SupportedLanguageId.CSharp:
+						cssClass += " " + PreviewCss.Language_CSharp;
+						break;
+				}
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, cssClass);
 				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 				if (this.Language == SupportedLanguageId.None)
 				{
@@ -312,6 +360,119 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the info for all type parameter constraints to the object signature.
+		/// Used when the constraints are not written inline during the type parameter
+		/// rendering.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void TypeParameterConstraintsPostSignature(HtmlTextWriter writer)
+		{
+			if (this.ShowTypeParameterConstraintsInline || !this.ElementHasGenericParameters)
+			{
+				return;
+			}
+			var typeParams = this.Element.GenericModifier.TypeParameters;
+			int parameterCount = typeParams.Count;
+			bool constraintsExist = false;
+			for (int i = 0; i < parameterCount; i++)
+			{
+				var parameter = typeParams[i];
+				var constraints = parameter.Constraints;
+				var constraintCount = constraints.Count;
+				if (constraintCount < 1)
+				{
+					continue;
+				}
+				if (!constraintsExist)
+				{
+					// Write the block for the constraints when the first one is encountered
+					writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraints);
+					writer.RenderBeginTag(HtmlTextWriterTag.Div);
+					constraintsExist = true;
+				}
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraint);
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
+				this.WriteSpan(writer, PreviewCss.Keyword, "where");
+				this.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name);
+				writer.Write(": ");
+				this.TypeParameterConstraintValue(writer, constraints[i]);
+				writer.RenderEndTag();
+			}
+			if (constraintsExist)
+			{
+				// Close the constraint block if it was opened.
+				writer.RenderEndTag();
+			}
+		}
+
+		/// <summary>
+		/// Writes the info for an individual type parameter constraint to the object signature
+		/// for inline constraints.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		/// <param name="parameter">
+		/// The type parameter constraint for which the information is being written.
+		/// </param>
+		protected virtual void TypeParameterConstraintsInline(HtmlTextWriter writer, TypeParameter parameter)
+		{
+			if (!this.ShowTypeParameterConstraintsInline)
+			{
+				return;
+			}
+			var constraints = parameter.Constraints;
+			int constraintCount = constraints.Count;
+			if (constraintCount == 0)
+			{
+				return;
+			}
+
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraints);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+			if (constraintCount > 1)
+			{
+				writer.Write("{");
+			}
+			for (int j = 0; j < constraintCount; j++)
+			{
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraint);
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
+				this.TypeParameterConstraintValue(writer, constraints[j]);
+				writer.RenderEndTag();
+				if (j + 1 < constraintCount)
+				{
+					writer.Write(", ");
+				}
+			}
+			if (constraintCount > 1)
+			{
+				writer.Write("}");
+			}
+			writer.RenderEndTag();
+		}
+
+		private void TypeParameterConstraintValue(HtmlTextWriter writer, TypeParameterConstraint constraint)
+		{
+			if (constraint is NamedTypeParameterConstraint)
+			{
+				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+				writer.RenderBeginTag(HtmlTextWriterTag.A);
+				writer.Write(HttpUtility.HtmlEncode(constraint.ToString()));
+				writer.RenderEndTag();
+			}
+			else
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, constraint.Name, "", "");
+			}
+		}
+
+		/// <summary>
 		/// Writes the type parameter information to the object signature.
 		/// </summary>
 		/// <param name="writer">
@@ -320,14 +481,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void TypeParameters(HtmlTextWriter writer)
 		{
-			if (!this.Element.IsGeneric)
-			{
-				return;
-			}
-
-			var typeParams = this.Element.GenericModifier.TypeParameters;
-			int parameterCount = typeParams.Count;
-			if (parameterCount == 0)
+			if (!this.ElementHasGenericParameters)
 			{
 				return;
 			}
@@ -345,11 +499,16 @@ namespace CR_Documentor.Transformation.Syntax
 					break;
 			}
 
+			var typeParams = this.Element.GenericModifier.TypeParameters;
+			int parameterCount = typeParams.Count;
 			for (int i = 0; i < parameterCount; i++)
 			{
-				// TODO: Handle parameter constraints.
 				var parameter = typeParams[i];
 				this.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name, "", "");
+				if (parameter.Constraints.Count > 0)
+				{
+					this.TypeParameterConstraintsInline(writer, parameter);
+				}
 				if (i + 1 < parameterCount)
 				{
 					writer.Write(", ");
