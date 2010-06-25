@@ -283,6 +283,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 			this.TypeParameters(writer);
+			// TODO: Write the inheritance/implements chain.
 			this.TypeParameterConstraintsPostSignature(writer);
 		}
 
