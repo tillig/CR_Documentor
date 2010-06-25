@@ -33,6 +33,7 @@ namespace CR_Documentor.Test.Transformation.Syntax
 			var element = Isolate.Fake.Instance<Enumeration>();
 			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
 			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+			Isolate.WhenCalled(() => element.UnderlyingType).WillReturn("");
 
 			string expected =
 @"<div class=""code"">
@@ -52,11 +53,52 @@ namespace CR_Documentor.Test.Transformation.Syntax
 			var element = Isolate.Fake.Instance<Enumeration>();
 			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
 			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+			Isolate.WhenCalled(() => element.UnderlyingType).WillReturn("");
 
 			string expected =
 @"<div class=""code"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">enum</span> <span class=""identifier"">TestEnum</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Generate_Enumeration_Basic_UnderlyingType()
+		{
+			var element = Isolate.Fake.Instance<Enumeration>();
+			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
+			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+			Isolate.WhenCalled(() => element.UnderlyingType).WillReturn("Int64");
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span> <span class=""keyword"">As</span> <span class=""keyword"">Int64</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Generate_Enumeration_CSharp_UnderlyingType()
+		{
+			var element = Isolate.Fake.Instance<Enumeration>();
+			Isolate.WhenCalled(() => element.Visibility).WillReturn(MemberVisibility.Public);
+			Isolate.WhenCalled(() => element.Name).WillReturn("TestEnum");
+			Isolate.WhenCalled(() => element.UnderlyingType).WillReturn("Int64");
+
+			string expected =
+@"<div class=""code"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">enum</span> <span class=""identifier"">TestEnum</span> : <span class=""keyword"">Int64</span>
 </div>
 </div>";
 

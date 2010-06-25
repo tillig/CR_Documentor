@@ -149,6 +149,20 @@ namespace CR_Documentor.Transformation.Syntax
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+			string underlyingType = ((Enumeration)this.Element).UnderlyingType;
+			if (!String.IsNullOrEmpty(underlyingType))
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+						break;
+					default:
+						writer.Write(" : ");
+						break;
+				}
+				this.WriteSpan(writer, PreviewCss.Keyword, underlyingType, null, "");
+			}
 		}
 
 		/// <summary>
