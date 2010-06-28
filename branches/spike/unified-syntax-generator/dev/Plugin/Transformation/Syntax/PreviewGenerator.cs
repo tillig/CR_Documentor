@@ -175,6 +175,53 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes attribute argument information.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		/// <param name="arguments">The attribute arguments to document.</param>
+		protected virtual void AttributeArguments(HtmlTextWriter writer, ExpressionCollection arguments)
+		{
+			if (arguments.Count < 1)
+			{
+				return;
+			}
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameters);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			writer.Write("(");
+			for (int j = 0; j < arguments.Count; j++)
+			{
+				Expression argument = arguments[j];
+				if (argument is BinaryOperatorExpression)
+				{
+					var init = (BinaryOperatorExpression)argument;
+					this.WriteSpan(writer, PreviewCss.Parameter, init.LeftSide.ToString());
+					switch (this.Language)
+					{
+						case SupportedLanguageId.Basic:
+							writer.Write(":= ");
+							break;
+						default:
+							writer.Write("= ");
+							break;
+					}
+					this.WriteSpan(writer, PreviewCss.Literal, init.RightSide.ToString(), "", "");
+				}
+				else
+				{
+					this.WriteSpan(writer, PreviewCss.Literal, argument.ToString(), "", "");
+				}
+				if (j + 1 < arguments.Count)
+				{
+					writer.Write(", ");
+				}
+			}
+			writer.Write(")");
+			writer.RenderEndTag();
+		}
+		/// <summary>
 		/// Writes attribute information.
 		/// </summary>
 		/// <param name="writer">
@@ -209,10 +256,7 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.RenderBeginTag(HtmlTextWriterTag.A);
 				writer.Write(attribute.Name);
 				writer.RenderEndTag();
-				//if (attribute.ArgumentCount > 0)
-				//{
-				//    this.AttributeArguments(attribute.Arguments);
-				//}
+				this.AttributeArguments(writer, attribute.Arguments);
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
