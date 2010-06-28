@@ -109,14 +109,17 @@
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
     <Compile Include="Transformation\Syntax\LanguageTest.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AttributeProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BinaryOperatorExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ClassProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EnumerationTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\GeneralTest.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\NamedTypeParameterConstraintProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeParameterConstraintProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeParameterProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\TypeReferenceExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\NamedTypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeReferenceExpressionProxy.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
