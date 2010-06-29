@@ -354,16 +354,7 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						string basicVal = "Delegate ";
-						if (TypeInfo.TypeIsVoid(((SP.DelegateDefinition)element).MemberType))
-						{
-							basicVal += "Sub";
-						}
-						else
-						{
-							basicVal += "Function";
-						}
-						return basicVal;
+						return "Delegate";
 					default:
 						return "delegate";
 				}

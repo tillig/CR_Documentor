@@ -127,6 +127,30 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Gets the member type of the current element, assuming the current element
+		/// is a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.String"/> containing the <see cref="DevExpress.CodeRush.StructuralParser.Member.MemberType"/>
+		/// of the <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>.
+		/// If <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>
+		/// is not a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>,
+		/// this property returns <see langword="null" />.
+		/// </value>
+		protected virtual string ElementMemberType
+		{
+			get
+			{
+				Member member = this.Element as Member;
+				if (member == null)
+				{
+					return null;
+				}
+				return member.MemberType;
+			}
+		}
+
+		/// <summary>
 		/// Gets the preview language.
 		/// </summary>
 		/// <value>
@@ -343,6 +367,46 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Delegate(HtmlTextWriter writer)
 		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			string elementMemberType = this.ElementMemberType;
+			if (TypeInfo.TypeIsVoid(elementMemberType))
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "void");
+						break;
+				}
+			}
+			else
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Function");
+						break;
+					default:
+						writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+						writer.RenderBeginTag(HtmlTextWriterTag.A);
+						writer.Write(HttpUtility.HtmlEncode(elementMemberType));
+						writer.RenderEndTag();
+						break;
+				}
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+				writer.RenderBeginTag(HtmlTextWriterTag.A);
+				writer.Write(HttpUtility.HtmlEncode(elementMemberType));
+				writer.RenderEndTag();
+			}
+			this.Parameters(writer, "(", ")");
 		}
 
 		/// <summary>
@@ -420,6 +484,100 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.Flush();
 				return baseWriter.ToString();
 			}
+		}
+
+		/// <summary>
+		/// Writes parameter information to the object signature.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		/// <param name="openParen">The open parenthesis (usually "(" but sometimes "[").</param>
+		/// <param name="closeParen">The close parenthesis (usually ")" but sometimes "]").</param>
+		protected virtual void Parameters(HtmlTextWriter writer, string openParen, string closeParen)
+		{
+			var parameters = ((MemberWithParameters)this.Element).Parameters;
+			int count = parameters.Count;
+			bool isBasic = this.Language == SupportedLanguageId.Basic;
+			if (isBasic && count == 0)
+			{
+				// If there aren't any parameters in VB, no parens get
+				// rendered or anything.
+				return;
+			}
+
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameters);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			writer.Write(openParen);
+			for (int i = 0; i < count; i++)
+			{
+				//// Get vars
+				//var parameter = (Param)parameters[i];
+
+				//// Write the newline
+				//this.Writer.Write(Statement.Continue[this.DocumentLanguage]);
+				//this.Writer.Write("<br />\t");
+
+				//// Optional, ref, out, params, etc.
+				//if (isBasic && parameter.IsOptional)
+				//{
+				//    this.WriteSpan(CssClassKeyword, "Optional");
+				//}
+				//if (parameter.IsOutParam)
+				//{
+				//    this.WriteSpan(CssClassKeyword, Keyword.Out[this.DocumentLanguage]);
+				//}
+				//else if (parameter.IsReferenceParam)
+				//{
+				//    this.WriteSpan(CssClassKeyword, Keyword.Ref[this.DocumentLanguage]);
+				//}
+				//else if (isBasic)
+				//{
+				//    this.WriteSpan(CssClassKeyword, "ByVal");
+				//}
+				//if (parameter.IsParamArray)
+				//{
+				//    this.WriteSpan(CssClassKeyword, Keyword.Params[this.DocumentLanguage]);
+				//}
+
+				//// Name and type
+				//if (isBasic)
+				//{
+				//    this.WriteSpan(CssClassParameter, parameter.Name);
+				//    this.WriteSpan(CssClassKeyword, "As");
+				//}
+				//this.WriteLink(HttpUtility.HtmlEncode(parameter.ParamType), "", "");
+				//if (!isBasic)
+				//{
+				//    this.Writer.Write(" ");
+				//    this.WriteSpan(CssClassParameter, parameter.Name, "", "");
+				//}
+
+				//// Default value and other language-specifics
+				//if (isBasic && parameter.IsOptional)
+				//{
+				//    this.Writer.Write(" = ");
+				//    this.Writer.Write(parameter.DefaultValue);
+				//}
+
+				//// Next param
+				//if (i + 1 < count)
+				//{
+				//    this.Writer.Write(",");
+				//}
+			}
+
+			// Final newline if there were params
+			//if (count > 0)
+			//{
+			//    this.Writer.Write(Statement.Continue[this.DocumentLanguage]);
+			//    this.Writer.Write("<br />");
+			//}
+
+			// Finished
+			writer.Write(closeParen);
+			writer.RenderEndTag();
 		}
 
 		/// <summary>
