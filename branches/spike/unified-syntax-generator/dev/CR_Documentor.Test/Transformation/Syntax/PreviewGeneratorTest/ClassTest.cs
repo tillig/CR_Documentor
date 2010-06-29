@@ -129,7 +129,11 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 &lt;<a href=""#"">SerializableAttribute</a>&gt; _
 </div><div class=""attribute"">
 &lt;<a href=""#"">XmlRootAttribute</a><div class=""parameters"">
-(<span class=""literal"">&quot;root&quot;</span>, <span class=""parameter"">DataType</span> := <span class=""literal"">&quot;string&quot;</span>)
+(<div class=""parameter"">
+<span class=""literal"">&quot;root&quot;</span>, 
+</div><div class=""parameter"">
+<span class=""identifier"">DataType</span> := <span class=""literal"">&quot;string&quot;</span>
+</div>)
 </div>&gt; _
 </div>
 </div><div class=""member"">
@@ -164,7 +168,11 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 [<a href=""#"">SerializableAttribute</a>]
 </div><div class=""attribute"">
 [<a href=""#"">XmlRootAttribute</a><div class=""parameters"">
-(<span class=""literal"">&quot;root&quot;</span>, <span class=""parameter"">DataType</span> = <span class=""literal"">&quot;string&quot;</span>)
+(<div class=""parameter"">
+<span class=""literal"">&quot;root&quot;</span>, 
+</div><div class=""parameter"">
+<span class=""identifier"">DataType</span> = <span class=""literal"">&quot;string&quot;</span>
+</div>)
 </div>]
 </div>
 </div><div class=""member"">

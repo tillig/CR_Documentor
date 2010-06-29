@@ -193,11 +193,13 @@ namespace CR_Documentor.Transformation.Syntax
 			writer.Write("(");
 			for (int j = 0; j < arguments.Count; j++)
 			{
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameter);
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 				Expression argument = arguments[j];
 				if (argument is BinaryOperatorExpression)
 				{
 					var init = (BinaryOperatorExpression)argument;
-					this.WriteSpan(writer, PreviewCss.Parameter, init.LeftSide.ToString());
+					this.WriteSpan(writer, PreviewCss.Identifier, init.LeftSide.ToString());
 					switch (this.Language)
 					{
 						case SupportedLanguageId.Basic:
@@ -217,6 +219,7 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					writer.Write(", ");
 				}
+				writer.RenderEndTag();
 			}
 			writer.Write(")");
 			writer.RenderEndTag();
@@ -332,6 +335,17 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a delegate.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Delegate(HtmlTextWriter writer)
+		{
+		}
+
+		/// <summary>
 		/// Writes the preview for an enumeration.
 		/// </summary>
 		/// <param name="writer">
@@ -395,6 +409,10 @@ namespace CR_Documentor.Transformation.Syntax
 					else if (this.Element is Class)
 					{
 						this.Class(writer);
+					}
+					else if (this.Element is DelegateDefinition)
+					{
+						this.Delegate(writer);
 					}
 					writer.RenderEndTag();
 				}
