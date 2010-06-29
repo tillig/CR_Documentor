@@ -394,6 +394,7 @@ namespace CR_Documentor.Transformation.Syntax
 						writer.RenderBeginTag(HtmlTextWriterTag.A);
 						writer.Write(HttpUtility.HtmlEncode(elementMemberType));
 						writer.RenderEndTag();
+						writer.Write(" ");
 						break;
 				}
 			}
