@@ -399,6 +399,7 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			this.Parameters(writer, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
@@ -407,7 +408,6 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.Write(HttpUtility.HtmlEncode(elementMemberType));
 				writer.RenderEndTag();
 			}
-			this.Parameters(writer, "(", ")");
 		}
 
 		/// <summary>
@@ -511,16 +511,17 @@ namespace CR_Documentor.Transformation.Syntax
 			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameters);
 			writer.RenderBeginTag(HtmlTextWriterTag.Div);
 			writer.Write(openParen);
+			if (isBasic)
+			{
+				writer.Write(" _");
+			}
 			for (int i = 0; i < count; i++)
 			{
-				//// Get vars
-				//var parameter = (Param)parameters[i];
+				var parameter = (Param)parameters[i];
+				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameter);
+				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-				//// Write the newline
-				//this.Writer.Write(Statement.Continue[this.DocumentLanguage]);
-				//this.Writer.Write("<br />\t");
-
-				//// Optional, ref, out, params, etc.
+				// TODO: Optional, ref, out, params, etc.
 				//if (isBasic && parameter.IsOptional)
 				//{
 				//    this.WriteSpan(CssClassKeyword, "Optional");
@@ -533,36 +534,41 @@ namespace CR_Documentor.Transformation.Syntax
 				//{
 				//    this.WriteSpan(CssClassKeyword, Keyword.Ref[this.DocumentLanguage]);
 				//}
-				//else if (isBasic)
-				//{
-				//    this.WriteSpan(CssClassKeyword, "ByVal");
-				//}
 				//if (parameter.IsParamArray)
 				//{
 				//    this.WriteSpan(CssClassKeyword, Keyword.Params[this.DocumentLanguage]);
 				//}
 
-				//// Name and type
-				//if (isBasic)
-				//{
-				//    this.WriteSpan(CssClassParameter, parameter.Name);
-				//    this.WriteSpan(CssClassKeyword, "As");
-				//}
-				//this.WriteLink(HttpUtility.HtmlEncode(parameter.ParamType), "", "");
-				//if (!isBasic)
-				//{
-				//    this.Writer.Write(" ");
-				//    this.WriteSpan(CssClassParameter, parameter.Name, "", "");
-				//}
+				// Name and type
+				if (isBasic)
+				{
+					this.WriteSpan(writer, PreviewCss.Identifier, parameter.Name);
+					this.WriteSpan(writer, PreviewCss.Keyword, "As");
+				}
+				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+				writer.RenderBeginTag(HtmlTextWriterTag.A);
+				writer.Write(HttpUtility.HtmlEncode(parameter.ParamType));
+				writer.RenderEndTag();
+				if (!isBasic)
+				{
+					writer.Write(" ");
+					this.WriteSpan(writer, PreviewCss.Identifier, parameter.Name, "", "");
+				}
 
-				//// Default value and other language-specifics
+				// TODO: Default value and other language-specifics
 				//if (isBasic && parameter.IsOptional)
 				//{
 				//    this.Writer.Write(" = ");
 				//    this.Writer.Write(parameter.DefaultValue);
 				//}
 
-				//// Next param
+				if (isBasic)
+				{
+					writer.Write(" _");
+				}
+				writer.RenderEndTag();
+
+				// TODO: Next param
 				//if (i + 1 < count)
 				//{
 				//    this.Writer.Write(",");
@@ -576,7 +582,6 @@ namespace CR_Documentor.Transformation.Syntax
 			//    this.Writer.Write("<br />");
 			//}
 
-			// Finished
 			writer.Write(closeParen);
 			writer.RenderEndTag();
 		}
