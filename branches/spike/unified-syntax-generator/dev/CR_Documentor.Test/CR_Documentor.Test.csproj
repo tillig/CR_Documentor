@@ -109,7 +109,9 @@
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
     <Compile Include="Transformation\Syntax\LanguageTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DelegateTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ParamTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AttributeProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BinaryOperatorExpressionProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ClassProxy.cs" />
