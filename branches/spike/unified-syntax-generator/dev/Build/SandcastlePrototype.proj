@@ -1,28 +1,62 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Doc" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Project Setup -->
+		<PresentationStyle Condition="'$(PresentationStyle)' == ''">prototype</PresentationStyle>
+
+		<!-- Environment -->
+		<Framework>$(WINDIR)\Microsoft.NET\Framework\v4.0.30319</Framework>
+		<ProductionTools>$(DxRoot)\ProductionTools</ProductionTools>
+		<ProductionTransforms>$(DxRoot)\ProductionTransforms</ProductionTransforms>
+		<Presentation>$(DxRoot)\Presentation\$(PresentationStyle)</Presentation>
+	</PropertyGroup>
+
+	<!--chm/hxs compiliers are installed under '$(ProgramFiles) (x86)' folder on 64-bit machine. -->
+	<Choose>
+		<When Condition="Exists('$(ProgramFiles) (x86)')">
+			<PropertyGroup>
+				<ToolsPath>$(ProgramFiles(x86))</ToolsPath>
+			</PropertyGroup>
+		</When>
+		<Otherwise>
+			<PropertyGroup>
+				<ToolsPath>$(ProgramFiles)</ToolsPath>
+			</PropertyGroup>
+		</Otherwise>
+	</Choose>
+
+	<ItemGroup>
+		<IconFiles Include="$(Presentation)\icons\**\*.*" />
+		<ScriptFiles Include="$(Presentation)\scripts\**\*.*" />
+		<StyleFiles Include="$(Presentation)\styles\**\*.*" />
+	</ItemGroup>
+
 	<Target Name="Doc" DependsOnTargets="VerifyParameters">
 		<Message Text="Building Sandcastle Prototype documentation..."/>
 		<MakeDir Directories="$(TempDir)"/>
-		<Exec Command="copy /y &quot;$(DocXmlPath)&quot; &quot;$(TempDir)\comments.xml&quot;"/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\MrefBuilder.exe&quot; &quot;$(AssemblyPath)&quot; /out:&quot;reflection.org&quot;" WorkingDirectory="$(TempDir)"/>
 		<Message Text="Copying Sandcastle Prototype assets..."/>
-		<Exec Command="&quot;$(DxRoot)\Presentation\prototype\copyOutput.bat" WorkingDirectory="$(TempDir)"/>
-		<MakeDir Directories="$(TempDir)\chm\html;$(TempDir)\chm\icons;$(TempDir)\chm\scripts;$(TempDir)\chm\styles;$(TempDir)\chm\media"/>
-		<Exec Command="xcopy output\icons\* chm\icons\ /y /r" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="xcopy output\media\* chm\media\ /y /r" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="xcopy output\scripts\* chm\scripts\ /y /r" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="xcopy output\styles\* chm\styles\ /y /r" WorkingDirectory="$(TempDir)"/>
-		<Message Text="Creating Sandcastle Prototype source items..."/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\XslTransform.exe&quot; /xsl:&quot;$(DxRoot)\ProductionTransforms\ApplyPrototypeDocModel.xsl&quot; reflection.org /xsl:&quot;$(DxRoot)\ProductionTransforms\AddGuidFilenames.xsl&quot; /out:reflection.xml" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\XslTransform.exe&quot; /xsl:&quot;$(DxRoot)\ProductionTransforms\ReflectionToManifest.xsl&quot; reflection.xml /out:manifest.xml" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\BuildAssembler.exe&quot; /config:&quot;$(DxRoot)\Presentation\prototype\configuration\sandcastle.config&quot; manifest.xml" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\XslTransform.exe&quot; /xsl:&quot;$(DxRoot)\ProductionTransforms\createPrototypetoc.xsl&quot; reflection.xml /out:toc.xml" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\ChmBuilder.exe&quot; /project:&quot;$(AssemblyName)&quot; /html:Output\html /lcid:1033 /toc:toc.xml /out:Chm" WorkingDirectory="$(TempDir)"/>
+		<Copy SourceFiles="@(IconFiles)" DestinationFiles="@(IconFiles->'$(TempDir)\Chm\icons\%(RecursiveDir)%(FileName)%(Extension)')" />
+		<Copy SourceFiles="@(ScriptFiles)" DestinationFiles="@(ScriptFiles->'$(TempDir)\Chm\scripts\%(RecursiveDir)%(FileName)%(Extension)')" />
+		<Copy SourceFiles="@(StyleFiles)" DestinationFiles="@(StyleFiles->'$(TempDir)\Chm\styles\%(RecursiveDir)%(FileName)%(Extension)')" />
+		<MakeDir Directories="$(TempDir)\Chm\html;$(TempDir)\Chm\intellisense" />
+
+		<Message Text="Creating target reflection data..."/>
+		<Exec Command='"$(ProductionTools)\MRefBuilder.exe" "$(AssemblyPath)" /out:"reflection_base.xml"' WorkingDirectory="$(TempDir)" />
+		<Exec Condition="'$(PresentationStyle)' == 'prototype'" Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\ApplyPrototypeDocModel.xsl" /xsl:"$(ProductionTransforms)\AddGuidFilenames.xsl"     "reflection_base.xml" /out:"reflection.xml"' WorkingDirectory="$(TempDir)" />
+		<Exec Condition="'$(PresentationStyle)' == 'vs2005'"    Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\ApplyVSDocModel.xsl"        /xsl:"$(ProductionTransforms)\AddFriendlyFilenames.xsl" "reflection_base.xml" /out:"reflection.xml" /arg:IncludeAllMembersTopic=true  /arg:IncludeInheritedOverloadTopics=true' WorkingDirectory="$(TempDir)" />
+		<Exec Condition="'$(PresentationStyle)' == 'hana'"      Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\ApplyVSDocModel.xsl"        /xsl:"$(ProductionTransforms)\AddFriendlyFilenames.xsl" "reflection_base.xml" /out:"reflection.xml" /arg:IncludeAllMembersTopic=false /arg:IncludeInheritedOverloadTopics=true' WorkingDirectory="$(TempDir)" />
+
+		<Message Text="Creating target manifest..."/>
+		<Exec Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\ReflectionToManifest.xsl" "reflection.xml" /out:"manifest.xml"' WorkingDirectory="$(TempDir)" />
+		<Exec Command='"$(ProductionTools)\BuildAssembler.exe" /config:"$(Presentation)\configuration\sandcastle.config" "manifest.xml"' WorkingDirectory="$(TempDir)" />
+
 		<Message Text="Cleaning Sandcastle Prototype source items and compiling help..."/>
-		<Exec Command="&quot;$(DxRoot)\ProductionTools\DBCSFix.exe&quot; /d:Chm /l:1033" WorkingDirectory="$(TempDir)"/>
-		<Exec Command="&quot;$(ProgramFiles)\HTML Help Workshop\hhc.exe&quot; &quot;chm\$(AssemblyName).hhp&quot;" WorkingDirectory="$(TempDir)" IgnoreExitCode="true"/>
-		<Message Text="Copying compiled Sandcastle Prototype help to final location..."/>
-		<Copy SourceFiles="$(TempDir)\chm\$(AssemblyName).chm" DestinationFolder="$(OutputDir)"/>
+		<Exec Condition="'$(PresentationStyle)' == 'prototype'" Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\CreatePrototypeToc.xsl" "reflection.xml" /out:"Toc.xml"' WorkingDirectory="$(TempDir)" />
+		<Exec Condition="'$(PresentationStyle)' != 'prototype'" Command='"$(ProductionTools)\XslTransform.exe" /xsl:"$(ProductionTransforms)\CreateVSToc.xsl"        "reflection.xml" /out:"Toc.xml"' WorkingDirectory="$(TempDir)" />
+		<Exec Command="&quot;$(ProductionTools)\ChmBuilder.exe&quot; /project:&quot;$(AssemblyName)&quot; /html:Output\html /lcid:1033 /toc:Toc.xml /out:Chm" WorkingDirectory="$(TempDir)" />
+		<Exec Command="&quot;$(ProductionTools)\DBCSFix.exe&quot; /d:Chm /l:1033" WorkingDirectory="$(TempDir)" />
+		<Exec Command='"$(ToolsPath)\HTML Help Workshop\hhc.exe" "Chm\$(AssemblyName).hhp"' IgnoreExitCode="true" WorkingDirectory="$(TempDir)" />
+		<Copy SourceFiles="$(TempDir)\Chm\$(AssemblyName).chm" DestinationFolder="$(OutputDir)"/>
 		<RemoveDir Directories="$(TempDir)"/>
 		<Message Text="Sandcastle Prototype documentation built."/>
 	</Target>
