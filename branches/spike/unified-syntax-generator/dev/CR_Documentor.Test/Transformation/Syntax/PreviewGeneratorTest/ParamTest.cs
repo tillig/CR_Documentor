@@ -11,6 +11,9 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 	[Isolated]
 	public class ParamTest
 	{
+		// Parameter tests use the delegate proxy as a base, but since parameter
+		// rendering happens the same for delegates and methods, it should be fine.
+
 		[TestMethod]
 		public void Parameter_0_Basic()
 		{
