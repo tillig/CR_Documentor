@@ -562,17 +562,16 @@ namespace CR_Documentor.Transformation.Syntax
 				//    this.Writer.Write(parameter.DefaultValue);
 				//}
 
+				if (i + 1 < count)
+				{
+					writer.Write(",");
+				}
 				if (isBasic)
 				{
 					writer.Write(" _");
 				}
 				writer.RenderEndTag();
 
-				// TODO: Next param
-				//if (i + 1 < count)
-				//{
-				//    this.Writer.Write(",");
-				//}
 			}
 
 			// Final newline if there were params
