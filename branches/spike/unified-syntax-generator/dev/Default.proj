@@ -63,7 +63,7 @@
 			<Output ItemName="AssembliesToDocument" TaskParameter="Include"/>
 		</CreateItem>
 		<Message Text="Building Sandcastle Prototype reflection data..."/>
-		<MSBuild Projects="Build\FxReflection.proj" Properties="PresentationStyle=prototype" Condition="'$(GenerateReflectionData)' == 'true'"/>
+		<MSBuild Projects="Build\FxReflection.proj" Condition="'$(GenerateReflectionData)' == 'true'"/>
 		<MSBuild Projects="Build\SandcastlePrototype.proj" Targets="Doc" Properties="AssemblyPath=%(AssembliesToDocument.FullPath);AssemblyName=%(AssembliesToDocument.Filename);TempDir=..\$(BuildDocTempDir);OutputDir=..\$(BuildDocDir);DocXmlPath=..\$(BuildBinDir)\%(AssembliesToDocument.Filename).xml"/>
 	</Target>
 	<Target Name="Test">

@@ -1,10 +1,10 @@
-﻿
+
 <Project DefaultTargets="Reflection" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
     <!-- Project Setup -->
-    <NetfxVer>2.0</NetfxVer>
-    <PresentationStyle >vs2005</PresentationStyle>
+    <NetfxVer>4.0</NetfxVer>
+    <PresentationStyle>prototype</PresentationStyle>
     <ProductionTools>$(DxRoot)\ProductionTools</ProductionTools>
     <ProductionTransforms>$(DxRoot)\ProductionTransforms</ProductionTransforms>
     <TmpPath>$(DxRoot)\Data\Tmp</TmpPath>
@@ -17,6 +17,8 @@
     <AssemblyFolders Include="$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\v3.0\*.dll" Condition="$(NetfxVer)>2.0"/>
     <AssemblyFolders Include="$(WINDIR)\Microsoft.NET\Framework\v3.5\**\*.dll" Condition="$(NetfxVer)>3.0"/>
     <AssemblyFolders Include="$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\v3.5\*.dll" Condition="$(NetfxVer)>3.0"/>
+    <AssemblyFolders Include="$(WINDIR)\Microsoft.NET\Framework\v4.0.30319\*.dll" Condition="$(NetfxVer)>3.5"/>
+    <AssemblyFolders Include="$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\*.dll" Condition="$(NetfxVer)>3.5"/>
   </ItemGroup>
 
   <Target Name="Reflection">
