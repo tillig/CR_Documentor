@@ -163,7 +163,32 @@ Namespace Syntax
 		''' </summary>
 		''' <param name="required">Required parameter.</param>
 		''' <param name="notRequired">Optional parameter.</param>
-		Public Sub MethodWithOptionalParams(ByVal required As System.String, Optional ByVal notRequired As System.String = "")
+		Public Sub MethodWithOptionalParam(ByVal required As System.String, Optional ByVal notRequired As System.String = "")
+
+		End Sub
+
+		''' <summary>
+		''' Method with an out parameter. (VB uses ByRef).
+		''' </summary>
+		''' <param name="required">Required parameter.</param>
+		Public Sub MethodWithOutParam(ByRef required As System.String)
+
+		End Sub
+
+		''' <summary>
+		''' Method with "params" array.
+		''' </summary>
+		''' <param name="required">Required parameter.</param>
+		''' <param name="notRequired">Parameter array.</param>
+		Public Sub MethodWithParamArray(ByVal required As System.String, ByVal ParamArray notRequired As Object())
+
+		End Sub
+
+		''' <summary>
+		''' Method with a ref parameter. (VB uses ByRef).
+		''' </summary>
+		''' <param name="required">Required parameter.</param>
+		Public Sub MethodWithRefParam(ByRef required As System.String)
 
 		End Sub
 
