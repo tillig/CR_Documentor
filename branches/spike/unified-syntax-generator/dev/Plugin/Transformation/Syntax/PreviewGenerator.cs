@@ -521,20 +521,31 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameter);
 				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 
-				// TODO: Optional parameters - check this against the new Sandcastle to see how it renders.
+				// Sandcastle does not render anything around optional parameters
+				// but if that changes, we'll need to do something here.
 				//if (isBasic && parameter.IsOptional)
 				//{
 				//    this.WriteSpan(CssClassKeyword, "Optional");
 				//}
+
 				// TODO: ref, out, params, etc.
 				//if (parameter.IsOutParam)
 				//{
 				//    this.WriteSpan(CssClassKeyword, Keyword.Out[this.DocumentLanguage]);
 				//}
-				//else if (parameter.IsReferenceParam)
-				//{
-				//    this.WriteSpan(CssClassKeyword, Keyword.Ref[this.DocumentLanguage]);
-				//}
+				// else
+				if (parameter.IsReferenceParam)
+				{
+					switch (this.Language)
+					{
+						case SupportedLanguageId.Basic:
+							this.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
+							break;
+						default:
+							this.WriteSpan(writer, PreviewCss.Keyword, "ref");
+							break;
+					}
+				}
 				//if (parameter.IsParamArray)
 				//{
 				//    this.WriteSpan(CssClassKeyword, Keyword.Params[this.DocumentLanguage]);
