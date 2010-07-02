@@ -35,6 +35,7 @@
 		<Message Text="Building Sandcastle Prototype documentation..."/>
 		<MakeDir Directories="$(TempDir)"/>
 		<Message Text="Copying Sandcastle Prototype assets..."/>
+		<Copy SourceFiles="$(DocXmlPath)" DestinationFiles="$(TempDir)\comments.xml" />
 		<Copy SourceFiles="@(IconFiles)" DestinationFiles="@(IconFiles->'$(TempDir)\Chm\icons\%(RecursiveDir)%(FileName)%(Extension)')" />
 		<Copy SourceFiles="@(ScriptFiles)" DestinationFiles="@(ScriptFiles->'$(TempDir)\Chm\scripts\%(RecursiveDir)%(FileName)%(Extension)')" />
 		<Copy SourceFiles="@(StyleFiles)" DestinationFiles="@(StyleFiles->'$(TempDir)\Chm\styles\%(RecursiveDir)%(FileName)%(Extension)')" />
