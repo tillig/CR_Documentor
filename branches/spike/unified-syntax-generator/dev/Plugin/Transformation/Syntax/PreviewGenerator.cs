@@ -554,10 +554,19 @@ namespace CR_Documentor.Transformation.Syntax
 							break;
 					}
 				}
-				//if (parameter.IsParamArray)
-				//{
-				//    this.WriteSpan(CssClassKeyword, Keyword.Params[this.DocumentLanguage]);
-				//}
+
+				if (parameter.IsParamArray)
+				{
+					switch (this.Language)
+					{
+						case SupportedLanguageId.Basic:
+							this.WriteSpan(writer, PreviewCss.Keyword, "ParamArray");
+							break;
+						default:
+							this.WriteSpan(writer, PreviewCss.Keyword, "params");
+							break;
+					}
+				}
 
 				// Name and type
 				if (isBasic)
