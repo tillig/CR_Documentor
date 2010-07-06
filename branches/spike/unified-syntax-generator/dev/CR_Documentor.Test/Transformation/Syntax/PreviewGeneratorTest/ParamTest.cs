@@ -15,6 +15,62 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		// rendering happens the same for delegates and methods, it should be fine.
 
 		[TestMethod]
+		public void Out_Basic()
+		{
+			DelegateProxy info = new DelegateProxy("TestDelegate");
+			var param = new ParamProxy("param1")
+			{
+				ParamType = "String",
+				IsOutParam = true
+			};
+			info.Parameters.Add(param.CreateFakeParam());
+			var element = info.CreateFakeDelegate();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Delegate</span> <span class=""keyword"">Sub</span> <span class=""identifier"">TestDelegate</span><div class=""parameters"">
+( _<div class=""parameter"">
+&lt;<a href=""#"">OutAttribute</a>&gt; <span class=""keyword"">ByRef</span> <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">String</a> _
+</div>)
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Out_CSharp()
+		{
+			DelegateProxy info = new DelegateProxy("TestDelegate");
+			var param = new ParamProxy("param1")
+			{
+				ParamType = "string",
+				IsOutParam = true
+			};
+			info.Parameters.Add(param.CreateFakeParam());
+			var element = info.CreateFakeDelegate();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">delegate</span> <span class=""keyword"">void</span> <span class=""identifier"">TestDelegate</span><div class=""parameters"">
+(<div class=""parameter"">
+<span class=""keyword"">out</span> <a href=""#"">string</a> <span class=""identifier"">param1</span>
+</div>)
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Parameter_0_Basic()
 		{
 			DelegateProxy info = new DelegateProxy("TestDelegate");

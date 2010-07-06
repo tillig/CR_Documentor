@@ -529,12 +529,20 @@ namespace CR_Documentor.Transformation.Syntax
 				//}
 
 				// TODO: ref, out, params, etc.
-				//if (parameter.IsOutParam)
-				//{
-				//    this.WriteSpan(CssClassKeyword, Keyword.Out[this.DocumentLanguage]);
-				//}
-				// else
-				if (parameter.IsReferenceParam)
+				if (parameter.IsOutParam)
+				{
+					switch (this.Language)
+					{
+						case SupportedLanguageId.Basic:
+							writer.Write("&lt;<a href=\"#\">OutAttribute</a>&gt; ");
+							this.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
+							break;
+						default:
+							this.WriteSpan(writer, PreviewCss.Keyword, "out");
+							break;
+					}
+				}
+				else if (parameter.IsReferenceParam)
 				{
 					switch (this.Language)
 					{
