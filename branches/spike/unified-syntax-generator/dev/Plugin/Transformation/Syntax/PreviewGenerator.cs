@@ -279,10 +279,7 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 				var attribute = (DevExpress.CodeRush.StructuralParser.Attribute)attributes[i];
-				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-				writer.RenderBeginTag(HtmlTextWriterTag.A);
-				writer.Write(attribute.Name);
-				writer.RenderEndTag();
+				this.WriteLink(writer, attribute.Name, "", "");
 				this.AttributeArguments(writer, attribute.Arguments);
 				switch (this.Language)
 				{
@@ -390,11 +387,7 @@ namespace CR_Documentor.Transformation.Syntax
 						this.WriteSpan(writer, PreviewCss.Keyword, "Function");
 						break;
 					default:
-						writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-						writer.RenderBeginTag(HtmlTextWriterTag.A);
-						writer.Write(HttpUtility.HtmlEncode(elementMemberType));
-						writer.RenderEndTag();
-						writer.Write(" ");
+						this.WriteLink(writer, elementMemberType, null, null);
 						break;
 				}
 			}
@@ -403,10 +396,7 @@ namespace CR_Documentor.Transformation.Syntax
 			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
-				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-				writer.RenderBeginTag(HtmlTextWriterTag.A);
-				writer.Write(HttpUtility.HtmlEncode(elementMemberType));
-				writer.RenderEndTag();
+				this.WriteLink(writer, elementMemberType, "", "");
 			}
 		}
 
@@ -479,6 +469,42 @@ namespace CR_Documentor.Transformation.Syntax
 					{
 						this.Delegate(writer);
 					}
+					// TODO: else if (this.Element is SP.Method)
+					//{
+					//    SP.Method method = (SP.Method)this.Element;
+					//    if (method.IsConstructor)
+					//    {
+					//        this.Constructor();
+					//    }
+					//    else if (method.IsClassOperator)
+					//    {
+					//        this.Operator();
+					//    }
+					//    else if (method.IsDestructor)
+					//    {
+					//        this.Destructor();
+					//    }
+					//    else
+					//    {
+					//        this.Method();
+					//    }
+					//}
+					// TODO: else if (this.Element is SP.Property)
+					//{
+					//    this.Property();
+					//}
+					// TODO: else if (this.Element is SP.Event)
+					//{
+					//    this.Event();
+					//}
+					// TODO: else if (this.Element is SP.BaseVariable)
+					//{
+					//    this.Field();
+					//}
+					//else
+					//{
+					// TODO: this.Writer.Write("[This object has no individual syntax.]");
+					//}
 					writer.RenderEndTag();
 				}
 				writer.RenderEndTag();
@@ -528,13 +554,12 @@ namespace CR_Documentor.Transformation.Syntax
 				//    this.WriteSpan(CssClassKeyword, "Optional");
 				//}
 
-				// TODO: ref, out, params, etc.
 				if (parameter.IsOutParam)
 				{
 					switch (this.Language)
 					{
 						case SupportedLanguageId.Basic:
-							writer.Write("&lt;<a href=\"#\">OutAttribute</a>&gt; ");
+							this.WriteLink(writer, "OutAttribute", "&lt;", "&gt; ");
 							this.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
 							break;
 						default:
@@ -568,23 +593,20 @@ namespace CR_Documentor.Transformation.Syntax
 					}
 				}
 
-				// Name and type
 				if (isBasic)
 				{
 					this.WriteSpan(writer, PreviewCss.Identifier, parameter.Name);
 					this.WriteSpan(writer, PreviewCss.Keyword, "As");
 				}
-				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-				writer.RenderBeginTag(HtmlTextWriterTag.A);
-				writer.Write(HttpUtility.HtmlEncode(parameter.ParamType));
-				writer.RenderEndTag();
+				this.WriteLink(writer, parameter.ParamType, "", "");
 				if (!isBasic)
 				{
 					writer.Write(" ");
 					this.WriteSpan(writer, PreviewCss.Identifier, parameter.Name, "", "");
 				}
 
-				// TODO: Default value and other language-specifics
+				// Sandcastle doesn't render the default value settings, but if
+				// that changes, we'll have to put the default value here.
 				//if (isBasic && parameter.IsOptional)
 				//{
 				//    this.Writer.Write(" = ");
@@ -602,13 +624,6 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.RenderEndTag();
 
 			}
-
-			// Final newline if there were params
-			//if (count > 0)
-			//{
-			//    this.Writer.Write(Statement.Continue[this.DocumentLanguage]);
-			//    this.Writer.Write("<br />");
-			//}
 
 			writer.Write(closeParen);
 			writer.RenderEndTag();
@@ -723,8 +738,6 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			if (constraint is NamedTypeParameterConstraint)
 			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
-				writer.RenderBeginTag(HtmlTextWriterTag.A);
 				// TODO: Consider rendering the complete signature of the type in the constraint.
 				// While NamedTypeParameterConstraint.TypeReference gives you a
 				// reference to a Type in a constraint, if that type is generic
@@ -734,8 +747,7 @@ namespace CR_Documentor.Transformation.Syntax
 				// it will render as...
 				// where T : IList
 				// because rendering the full type in a language-specific fashion is non-trivial.
-				writer.Write(HttpUtility.HtmlEncode(((NamedTypeParameterConstraint)constraint).TypeReference.ToString()));
-				writer.RenderEndTag();
+				this.WriteLink(writer, ((NamedTypeParameterConstraint)constraint).TypeReference.ToString(), "", "");
 			}
 			else
 			{
@@ -798,6 +810,29 @@ namespace CR_Documentor.Transformation.Syntax
 			writer.RenderEndTag();
 		}
 
+		private void WriteLink(HtmlTextWriter writer, string contents, string before, string after)
+		{
+			if (string.IsNullOrEmpty(contents))
+			{
+				return;
+			}
+			if (before != null)
+			{
+				writer.Write(before);
+			}
+			writer.Write("<a href=\"#\">");
+			writer.Write(HttpUtility.HtmlEncode(contents));
+			writer.Write("</a>");
+			if (after != null)
+			{
+				writer.Write(after);
+			}
+			else
+			{
+				writer.Write(" ");
+			}
+		}
+
 		private void WriteDiv(HtmlTextWriter writer, string cssClass, string contents)
 		{
 			this.WriteDiv(writer, cssClass, contents, null, null);
@@ -834,7 +869,7 @@ namespace CR_Documentor.Transformation.Syntax
 			writer.RenderEndTag();
 			if (after != null)
 			{
-				writer.Write(before);
+				writer.Write(after);
 			}
 			else
 			{
