@@ -4,7 +4,7 @@ using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
-	public class AttributeProxy : AccessSpecifiedElementProxy
+	public class AttributeProxy
 	{
 		public int ArgumentCount
 		{
@@ -15,6 +15,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 		}
 
 		public ExpressionCollection Arguments { get; set; }
+		public string Name { get; set; }
 
 		public AttributeProxy(string name)
 		{
