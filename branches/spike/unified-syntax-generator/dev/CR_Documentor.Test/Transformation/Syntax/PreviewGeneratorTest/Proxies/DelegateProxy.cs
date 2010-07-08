@@ -4,11 +4,9 @@ using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
-	public class DelegateProxy
+	public class DelegateProxy : AccessSpecifiedElementProxy
 	{
-		public MemberVisibility Visibility { get; set; }
 		public string MemberType { get; set; }
-		public string Name { get; private set; }
 		public LanguageElementCollection Parameters { get; set; }
 
 		public DelegateProxy(string name)
