@@ -11,47 +11,8 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 	[Isolated]
 	public class ClassTest
 	{
-		[TestMethod]
-		public void Abstract_Basic()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsAbstract = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code vb"">
-<div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">MustInherit</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void Abstract_CSharp()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsAbstract = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code cs"">
-<div class=""member"">
-<span class=""keyword"">public</span> <span class=""keyword"">abstract</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
+		// Tests for abstract, sealed, static, new
+		// are all in ContractTest.
 
 		[TestMethod]
 		public void Generic_1_Basic()
@@ -330,90 +291,6 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
-		public void New_Basic()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsNew = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code vb"">
-<div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Shadows</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void New_CSharp()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsNew = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code cs"">
-<div class=""member"">
-<span class=""keyword"">new</span> <span class=""keyword"">public</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void Sealed_Basic()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsSealed = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code vb"">
-<div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">NotInheritable</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void Sealed_CSharp()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsSealed = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code cs"">
-<div class=""member"">
-<span class=""keyword"">public</span> <span class=""keyword"">sealed</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
 		public void Simple_Basic()
 		{
 			ClassProxy info = new ClassProxy("TestClass")
@@ -447,48 +324,6 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 @"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">protected internal</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void Static_Basic()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsStatic = true // There's no such thing as a static class in VB; only members are static.
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code vb"">
-<div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
-</div>
-</div>";
-
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
-			string actual = generator.Generate();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void Static_CSharp()
-		{
-			ClassProxy info = new ClassProxy("TestClass")
-			{
-				IsStatic = true
-			};
-			var element = info.CreateFakeClass();
-
-			string expected =
-@"<div class=""code cs"">
-<div class=""member"">
-<span class=""keyword"">public</span> <span class=""keyword"">static</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
 </div>
 </div>";
 

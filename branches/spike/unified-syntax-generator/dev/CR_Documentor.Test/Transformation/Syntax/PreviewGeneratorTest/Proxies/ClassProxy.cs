@@ -17,7 +17,6 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 
 		public ClassProxy(string name)
 		{
-			this.Visibility = MemberVisibility.Public;
 			this.Attributes = new NodeList();
 			this.Name = name;
 		}

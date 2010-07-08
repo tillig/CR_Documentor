@@ -313,6 +313,23 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				this.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
 			}
+			this.ElementContract(writer);
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+			this.TypeParameters(writer);
+			// TODO: Write the inheritance/implements chain.
+			this.TypeParameterConstraintsPostSignature(writer);
+		}
+
+		/// <summary>
+		/// Writes the contract (static/abstract/sealed/etc.) for the element.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void ElementContract(HtmlTextWriter writer)
+		{
 			if (this.Element.IsStatic)
 			{
 				switch (this.Language)
@@ -348,11 +365,6 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 			}
-			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
-			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
-			this.TypeParameters(writer);
-			// TODO: Write the inheritance/implements chain.
-			this.TypeParameterConstraintsPostSignature(writer);
 		}
 
 		/// <summary>
@@ -429,6 +441,30 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a field.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Field(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			if (this.Language != SupportedLanguageId.Basic)
+			{
+				this.WriteLink(writer, this.ElementMemberType, null, null);
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			if (this.Language == SupportedLanguageId.Basic)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteLink(writer, this.ElementMemberType, "", "");
+			}
+		}
+
+		/// <summary>
 		/// Generates the HTML syntax preview for an element.
 		/// </summary>
 		public virtual string Generate()
@@ -497,10 +533,10 @@ namespace CR_Documentor.Transformation.Syntax
 					//{
 					//    this.Event();
 					//}
-					// TODO: else if (this.Element is SP.BaseVariable)
-					//{
-					//    this.Field();
-					//}
+					else if (this.Element is BaseVariable)
+					{
+						this.Field(writer);
+					}
 					//else
 					//{
 					// TODO: this.Writer.Write("[This object has no individual syntax.]");

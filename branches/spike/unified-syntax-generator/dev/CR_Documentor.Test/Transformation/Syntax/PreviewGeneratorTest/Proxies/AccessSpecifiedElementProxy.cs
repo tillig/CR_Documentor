@@ -26,6 +26,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 
 		protected AccessSpecifiedElementProxy()
 		{
+			this.Visibility = MemberVisibility.Public;
 			this.GenericModifier = null;
 		}
 

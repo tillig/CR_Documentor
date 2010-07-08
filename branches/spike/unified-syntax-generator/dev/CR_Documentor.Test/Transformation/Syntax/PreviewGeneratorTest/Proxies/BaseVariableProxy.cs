@@ -4,7 +4,7 @@ using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
-	public class BaseVariableProxy : AccessSpecifiedElementProxy
+	public class BaseVariableProxy : MemberProxy
 	{
 		public BaseVariableProxy(string name)
 		{

@@ -4,7 +4,7 @@ using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
-	public class ParamProxy : AccessSpecifiedElementProxy
+	public class ParamProxy : BaseVariableProxy
 	{
 		public bool IsOptional { get; set; }
 		public bool IsOutParam { get; set; }
@@ -14,8 +14,8 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 		public string DefaultValue { get; set; }
 
 		public ParamProxy(string name)
+			: base(name)
 		{
-			this.Name = name;
 		}
 
 		public Param CreateFakeParam()
