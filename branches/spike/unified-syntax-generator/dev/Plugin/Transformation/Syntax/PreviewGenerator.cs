@@ -314,7 +314,44 @@ namespace CR_Documentor.Transformation.Syntax
 				this.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
 			}
 			this.ElementContract(writer);
-			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			// TODO: Test interface preview.
+			// TODO: Test struct preview.
+			if (this.Element is Interface)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Interface");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "interface");
+						break;
+				}
+			}
+			else if (this.Element is Struct)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Structure");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "struct");
+						break;
+				}
+			}
+			else
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Class");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "class");
+						break;
+				}
+			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 			this.TypeParameters(writer);
 			// TODO: Write the inheritance/implements chain.
@@ -335,6 +372,7 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Shared");
 						break;
 					default:
 						this.WriteSpan(writer, PreviewCss.Keyword, "static");
@@ -377,6 +415,18 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 			}
+			if (this.Element.IsReadOnly)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "readonly");
+						break;
+				}
+			}
 		}
 
 		/// <summary>
@@ -389,7 +439,15 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Delegate(HtmlTextWriter writer)
 		{
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Delegate");
+					break;
+				default:
+					this.WriteSpan(writer, PreviewCss.Keyword, "delegate");
+					break;
+			}
 			string elementMemberType = this.ElementMemberType;
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
@@ -434,7 +492,15 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Enumeration(HtmlTextWriter writer)
 		{
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Enum");
+					break;
+				default:
+					this.WriteSpan(writer, PreviewCss.Keyword, "enum");
+					break;
+			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
 			string underlyingType = ((Enumeration)this.Element).UnderlyingType;
 			if (!String.IsNullOrEmpty(underlyingType))
@@ -463,7 +529,6 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			this.ElementContract(writer);
-			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.ElementType(this.Language, this.Element));
 			if (this.Language != SupportedLanguageId.Basic)
 			{
 				this.WriteLink(writer, this.ElementMemberType, null, null);

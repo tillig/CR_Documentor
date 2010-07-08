@@ -142,14 +142,14 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		{
 			ClassProxy info = new ClassProxy("TestClass")
 			{
-				IsStatic = true // There's no such thing as a static class in VB; only members are static.
+				IsStatic = true
 			};
 			var element = info.CreateFakeClass();
 
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
+<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span>
 </div>
 </div>";
 
