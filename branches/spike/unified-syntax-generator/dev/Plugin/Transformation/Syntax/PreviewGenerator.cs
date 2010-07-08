@@ -365,6 +365,18 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 			}
+			else if (this.Element.IsConst)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Const");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "const");
+						break;
+				}
+			}
 		}
 
 		/// <summary>

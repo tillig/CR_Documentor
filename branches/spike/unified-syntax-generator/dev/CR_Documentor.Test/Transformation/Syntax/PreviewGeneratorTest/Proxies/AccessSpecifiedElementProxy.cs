@@ -7,6 +7,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 	{
 		public GenericModifier GenericModifier { get; private set; }
 		public bool IsAbstract { get; set; }
+		public bool IsConst { get; set; }
 		public bool IsGeneric
 		{
 			get
