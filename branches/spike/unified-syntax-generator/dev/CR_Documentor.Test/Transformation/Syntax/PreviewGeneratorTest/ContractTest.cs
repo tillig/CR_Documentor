@@ -54,6 +54,50 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Constant_Field_Basic()
+		{
+			BaseVariableProxy info = new BaseVariableProxy("Field")
+			{
+				MemberType = "String",
+				IsConst = true
+			};
+			var element = info.CreateFakeField();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Const</span> <span class=""identifier"">Field</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Constant_Field_CSharp()
+		{
+			BaseVariableProxy info = new BaseVariableProxy("Field")
+			{
+				MemberType = "string",
+				IsConst = true
+			};
+			var element = info.CreateFakeField();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">const</span> <a href=""#"">string</a> <span class=""identifier"">Field</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void New_Class_Basic()
 		{
 			ClassProxy info = new ClassProxy("TestClass")
@@ -171,6 +215,52 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 @"<div class=""code cs"">
 <div class=""member"">
 <span class=""keyword"">public</span> <span class=""keyword"">static</span> <span class=""keyword"">class</span> <span class=""identifier"">TestClass</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void StaticReadonly_Field_Basic()
+		{
+			BaseVariableProxy info = new BaseVariableProxy("Field")
+			{
+				MemberType = "String",
+				IsStatic = true,
+				IsReadOnly = true
+			};
+			var element = info.CreateFakeField();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">ReadOnly</span> <span class=""identifier"">Field</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void StaticReadonly_Field_CSharp()
+		{
+			BaseVariableProxy info = new BaseVariableProxy("Field")
+			{
+				MemberType = "string",
+				IsStatic = true,
+				IsReadOnly = true
+			};
+			var element = info.CreateFakeField();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">static</span> <span class=""keyword"">readonly</span> <a href=""#"">string</a> <span class=""identifier"">Field</span>
 </div>
 </div>";
 
