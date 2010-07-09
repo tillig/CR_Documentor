@@ -314,8 +314,6 @@ namespace CR_Documentor.Transformation.Syntax
 				this.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
 			}
 			this.ElementContract(writer);
-			// TODO: Test interface preview.
-			// TODO: Test struct preview.
 			if (this.Element is Interface)
 			{
 				switch (this.Language)
