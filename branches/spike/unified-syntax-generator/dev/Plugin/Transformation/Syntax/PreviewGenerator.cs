@@ -118,7 +118,7 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			get
 			{
-				if (!this.Element.IsGeneric || this.Element.GenericModifier.TypeParameters.Count == 0)
+				if (!this.Element.IsGeneric || this.Element.GenericModifier.TypeParameters == null || this.Element.GenericModifier.TypeParameters.Count == 0)
 				{
 					return false;
 				}
@@ -208,7 +208,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="arguments">The attribute arguments to document.</param>
 		protected virtual void AttributeArguments(HtmlTextWriter writer, ExpressionCollection arguments)
 		{
-			if (arguments.Count < 1)
+			if (arguments == null || arguments.Count < 1)
 			{
 				return;
 			}
@@ -365,6 +365,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void ElementContract(HtmlTextWriter writer)
 		{
+			// TODO: virtual
+			// TODO: override
+			// TODO: writeonly
 			if (this.Element.IsStatic)
 			{
 				switch (this.Language)
@@ -517,6 +520,54 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for an event.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Event(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Event");
+					break;
+				default:
+					this.WriteSpan(writer, PreviewCss.Keyword, "event");
+					break;
+			}
+
+			// Get the generated parameterized event handler type name if it exists.
+			// e.g., Public Event EventParameterized As TestClass.EventParameterizedEventHandler
+			var eventElement = (Event)this.Element;
+			string memberType = this.ElementMemberType;
+			if (eventElement.ParameterCount > 0)
+			{
+				var parent = eventElement.GetParentClassInterfaceStructOrModule();
+				memberType = "";
+				if (parent != null)
+				{
+					memberType = parent.Name + ".";
+				}
+				memberType += eventElement.Name + "EventHandler";
+			}
+
+			if (this.Language != SupportedLanguageId.Basic)
+			{
+				this.WriteLink(writer, memberType, null, null);
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			if (this.Language == SupportedLanguageId.Basic)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteLink(writer, memberType, "", "");
+			}
+		}
+
+		/// <summary>
 		/// Writes the preview for a field.
 		/// </summary>
 		/// <param name="writer">
@@ -604,10 +655,10 @@ namespace CR_Documentor.Transformation.Syntax
 					//{
 					//    this.Property();
 					//}
-					// TODO: else if (this.Element is SP.Event)
-					//{
-					//    this.Event();
-					//}
+					else if (this.Element is Event)
+					{
+						this.Event(writer);
+					}
 					else if (this.Element is BaseVariable)
 					{
 						this.Field(writer);
@@ -636,6 +687,10 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Parameters(HtmlTextWriter writer, string openParen, string closeParen)
 		{
 			var parameters = ((MemberWithParameters)this.Element).Parameters;
+			if (parameters == null)
+			{
+				return;
+			}
 			int count = parameters.Count;
 			bool isBasic = this.Language == SupportedLanguageId.Basic;
 			if (isBasic && count == 0)

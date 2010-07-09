@@ -3,7 +3,7 @@ using DevExpress.CodeRush.StructuralParser;
 
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
-	public abstract class AccessSpecifiedElementProxy
+	public abstract class AccessSpecifiedElementProxy : LanguageElementProxy
 	{
 		public GenericModifier GenericModifier { get; private set; }
 		public bool IsAbstract { get; set; }

@@ -8,6 +8,7 @@ using TypeMock.ArrangeActAssert;
 namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 {
 	[TestClass]
+	[Isolated]
 	public class InterfaceTest
 	{
 		[TestMethod]
