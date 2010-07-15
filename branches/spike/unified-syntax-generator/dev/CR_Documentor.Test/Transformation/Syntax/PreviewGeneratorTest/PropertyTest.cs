@@ -116,6 +116,77 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Indexer_Basic()
+		{
+			PropertyProxy info = new PropertyProxy("Item")
+			{
+				MemberType = "String",
+				HasGetter = true,
+				HasSetter = true
+			};
+			ParamProxy param = new ParamProxy("index")
+			{
+				ParamType = "Integer"
+			};
+			info.Parameters.Add(param.CreateFakeParam());
+			var element = info.CreateFakeProperty();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Default</span> <span class=""keyword"">Property</span> <span class=""identifier"">Item</span><div class=""parameters"">
+( _<div class=""parameter"">
+<span class=""identifier"">index</span> <span class=""keyword"">As</span> <a href=""#"">Integer</a> _
+</div>)
+</div> <span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
+<span class=""keyword"">Get</span>
+</div><div class=""getset"">
+<span class=""keyword"">Set</span>
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Indexer_CSharp()
+		{
+			PropertyProxy info = new PropertyProxy("Item")
+			{
+				MemberType = "string",
+				HasGetter = true,
+				HasSetter = true
+			};
+			ParamProxy param = new ParamProxy("index")
+			{
+				ParamType = "int"
+			};
+			info.Parameters.Add(param.CreateFakeParam());
+			var element = info.CreateFakeProperty();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <a href=""#"">string</a> <span class=""keyword"">this</span><div class=""parameters"">
+[<div class=""parameter"">
+<a href=""#"">int</a> <span class=""identifier"">index</span>
+</div>]
+</div> {<div class=""getset"">
+<span class=""keyword"">get</span>;
+</div><div class=""getset"">
+<span class=""keyword"">set</span>;
+</div>}
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+		[TestMethod]
 		public void SetOnly_Basic()
 		{
 			PropertyProxy info = new PropertyProxy("TestProperty")

@@ -810,7 +810,11 @@ namespace CR_Documentor.Transformation.Syntax
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					if (property.HasGetter && !property.HasSetter)
+					if (property.ParameterCount > 0)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "Default");
+					}
+					else if (property.HasGetter && !property.HasSetter)
 					{
 						this.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
 					}
@@ -828,10 +832,23 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				this.WriteLink(writer, this.ElementMemberType, null, null);
 			}
-			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			if (property.ParameterCount > 0)
 			{
-				// TODO: indexer properties
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+						this.Parameters(writer, "(", ")");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "this", "", "");
+						this.Parameters(writer, "[", "]");
+						break;
+				}
+			}
+			else
+			{
+				this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			}
 			if (this.Language == SupportedLanguageId.Basic)
 			{
@@ -870,63 +887,6 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				writer.Write("}");
 			}
-
-			//this.MemberSyntaxProlog();
-			//this.WriteSpan(CssClassKeyword, Keyword.Property[this.DocumentLanguage]);
-
-			//if (this.DocumentLanguage != Language.Basic)
-			//{
-			//    this.ReturnType();
-			//}
-
-			//SP.Property property = (SP.Property)this.Element;
-
-			//if (property.ParameterCount > 0)
-			//{
-			//    if (this.DocumentLanguage == Language.CSharp)
-			//    {
-			//        this.WriteSpan(CssClassKeyword, "this", "", "");
-			//    }
-			//    else
-			//    {
-			//        this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
-			//    }
-
-			//    if (this.DocumentLanguage == Language.Basic)
-			//    {
-			//        this.Parameters("(", ")");
-			//    }
-			//    else
-			//    {
-			//        this.Parameters("[", "]");
-			//    }
-			//}
-			//else
-			//{
-			//    this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
-			//}
-
-			//if (this.DocumentLanguage != Language.Basic)
-			//{
-			//    // Get/Set
-			//    this.Writer.Write("{ ");
-			//    if (property.Getter != null)
-			//    {
-			//        this.WriteSpan(CssClassKeyword, "get", "", "");
-			//        this.Writer.Write("; ");
-			//    }
-			//    if (property.Setter != null)
-			//    {
-			//        this.WriteSpan(CssClassKeyword, "set", "", "");
-			//        this.Writer.Write("; ");
-			//    }
-			//    this.Writer.Write("}");
-			//}
-
-			//if (this.DocumentLanguage == Language.Basic)
-			//{
-			//    this.ReturnType();
-			//}
 		}
 
 		private void GetSet(HtmlTextWriter writer, string keyword)
