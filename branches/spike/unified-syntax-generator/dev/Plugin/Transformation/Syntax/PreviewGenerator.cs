@@ -634,15 +634,15 @@ namespace CR_Documentor.Transformation.Syntax
 					// TODO: else if (this.Element is SP.Method)
 					//{
 					//    SP.Method method = (SP.Method)this.Element;
-					//    if (method.IsConstructor)
+					//    TODO: if (method.IsConstructor)
 					//    {
 					//        this.Constructor();
 					//    }
-					//    else if (method.IsClassOperator)
+					//    TODO: else if (method.IsClassOperator)
 					//    {
 					//        this.Operator();
 					//    }
-					//    else if (method.IsDestructor)
+					//    TODO: else if (method.IsDestructor)
 					//    {
 					//        this.Destructor();
 					//    }
