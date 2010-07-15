@@ -806,9 +806,18 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			this.ElementContract(writer);
+			var property = (Property)this.Element;
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
+					if (property.HasGetter && !property.HasSetter)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
+					}
+					else if (!property.HasGetter && property.HasSetter)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "WriteOnly");
+					}
 					this.WriteSpan(writer, PreviewCss.Keyword, "Property");
 					break;
 				default:
@@ -820,7 +829,6 @@ namespace CR_Documentor.Transformation.Syntax
 				this.WriteLink(writer, this.ElementMemberType, null, null);
 			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
-			var property = (Property)this.Element;
 			if (property.ParameterCount > 0)
 			{
 				// TODO: indexer properties
