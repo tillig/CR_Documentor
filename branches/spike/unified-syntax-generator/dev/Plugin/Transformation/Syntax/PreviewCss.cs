@@ -38,6 +38,11 @@ namespace CR_Documentor.Transformation.Syntax
 		public const string Constraints = "constraints";
 
 		/// <summary>
+		/// Surrounds a get or set operation on a property.
+		/// </summary>
+		public const string GetSet = "getset";
+
+		/// <summary>
 		/// Surrounds the member identifier.
 		/// </summary>
 		public const string Identifier = "identifier";

@@ -651,10 +651,10 @@ namespace CR_Documentor.Transformation.Syntax
 					//        this.Method();
 					//    }
 					//}
-					// TODO: else if (this.Element is SP.Property)
-					//{
-					//    this.Property();
-					//}
+					else if (this.Element is Property)
+					{
+						this.Property(writer);
+					}
 					else if (this.Element is Event)
 					{
 						this.Event(writer);
@@ -792,6 +792,144 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 
 			writer.Write(closeParen);
+			writer.RenderEndTag();
+		}
+
+		/// <summary>
+		/// Writes the preview for a property.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Property(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Property");
+					break;
+				default:
+					break;
+			}
+
+			if (this.Language != SupportedLanguageId.Basic)
+			{
+				this.WriteLink(writer, this.ElementMemberType, null, null);
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			var property = (Property)this.Element;
+			if (property.ParameterCount > 0)
+			{
+				// TODO: indexer properties
+			}
+			if (this.Language == SupportedLanguageId.Basic)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteLink(writer, this.ElementMemberType, "", "");
+			}
+			else
+			{
+				writer.Write(" {");
+			}
+			if (property.HasGetter)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.GetSet(writer, "Get");
+						break;
+					default:
+						this.GetSet(writer, "get");
+						break;
+				}
+			}
+			if (property.HasSetter)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.GetSet(writer, "Set");
+						break;
+					default:
+						this.GetSet(writer, "set");
+						break;
+				}
+			}
+			if (this.Language != SupportedLanguageId.Basic)
+			{
+				writer.Write("}");
+			}
+
+			//this.MemberSyntaxProlog();
+			//this.WriteSpan(CssClassKeyword, Keyword.Property[this.DocumentLanguage]);
+
+			//if (this.DocumentLanguage != Language.Basic)
+			//{
+			//    this.ReturnType();
+			//}
+
+			//SP.Property property = (SP.Property)this.Element;
+
+			//if (property.ParameterCount > 0)
+			//{
+			//    if (this.DocumentLanguage == Language.CSharp)
+			//    {
+			//        this.WriteSpan(CssClassKeyword, "this", "", "");
+			//    }
+			//    else
+			//    {
+			//        this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
+			//    }
+
+			//    if (this.DocumentLanguage == Language.Basic)
+			//    {
+			//        this.Parameters("(", ")");
+			//    }
+			//    else
+			//    {
+			//        this.Parameters("[", "]");
+			//    }
+			//}
+			//else
+			//{
+			//    this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
+			//}
+
+			//if (this.DocumentLanguage != Language.Basic)
+			//{
+			//    // Get/Set
+			//    this.Writer.Write("{ ");
+			//    if (property.Getter != null)
+			//    {
+			//        this.WriteSpan(CssClassKeyword, "get", "", "");
+			//        this.Writer.Write("; ");
+			//    }
+			//    if (property.Setter != null)
+			//    {
+			//        this.WriteSpan(CssClassKeyword, "set", "", "");
+			//        this.Writer.Write("; ");
+			//    }
+			//    this.Writer.Write("}");
+			//}
+
+			//if (this.DocumentLanguage == Language.Basic)
+			//{
+			//    this.ReturnType();
+			//}
+		}
+
+		private void GetSet(HtmlTextWriter writer, string keyword)
+		{
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.GetSet);
+			writer.RenderBeginTag(HtmlTextWriterTag.Div);
+			this.WriteSpan(writer, PreviewCss.Keyword, keyword, "", "");
+			if (this.Language != SupportedLanguageId.Basic)
+			{
+				writer.Write(";");
+			}
 			writer.RenderEndTag();
 		}
 
