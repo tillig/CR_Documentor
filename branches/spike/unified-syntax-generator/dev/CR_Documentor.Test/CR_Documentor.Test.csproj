@@ -115,6 +115,7 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EventTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\FieldTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\InterfaceTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\MethodTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ParamTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\PropertyTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AttributeProxy.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\LanguageElementProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberWithParametersProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MethodProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\NamedTypeParameterConstraintProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ParamProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AccessSpecifiedElementProxy.cs" />

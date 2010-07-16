@@ -367,7 +367,6 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			// TODO: virtual
 			// TODO: override
-			// TODO: writeonly
 			if (this.Element.IsStatic)
 			{
 				switch (this.Language)
@@ -631,26 +630,10 @@ namespace CR_Documentor.Transformation.Syntax
 					{
 						this.Delegate(writer);
 					}
-					// TODO: else if (this.Element is SP.Method)
-					//{
-					//    SP.Method method = (SP.Method)this.Element;
-					//    TODO: if (method.IsConstructor)
-					//    {
-					//        this.Constructor();
-					//    }
-					//    TODO: else if (method.IsClassOperator)
-					//    {
-					//        this.Operator();
-					//    }
-					//    TODO: else if (method.IsDestructor)
-					//    {
-					//        this.Destructor();
-					//    }
-					//    else
-					//    {
-					//        this.Method();
-					//    }
-					//}
+					else if (this.Element is Method)
+					{
+						this.Method(writer);
+					}
 					else if (this.Element is Property)
 					{
 						this.Property(writer);
@@ -673,6 +656,111 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.Flush();
 				return baseWriter.ToString();
 			}
+		}
+
+		/// <summary>
+		/// Writes the preview for a method.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Method(HtmlTextWriter writer)
+		{
+			var method = (Method)this.Element;
+			if (method.IsConstructor)
+			{
+				// TODO: this.Constructor();
+				return;
+			}
+			else if (method.IsClassOperator)
+			{
+				// TODO: this.Operator();
+				return;
+			}
+			else if (method.IsDestructor)
+			{
+				// TODO: this.Destructor();
+				return;
+			}
+
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			string elementMemberType = this.ElementMemberType;
+			if (TypeInfo.TypeIsVoid(elementMemberType))
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "void");
+						break;
+				}
+			}
+			else
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Function");
+						break;
+					default:
+						this.WriteLink(writer, elementMemberType, null, null);
+						break;
+				}
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			this.Parameters(writer, "(", ")");
+			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteLink(writer, elementMemberType, "", "");
+			}
+			// TODO: Implements
+
+
+			//this.MemberSyntaxProlog();
+			//if (this.DocumentLanguage == Language.Basic)
+			//{
+			//    if (TypeInfo.TypeIsVoid(this.ElementMemberType))
+			//    {
+			//        this.WriteSpan(CssClassKeyword, "Sub");
+			//    }
+			//    else
+			//    {
+			//        this.WriteSpan(CssClassKeyword, "Function");
+			//    }
+			//}
+			//if (this.DocumentLanguage != Language.Basic)
+			//{
+			//    this.ReturnType();
+			//}
+
+			//this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
+			//this.TypeParameters();
+			//this.Parameters("(", ")");
+
+			//SP.Method method = (SP.Method)this.Element;
+			//if (this.DocumentLanguage == Language.Basic)
+			//{
+			//    int count = method.Implements.Count;
+			//    if (count > 0)
+			//    {
+			//        this.Writer.Write("_<br/>");
+			//        this.WriteSpan(CssClassKeyword, "Implements");
+			//        for (int i = 0; i < count; i++)
+			//        {
+			//            this.WriteLink(method.Implements[i]);
+			//            if (i + 1 < count)
+			//            {
+			//                this.WriteSpan("", ",");
+			//            }
+			//        }
+			//    }
+
+			//    this.ReturnType();
+			//}
 		}
 
 		/// <summary>
