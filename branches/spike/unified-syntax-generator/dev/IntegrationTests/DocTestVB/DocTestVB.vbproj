@@ -135,6 +135,7 @@
     <Compile Include="Syntax\TestEnum.vb" />
     <Compile Include="Syntax\TestGenerics.vb" />
     <Compile Include="Syntax\TestInterface.vb" />
+    <Compile Include="Syntax\TestInterfaceImplementation.vb" />
     <Compile Include="Tags\Inline\See.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -149,6 +149,8 @@
     <Compile Include="Syntax\TestEnum.cs" />
     <Compile Include="Syntax\TestGenerics.cs" />
     <Compile Include="Syntax\TestInterface.cs" />
+    <Compile Include="Syntax\TestInterfaceImplementationExplicit.cs" />
+    <Compile Include="Syntax\TestInterfaceImplementationImplicit.cs" />
     <Compile Include="Tags\Inline\C.cs">
       <SubType>Code</SubType>
     </Compile>
