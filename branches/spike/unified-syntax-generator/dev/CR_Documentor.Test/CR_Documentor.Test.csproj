@@ -112,6 +112,7 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ConstructorTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ContractTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DestructorTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DelegateTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EventTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\FieldTest.cs" />

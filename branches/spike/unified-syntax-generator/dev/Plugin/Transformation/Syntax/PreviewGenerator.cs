@@ -380,6 +380,32 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a destructor/finalizer.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Destructor(HtmlTextWriter writer)
+		{
+			// Destructor preview always renders as protected.
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, MemberVisibility.Protected));
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Overrides");
+					this.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+					break;
+				default:
+					this.WriteSpan(writer, PreviewCss.Keyword, "override");
+					this.WriteSpan(writer, PreviewCss.Keyword, "void");
+					break;
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, "Finalize", "", "");
+			this.Parameters(writer, "(", ")");
+		}
+
+		/// <summary>
 		/// Writes the contract (static/abstract/sealed/etc.) for the element.
 		/// </summary>
 		/// <param name="writer">
@@ -703,7 +729,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (method.IsDestructor)
 			{
-				// TODO: this.Destructor();
+				this.Destructor(writer);
 				return;
 			}
 
