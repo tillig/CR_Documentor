@@ -110,6 +110,7 @@
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
     <Compile Include="Transformation\Syntax\LanguageTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ConstructorTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ContractTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DelegateTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EventTest.cs" />

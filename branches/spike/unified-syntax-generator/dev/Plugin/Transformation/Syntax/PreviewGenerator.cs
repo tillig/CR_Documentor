@@ -357,6 +357,29 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a constructor.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void Constructor(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+					this.WriteSpan(writer, PreviewCss.Identifier, "New", "", "");
+					break;
+				default:
+					this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+					break;
+			}
+			this.Parameters(writer, "(", ")");
+		}
+
+		/// <summary>
 		/// Writes the contract (static/abstract/sealed/etc.) for the element.
 		/// </summary>
 		/// <param name="writer">
@@ -670,7 +693,7 @@ namespace CR_Documentor.Transformation.Syntax
 			var method = (Method)this.Element;
 			if (method.IsConstructor)
 			{
-				// TODO: this.Constructor();
+				this.Constructor(writer);
 				return;
 			}
 			else if (method.IsClassOperator)
