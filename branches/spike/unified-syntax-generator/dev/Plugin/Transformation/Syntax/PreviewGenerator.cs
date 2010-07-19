@@ -712,55 +712,28 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			this.Parameters(writer, "(", ")");
-			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
+			if (this.Language == SupportedLanguageId.Basic)
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
-				this.WriteLink(writer, elementMemberType, "", "");
+				if (!TypeInfo.TypeIsVoid(elementMemberType))
+				{
+					this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+					this.WriteLink(writer, elementMemberType, "", "");
+				}
+				int count = method.ImplementsCount;
+				if (count > 0)
+				{
+					writer.Write(" ");
+					this.WriteSpan(writer, PreviewCss.Keyword, "Implements");
+					for (int i = 0; i < count; i++)
+					{
+						this.WriteLink(writer, method.Implements[i], "", "");
+						if (i + 1 < count)
+						{
+							writer.Write(", ");
+						}
+					}
+				}
 			}
-			// TODO: Implements
-
-
-			//this.MemberSyntaxProlog();
-			//if (this.DocumentLanguage == Language.Basic)
-			//{
-			//    if (TypeInfo.TypeIsVoid(this.ElementMemberType))
-			//    {
-			//        this.WriteSpan(CssClassKeyword, "Sub");
-			//    }
-			//    else
-			//    {
-			//        this.WriteSpan(CssClassKeyword, "Function");
-			//    }
-			//}
-			//if (this.DocumentLanguage != Language.Basic)
-			//{
-			//    this.ReturnType();
-			//}
-
-			//this.WriteSpan(CssClassIdentifier, this.Element.Name, "", "");
-			//this.TypeParameters();
-			//this.Parameters("(", ")");
-
-			//SP.Method method = (SP.Method)this.Element;
-			//if (this.DocumentLanguage == Language.Basic)
-			//{
-			//    int count = method.Implements.Count;
-			//    if (count > 0)
-			//    {
-			//        this.Writer.Write("_<br/>");
-			//        this.WriteSpan(CssClassKeyword, "Implements");
-			//        for (int i = 0; i < count; i++)
-			//        {
-			//            this.WriteLink(method.Implements[i]);
-			//            if (i + 1 < count)
-			//            {
-			//                this.WriteSpan("", ",");
-			//            }
-			//        }
-			//    }
-
-			//    this.ReturnType();
-			//}
 		}
 
 		/// <summary>
