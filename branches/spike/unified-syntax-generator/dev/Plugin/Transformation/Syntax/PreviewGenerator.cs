@@ -357,6 +357,36 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Writes the preview for a class operator (cast, overload, etc.).
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		protected virtual void ClassOperator(HtmlTextWriter writer)
+		{
+			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
+			switch (this.Language)
+			{
+				case SupportedLanguageId.Basic:
+					this.WriteSpan(writer, PreviewCss.Keyword, "Operator");
+					break;
+				default:
+					this.WriteLink(writer, this.ElementMemberType, "", " ");
+					this.WriteSpan(writer, PreviewCss.Keyword, "operator");
+					break;
+			}
+			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			this.Parameters(writer, "(", ")");
+			if (this.Language == SupportedLanguageId.Basic)
+			{
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteLink(writer, this.ElementMemberType, "", "");
+			}
+		}
+
+		/// <summary>
 		/// Writes the preview for a constructor.
 		/// </summary>
 		/// <param name="writer">
@@ -366,6 +396,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Constructor(HtmlTextWriter writer)
 		{
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -724,7 +755,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			else if (method.IsClassOperator)
 			{
-				// TODO: this.Operator();
+				this.ClassOperator(writer);
 				return;
 			}
 			else if (method.IsDestructor)
@@ -734,6 +765,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			this.ElementContract(writer);
 			string elementMemberType = this.ElementMemberType;
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
