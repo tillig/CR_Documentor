@@ -365,19 +365,52 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void ClassOperator(HtmlTextWriter writer)
 		{
+			var method = (Method)this.Element;
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			this.ElementContract(writer);
+			bool isCast = method.IsImplicitCast || method.IsExplicitCast;
+
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
+					if (method.IsImplicitCast)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "Widening");
+					}
+					else if (method.IsExplicitCast)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "Narrowing");
+					}
 					this.WriteSpan(writer, PreviewCss.Keyword, "Operator");
 					break;
 				default:
-					this.WriteLink(writer, this.ElementMemberType, "", " ");
+					if (method.IsImplicitCast)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "implicit");
+					}
+					else if (method.IsExplicitCast)
+					{
+						this.WriteSpan(writer, PreviewCss.Keyword, "explicit");
+					}
+					else
+					{
+						this.WriteLink(writer, this.ElementMemberType, "", " ");
+					}
 					this.WriteSpan(writer, PreviewCss.Keyword, "operator");
+					if (isCast)
+					{
+						this.WriteLink(writer, this.ElementMemberType, "", "");
+					}
 					break;
 			}
-			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			if (!isCast)
+			{
+				this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			}
+			else if (this.Language == SupportedLanguageId.Basic)
+			{
+				this.WriteSpan(writer, PreviewCss.Identifier, "CType", "", "");
+			}
 			this.Parameters(writer, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
