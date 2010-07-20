@@ -268,5 +268,51 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
+
+		[TestMethod]
+		public void Virtual_Basic()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "String",
+				IsVirtual = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Overridable</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Virtual_CSharp()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "string",
+				IsVirtual = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">virtual</span> <a href=""#"">string</a> <span class=""identifier"">TestMethod</span><div class=""parameters"">
+()
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

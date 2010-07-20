@@ -433,7 +433,6 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void ElementContract(HtmlTextWriter writer)
 		{
-			// TODO: virtual
 			// TODO: override
 			if (this.Element.IsStatic)
 			{
@@ -483,6 +482,19 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 			}
+			else if (this.Element.IsVirtual)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Overridable");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "virtual");
+						break;
+				}
+			}
+
 			if (this.Element.IsReadOnly)
 			{
 				switch (this.Language)
