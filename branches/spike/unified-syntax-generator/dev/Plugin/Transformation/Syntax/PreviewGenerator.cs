@@ -50,6 +50,12 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </remarks>
 	public class PreviewGenerator
 	{
+		// TODO: Look at options to refactor this class - smaller methods, smaller classes (one per preview type?), etc.
+		// TODO: Create CSS for Sandcastle syntax preview.
+		// TODO: Create CSS for MSDN syntax preview.
+		// TODO: Swap the new preview generator in for the old ones.
+		// TODO: Remove unused lookups, classes, etc. after the new preview generator is in place.
+
 		/// <summary>
 		/// Gets the element being documented.
 		/// </summary>
