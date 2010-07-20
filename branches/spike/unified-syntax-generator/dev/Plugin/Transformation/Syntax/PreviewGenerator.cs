@@ -27,6 +27,9 @@ namespace CR_Documentor.Transformation.Syntax
 	/// <item><term>.attribute</term></item>
 	/// <item><term>.attributes</term></item>
 	/// <item><term>.comment</term></item>
+	/// <item><term>.constraint</term></item>
+	/// <item><term>.constraints</term></item>
+	/// <item><term>.getset</term></item>
 	/// <item><term>.identifier</term></item>
 	/// <item><term>.keyword</term></item>
 	/// <item><term>.literal</term></item>
@@ -47,56 +50,8 @@ namespace CR_Documentor.Transformation.Syntax
 	/// there is no need for CSS classes that are language-specific.
 	/// </para>
 	/// </remarks>
-	/// <example>
-	/// <para>
-	/// For this method:
-	/// </para>
-	/// <code lang="C#">
-	/// [SomeAttribute]
-	/// [OtherAttribute(1, b=2)]
-	/// public abstract string MyMethod&lt;T&gt;(out string a, T b)
-	/// </code>
-	/// <para>
-	/// The corresponding HTML for a C# preview would be:
-	/// </para>
-	/// <code>
-	/// &lt;div class=&quot;code&quot;&gt;
-	///   &lt;div class=&quot;attributes&quot;&gt;
-	///     &lt;div class=&quot;attribute&quot;&gt;[SomeAttribute]&lt;/div&gt;
-	///     &lt;div class=&quot;attribute&quot;&gt;[OtherAttribute&lt;div class=&quot;parameters&quot;&gt;(&lt;div class=&quot;literal&quot;&gt;1&lt;/div&gt;, &lt;div class=&quot;parameter&quot;&gt;b&lt;/div&gt;=&lt;div class=&quot;literal&quot;&gt;2&lt;/div&gt;)&lt;/div&gt;]&lt;/div&gt;
-	///   &lt;/div&gt;
-	///   &lt;div class=&quot;member&quot;&gt;
-	///     &lt;span class=&quot;keyword&quot;&gt;public&lt;span&gt;
-	///     &lt;span class=&quot;keyword&quot;&gt;abstract&lt;/span&gt;
-	///     &lt;span class=&quot;keyword&quot;&gt;&lt;a href=&quot;#&quot;&gt;string&lt;/a&gt;&lt;/span&gt;
-	///     &lt;span class=&quot;identifier&quot;&gt;MyMethod&lt;/span&gt;&lt;div class=&quot;typeparameters&quot;&gt;&amp;lt;&lt;div class=&quot;typeparameter&quot;&gt;T&lt;/div&gt;&amp;gt;&lt;/div&gt;&lt;div class=&quot;parameters&quot;&gt;(&lt;br /&gt;
-	///     &lt;div class=&quot;keyword&quot;&gt;out&lt;/div&gt; &lt;div class=&quot;keyword&quot;&gt;&lt;a href=&quot;#&quot;&gt;string&lt;/a&gt;&lt;/div&gt; &lt;div class=&quot;parameter&quot;&gt;a&lt;/div&gt;,&lt;br /&gt;
-	///     &lt;div class=&quot;keyword&quot;&gt;T&lt;/div&gt; &lt;div class=&quot;parameter&quot;&gt;b&lt;/div&gt;&lt;br /&gt;
-	///     )&lt;/div&gt;
-	///   &lt;/div&gt;
-	/// &lt;/div&gt;
-	/// </code>
-	/// </example>
 	public class PreviewGenerator
 	{
-		/* TODO: After all is said and done, encode this sample and update it in the XML doc above.
-		 * <div class="code">
-		 *   <div class="attributes">
-		 *     <div class="attribute">[SomeAttribute]</div>
-		 *     <div class="attribute">[OtherAttribute<div class="parameters">(<span class="parameter">1</span>, <span class="parameter">b</span>=<span class="literal">2</span>)</div>]</div>
-		 *   </div>
-		 *   <div class="member">
-		 *     <span class="keyword">public<span>
-		 *     <span class="keyword">abstract</span>
-		 *     <span class="keyword"><a href="#">string</a></span>
-		 *     <span class="identifier">MyMethod</span><div class="typeparameters">&lt;<span class="typeparameter">T</span>&gt;</div><div class="parameters">(<br />
-		 *     <span class="keyword">out</span> <span class="keyword"><a href="#">string</a></span> <span class="parameter">a</span>,<br />
-		 *     <span class="keyword"><a href="#">string</a></span> <span class="parameter">b</span><br />
-		 *     )</div>
-		 *   </div>
-		 * </div>
-		 */
-
 		/// <summary>
 		/// Gets the element being documented.
 		/// </summary>
