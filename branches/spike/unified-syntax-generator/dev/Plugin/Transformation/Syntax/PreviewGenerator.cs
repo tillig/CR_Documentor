@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DevExpress.CodeRush.StructuralParser;
 using System.IO;
-using System.Web.UI;
 using System.Web;
+using System.Web.UI;
 using CR_Documentor.Properties;
+using DevExpress.CodeRush.StructuralParser;
 
 namespace CR_Documentor.Transformation.Syntax
 {
@@ -433,7 +431,6 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void ElementContract(HtmlTextWriter writer)
 		{
-			// TODO: override
 			if (this.Element.IsStatic)
 			{
 				switch (this.Language)
@@ -491,6 +488,18 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 					default:
 						this.WriteSpan(writer, PreviewCss.Keyword, "virtual");
+						break;
+				}
+			}
+			else if (this.Element.IsOverride)
+			{
+				switch (this.Language)
+				{
+					case SupportedLanguageId.Basic:
+						this.WriteSpan(writer, PreviewCss.Keyword, "Overrides");
+						break;
+					default:
+						this.WriteSpan(writer, PreviewCss.Keyword, "override");
 						break;
 				}
 			}

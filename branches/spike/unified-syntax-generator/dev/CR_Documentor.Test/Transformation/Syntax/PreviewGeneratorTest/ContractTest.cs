@@ -140,6 +140,52 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Override_Method_Basic()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "String",
+				IsOverride = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Overrides</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Override_Method_CSharp()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "string",
+				IsOverride = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">override</span> <a href=""#"">string</a> <span class=""identifier"">TestMethod</span><div class=""parameters"">
+()
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Sealed_Class_Basic()
 		{
 			ClassProxy info = new ClassProxy("TestClass")
@@ -270,7 +316,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
-		public void Virtual_Basic()
+		public void Virtual_Method_Basic()
 		{
 			MethodProxy info = new MethodProxy("TestMethod")
 			{
@@ -292,7 +338,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
-		public void Virtual_CSharp()
+		public void Virtual_Method_CSharp()
 		{
 			MethodProxy info = new MethodProxy("TestMethod")
 			{
