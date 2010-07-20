@@ -61,6 +61,15 @@ namespace CR_Documentor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [This object has no individual syntax.].
+        /// </summary>
+        public static string PreviewGenerator_LanguageElementNotSupported {
+            get {
+                return ResourceManager.GetString("PreviewGenerator_LanguageElementNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [Language not supported for syntax preview.].
         /// </summary>
         public static string PreviewGenerator_LanguageNotSupported {

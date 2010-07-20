@@ -28,6 +28,22 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Generate_LanguageElementNotSupported()
+		{
+			var element = Isolate.Fake.Instance<AccessSpecifiedElement>();
+
+			string expected =
+@"<div class=""code cs"">
+{0}
+</div>";
+			expected = String.Format(expected, Resources.PreviewGenerator_LanguageElementNotSupported);
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Generate_LanguageNotSupported()
 		{
 			var element = Isolate.Fake.Instance<AccessSpecifiedElement>();
