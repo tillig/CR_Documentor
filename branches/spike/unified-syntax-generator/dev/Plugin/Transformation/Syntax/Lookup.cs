@@ -11,10 +11,6 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </summary>
 	public static class Lookup
 	{
-		#region Lookup Variables
-
-		#region Statics
-
 		/// <summary>
 		/// Contains the lookup values for various operator method names.
 		/// </summary>
@@ -30,16 +26,6 @@ namespace CR_Documentor.Transformation.Syntax
 		/// to the DXCore document language.
 		/// </summary>
 		public static readonly DefaultValueStringDictionary LanguageValue;
-
-		#endregion
-
-		#endregion
-
-
-
-		#region Lookup Implementation
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes <see langword="static" /> values of the <see cref="CR_Documentor.Transformation.Syntax.Lookup" /> class.
@@ -95,116 +81,6 @@ namespace CR_Documentor.Transformation.Syntax
 			LanguageValue.Add(Language.Basic, "VisualBasic vb");
 			LanguageValue.Add(Language.CSharp, "CSharp cs");
 			LanguageValue.DefaultValue = "x";
-		}
-
-		#endregion
-
-		#region Methods
-
-		/// <summary>
-		/// Resolves the member contract (new/static/abstract/etc.).
-		/// </summary>
-		/// <param name="element">
-		/// The member to determine the contract for.
-		/// </param>
-		/// <returns>
-		/// A language-specific member contract based on the element language.
-		/// </returns>
-		public static string Contract(SP.AccessSpecifiedElement element)
-		{
-			string retVal = "";
-			string lang = element.Document.Language;
-			if (element.IsNew)
-			{
-				retVal = Keyword.New[lang];
-			}
-
-			string memberKW = "";
-			if (element.IsStatic)
-			{
-				memberKW = Keyword.StaticMember[lang];
-			}
-			else if (element.IsAbstract)
-			{
-				memberKW = Keyword.AbstractMember[lang];
-			}
-			else if (element.IsVirtual)
-			{
-				memberKW = Keyword.Virtual[lang];
-			}
-			else if (element.IsOverride)
-			{
-				memberKW = Keyword.Override[lang];
-			}
-
-			if (memberKW != "")
-			{
-				if (retVal != "")
-				{
-					retVal += " " + memberKW;
-				}
-				else
-				{
-					retVal = memberKW;
-				}
-			}
-			return retVal;
-		}
-
-		/// <summary>
-		/// Resolves the member contract (new/static/abstract/etc.).
-		/// </summary>
-		/// <param name="documentLanguage">The language to resolve the contract for.</param>
-		/// <param name="access">The accessibility of the member.</param>
-		/// <returns>
-		/// A language-specific member contract based on the element language.
-		/// </returns>
-		public static string Contract(string documentLanguage, SP.AccessSpecifiers access)
-		{
-			string retVal = "";
-			if (access.IsNew)
-			{
-				retVal = Keyword.New[documentLanguage];
-			}
-
-			string memberKW = "";
-			if (access.IsStatic)
-			{
-				memberKW = Keyword.StaticMember[documentLanguage];
-			}
-			else if (access.IsAbstract)
-			{
-				memberKW = Keyword.AbstractMember[documentLanguage];
-			}
-			else if (access.IsVirtual)
-			{
-				memberKW = Keyword.Virtual[documentLanguage];
-			}
-			else if (access.IsOverride)
-			{
-				memberKW = Keyword.Override[documentLanguage];
-			}
-			else if (access.IsReadOnly)
-			{
-				memberKW = Keyword.ReadOnly[documentLanguage];
-			}
-			else if (access.IsWriteOnly)
-			{
-				memberKW = Keyword.WriteOnly[documentLanguage];
-			}
-
-			if (memberKW != "")
-			{
-				if (retVal != "")
-				{
-					retVal += " " + memberKW;
-				}
-				else
-				{
-					retVal = memberKW;
-				}
-			}
-			return retVal;
 		}
 
 		/// <summary>
@@ -282,127 +158,6 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
-		/// Resolves the language-specific keyword that defines the element.
-		/// </summary>
-		/// <param name="element">
-		/// The member to determine the keyword for.
-		/// </param>
-		/// <returns>
-		/// A language-specific keyword for the given element.
-		/// </returns>
-		public static string ElementType(SP.AccessSpecifiedElement element)
-		{
-			return ElementType(Language.ConvertToSupportedLanguageId(element.Document.Language), element);
-		}
-
-		/// <summary>
-		/// Resolves the language-specific keyword that defines the element.
-		/// </summary>
-		/// <param name="language">
-		/// The language in which the keyword should be returned.
-		/// </param>
-		/// <param name="element">
-		/// The member to determine the keyword for.
-		/// </param>
-		/// <returns>
-		/// A language-specific keyword for the given element.
-		/// </returns>
-		public static string ElementType(SupportedLanguageId language, SP.AccessSpecifiedElement element)
-		{
-			if (element is SP.Struct)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Structure";
-					default:
-						return "struct";
-				}
-			}
-			else if (element is SP.Interface)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Interface";
-					default:
-						return "interface";
-				}
-			}
-			else if (element is SP.Class)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Class";
-					default:
-						return "class";
-				}
-			}
-			else if (element is SP.Enumeration)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Enum";
-					default:
-						return "enum";
-				}
-			}
-			else if (element is SP.DelegateDefinition)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Delegate";
-					default:
-						return "delegate";
-				}
-			}
-			else if (element is SP.Event)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Event";
-					default:
-						return "event";
-				}
-			}
-			else if (element is SP.Const)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Const";
-					default:
-						return "const";
-				}
-			}
-			else if (element is SP.BaseVariable && element.IsReadOnly)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "ReadOnly";
-					default:
-						return "readonly";
-				}
-			}
-			else if (element is SP.Method && ((SP.Method)element).IsClassOperator)
-			{
-				switch (language)
-				{
-					case SupportedLanguageId.Basic:
-						return "Operator";
-					default:
-						return "operator";
-				}
-			}
-			return "";
-		}
-
-		/// <summary>
 		/// Determines the descriptive type of the provided element.
 		/// </summary>
 		/// <param name="element">The element to look up the type of.</param>
@@ -467,33 +222,6 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
-		/// Resolves the visibility of the specified element.
-		/// </summary>
-		/// <param name="element">
-		/// The member to determine the visibility of.
-		/// </param>
-		/// <returns>
-		/// A language-specific string that contains the visibility of the provided member.
-		/// </returns>
-		public static string Visibility(SP.AccessSpecifiedElement element)
-		{
-			return Visibility(element.Document.Language, element.Visibility);
-		}
-
-		/// <summary>
-		/// Resolves the language-specific visibility keyword.
-		/// </summary>
-		/// <param name="documentLanguage">The document language to return the value in.</param>
-		/// <param name="visibility">The visibility to look up.</param>
-		/// <returns>
-		/// A language-specific string that contains the visibility information.
-		/// </returns>
-		public static string Visibility(string documentLanguage, SP.MemberVisibility visibility)
-		{
-			return Visibility(Language.ConvertToSupportedLanguageId(documentLanguage), visibility);
-		}
-
-		/// <summary>
 		/// Resolves the language-specific visibility keyword.
 		/// </summary>
 		/// <param name="language">The document language to return the value in.</param>
@@ -540,10 +268,5 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 			}
 		}
-
-		#endregion
-
-		#endregion
-
 	}
 }

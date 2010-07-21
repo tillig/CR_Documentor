@@ -266,21 +266,15 @@
     <Compile Include="Transformation\MSDN\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Transformation\MSDN\SyntaxGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Transformation\SandcastlePrototype\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Transformation\SandcastlePrototype\SyntaxGenerator.cs" />
     <Compile Include="Collections\DefaultValueStringDictionary.cs" />
-    <Compile Include="Transformation\Syntax\Keyword.cs" />
     <Compile Include="Transformation\Syntax\PreviewCss.cs" />
     <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
     <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />
-    <Compile Include="Transformation\Syntax\Statement.cs" />
-    <Compile Include="Transformation\Syntax\SyntaxGenerator.cs" />
+    <Compile Include="Transformation\MSDN\Statement.cs" />
     <Compile Include="Transformation\Syntax\Language.cs" />
     <Compile Include="Transformation\Syntax\TypeInfo.cs" />
     <Compile Include="Transformation\TransformEngine.cs">
