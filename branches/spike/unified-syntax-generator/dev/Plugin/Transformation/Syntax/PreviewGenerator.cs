@@ -824,7 +824,9 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 			}
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			this.TypeParameters(writer);
 			this.Parameters(writer, "(", ")");
+			this.TypeParameterConstraintsPostSignature(writer);
 			if (this.Language == SupportedLanguageId.Basic)
 			{
 				if (!TypeInfo.TypeIsVoid(elementMemberType))
