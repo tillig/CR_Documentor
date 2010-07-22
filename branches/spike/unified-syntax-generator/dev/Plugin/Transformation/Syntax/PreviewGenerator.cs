@@ -832,6 +832,7 @@ namespace CR_Documentor.Transformation.Syntax
 				return;
 			}
 
+			// TODO: For explicit interface implementations in C#, no visibility is written.
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			this.ElementContract(writer);
 			string elementMemberType = this.ElementMemberType;
