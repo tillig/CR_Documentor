@@ -128,7 +128,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span> <span class=""keyword"">As</span> <span class=""keyword"">Int64</span>
+<span class=""keyword"">Public</span> <span class=""keyword"">Enum</span> <span class=""identifier"">TestEnum</span>&nbsp;<span class=""keyword"">As</span> <span class=""keyword"">Int64</span>
 </div>
 </div>";
 

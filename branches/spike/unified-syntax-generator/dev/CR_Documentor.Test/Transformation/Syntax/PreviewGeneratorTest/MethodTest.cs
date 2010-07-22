@@ -49,15 +49,15 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Sub</span> <span class=""identifier"">TestMethod</span><div class=""typeparameters"">
 (<span class=""keyword"">Of</span> <span class=""typeparameter"">H</span><div class=""constraints"">
- <span class=""keyword"">As</span> {<div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> {<div class=""constraint"">
 <a href=""#"">Attribute</a>, <a href=""#"">ISerializable</a>
 </div>}
 </div>, <span class=""typeparameter"">I</span><div class=""constraints"">
- <span class=""keyword"">As</span> <div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> <div class=""constraint"">
 <span class=""keyword"">Structure</span>
 </div>
 </div>, <span class=""typeparameter"">J</span><div class=""constraints"">
- <span class=""keyword"">As</span> {<div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> {<div class=""constraint"">
 <span class=""keyword"">Class</span>, <a href=""#"">IList</a>, <a href=""#"">ICollection</a>, <span class=""keyword"">New</span>
 </div>}
 </div>)
@@ -155,7 +155,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">String</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">String</a> <span class=""keyword"">Implements</span> <a href=""#"">TestInterface.TestMethod1</a>, <a href=""#"">TestInterface.TestMethod2</a>, <a href=""#"">TestInterface.TestMethod3</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a> <span class=""keyword"">Implements</span> <a href=""#"">TestInterface.TestMethod1</a>, <a href=""#"">TestInterface.TestMethod2</a>, <a href=""#"">TestInterface.TestMethod3</a>
 </div>
 </div>";
 
@@ -190,7 +190,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">String</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">String</a> <span class=""keyword"">Implements</span> <a href=""#"">TestInterface.TestMethod</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a> <span class=""keyword"">Implements</span> <a href=""#"">TestInterface.TestMethod</a>
 </div>
 </div>";
 
@@ -220,7 +220,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">String</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -271,7 +271,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -354,7 +354,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 

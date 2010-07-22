@@ -35,7 +35,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">TestClass</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">Integer</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">Integer</a>
 </div>
 </div>";
 
@@ -101,7 +101,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">TestClass</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">Integer</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">Integer</a>
 </div>
 </div>";
 
@@ -166,7 +166,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">TestClass</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">TestClass</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">TestClass</a>
 </div>
 </div>";
 

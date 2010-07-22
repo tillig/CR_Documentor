@@ -32,7 +32,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">param1</span> <span class=""keyword"">As</span> <a href=""#"">String</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -83,7 +83,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Delegate</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestDelegate</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Delegate</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestDelegate</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 

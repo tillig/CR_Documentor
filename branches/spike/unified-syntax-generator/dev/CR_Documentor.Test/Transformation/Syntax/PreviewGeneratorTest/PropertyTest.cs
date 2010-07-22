@@ -25,7 +25,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">ReadOnly</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span> <span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
+<span class=""keyword"">Public</span> <span class=""keyword"">ReadOnly</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
 <span class=""keyword"">Get</span>
 </div>
 </div>
@@ -75,7 +75,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span> <span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
+<span class=""keyword"">Public</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
 <span class=""keyword"">Get</span>
 </div><div class=""getset"">
 <span class=""keyword"">Set</span>
@@ -138,7 +138,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 ( _<div class=""parameter"">
 <span class=""identifier"">index</span> <span class=""keyword"">As</span> <a href=""#"">Integer</a> _
 </div>)
-</div> <span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
+</div>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
 <span class=""keyword"">Get</span>
 </div><div class=""getset"">
 <span class=""keyword"">Set</span>
@@ -200,7 +200,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">WriteOnly</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span> <span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
+<span class=""keyword"">Public</span> <span class=""keyword"">WriteOnly</span> <span class=""keyword"">Property</span> <span class=""identifier"">TestProperty</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a><div class=""getset"">
 <span class=""keyword"">Set</span>
 </div>
 </div>

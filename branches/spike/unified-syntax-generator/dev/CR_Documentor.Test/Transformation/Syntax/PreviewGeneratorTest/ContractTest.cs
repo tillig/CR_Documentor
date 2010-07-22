@@ -66,7 +66,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Const</span> <span class=""identifier"">Field</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Const</span> <span class=""identifier"">Field</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -152,7 +152,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Overrides</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Overrides</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -283,7 +283,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">ReadOnly</span> <span class=""identifier"">Field</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Shared</span> <span class=""keyword"">ReadOnly</span> <span class=""identifier"">Field</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 
@@ -328,7 +328,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Overridable</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Overridable</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 

@@ -403,7 +403,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.Parameters(writer, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 				this.WriteLink(writer, this.ElementMemberType, "", "");
 			}
 		}
@@ -602,7 +602,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.Parameters(writer, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 				this.WriteLink(writer, elementMemberType, "", "");
 			}
 		}
@@ -633,7 +633,7 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+						this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 						break;
 					default:
 						writer.Write(" : ");
@@ -686,7 +686,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 				this.WriteLink(writer, memberType, "", "");
 			}
 		}
@@ -709,7 +709,7 @@ namespace CR_Documentor.Transformation.Syntax
 			this.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 				this.WriteLink(writer, this.ElementMemberType, "", "");
 			}
 		}
@@ -867,7 +867,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				if (!TypeInfo.TypeIsVoid(elementMemberType))
 				{
-					this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+					this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 					this.WriteLink(writer, elementMemberType, "", "");
 				}
 				int count = method.ImplementsCount;
@@ -1064,7 +1064,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+				this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 				this.WriteLink(writer, this.ElementMemberType, "", "");
 			}
 			else
@@ -1195,7 +1195,7 @@ namespace CR_Documentor.Transformation.Syntax
 
 			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraints);
 			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			this.WriteSpan(writer, PreviewCss.Keyword, "As", " ", " ");
+			this.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
 			if (constraintCount > 1)
 			{
 				writer.Write("{");

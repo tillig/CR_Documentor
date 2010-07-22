@@ -130,7 +130,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 (<span class=""keyword"">Of</span> <span class=""typeparameter"">T</span><div class=""constraints"">
- <span class=""keyword"">As</span> <div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> <div class=""constraint"">
 <span class=""keyword"">New</span>
 </div>
 </div>)
@@ -214,15 +214,15 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 <div class=""member"">
 <span class=""keyword"">Public</span> <span class=""keyword"">Class</span> <span class=""identifier"">TestClass</span><div class=""typeparameters"">
 (<span class=""keyword"">Of</span> <span class=""typeparameter"">H</span><div class=""constraints"">
- <span class=""keyword"">As</span> {<div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> {<div class=""constraint"">
 <a href=""#"">Attribute</a>, <a href=""#"">ISerializable</a>
 </div>}
 </div>, <span class=""typeparameter"">I</span><div class=""constraints"">
- <span class=""keyword"">As</span> <div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> <div class=""constraint"">
 <span class=""keyword"">Structure</span>
 </div>
 </div>, <span class=""typeparameter"">J</span><div class=""constraints"">
- <span class=""keyword"">As</span> {<div class=""constraint"">
+&nbsp;<span class=""keyword"">As</span> {<div class=""constraint"">
 <span class=""keyword"">Class</span>, <a href=""#"">IList</a>, <a href=""#"">ICollection</a>, <span class=""keyword"">New</span>
 </div>}
 </div>)

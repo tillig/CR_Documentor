@@ -24,7 +24,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""identifier"">Field</span> <span class=""keyword"">As</span> <a href=""#"">String</a>
+<span class=""keyword"">Public</span> <span class=""identifier"">Field</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
 </div>
 </div>";
 

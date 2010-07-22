@@ -26,7 +26,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Event</span> <span class=""identifier"">TestEvent</span> <span class=""keyword"">As</span> <a href=""#"">TestClass.TestEventEventHandler</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Event</span> <span class=""identifier"">TestEvent</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">TestClass.TestEventEventHandler</a>
 </div>
 </div>";
 
@@ -47,7 +47,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			string expected =
 @"<div class=""code vb"">
 <div class=""member"">
-<span class=""keyword"">Public</span> <span class=""keyword"">Event</span> <span class=""identifier"">TestEvent</span> <span class=""keyword"">As</span> <a href=""#"">EventHandler</a>
+<span class=""keyword"">Public</span> <span class=""keyword"">Event</span> <span class=""identifier"">TestEvent</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">EventHandler</a>
 </div>
 </div>";
 
