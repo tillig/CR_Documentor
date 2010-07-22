@@ -15,14 +15,14 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void Ctor_NullElement()
 		{
-			new PreviewGenerator(null, SupportedLanguageId.CSharp);
+			new PreviewGenerator(null, SupportedLanguageId.CSharp, true);
 		}
 
 		[TestMethod]
 		public void Ctor_PropertiesSet()
 		{
 			var element = Isolate.Fake.Instance<AccessSpecifiedElement>();
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			Assert.AreSame(generator.Element, element);
 			Assert.AreEqual(SupportedLanguageId.CSharp, generator.Language);
 		}
@@ -38,7 +38,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>";
 			expected = String.Format(expected, Resources.PreviewGenerator_LanguageElementNotSupported);
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -54,7 +54,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>";
 			expected = String.Format(expected, Resources.PreviewGenerator_LanguageNotSupported);
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.None);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.None, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}

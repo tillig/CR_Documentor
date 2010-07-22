@@ -39,7 +39,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -72,7 +72,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -105,7 +105,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -138,7 +138,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -170,7 +170,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}
@@ -202,7 +202,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 </div>
 </div>";
 
-			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp);
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			string actual = generator.Generate();
 			Assert.AreEqual(expected, actual);
 		}

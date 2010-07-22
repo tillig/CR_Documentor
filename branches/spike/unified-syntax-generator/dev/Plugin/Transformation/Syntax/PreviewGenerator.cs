@@ -108,6 +108,15 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Gets a value indicating if the HTML output has newlines in it.
+		/// </summary>
+		/// <value>
+		/// <see langword="true" /> to allow newlines (easier for testing);
+		/// <see langword="false" /> to disable newlines (for production).
+		/// </value>
+		public bool EnableNewlines { get; private set; }
+
+		/// <summary>
 		/// Gets the preview language.
 		/// </summary>
 		/// <value>
@@ -153,6 +162,29 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			this.Element = element;
 			this.Language = language;
+		}
+
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator" /> class.
+		/// </summary>
+		/// <param name="element">
+		/// The element for which the syntax preview should be generated.
+		/// </param>
+		/// <param name="language">
+		/// The programming language in which the preview should be rendered.
+		/// </param>
+		/// <param name="enableNewlines">
+		/// <see langword="true" /> to enable newlines in the output (helpful for
+		/// testing); <see langword="false" /> to disable newlines (production).
+		/// </param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="element" /> is <see langword="null" />.
+		/// </exception>
+		public PreviewGenerator(AccessSpecifiedElement element, SupportedLanguageId language, bool enableNewlines)
+			: this(element, language)
+		{
+			this.EnableNewlines = enableNewlines;
 		}
 
 		/// <summary>
@@ -690,6 +722,10 @@ namespace CR_Documentor.Transformation.Syntax
 			using (StringWriter baseWriter = new StringWriter())
 			using (XhtmlTextWriter writer = new XhtmlTextWriter(baseWriter, ""))
 			{
+				if (!this.EnableNewlines)
+				{
+					writer.NewLine = "";
+				}
 				string cssClass = PreviewCss.Code;
 				switch (this.Language)
 				{
