@@ -1004,10 +1004,21 @@
 			color: green;
 		}
 		
-		div.code span.parameter
+		div.code div.parameters div.parameter
+		{
+			margin-left: 65px;
+		}
+		
+		div.code div.parameter span.identifier
 		{
 			font-style: italic;
 			color: purple;
+			font-weight: normal;
+		}
+		
+		div.code div.attributes div.parameter
+		{
+			margin-left: 0px;
 		}
 		
 		div.code span.literal
@@ -1040,6 +1051,23 @@
 			display: inline;
 		}
 		
+		div.code div.attribute div.parameter
+		{
+			display: inline;
+		}
+		
+		div.code.cs div.getset
+		{
+			display: inline;
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+		
+		div.code.vb div.getset
+		{
+			margin-left: 65px;
+		}
+		
 		/* CR_Documentor overrides for printing */
 		@media print
 		{
@@ -1051,5 +1079,4 @@
 	</style>
 	<title>CR_Documentor Preview</title>
 </head>
-<body>
-	!!BODY!!</body></html>
+<body>!!BODY!!</body></html>
