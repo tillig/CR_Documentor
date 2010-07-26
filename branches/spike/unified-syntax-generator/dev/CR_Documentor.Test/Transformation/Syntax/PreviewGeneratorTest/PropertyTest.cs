@@ -18,7 +18,8 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			{
 				MemberType = "String",
 				HasGetter = true,
-				HasSetter = false
+				HasSetter = false,
+				IsReadOnly = true // ReadOnly properties in VB parse with IsReadOnly set true
 			};
 			var element = info.CreateFakeProperty();
 

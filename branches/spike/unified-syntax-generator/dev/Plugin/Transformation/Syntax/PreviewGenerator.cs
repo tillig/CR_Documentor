@@ -832,8 +832,10 @@ namespace CR_Documentor.Transformation.Syntax
 				return;
 			}
 
+			// TODO: For members that belong to an interface (methods in an interface definition), no visibility is written.
 			// TODO: For explicit interface implementations in C#, no visibility is written.
 			this.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			// TODO: VB abstract methods should be MustOverride, not MustInherit.
 			this.ElementContract(writer);
 			string elementMemberType = this.ElementMemberType;
 			if (TypeInfo.TypeIsVoid(elementMemberType))
@@ -1027,10 +1029,9 @@ namespace CR_Documentor.Transformation.Syntax
 					{
 						this.WriteSpan(writer, PreviewCss.Keyword, "Default");
 					}
-					else if (property.HasGetter && !property.HasSetter)
-					{
-						this.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
-					}
+					// In VB, properties with the ReadOnly keyword parse with IsReadOnly
+					// set so we don't have to check for property.HasGetter && !property.HasSetter
+					// because the ElementContract method will handle ReadOnly.
 					else if (!property.HasGetter && property.HasSetter)
 					{
 						this.WriteSpan(writer, PreviewCss.Keyword, "WriteOnly");
