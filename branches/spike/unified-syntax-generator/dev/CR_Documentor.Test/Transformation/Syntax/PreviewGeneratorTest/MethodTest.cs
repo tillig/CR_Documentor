@@ -12,6 +12,46 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 	public class MethodTest
 	{
 		[TestMethod]
+		public void InterfaceMember_Basic()
+		{
+			MethodProxy info = new MethodProxy("TestMethod");
+			info.Parent = new InterfaceProxy("TestInterface").CreateFakeInterface();
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Sub</span> <span class=""identifier"">TestMethod</span>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic, true);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void InterfaceMember_CSharp()
+		{
+			MethodProxy info = new MethodProxy("TestMethod");
+			info.Parent = new InterfaceProxy("TestInterface").CreateFakeInterface();
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">void</span> <span class=""identifier"">TestMethod</span><div class=""parameters"">
+()
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Generic_Constraint_3_Basic()
 		{
 			MethodProxy info = new MethodProxy("TestMethod");

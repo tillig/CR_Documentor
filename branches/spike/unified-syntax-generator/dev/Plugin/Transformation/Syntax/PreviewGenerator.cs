@@ -734,9 +734,13 @@ namespace CR_Documentor.Transformation.Syntax
 				return;
 			}
 
-			// TODO: For members that belong to an interface (methods in an interface definition), no visibility is written.
+			if (this.Element.Parent as Interface == null)
+			{
+				// For members that belong to an interface (methods in an interface definition), no visibility is written.
+				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			}
+
 			// TODO: For explicit interface implementations in C#, no visibility is written.
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			// TODO: VB abstract methods should be MustOverride, not MustInherit.
 			ContractWriter.Write(writer, this.Element, this.Language);
 			string elementMemberType = this.ElementMemberType;

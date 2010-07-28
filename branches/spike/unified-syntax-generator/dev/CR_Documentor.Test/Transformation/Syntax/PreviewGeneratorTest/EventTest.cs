@@ -20,7 +20,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 			};
 			info.Parameters.Add(new ParamProxy("a") { MemberType = "string" }.CreateFakeParam());
 			ClassProxy parent = new ClassProxy("TestClass");
-			info.__SetParentClassInterfaceStructOrModule(parent.CreateFakeClass());
+			info.Parent = parent.CreateFakeClass();
 			var element = info.CreateFakeEvent();
 
 			string expected =

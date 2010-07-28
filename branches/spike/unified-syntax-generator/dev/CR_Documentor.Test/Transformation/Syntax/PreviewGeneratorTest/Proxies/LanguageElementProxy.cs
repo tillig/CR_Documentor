@@ -6,16 +6,12 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
 {
 	public abstract class LanguageElementProxy
 	{
-		private LanguageElement _parent;
+		// TODO: There should be a more diligent mechanism for managing the parent class, interface, struct, or module than this.
+		public LanguageElement Parent { get; set; }
 
 		public LanguageElement GetParentClassInterfaceStructOrModule()
 		{
-			return _parent;
-		}
-
-		public void __SetParentClassInterfaceStructOrModule(LanguageElement parent)
-		{
-			this._parent = parent;
+			return this.Parent;
 		}
 	}
 }
