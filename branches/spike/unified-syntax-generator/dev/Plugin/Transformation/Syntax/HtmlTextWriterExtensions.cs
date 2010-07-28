@@ -18,8 +18,15 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="contents">The contents to appear inside the tag.</param>
 		/// <param name="before">Text that should appear before the tag. If <see langword="null" />, nothing will be written before the tag.</param>
 		/// <param name="after">Text that should appear after the tag. If <see langword="null" />, a space will be written after the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteLink(HtmlTextWriter writer, string contents, string before, string after)
 		{
+			if (writer == null)
+			{
+				throw new ArgumentNullException("writer");
+			}
 			if (string.IsNullOrEmpty(contents))
 			{
 				return;
@@ -48,6 +55,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="writer">The writer to which the content should be written.</param>
 		/// <param name="cssClass">The CSS class to be applied to the tag.</param>
 		/// <param name="contents">The contents to appear inside the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteDiv(HtmlTextWriter writer, string cssClass, string contents)
 		{
 			WriteDiv(writer, cssClass, contents, null, null);
@@ -61,6 +71,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="contents">The contents to appear inside the tag.</param>
 		/// <param name="before">Text that should appear before the tag. If <see langword="null" />, nothing will be written before the tag.</param>
 		/// <param name="after">Text that should appear after the tag. If <see langword="null" />, a space will be written after the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteDiv(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
 		{
 			WriteTag(writer, HtmlTextWriterTag.Div, cssClass, contents, before, after);
@@ -73,6 +86,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="writer">The writer to which the content should be written.</param>
 		/// <param name="cssClass">The CSS class to be applied to the tag.</param>
 		/// <param name="contents">The contents to appear inside the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteSpan(HtmlTextWriter writer, string cssClass, string contents)
 		{
 			WriteSpan(writer, cssClass, contents, null, null);
@@ -86,6 +102,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="contents">The contents to appear inside the tag.</param>
 		/// <param name="before">Text that should appear before the tag. If <see langword="null" />, nothing will be written before the tag.</param>
 		/// <param name="after">Text that should appear after the tag. If <see langword="null" />, a space will be written after the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteSpan(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
 		{
 			WriteTag(writer, HtmlTextWriterTag.Span, cssClass, contents, before, after);
@@ -100,8 +119,15 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <param name="contents">The contents to appear inside the tag.</param>
 		/// <param name="before">Text that should appear before the tag. If <see langword="null" />, nothing will be written before the tag.</param>
 		/// <param name="after">Text that should appear after the tag. If <see langword="null" />, a space will be written after the tag.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
+		/// </exception>
 		public static void WriteTag(HtmlTextWriter writer, HtmlTextWriterTag tagKey, string cssClass, string contents, string before, string after)
 		{
+			if (writer == null)
+			{
+				throw new ArgumentNullException("writer");
+			}
 			if (string.IsNullOrEmpty(contents))
 			{
 				return;

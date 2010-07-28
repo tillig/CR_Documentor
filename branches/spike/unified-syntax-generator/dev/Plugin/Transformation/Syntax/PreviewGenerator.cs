@@ -300,7 +300,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
 			}
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Element is Interface)
 			{
 				switch (this.Language)
@@ -354,7 +354,7 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			var method = (Method)this.Element;
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			bool isCast = method.IsImplicitCast || method.IsExplicitCast;
 
 			switch (this.Language)
@@ -416,7 +416,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Constructor(HtmlTextWriter writer)
 		{
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -454,102 +454,6 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "Finalize", "", "");
 			this.Parameters(writer, "(", ")");
-		}
-
-		/// <summary>
-		/// Writes the contract (static/abstract/sealed/etc.) for the element.
-		/// </summary>
-		/// <param name="writer">
-		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
-		/// is being written.
-		/// </param>
-		protected virtual void ElementContract(HtmlTextWriter writer)
-		{
-			if (this.Element.IsStatic)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Shared");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "static");
-						break;
-				}
-			}
-			else if (this.Element.IsAbstract)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustInherit");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "abstract");
-						break;
-				}
-			}
-			else if (this.Element.IsSealed)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "NotInheritable");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "sealed");
-						break;
-				}
-			}
-			else if (this.Element.IsConst)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Const");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "const");
-						break;
-				}
-			}
-			else if (this.Element.IsVirtual)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Overridable");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "virtual");
-						break;
-				}
-			}
-			else if (this.Element.IsOverride)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Overrides");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "override");
-						break;
-				}
-			}
-
-			if (this.Element.IsReadOnly)
-			{
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
-						break;
-					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "readonly");
-						break;
-				}
-			}
 		}
 
 		/// <summary>
@@ -651,7 +555,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Event(HtmlTextWriter writer)
 		{
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -699,7 +603,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Field(HtmlTextWriter writer)
 		{
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Language != SupportedLanguageId.Basic)
 			{
 				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, null, null);
@@ -834,7 +738,7 @@ namespace CR_Documentor.Transformation.Syntax
 			// TODO: For explicit interface implementations in C#, no visibility is written.
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			// TODO: VB abstract methods should be MustOverride, not MustInherit.
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			string elementMemberType = this.ElementMemberType;
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
@@ -1018,7 +922,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Property(HtmlTextWriter writer)
 		{
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
-			this.ElementContract(writer);
+			ContractWriter.Write(writer, this.Element, this.Language);
 			var property = (Property)this.Element;
 			switch (this.Language)
 			{
@@ -1101,6 +1005,16 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 		}
 
+		/// <summary>
+		/// Writes the "get" or "set" keyword for a property.
+		/// </summary>
+		/// <param name="writer">
+		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
+		/// is being written.
+		/// </param>
+		/// <param name="keyword">
+		/// The "get" or "set" keyword being written.
+		/// </param>
 		private void GetSet(HtmlTextWriter writer, string keyword)
 		{
 			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.GetSet);
