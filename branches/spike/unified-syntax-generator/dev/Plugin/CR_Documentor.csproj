@@ -270,6 +270,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\DefaultValueStringDictionary.cs" />
+    <Compile Include="Transformation\Syntax\HtmlTextWriterExtensions.cs" />
     <Compile Include="Transformation\Syntax\PreviewCss.cs" />
     <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
