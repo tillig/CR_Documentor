@@ -51,7 +51,6 @@ namespace CR_Documentor.Transformation.Syntax
 	public class PreviewGenerator
 	{
 		// TODO: Look at options to refactor this class - smaller methods, smaller classes (one per preview type?), etc.
-		// TODO: Create CSS for MSDN syntax preview.
 
 		/// <summary>
 		/// Gets the element being documented.
