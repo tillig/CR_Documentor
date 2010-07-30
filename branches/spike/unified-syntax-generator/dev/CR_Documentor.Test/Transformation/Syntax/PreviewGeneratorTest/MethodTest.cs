@@ -12,6 +12,28 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 	public class MethodTest
 	{
 		[TestMethod]
+		public void ExplicitInterfaceImplementation_CSharp()
+		{
+			// Visibility isn't written on explicit interface implementations in C#
+			MethodProxy info = new MethodProxy("TestInterface.TestMethod");
+			info.Implements.Add("TestInterface.TestMethod");
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">void</span> <span class=""identifier"">TestInterface.TestMethod</span><div class=""parameters"">
+()
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void InterfaceMember_Basic()
 		{
 			MethodProxy info = new MethodProxy("TestMethod");
