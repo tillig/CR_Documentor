@@ -40,6 +40,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <summary>
 		/// Determines if a langauge element is supported for preview.
 		/// </summary>
+		/// <param name="element">
+		/// The element to check for compatibility.
+		/// </param>
 		/// <returns>
 		/// <see langword="true" /> if a syntax preview can be generated
 		/// for the element, otherwise <see langword="false" />.
