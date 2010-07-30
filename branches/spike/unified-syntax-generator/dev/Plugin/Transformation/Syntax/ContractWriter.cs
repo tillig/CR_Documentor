@@ -52,7 +52,14 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustInherit");
+						if (element is Method)
+						{
+							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustOverride");
+						}
+						else
+						{
+							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustInherit");
+						}
 						break;
 					default:
 						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "abstract");

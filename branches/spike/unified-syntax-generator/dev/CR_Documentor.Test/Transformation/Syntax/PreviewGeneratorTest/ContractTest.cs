@@ -54,6 +54,52 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 		}
 
 		[TestMethod]
+		public void Abstract_Method_Basic()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "String",
+				IsAbstract = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code vb"">
+<div class=""member"">
+<span class=""keyword"">Public</span> <span class=""keyword"">MustOverride</span> <span class=""keyword"">Function</span> <span class=""identifier"">TestMethod</span>&nbsp;<span class=""keyword"">As</span> <a href=""#"">String</a>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.Basic, true);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void Abstract_Method_CSharp()
+		{
+			MethodProxy info = new MethodProxy("TestMethod")
+			{
+				MemberType = "string",
+				IsAbstract = true
+			};
+			var element = info.CreateFakeMethod();
+
+			string expected =
+@"<div class=""code cs"">
+<div class=""member"">
+<span class=""keyword"">public</span> <span class=""keyword"">abstract</span> <a href=""#"">string</a> <span class=""identifier"">TestMethod</span><div class=""parameters"">
+()
+</div>
+</div>
+</div>";
+
+			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
+			string actual = generator.Generate();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void Constant_Field_Basic()
 		{
 			BaseVariableProxy info = new BaseVariableProxy("Field")

@@ -742,7 +742,6 @@ namespace CR_Documentor.Transformation.Syntax
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			}
 
-			// TODO: VB abstract methods should be MustOverride, not MustInherit.
 			ContractWriter.Write(writer, this.Element, this.Language);
 			string elementMemberType = this.ElementMemberType;
 			if (TypeInfo.TypeIsVoid(elementMemberType))
