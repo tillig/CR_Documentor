@@ -378,7 +378,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "CType", "", "");
 			}
-			this.Parameters(writer, "(", ")");
+			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
@@ -407,7 +407,7 @@ namespace CR_Documentor.Transformation.Syntax
 					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 					break;
 			}
-			this.Parameters(writer, "(", ")");
+			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 		}
 
 		/// <summary>
@@ -433,7 +433,7 @@ namespace CR_Documentor.Transformation.Syntax
 					break;
 			}
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "Finalize", "", "");
-			this.Parameters(writer, "(", ")");
+			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 		}
 
 		/// <summary>
@@ -481,7 +481,7 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 			}
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
-			this.Parameters(writer, "(", ")");
+			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
@@ -750,7 +750,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			this.TypeParameters(writer);
-			this.Parameters(writer, "(", ")");
+			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			this.TypeParameterConstraintsPostSignature(writer);
 			if (this.Language == SupportedLanguageId.Basic)
 			{
@@ -774,126 +774,6 @@ namespace CR_Documentor.Transformation.Syntax
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Writes parameter information to the object signature.
-		/// </summary>
-		/// <param name="writer">
-		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
-		/// is being written.
-		/// </param>
-		/// <param name="openParen">The open parenthesis (usually "(" but sometimes "[").</param>
-		/// <param name="closeParen">The close parenthesis (usually ")" but sometimes "]").</param>
-		protected virtual void Parameters(HtmlTextWriter writer, string openParen, string closeParen)
-		{
-			var parameters = ((MemberWithParameters)this.Element).Parameters;
-			if (parameters == null)
-			{
-				return;
-			}
-			int count = parameters.Count;
-			bool isBasic = this.Language == SupportedLanguageId.Basic;
-			if (isBasic && count == 0)
-			{
-				// If there aren't any parameters in VB, no parens get
-				// rendered or anything.
-				return;
-			}
-
-			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameters);
-			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			writer.Write(openParen);
-			if (isBasic)
-			{
-				writer.Write(" _");
-			}
-			for (int i = 0; i < count; i++)
-			{
-				var parameter = (Param)parameters[i];
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameter);
-				writer.RenderBeginTag(HtmlTextWriterTag.Div);
-
-				// Sandcastle does not render anything around optional parameters
-				// but if that changes, we'll need to do something here.
-				//if (isBasic && parameter.IsOptional)
-				//{
-				//    HtmlTextWriterExtensions.WriteSpan(CssClassKeyword, "Optional");
-				//}
-
-				if (parameter.IsOutParam)
-				{
-					switch (this.Language)
-					{
-						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteLink(writer, "OutAttribute", "&lt;", "&gt; ");
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
-							break;
-						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "out");
-							break;
-					}
-				}
-				else if (parameter.IsReferenceParam)
-				{
-					switch (this.Language)
-					{
-						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
-							break;
-						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ref");
-							break;
-					}
-				}
-
-				if (parameter.IsParamArray)
-				{
-					switch (this.Language)
-					{
-						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ParamArray");
-							break;
-						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "params");
-							break;
-					}
-				}
-
-				if (isBasic)
-				{
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, parameter.Name);
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As");
-				}
-				HtmlTextWriterExtensions.WriteLink(writer, parameter.ParamType, "", "");
-				if (!isBasic)
-				{
-					writer.Write(" ");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, parameter.Name, "", "");
-				}
-
-				// Sandcastle doesn't render the default value settings, but if
-				// that changes, we'll have to put the default value here.
-				//if (isBasic && parameter.IsOptional)
-				//{
-				//    this.Writer.Write(" = ");
-				//    this.Writer.Write(parameter.DefaultValue);
-				//}
-
-				if (i + 1 < count)
-				{
-					writer.Write(",");
-				}
-				if (isBasic)
-				{
-					writer.Write(" _");
-				}
-				writer.RenderEndTag();
-
-			}
-
-			writer.Write(closeParen);
-			writer.RenderEndTag();
 		}
 
 		/// <summary>
@@ -938,11 +818,11 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					case SupportedLanguageId.Basic:
 						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
-						this.Parameters(writer, "(", ")");
+						ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 						break;
 					default:
 						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "this", "", "");
-						this.Parameters(writer, "[", "]");
+						ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "[", "]");
 						break;
 				}
 			}

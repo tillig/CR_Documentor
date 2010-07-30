@@ -273,6 +273,7 @@
     <Compile Include="Transformation\Syntax\AccessSpecifiedElementExtensions.cs" />
     <Compile Include="Transformation\Syntax\ContractWriter.cs" />
     <Compile Include="Transformation\Syntax\HtmlTextWriterExtensions.cs" />
+    <Compile Include="Transformation\Syntax\ParameterWriter.cs" />
     <Compile Include="Transformation\Syntax\PreviewCss.cs" />
     <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
