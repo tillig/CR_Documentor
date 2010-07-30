@@ -62,26 +62,6 @@ namespace CR_Documentor.Transformation.Syntax
 		public AccessSpecifiedElement Element { get; private set; }
 
 		/// <summary>
-		/// Gets a flag indicating if there are generic type parameters
-		/// to render to the preview.
-		/// </summary>
-		/// <value>
-		/// <see langword="true" /> if <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>
-		/// has generic type parameters to render; <see langword="false" /> if not.
-		/// </value>
-		protected bool ElementHasGenericParameters
-		{
-			get
-			{
-				if (!this.Element.IsGeneric || this.Element.GenericModifier.TypeParameters == null || this.Element.GenericModifier.TypeParameters.Count == 0)
-				{
-					return false;
-				}
-				return true;
-			}
-		}
-
-		/// <summary>
 		/// Gets the member type of the current element, assuming the current element
 		/// is a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>.
 		/// </summary>
@@ -1042,7 +1022,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void TypeParameterConstraintsPostSignature(HtmlTextWriter writer)
 		{
-			if (this.ShowTypeParameterConstraintsInline || !this.ElementHasGenericParameters)
+			if (this.ShowTypeParameterConstraintsInline || !AccessSpecifiedElementExtensions.HasGenericParameters(this.Element))
 			{
 				return;
 			}
@@ -1166,7 +1146,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void TypeParameters(HtmlTextWriter writer)
 		{
-			if (!this.ElementHasGenericParameters)
+			if (!AccessSpecifiedElementExtensions.HasGenericParameters(this.Element))
 			{
 				return;
 			}
