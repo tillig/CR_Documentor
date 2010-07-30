@@ -37,5 +37,25 @@ namespace CR_Documentor.Transformation.Syntax
 			return true;
 		}
 
+		/// <summary>
+		/// Gets the member type of the current element, assuming the current element
+		/// is a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> containing the <see cref="DevExpress.CodeRush.StructuralParser.Member.MemberType"/>
+		/// of the <paramref name="element" />.
+		/// If <paramref name="element" />
+		/// is not a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>,
+		/// this method returns <see langword="null" />.
+		/// </returns>
+		public static string MemberType(AccessSpecifiedElement element)
+		{
+			Member member = element as Member;
+			if (member == null)
+			{
+				return null;
+			}
+			return member.MemberType;
+		}
 	}
 }

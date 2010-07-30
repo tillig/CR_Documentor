@@ -62,30 +62,6 @@ namespace CR_Documentor.Transformation.Syntax
 		public AccessSpecifiedElement Element { get; private set; }
 
 		/// <summary>
-		/// Gets the member type of the current element, assuming the current element
-		/// is a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>.
-		/// </summary>
-		/// <value>
-		/// A <see cref="System.String"/> containing the <see cref="DevExpress.CodeRush.StructuralParser.Member.MemberType"/>
-		/// of the <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>.
-		/// If <see cref="CR_Documentor.Transformation.Syntax.PreviewGenerator.Element"/>
-		/// is not a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>,
-		/// this property returns <see langword="null" />.
-		/// </value>
-		protected virtual string ElementMemberType
-		{
-			get
-			{
-				Member member = this.Element as Member;
-				if (member == null)
-				{
-					return null;
-				}
-				return member.MemberType;
-			}
-		}
-
-		/// <summary>
 		/// Gets a value indicating if the HTML output has newlines in it.
 		/// </summary>
 		/// <value>
@@ -344,12 +320,12 @@ namespace CR_Documentor.Transformation.Syntax
 					}
 					else
 					{
-						HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, "", " ");
+						HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", " ");
 					}
 					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "operator");
 					if (isCast)
 					{
-						HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, "", "");
+						HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
 					}
 					break;
 			}
@@ -365,7 +341,7 @@ namespace CR_Documentor.Transformation.Syntax
 			if (this.Language == SupportedLanguageId.Basic)
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, "", "");
+				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
 			}
 		}
 
@@ -438,7 +414,7 @@ namespace CR_Documentor.Transformation.Syntax
 					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "delegate");
 					break;
 			}
-			string elementMemberType = this.ElementMemberType;
+			string elementMemberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				switch (this.Language)
@@ -532,7 +508,7 @@ namespace CR_Documentor.Transformation.Syntax
 			// Get the generated parameterized event handler type name if it exists.
 			// e.g., Public Event EventParameterized As TestClass.EventParameterizedEventHandler
 			var eventElement = (Event)this.Element;
-			string memberType = this.ElementMemberType;
+			string memberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
 			if (eventElement.ParameterCount > 0)
 			{
 				var parent = eventElement.GetParentClassInterfaceStructOrModule();
@@ -569,13 +545,13 @@ namespace CR_Documentor.Transformation.Syntax
 			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Language != SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, null, null);
+				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), null, null);
 			}
 			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, "", "");
+				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
 			}
 		}
 
@@ -706,7 +682,7 @@ namespace CR_Documentor.Transformation.Syntax
 			}
 
 			ContractWriter.Write(writer, this.Element, this.Language);
-			string elementMemberType = this.ElementMemberType;
+			string elementMemberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				switch (this.Language)
@@ -793,7 +769,7 @@ namespace CR_Documentor.Transformation.Syntax
 
 			if (this.Language != SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, null, null);
+				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), null, null);
 			}
 			if (property.ParameterCount > 0)
 			{
@@ -816,7 +792,7 @@ namespace CR_Documentor.Transformation.Syntax
 			if (this.Language == SupportedLanguageId.Basic)
 			{
 				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, this.ElementMemberType, "", "");
+				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
 			}
 			else
 			{
