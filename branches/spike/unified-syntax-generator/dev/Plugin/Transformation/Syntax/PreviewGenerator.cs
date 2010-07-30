@@ -583,7 +583,7 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageNotSupported));
 				}
-				else if (!IsSupportedElement(this.Element))
+				else if (!AccessSpecifiedElementExtensions.IsSupportedForPreview(this.Element))
 				{
 					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageElementNotSupported));
 				}
@@ -626,25 +626,6 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.Flush();
 				return baseWriter.ToString();
 			}
-		}
-
-		/// <summary>
-		/// Determines if a langauge element is supported for preview.
-		/// </summary>
-		/// <returns>
-		/// <see langword="true" /> if a syntax preview can be generated
-		/// for the element, otherwise <see langword="false" />.
-		/// </returns>
-		public static bool IsSupportedElement(AccessSpecifiedElement element)
-		{
-			return
-				element is Enumeration ||
-				element is Class ||
-				element is DelegateDefinition ||
-				element is Method ||
-				element is Property ||
-				element is Event ||
-				element is BaseVariable;
 		}
 
 		/// <summary>

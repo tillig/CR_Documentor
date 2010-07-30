@@ -38,6 +38,25 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
+		/// Determines if a langauge element is supported for preview.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true" /> if a syntax preview can be generated
+		/// for the element, otherwise <see langword="false" />.
+		/// </returns>
+		public static bool IsSupportedForPreview(AccessSpecifiedElement element)
+		{
+			return
+				element is Enumeration ||
+				element is Class ||
+				element is DelegateDefinition ||
+				element is Method ||
+				element is Property ||
+				element is Event ||
+				element is BaseVariable;
+		}
+
+		/// <summary>
 		/// Gets the member type of the current element, assuming the current element
 		/// is a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>.
 		/// </summary>
