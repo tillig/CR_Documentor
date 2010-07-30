@@ -281,6 +281,7 @@
     <Compile Include="Transformation\MSDN\Statement.cs" />
     <Compile Include="Transformation\Syntax\Language.cs" />
     <Compile Include="Transformation\Syntax\TypeInfo.cs" />
+    <Compile Include="Transformation\Syntax\TypeParameterWriter.cs" />
     <Compile Include="Transformation\TransformEngine.cs">
       <SubType>Code</SubType>
     </Compile>
