@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>http://localhost/DocTestCS/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -44,6 +44,7 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -148,6 +149,8 @@
     <Compile Include="Syntax\TestEnum.cs" />
     <Compile Include="Syntax\TestGenerics.cs" />
     <Compile Include="Syntax\TestInterface.cs" />
+    <Compile Include="Syntax\TestInterfaceImplementationExplicit.cs" />
+    <Compile Include="Syntax\TestInterfaceImplementationImplicit.cs" />
     <Compile Include="Tags\Inline\C.cs">
       <SubType>Code</SubType>
     </Compile>

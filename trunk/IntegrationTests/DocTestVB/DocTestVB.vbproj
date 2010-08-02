@@ -32,7 +32,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>http://localhost/DocTestVB/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -48,6 +48,7 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -134,6 +135,7 @@
     <Compile Include="Syntax\TestEnum.vb" />
     <Compile Include="Syntax\TestGenerics.vb" />
     <Compile Include="Syntax\TestInterface.vb" />
+    <Compile Include="Syntax\TestInterfaceImplementation.vb" />
     <Compile Include="Tags\Inline\See.vb" />
   </ItemGroup>
   <ItemGroup>
