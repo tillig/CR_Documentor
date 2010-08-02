@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DocTestCS.Syntax
 {
@@ -33,6 +34,19 @@ namespace DocTestCS.Syntax
 		/// </summary>
 		/// <typeparam name="P">The method's type parameter.</typeparam>
 		public void MethodWithTypeParameter<P>()
+		{
+		}
+
+		/// <summary>
+		/// Method with multiple type parameters, each with constraints.
+		/// </summary>
+		/// <typeparam name="H">The method's type parameter.</typeparam>
+		/// <typeparam name="I">The method's type parameter.</typeparam>
+		/// <typeparam name="J">The method's type parameter.</typeparam>
+		public void MultipleTypeParametersWithConstraints<H, I, J>()
+			where H : Attribute, ISerializable
+			where I : struct
+			where J : class, IList<H>, ICollection<H>, new()
 		{
 		}
 	}

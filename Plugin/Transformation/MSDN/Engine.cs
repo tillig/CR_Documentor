@@ -1029,10 +1029,8 @@ namespace CR_Documentor.Transformation.MSDN
 			if (this.MemberSyntax == null)
 			{
 				// Refresh the member syntax signature cache if it's empty
-				System.IO.StringWriter syntaxWriter = new System.IO.StringWriter(System.Globalization.CultureInfo.InvariantCulture);
-				SyntaxGenerator generator = new SyntaxGenerator(asElement, syntaxWriter);
-				generator.GenerateSyntaxPreview();
-				this.MemberSyntax = syntaxWriter.ToString();
+				PreviewGenerator generator = new PreviewGenerator(asElement, Language.ConvertToSupportedLanguageId(asElement.Document.Language));
+				this.MemberSyntax = generator.Generate();
 			}
 			this.Writer.Write(this.MemberSyntax);
 		}

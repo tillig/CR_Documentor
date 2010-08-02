@@ -1,3 +1,5 @@
+Imports System.Runtime.Serialization
+
 Namespace Syntax
 	''' <summary>
 	''' Class used in testing syntax generation for generics. Class definition
@@ -27,6 +29,15 @@ Namespace Syntax
 		''' </summary>
 		''' <typeparam name="P">The method's type parameter.</typeparam>
 		Public Sub MethodWithTypeParameter(Of P)()
+		End Sub
+
+		''' <summary>
+		''' Method with multiple type parameters, each with constraints.
+		''' </summary>
+		''' <typeparam name="H">The method's type parameter.</typeparam>
+		''' <typeparam name="I">The method's type parameter.</typeparam>
+		''' <typeparam name="J">The method's type parameter.</typeparam>
+		Public Sub MultipleTypeParametersWithConstraints(Of H As {Attribute, ISerializable}, I As Structure, J As {Class, IList(Of H), ICollection(Of H), New})()
 		End Sub
 
 	End Class

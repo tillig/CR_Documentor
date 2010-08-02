@@ -158,12 +158,39 @@ namespace DocTestCS.Syntax
 		}
 
 		/// <summary>
-		/// Method with optional parameters. Uses "params" array.
+		/// Method with optional parameters. Uses C# inline initialization.
 		/// </summary>
 		/// <param name="required">Required parameter.</param>
-		/// <param name="notRequired">Optional parameter (array).</param>
-		public void MethodWithOptionalParams(string required, params object[] notRequired)
+		/// <param name="notRequired">Optional parameter.</param>
+		public void MethodWithOptionalParam(string required, string notRequired = "")
 		{
+		}
+
+		/// <summary>
+		/// Method with an out parameter.
+		/// </summary>
+		/// <param name="required">Required parameter.</param>
+		public void MethodWithOutParam(out string required)
+		{
+			required = "";
+		}
+
+		/// <summary>
+		/// Method with "params" array.
+		/// </summary>
+		/// <param name="required">Required parameter.</param>
+		/// <param name="notRequired">Parameter array.</param>
+		public void MethodWithParamArray(string required, params object[] notRequired)
+		{
+		}
+
+		/// <summary>
+		/// Method with a ref parameter.
+		/// </summary>
+		/// <param name="required">Required parameter.</param>
+		public void MethodWithRefParam(ref string required)
+		{
+			required = "";
 		}
 
 		/// <summary>

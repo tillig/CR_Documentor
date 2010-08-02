@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -85,6 +85,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="TypeMock" />
+    <Reference Include="TypeMock.ArrangeActAssert" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersion.cs">
@@ -107,6 +108,43 @@
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\CommentMatchEventArgsTest.cs" />
+    <Compile Include="Transformation\Syntax\LanguageTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassOperatorTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ConstructorTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ContractTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DestructorTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\DelegateTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EventTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\FieldTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\InterfaceTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\MethodTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ParamTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\PropertyTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AttributeProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BaseVariableProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BinaryOperatorExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ClassProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EnumerationTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\GeneralTest.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\DelegateProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\EventProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\InterfaceProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\LanguageElementProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberWithParametersProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MethodProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\NamedTypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ParamProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AccessSpecifiedElementProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\PropertyProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\StructProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeReferenceExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\StructTest.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
