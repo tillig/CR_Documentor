@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9229512A-C004-46FD-8CEE-D096C883E827}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>CR_Documentor</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CR_Documentor</RootNamespace>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <PublishUrl>http://localhost/CR_Documentor/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\CR_Documentor.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\CR_Documentor.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Doc Test Assemblies|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\CR_Documentor.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.CodeRush.Common">
+      <Name>DevExpress.CodeRush.Common</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.Core">
+      <Name>DevExpress.CodeRush.Core</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.PlugInCore">
+      <Name>DevExpress.CodeRush.PlugInCore</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.StructuralParser">
+      <Name>DevExpress.CodeRush.StructuralParser</Name>
+    </Reference>
+    <Reference Include="DevExpress.CodeRush.VSCore">
+      <Name>DevExpress.CodeRush.VSCore</Name>
+    </Reference>
+    <Reference Include="EnvDTE">
+      <Name>EnvDTE</Name>
+    </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.mshtml">
+      <Name>Microsoft.mshtml</Name>
+      <HintPath>$(ProgramFiles)\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
+    <Compile Include="Diagnostics\ActivityContext.cs" />
+    <Compile Include="Diagnostics\ILog.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Diagnostics\LogLevel.cs" />
+    <Compile Include="Diagnostics\LogManager.cs" />
+    <Compile Include="Diagnostics\MenuLogger.cs" />
+    <Compile Include="Diagnostics\ToolWindowLogger.cs" />
+    <Compile Include="DocumentorActions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DocumentorActions.Designer.cs">
+      <DependentUpon>DocumentorActions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomAttributeProviderExtensions.cs" />
+    <Compile Include="CommentParser.cs" />
+    <Compile Include="ContextMenu\Button\ContextMenuButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Button\ConvertSelectionToCommentButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Button\DocumentorVisibilityToggleButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Button\OutlineXmlDocSectionsButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Button\TextTemplateContextMenuButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Button\XmlEncodeButton.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\ContextMenuItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DXCoreContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\MenuBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Popup\ContextMenuPopup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ContextMenu\Popup\ContextMenuPopupSelectExists.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\Browser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DocumentationControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\ProductConstants.cs" />
+    <Compile Include="ProductModule\CR_DocumentorProductModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DocumentorContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DocumentorWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AssemblyExtensions.cs" />
+    <Compile Include="Options\DocumentorOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Options\DocumentorOptions.Designer.cs">
+      <DependentUpon>DocumentorOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options\IncludeProcessing.cs" />
+    <Compile Include="Options\OptionSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Options\TagCompatibilityLevel.cs" />
+    <Compile Include="Options\UnrecognizedTagHandlingMethod.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reflector\MemberKey.cs" />
+    <Compile Include="Reflector\TypeInformation.cs" />
+    <Compile Include="Server\HttpRequestEventArgs.cs" />
+    <Compile Include="Server\ResponseWriter.cs" />
+    <Compile Include="Server\WebListener.cs" />
+    <Compile Include="Server\WebServer.cs" />
+    <Compile Include="Transformation\CommentMatchEventArgs.cs" />
+    <Compile Include="Transformation\MSDN\Engine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transformation\SandcastlePrototype\Engine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collections\DefaultValueStringDictionary.cs" />
+    <Compile Include="Transformation\Syntax\AccessSpecifiedElementExtensions.cs" />
+    <Compile Include="Transformation\Syntax\AttributeWriter.cs" />
+    <Compile Include="Transformation\Syntax\ContractWriter.cs" />
+    <Compile Include="Transformation\Syntax\HtmlTextWriterExtensions.cs" />
+    <Compile Include="Transformation\Syntax\ParameterWriter.cs" />
+    <Compile Include="Transformation\Syntax\PreviewCss.cs" />
+    <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
+    <Compile Include="Transformation\Syntax\Lookup.cs" />
+    <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />
+    <Compile Include="Transformation\MSDN\Statement.cs" />
+    <Compile Include="Transformation\Syntax\Language.cs" />
+    <Compile Include="Transformation\Syntax\TypeInfo.cs" />
+    <Compile Include="Transformation\Syntax\TypeParameterWriter.cs" />
+    <Compile Include="Transformation\TransformEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xml\Evaluator.cs" />
+    <Compile Include="Xml\LinkProcessor.cs" />
+    <Compile Include="Xml\TextProcessor.cs" />
+    <Content Include="Documentor.ico" />
+    <EmbeddedResource Include="DocumentorActions.resx">
+      <DependentUpon>DocumentorActions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Pause.ico" />
+    <EmbeddedResource Include="ProductModule\CR_DocumentorProductModule.png" />
+    <EmbeddedResource Include="DocumentorContextMenu.resx">
+      <DependentUpon>DocumentorContextMenu.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DocumentorWindow.resx">
+      <DependentUpon>DocumentorWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options\DocumentorOptions.resx">
+      <DependentUpon>DocumentorOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Printer.ico" />
+    <EmbeddedResource Include="Resources\Settings.ico" />
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Transformation\MSDN\BaseDocument.html" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\BaseDocument.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(UserProfile)\My Documents\DevExpress\IDE Tools\Community\PlugIns\" /y</PostBuildEvent>
+  </PropertyGroup>
+</Project>
