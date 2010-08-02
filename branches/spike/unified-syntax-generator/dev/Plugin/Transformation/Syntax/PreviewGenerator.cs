@@ -125,103 +125,6 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
-		/// Writes attribute argument information.
-		/// </summary>
-		/// <param name="writer">
-		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
-		/// is being written.
-		/// </param>
-		/// <param name="arguments">The attribute arguments to document.</param>
-		protected virtual void AttributeArguments(HtmlTextWriter writer, ExpressionCollection arguments)
-		{
-			if (arguments == null || arguments.Count < 1)
-			{
-				return;
-			}
-			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameters);
-			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			writer.Write("(");
-			for (int j = 0; j < arguments.Count; j++)
-			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Parameter);
-				writer.RenderBeginTag(HtmlTextWriterTag.Div);
-				Expression argument = arguments[j];
-				if (argument is BinaryOperatorExpression)
-				{
-					var init = (BinaryOperatorExpression)argument;
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, init.LeftSide.ToString());
-					switch (this.Language)
-					{
-						case SupportedLanguageId.Basic:
-							writer.Write(":= ");
-							break;
-						default:
-							writer.Write("= ");
-							break;
-					}
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Literal, init.RightSide.ToString(), "", "");
-				}
-				else
-				{
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Literal, argument.ToString(), "", "");
-				}
-				if (j + 1 < arguments.Count)
-				{
-					writer.Write(", ");
-				}
-				writer.RenderEndTag();
-			}
-			writer.Write(")");
-			writer.RenderEndTag();
-		}
-		/// <summary>
-		/// Writes attribute information.
-		/// </summary>
-		/// <param name="writer">
-		/// The <see cref="System.Web.UI.HtmlTextWriter"/> to which the preview
-		/// is being written.
-		/// </param>
-		protected virtual void Attributes(HtmlTextWriter writer)
-		{
-			if (this.Element.AttributeCount < 1)
-			{
-				return;
-			}
-
-			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Attributes);
-			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			var attributes = this.Element.Attributes;
-			for (int i = 0; i < attributes.Count; i++)
-			{
-				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Attribute);
-				writer.RenderBeginTag(HtmlTextWriterTag.Div);
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						writer.Write("&lt;");
-						break;
-					default:
-						writer.Write("[");
-						break;
-				}
-				var attribute = (DevExpress.CodeRush.StructuralParser.Attribute)attributes[i];
-				HtmlTextWriterExtensions.WriteLink(writer, attribute.Name, "", "");
-				this.AttributeArguments(writer, attribute.Arguments);
-				switch (this.Language)
-				{
-					case SupportedLanguageId.Basic:
-						writer.Write("&gt; _");
-						break;
-					default:
-						writer.Write("]");
-						break;
-				}
-				writer.RenderEndTag();
-			}
-			writer.RenderEndTag();
-		}
-
-		/// <summary>
 		/// Writes the preview for a class.
 		/// </summary>
 		/// <param name="writer">
@@ -589,7 +492,7 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 				else
 				{
-					this.Attributes(writer);
+					AttributeWriter.Write(writer, this.Element, this.Language);
 					writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Member);
 					writer.RenderBeginTag(HtmlTextWriterTag.Div);
 					if (this.Element is Enumeration)
