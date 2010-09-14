@@ -271,10 +271,10 @@ namespace CR_Documentor.Controls
 		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
 		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
 		{
-			// TODO: ISSUE 4 - Create an attribute to specify embedded resource short filename, full embedded location, and mime type.
-			// TODO: ISSUE 4 - On initialization read the embedded resource attributes into an in-memory dictionary/cache.
 			// TODO: ISSUE 4 - Create ResponseWriter.WriteEmbeddedResource() method.
 			// TODO: ISSUE 4 - Get the file name of the request from the incoming URL.
+			// TODO: ISSUE 4 - Add a test image and hardcode a response to verify this works.
+			// TODO: ISSUE 4 - On initialization read the embedded resource attributes into an in-memory dictionary/cache.
 			// TODO: ISSUE 4 - If the filename is empty, write the main preview content.
 			// TODO: ISSUE 4 - If the filename doesn't match any registered embedded resource, write 404.
 			// TODO: ISSUE 4 - Write the embedded resource content and content type to the response.

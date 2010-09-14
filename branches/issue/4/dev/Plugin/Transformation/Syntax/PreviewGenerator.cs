@@ -484,11 +484,11 @@ namespace CR_Documentor.Transformation.Syntax
 				writer.RenderBeginTag(HtmlTextWriterTag.Div);
 				if (this.Language == SupportedLanguageId.None)
 				{
-					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageNotSupported));
+					writer.Write(HttpUtility.HtmlEncode(Strings.PreviewGenerator_LanguageNotSupported));
 				}
 				else if (!AccessSpecifiedElementExtensions.IsSupportedForPreview(this.Element))
 				{
-					writer.Write(HttpUtility.HtmlEncode(Resources.PreviewGenerator_LanguageElementNotSupported));
+					writer.Write(HttpUtility.HtmlEncode(Strings.PreviewGenerator_LanguageElementNotSupported));
 				}
 				else
 				{

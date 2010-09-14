@@ -36,7 +36,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 @"<div class=""code cs"">
 {0}
 </div>";
-			expected = String.Format(expected, Resources.PreviewGenerator_LanguageElementNotSupported);
+			expected = String.Format(expected, Strings.PreviewGenerator_LanguageElementNotSupported);
 
 			var generator = new PreviewGenerator(element, SupportedLanguageId.CSharp, true);
 			string actual = generator.Generate();
@@ -52,7 +52,7 @@ namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest
 @"<div class=""code"">
 {0}
 </div>";
-			expected = String.Format(expected, Resources.PreviewGenerator_LanguageNotSupported);
+			expected = String.Format(expected, Strings.PreviewGenerator_LanguageNotSupported);
 
 			var generator = new PreviewGenerator(element, SupportedLanguageId.None, true);
 			string actual = generator.Generate();
