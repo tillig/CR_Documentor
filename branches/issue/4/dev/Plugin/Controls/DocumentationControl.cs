@@ -5,6 +5,7 @@ using CR_Documentor.Diagnostics;
 using CR_Documentor.Server;
 using CR_Documentor.Transformation;
 using DevExpress.CodeRush.StructuralParser;
+using System.IO;
 
 namespace CR_Documentor.Controls
 {
@@ -271,15 +272,18 @@ namespace CR_Documentor.Controls
 		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
 		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
 		{
-			// TODO: ISSUE 4 - Create ResponseWriter.WriteEmbeddedResource() method.
-			// TODO: ISSUE 4 - Get the file name of the request from the incoming URL.
 			// TODO: ISSUE 4 - Add a test image and hardcode a response to verify this works.
 			// TODO: ISSUE 4 - On initialization read the embedded resource attributes into an in-memory dictionary/cache.
-			// TODO: ISSUE 4 - If the filename is empty, write the main preview content.
-			// TODO: ISSUE 4 - If the filename doesn't match any registered embedded resource, write 404.
-			// TODO: ISSUE 4 - Write the embedded resource content and content type to the response.
-			//var path = e.RequestContext.Request.Url.AbsolutePath;
-			ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
+			var filename = Path.GetFileName(e.RequestContext.Request.Url.LocalPath);
+			if (String.IsNullOrEmpty(filename))
+			{
+				ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
+			}
+			else
+			{
+				// TODO: ISSUE 4 - Write the embedded resource content and content type to the response.
+				// TODO: ISSUE 4 - If the filename doesn't match any registered embedded resource, log the error and write 404.
+			}
 		}
 
 		/// <summary>
