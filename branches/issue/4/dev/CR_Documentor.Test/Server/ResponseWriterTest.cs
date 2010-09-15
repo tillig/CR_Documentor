@@ -30,6 +30,8 @@ namespace CR_Documentor.Test.Server
 				recorder.CheckArguments();
 				response.ContentEncoding = Encoding.UTF8;
 				recorder.CheckArguments();
+				response.ContentType = "text/html";
+				recorder.CheckArguments();
 
 				outputStream.Write(buffer, 0, bufferLength);
 				outputStream.Close();
@@ -54,6 +56,8 @@ namespace CR_Documentor.Test.Server
 				response.ContentLength64 = bufferLength;
 				recorder.CheckArguments();
 
+				response.ContentType = "";
+
 				outputStream.Write(buffer, 0, bufferLength);
 				recorder.CheckArguments();
 			}
@@ -76,6 +80,8 @@ namespace CR_Documentor.Test.Server
 			{
 				response.ContentLength64 = bufferLength;
 				recorder.CheckArguments();
+
+				response.ContentType = "";
 
 				outputStream.Write(buffer, 0, bufferLength);
 				recorder.CheckArguments();
@@ -106,6 +112,8 @@ namespace CR_Documentor.Test.Server
 			{
 				response.ContentLength64 = bufferLength;
 				recorder.CheckArguments();
+
+				response.ContentType = "";
 
 				outputStream.Write(buffer, 0, bufferLength);
 				recorder.CheckArguments();

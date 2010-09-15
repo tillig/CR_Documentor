@@ -26,7 +26,7 @@ namespace CR_Documentor.Server
 			HttpListenerResponse response = context.Response;
 			string content = String.IsNullOrEmpty(html) ? "&nbsp;" : html;
 			byte[] buffer = Encoding.UTF8.GetBytes(content);
-			WriteSuccessResponse(response, buffer, Encoding.UTF8);
+			WriteSuccessResponse(response, buffer, Encoding.UTF8, "text/html");
 		}
 
 		/// <summary>
@@ -35,12 +35,17 @@ namespace CR_Documentor.Server
 		/// <param name="response">The response object to write to.</param>
 		/// <param name="content">The content to send.</param>
 		/// <param name="encoding">The encoding the content is in.</param>
-		private static void WriteSuccessResponse(HttpListenerResponse response, byte[] content, Encoding encoding)
+		/// <param name="contentType">The MIME type of the response.</param>
+		private static void WriteSuccessResponse(HttpListenerResponse response, byte[] content, Encoding encoding, string contentType)
 		{
 			response.StatusCode = (int)HttpStatusCode.OK;
 			response.StatusDescription = "OK";
 			response.ContentLength64 = content.Length;
-			response.ContentEncoding = encoding;
+			if (encoding != null)
+			{
+				response.ContentEncoding = encoding;
+			}
+			response.ContentType = contentType;
 			response.OutputStream.Write(content, 0, content.Length);
 			response.OutputStream.Close();
 			response.Close();
