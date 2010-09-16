@@ -104,6 +104,7 @@
     <Compile Include="Reflector\MemberKeyTest.cs" />
     <Compile Include="Reflector\TypeInformationTest.cs" />
     <Compile Include="Resources\EmbeddedFileAttributeTest.cs" />
+    <Compile Include="Server\EmbeddedFileHandler.cs" />
     <Compile Include="Server\HttpRequestEventArgsTest.cs" />
     <Compile Include="Server\ResponseWriterTest.cs" />
     <Compile Include="Server\WebListenerTest.cs" />

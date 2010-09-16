@@ -273,7 +273,7 @@ namespace CR_Documentor.Controls
 		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
 		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
 		{
-			// TODO: ISSUE 4 - On initialization read the embedded resource attributes into an in-memory dictionary/cache.
+			// TODO: ISSUE 4 - On initialization set up an EmbeddedFileHandler with the list of current assembly files.
 			var filename = Path.GetFileName(e.RequestContext.Request.Url.LocalPath);
 			if (String.IsNullOrEmpty(filename))
 			{
@@ -281,9 +281,7 @@ namespace CR_Documentor.Controls
 			}
 			else
 			{
-				//ResponseWriter.WriteResource(e.RequestContext, Assembly.GetExecutingAssembly(), "CR_Documentor.Transformation.SandcastlePrototype.Resources.alert_caution.gif", "image/gif");
-				// TODO: ISSUE 4 - Write the embedded resource content and content type to the response.
-				// TODO: ISSUE 4 - If the filename doesn't match any registered embedded resource, log the error and write 404.
+				// TODO: ISSUE 4 - Use an EmbeddedFileHandler to write the response for the embedded file.
 			}
 		}
 
