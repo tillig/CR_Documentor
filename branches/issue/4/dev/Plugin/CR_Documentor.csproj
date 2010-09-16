@@ -271,6 +271,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\DefaultValueStringDictionary.cs" />
+    <Compile Include="Transformation\SandcastlePrototype\Resources\AssemblyInfo.cs" />
     <Compile Include="Transformation\Syntax\AccessSpecifiedElementExtensions.cs" />
     <Compile Include="Transformation\Syntax\AttributeWriter.cs" />
     <Compile Include="Transformation\Syntax\ContractWriter.cs" />
@@ -291,6 +292,48 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_caution.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_note.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_security.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\Caution.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\CFW.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\collapse_all.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\copycode.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\expand_all.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\LastChild.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\NotLastChild.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privclass.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privdelegate.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privenum.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privevent.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privfield.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privinterface.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privmethod.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privproperty.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\privstructure.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protclass.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protdelegate.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protenum.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protevent.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protfield.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protfield.png" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protinterface.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protmethod.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protoperator.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protproperty.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protstructure.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubclass.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubdelegate.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubenum.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubevent.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubfield.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubinterface.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubmethod.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\puboperator.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubproperty.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\pubstructure.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\security.gif" />
+    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\static.gif" />
     <EmbeddedResource Include="DocumentorActions.resx">
       <DependentUpon>DocumentorActions.cs</DependentUpon>
     </EmbeddedResource>
