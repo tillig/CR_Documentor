@@ -52,6 +52,8 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		private bool _isBrowserInitialized = false;
 
+		private EmbeddedFileHandler _embeddedFileHandler = null;
+
 		/// <summary>
 		/// The default message that gets put into the Documentor window.
 		/// </summary>
@@ -132,6 +134,7 @@ namespace CR_Documentor.Controls
 			this.Controls.Add(this._browser);
 			// Setting the transformation engine will refresh/initialize the browser.
 			this.Transformer = new CR_Documentor.Transformation.SandcastlePrototype.Engine();
+			this._embeddedFileHandler = new EmbeddedFileHandler(Assembly.GetExecutingAssembly());
 		}
 
 		/// <summary>
@@ -273,15 +276,14 @@ namespace CR_Documentor.Controls
 		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
 		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
 		{
-			// TODO: ISSUE 4 - On initialization set up an EmbeddedFileHandler with the list of current assembly files.
 			var filename = Path.GetFileName(e.RequestContext.Request.Url.LocalPath);
 			if (String.IsNullOrEmpty(filename))
 			{
-				ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent + "<img src='other.gif' />");
+				ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
 			}
 			else
 			{
-				// TODO: ISSUE 4 - Use an EmbeddedFileHandler to write the response for the embedded file.
+				this._embeddedFileHandler.WriteFile(e.RequestContext, filename);
 			}
 		}
 

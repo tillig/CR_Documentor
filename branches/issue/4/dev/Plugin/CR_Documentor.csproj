@@ -259,6 +259,7 @@
     <Compile Include="Reflector\MemberKey.cs" />
     <Compile Include="Reflector\TypeInformation.cs" />
     <Compile Include="Resources\EmbeddedFileAttribute.cs" />
+    <Compile Include="Server\EmbeddedFileHandler.cs" />
     <Compile Include="Server\HttpRequestEventArgs.cs" />
     <Compile Include="Server\ResponseWriter.cs" />
     <Compile Include="Server\WebListener.cs" />
