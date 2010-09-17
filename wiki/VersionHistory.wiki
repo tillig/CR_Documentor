@@ -1,6 +1,12 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured,Phase-Support
-
+=2.5.0.0=
+  * New features:
+    * All syntax previews are now rendered with a single syntax generator that supports more preview abilities, particularly around generics and type constraints.
+    * The Sandcastle preview style has been updated to display icons in the class-level previews, making the preview richer and more accurate.
+  * Resolved issues:
+    * Issue #4: Added support for images and other files to be served from embedded resources.
+    * Issue #30: Added default tag handler support to NDoc preview style so Sandcastle tag compatibility can be used with the NDoc style.
 =2.4.1.0=
   * Resolved issues:
     * Issue #26: Visual Studio 2010 RC/DXCore 2010.1 context menu/text replacement issues. A few minor issues remain but are DXCore issues and should be resolved in next release of DXCore.
