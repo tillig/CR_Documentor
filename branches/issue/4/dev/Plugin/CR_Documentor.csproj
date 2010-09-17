@@ -317,7 +317,6 @@
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protenum.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protevent.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protfield.gif" />
-    <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protfield.png" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protinterface.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protmethod.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\protoperator.gif" />
