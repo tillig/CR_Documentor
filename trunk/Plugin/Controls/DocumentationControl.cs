@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using CR_Documentor.Diagnostics;
@@ -49,6 +51,8 @@ namespace CR_Documentor.Controls
 		/// Indicates if the browser has been initialized and has navigated to the preview page.
 		/// </summary>
 		private bool _isBrowserInitialized = false;
+
+		private EmbeddedFileHandler _embeddedFileHandler = null;
 
 		/// <summary>
 		/// The default message that gets put into the Documentor window.
@@ -130,6 +134,7 @@ namespace CR_Documentor.Controls
 			this.Controls.Add(this._browser);
 			// Setting the transformation engine will refresh/initialize the browser.
 			this.Transformer = new CR_Documentor.Transformation.SandcastlePrototype.Engine();
+			this._embeddedFileHandler = new EmbeddedFileHandler(Assembly.GetExecutingAssembly());
 		}
 
 		/// <summary>
@@ -271,7 +276,15 @@ namespace CR_Documentor.Controls
 		/// <param name="e">The <see cref="CR_Documentor.Server.HttpRequestEventArgs"/> instance containing the event data.</param>
 		private void WebServer_IncomingRequest(object sender, HttpRequestEventArgs e)
 		{
-			ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
+			var filename = Path.GetFileName(e.RequestContext.Request.Url.LocalPath);
+			if (String.IsNullOrEmpty(filename))
+			{
+				ResponseWriter.WriteHtml(e.RequestContext, this.PreviewContent);
+			}
+			else
+			{
+				this._embeddedFileHandler.WriteFile(e.RequestContext, filename);
+			}
 		}
 
 		/// <summary>
