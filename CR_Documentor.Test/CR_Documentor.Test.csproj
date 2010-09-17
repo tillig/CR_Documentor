@@ -103,6 +103,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector\MemberKeyTest.cs" />
     <Compile Include="Reflector\TypeInformationTest.cs" />
+    <Compile Include="Resources\EmbeddedFileAttributeTest.cs" />
+    <Compile Include="Server\EmbeddedFileHandlerTest.cs" />
     <Compile Include="Server\HttpRequestEventArgsTest.cs" />
     <Compile Include="Server\ResponseWriterTest.cs" />
     <Compile Include="Server\WebListenerTest.cs" />
@@ -180,6 +182,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Server\ResponseWriterTest.WriteResourceTextFile.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
