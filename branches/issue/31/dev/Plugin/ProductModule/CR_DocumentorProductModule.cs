@@ -28,7 +28,7 @@ namespace CR_Documentor.ProductModule
 		/// <summary>
 		/// Contains the minimum supported version of DXCore that is required.
 		/// </summary>
-		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(9, 1, 3, 0);
+		private static DevExpress.CodeRush.Common.Version __minEngineVersion = new DevExpress.CodeRush.Common.Version(10, 2, 3, 0);
 
 		/// <summary>
 		/// Contains the current version of the assembly.
