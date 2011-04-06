@@ -31,6 +31,25 @@ namespace DocTestCS.Integration
 	/// <threadsafety static="true" instance="false" />
 	public class Class1
 	{
+		/// <summary>
+		/// Private field. Should NOT show up in the class summary.
+		/// </summary>
+		private int _privateField;
+
+		/// <summary>
+		/// Internal field. Should show up in the class summary.
+		/// </summary>
+		internal int _internalField;
+
+		/// <summary>
+		/// Protected field. Should show up in the class summary.
+		/// </summary>
+		protected int _protectedField;
+
+		/// <summary>
+		/// Public field. Should show up in the class summary.
+		/// </summary>
+		public int _publicField;
 
 		#region Class1 Events
 
