@@ -34,22 +34,22 @@ namespace DocTestCS.Integration
 		/// <summary>
 		/// Private field. Should NOT show up in the class summary.
 		/// </summary>
-		private int _privateField;
+		private int _privateField = 0;
 
 		/// <summary>
 		/// Internal field. Should show up in the class summary.
 		/// </summary>
-		internal int _internalField;
+		internal int _internalField = 0;
 
 		/// <summary>
 		/// Protected field. Should show up in the class summary.
 		/// </summary>
-		protected int _protectedField;
+		protected int _protectedField = 0;
 
 		/// <summary>
 		/// Public field. Should show up in the class summary.
 		/// </summary>
-		public int _publicField;
+		public int _publicField = 0;
 
 		#region Class1 Events
 
@@ -111,7 +111,9 @@ namespace DocTestCS.Integration
 		{
 			get
 			{
-				return String.Empty;
+				// Get the private field so the compiler doesn't complain
+				// about the unused field.
+				return this._privateField.ToString();
 			}
 		}
 
