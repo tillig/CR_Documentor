@@ -131,8 +131,8 @@
     <Reference Include="DevExpress.CodeRush.VSCore">
       <Name>DevExpress.CodeRush.VSCore</Name>
     </Reference>
-    <Reference Include="DevExpress.DXCore.Controls.Utils.v6.3, Version=10.2.3.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.DXCore.Parser, Version=10.2.3.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.DXCore.Controls.Utils.v6.3, Version=10.2.6.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.DXCore.Parser, Version=10.2.6.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
     <Reference Include="EnvDTE">
       <Name>EnvDTE</Name>
     </Reference>
@@ -396,6 +396,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(UserProfile)\My Documents\DevExpress\IDE Tools\Community\PlugIns\" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(UserProfile)\Documents\DevExpress\IDE Tools\Community\PlugIns\" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
