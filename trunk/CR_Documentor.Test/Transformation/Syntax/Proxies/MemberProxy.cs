@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
+namespace CR_Documentor.Test.Transformation.Syntax.Proxies
 {
 	public abstract class MemberProxy : AccessSpecifiedElementProxy
 	{

@@ -38,7 +38,7 @@ namespace CR_Documentor.Transformation.Syntax
 		}
 
 		/// <summary>
-		/// Determines if a langauge element is supported for preview.
+		/// Determines if a language element is supported for preview.
 		/// </summary>
 		/// <param name="element">
 		/// The element to check for compatibility.
