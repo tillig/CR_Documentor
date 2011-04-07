@@ -125,30 +125,31 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\MethodTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ParamTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\PropertyTest.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AttributeProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BaseVariableProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\BinaryOperatorExpressionProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ClassProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\AttributeProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\BaseVariableProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\BinaryOperatorExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\ClassProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\EnumerationTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\GeneralTest.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\DelegateProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\EventProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ExpressionProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\InterfaceProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\LanguageElementProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MemberWithParametersProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\MethodProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\NamedTypeParameterConstraintProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\ParamProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\AccessSpecifiedElementProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\PropertyProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\StructProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterConstraintProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeParameterProxy.cs" />
-    <Compile Include="Transformation\Syntax\PreviewGeneratorTest\Proxies\TypeReferenceExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\DelegateProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\EventProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\ExpressionProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\InterfaceProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\LanguageElementProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\MemberProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\MemberWithParametersProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\MethodProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\NamedTypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\ParamProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\AccessSpecifiedElementProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\PropertyProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\StructProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\TypeParameterConstraintProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\TypeParameterProxy.cs" />
+    <Compile Include="Transformation\Syntax\Proxies\TypeReferenceExpressionProxy.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\StructTest.cs" />
+    <Compile Include="Transformation\Syntax\SimpleSignatureGeneratorTest\GeneralTest.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Server\ResponseWriterTest.WriteResourceTextFile.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

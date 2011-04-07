@@ -1,7 +1,7 @@
 ﻿using System;
 using DevExpress.CodeRush.StructuralParser;
 
-namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
+namespace CR_Documentor.Test.Transformation.Syntax.Proxies
 {
 	public abstract class AccessSpecifiedElementProxy : LanguageElementProxy
 	{

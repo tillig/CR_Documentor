@@ -281,6 +281,7 @@
     <Compile Include="Transformation\Syntax\HtmlTextWriterExtensions.cs" />
     <Compile Include="Transformation\Syntax\ParameterWriter.cs" />
     <Compile Include="Transformation\Syntax\PreviewCss.cs" />
+    <Compile Include="Transformation\Syntax\SimpleSignatureGenerator.cs" />
     <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
     <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />

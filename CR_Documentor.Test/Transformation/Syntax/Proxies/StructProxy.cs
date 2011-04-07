@@ -2,7 +2,7 @@
 using DevExpress.CodeRush.StructuralParser;
 using TypeMock.ArrangeActAssert;
 
-namespace CR_Documentor.Test.Transformation.Syntax.PreviewGeneratorTest.Proxies
+namespace CR_Documentor.Test.Transformation.Syntax.Proxies
 {
 	public class StructProxy : ClassProxy
 	{
