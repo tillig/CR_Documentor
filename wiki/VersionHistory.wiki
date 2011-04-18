@@ -1,5 +1,8 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured,Phase-Support
+=2.6.1.0=
+  * New feature/resolved issue: Top level class documentation in Sandcastle preview now shows an abbreviated method signature for class members (Issue #29) and no longer shows private/internal members.
+  * Updated tool window icons for nicer look.
 =2.6.0.0=
   * Compatibility fix (Issue #31) for DXCore 10.2.3.
 =2.5.0.0=
