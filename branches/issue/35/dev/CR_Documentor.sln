@@ -17,9 +17,6 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|Win32 = Debug|Win32
-		Doc Test Assemblies|Any CPU = Doc Test Assemblies|Any CPU
-		Doc Test Assemblies|Mixed Platforms = Doc Test Assemblies|Mixed Platforms
-		Doc Test Assemblies|Win32 = Doc Test Assemblies|Win32
 		Release|Any CPU = Release|Any CPU
 		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|Win32 = Release|Win32
@@ -30,11 +27,6 @@ Global
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Any CPU.ActiveCfg = Doc Test Assemblies|Any CPU
-		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Any CPU.Build.0 = Doc Test Assemblies|Any CPU
-		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Mixed Platforms.ActiveCfg = Doc Test Assemblies|Any CPU
-		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Mixed Platforms.Build.0 = Doc Test Assemblies|Any CPU
-		{9229512A-C004-46FD-8CEE-D096C883E827}.Doc Test Assemblies|Win32.ActiveCfg = Doc Test Assemblies|Any CPU
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9229512A-C004-46FD-8CEE-D096C883E827}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -45,11 +37,6 @@ Global
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Any CPU.ActiveCfg = Debug|Any CPU
-		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Any CPU.Build.0 = Debug|Any CPU
-		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Mixed Platforms.Build.0 = Debug|Any CPU
-		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Doc Test Assemblies|Win32.ActiveCfg = Debug|Any CPU
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63B82EFB-4D5C-4967-AB9D-729CEF225A06}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
