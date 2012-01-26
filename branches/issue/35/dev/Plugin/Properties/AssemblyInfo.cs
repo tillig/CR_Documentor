@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
+using System.Security;
 using CR_Documentor.ProductModule;
 using CR_Documentor.Properties;
 using DevExpress.CodeRush.Common;
@@ -10,7 +10,8 @@ using DevExpress.CodeRush.Common;
 [assembly: DXCoreAuthorizedAssembly(LoadAuthorization.AllProducts)]
 
 [assembly: ComVisible(false)]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum)]
+[assembly: SecurityTransparent]
+[assembly: SecurityRules(SecurityRuleSet.Level2)]
 
 [assembly: AssemblyTitle(ProductConstants.PlugInName)]
 [assembly: AssemblyDescription("DXCore plugin that provides the ability to preview how XML documentation comments will render.")]
