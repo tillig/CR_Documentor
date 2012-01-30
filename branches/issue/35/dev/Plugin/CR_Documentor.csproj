@@ -5,6 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{9229512A-C004-46FD-8CEE-D096C883E827}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -53,9 +54,7 @@
     </Reference>
     <Reference Include="DevExpress.DXCore.Controls.Utils.v6.3" />
     <Reference Include="DevExpress.DXCore.Parser" />
-    <Reference Include="EnvDTE">
-      <Name>EnvDTE</Name>
-    </Reference>
+    <Reference Include="EnvDTE" />
     <Reference Include="EnvDTE80" />
     <Reference Include="Extensibility" />
     <Reference Include="Microsoft.mshtml">
@@ -72,6 +71,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -212,10 +212,12 @@
     <Compile Include="Transformation\TransformEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VsixPluginExtension.cs" />
     <Compile Include="Xml\Evaluator.cs" />
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <None Include="source.extension.vsixmanifest" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_caution.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_note.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_security.gif" />
@@ -287,6 +289,7 @@
     <EmbeddedResource Include="Transformation\SandcastlePrototype\BaseDocument.html" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
