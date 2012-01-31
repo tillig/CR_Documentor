@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
 	<Identifier Id="CR_Documentor">
 		<Name>CR_Documentor</Name>
@@ -7,6 +7,7 @@
 		<Description xml:space="preserve">DXCore plugin that provides the ability to preview how XML documentation comments will render.</Description>
 		<Locale>1033</Locale>
 		<MoreInfoUrl>http://code.google.com/p/cr-documentor/</MoreInfoUrl>
+		<License>..\license.txt</License>
 		<GettingStartedGuide>http://code.google.com/p/cr-documentor/wiki/InstallationAndUsage</GettingStartedGuide>
 		<SupportedProducts>
 			<VisualStudio Version="10.0">
