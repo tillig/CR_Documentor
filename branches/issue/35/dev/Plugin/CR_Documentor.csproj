@@ -227,6 +227,14 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <Content Include="VsixIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="VsixPreview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_caution.gif" />
     <EmbeddedResource Include="Transformation\SandcastlePrototype\Resources\alert_note.gif" />

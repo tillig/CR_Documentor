@@ -9,6 +9,8 @@
 		<MoreInfoUrl>http://code.google.com/p/cr-documentor/</MoreInfoUrl>
 		<License>..\license.txt</License>
 		<GettingStartedGuide>http://code.google.com/p/cr-documentor/wiki/InstallationAndUsage</GettingStartedGuide>
+		<Icon>VsixIcon.png</Icon>
+		<PreviewImage>VsixPreview.png</PreviewImage>
 		<SupportedProducts>
 			<VisualStudio Version="10.0">
 				<Edition>Ultimate</Edition>
