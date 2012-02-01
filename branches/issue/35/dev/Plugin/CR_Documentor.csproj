@@ -227,6 +227,10 @@
     <Compile Include="Xml\LinkProcessor.cs" />
     <Compile Include="Xml\TextProcessor.cs" />
     <Content Include="Documentor.ico" />
+    <Content Include="license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="VsixIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
