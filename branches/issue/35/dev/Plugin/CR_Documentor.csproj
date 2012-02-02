@@ -159,6 +159,7 @@
     <Compile Include="Controls\DocumentationControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\DecoupledStorageExtensions.cs" />
     <Compile Include="Properties\ProductConstants.cs" />
     <Compile Include="ProductModule\CR_DocumentorProductModule.cs">
       <SubType>Code</SubType>

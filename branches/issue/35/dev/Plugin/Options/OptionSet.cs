@@ -336,80 +336,16 @@ namespace CR_Documentor.Options
 		/// <returns>An <see cref="OptionSet"/> with the settings from storage.</returns>
 		public static OptionSet GetOptionSetFromStorage(DecoupledStorage storage)
 		{
-			// TODO: Build some safe extensions around reading values from storage so we don't have this redundant code.
 			OptionSet retVal = new OptionSet();
-			try
-			{
-				retVal.TagCompatibilityLevel = storage.ReadEnum<TagCompatibilityLevel>(SECTION_DOCTAGCOMPAT, KEY_DOCTAGCOMPAT_COMPATLEVEL, DEFAULT_DOCTAGCOMPAT_COMPATLEVEL);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read TagCompatibilityLevel from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.UnrecognizedTagHandlingMethod = storage.ReadEnum<UnrecognizedTagHandlingMethod>(SECTION_UNRECOGNIZEDTAGS, KEY_UNRECOGNIZEDTAGS_HANDLING, DEFAULT_UNRECOGNIZEDTAGS_HANDLING);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read UnrecognizedTagHandlingMethod from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ConvertCodeTabsToSpaces = storage.ReadBoolean(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACES, DEFAULT_FORMATOPTIONS_CODETABSTOSPACES);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpaces from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ConvertCodeTabsToSpacesNum = Convert.ToUInt16(storage.ReadInt32(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACESNUM, DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM));
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ProcessDuplicateSeeLinks = storage.ReadBoolean(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_PROCESSDUPLICATESEELINKS, DEFAULT_FORMATOPTIONS_PROCESSDUPLICATESEELINKS);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ProcessDuplicateSeeLinks from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ProcessIncludes = storage.ReadEnum<IncludeProcessing>(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_PROCESSINCLUDES, DEFAULT_FORMATOPTIONS_PROCESSINCLUDES);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ProcessIncludes from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ServerPort = Convert.ToUInt16(storage.ReadInt32(SECTION_SERVEROPTIONS, KEY_SERVEROPTIONS_PORT, DEFAULT_SERVEROPTIONS_PORT));
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ConvertCodeTabsToSpacesNum from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.ShowToolbar = storage.ReadBoolean(SECTION_DISPLAYOPTIONS, KEY_DISPLAYOPTIONS_SHOWTOOLBAR, DEFAULT_DISPLAYOPTIONS_SHOWTOOLBAR);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read ShowToolbar from options. Defaulting."), ex);
-			}
-			try
-			{
-				retVal.PreviewStyle = storage.ReadString(SECTION_PREVIEWSTYLE, KEY_PREVIEWSTYLE_STYLEDESCRIPTOR, DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR);
-			}
-			catch (Exception ex)
-			{
-				Log.Write(LogLevel.Error, String.Format("Unable to read PreviewStyle from options. Defaulting."), ex);
-			}
+			retVal.TagCompatibilityLevel = storage.SafeReadEnum<TagCompatibilityLevel>(SECTION_DOCTAGCOMPAT, KEY_DOCTAGCOMPAT_COMPATLEVEL, DEFAULT_DOCTAGCOMPAT_COMPATLEVEL, Log);
+			retVal.UnrecognizedTagHandlingMethod = storage.SafeReadEnum<UnrecognizedTagHandlingMethod>(SECTION_UNRECOGNIZEDTAGS, KEY_UNRECOGNIZEDTAGS_HANDLING, DEFAULT_UNRECOGNIZEDTAGS_HANDLING, Log);
+			retVal.ConvertCodeTabsToSpaces = storage.SafeReadBoolean(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACES, DEFAULT_FORMATOPTIONS_CODETABSTOSPACES, Log);
+			retVal.ConvertCodeTabsToSpacesNum = Convert.ToUInt16(storage.SafeReadInt32(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_CODETABSTOSPACESNUM, DEFAULT_FORMATOPTIONS_CODETABSTOSPACESNUM, Log));
+			retVal.ProcessDuplicateSeeLinks = storage.SafeReadBoolean(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_PROCESSDUPLICATESEELINKS, DEFAULT_FORMATOPTIONS_PROCESSDUPLICATESEELINKS, Log);
+			retVal.ProcessIncludes = storage.SafeReadEnum<IncludeProcessing>(SECTION_FORMATOPTIONS, KEY_FORMATOPTIONS_PROCESSINCLUDES, DEFAULT_FORMATOPTIONS_PROCESSINCLUDES, Log);
+			retVal.ServerPort = Convert.ToUInt16(storage.SafeReadInt32(SECTION_SERVEROPTIONS, KEY_SERVEROPTIONS_PORT, DEFAULT_SERVEROPTIONS_PORT, Log));
+			retVal.ShowToolbar = storage.SafeReadBoolean(SECTION_DISPLAYOPTIONS, KEY_DISPLAYOPTIONS_SHOWTOOLBAR, DEFAULT_DISPLAYOPTIONS_SHOWTOOLBAR, Log);
+			retVal.PreviewStyle = storage.SafeReadString(SECTION_PREVIEWSTYLE, KEY_PREVIEWSTYLE_STYLEDESCRIPTOR, DEFAULT_PREVIEWSTYLE_STYLEDESCRIPTOR, Log);
 			return retVal;
 		}
 
