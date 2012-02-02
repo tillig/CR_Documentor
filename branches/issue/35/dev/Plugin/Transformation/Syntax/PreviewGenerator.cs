@@ -135,12 +135,12 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			if (this.Language == SupportedLanguageId.CSharp && this.Element.IsNew)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "new");
+				writer.WriteSpan(PreviewCss.Keyword, "new");
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			if (this.Language == SupportedLanguageId.Basic && this.Element.IsNew)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Shadows");
+				writer.WriteSpan(PreviewCss.Keyword, "Shadows");
 			}
 			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Element is Interface)
@@ -148,10 +148,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Interface");
+						writer.WriteSpan(PreviewCss.Keyword, "Interface");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "interface");
+						writer.WriteSpan(PreviewCss.Keyword, "interface");
 						break;
 				}
 			}
@@ -160,10 +160,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Structure");
+						writer.WriteSpan(PreviewCss.Keyword, "Structure");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "struct");
+						writer.WriteSpan(PreviewCss.Keyword, "struct");
 						break;
 				}
 			}
@@ -172,14 +172,14 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Class");
+						writer.WriteSpan(PreviewCss.Keyword, "Class");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "class");
+						writer.WriteSpan(PreviewCss.Keyword, "class");
 						break;
 				}
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, null, "");
 			TypeParameterWriter.WriteTypeParameters(writer, this.Element, this.Language);
 			// TODO: Write the inheritance/implements chain.
 			TypeParameterWriter.WriteConstraintsPostSignature(writer, this.Element, this.Language);
@@ -195,7 +195,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void ClassOperator(HtmlTextWriter writer)
 		{
 			var method = (Method)this.Element;
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			bool isCast = method.IsImplicitCast || method.IsExplicitCast;
 
@@ -204,47 +204,47 @@ namespace CR_Documentor.Transformation.Syntax
 				case SupportedLanguageId.Basic:
 					if (method.IsImplicitCast)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Widening");
+						writer.WriteSpan(PreviewCss.Keyword, "Widening");
 					}
 					else if (method.IsExplicitCast)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Narrowing");
+						writer.WriteSpan(PreviewCss.Keyword, "Narrowing");
 					}
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Operator");
+					writer.WriteSpan(PreviewCss.Keyword, "Operator");
 					break;
 				default:
 					if (method.IsImplicitCast)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "implicit");
+						writer.WriteSpan(PreviewCss.Keyword, "implicit");
 					}
 					else if (method.IsExplicitCast)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "explicit");
+						writer.WriteSpan(PreviewCss.Keyword, "explicit");
 					}
 					else
 					{
-						HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", " ");
+						writer.WriteLink(this.Element.MemberType(), "", " ");
 					}
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "operator");
+					writer.WriteSpan(PreviewCss.Keyword, "operator");
 					if (isCast)
 					{
-						HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
+						writer.WriteLink(this.Element.MemberType(), "", "");
 					}
 					break;
 			}
 			if (!isCast)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+				writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			}
 			else if (this.Language == SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "CType", "", "");
+				writer.WriteSpan(PreviewCss.Identifier, "CType", "", "");
 			}
 			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
+				writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+				writer.WriteLink(this.Element.MemberType(), "", "");
 			}
 		}
 
@@ -257,16 +257,16 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Constructor(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Sub");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "New", "", "");
+					writer.WriteSpan(PreviewCss.Keyword, "Sub");
+					writer.WriteSpan(PreviewCss.Identifier, "New", "", "");
 					break;
 				default:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+					writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 					break;
 			}
 			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
@@ -282,19 +282,19 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Destructor(HtmlTextWriter writer)
 		{
 			// Destructor preview always renders as protected.
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, MemberVisibility.Protected));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, MemberVisibility.Protected));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Overrides");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+					writer.WriteSpan(PreviewCss.Keyword, "Overrides");
+					writer.WriteSpan(PreviewCss.Keyword, "Sub");
 					break;
 				default:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "override");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "void");
+					writer.WriteSpan(PreviewCss.Keyword, "override");
+					writer.WriteSpan(PreviewCss.Keyword, "void");
 					break;
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, "Finalize", "", "");
+			writer.WriteSpan(PreviewCss.Identifier, "Finalize", "", "");
 			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 		}
 
@@ -307,26 +307,26 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Delegate(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Delegate");
+					writer.WriteSpan(PreviewCss.Keyword, "Delegate");
 					break;
 				default:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "delegate");
+					writer.WriteSpan(PreviewCss.Keyword, "delegate");
 					break;
 			}
-			string elementMemberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
+			string elementMemberType = this.Element.MemberType();
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+						writer.WriteSpan(PreviewCss.Keyword, "Sub");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "void");
+						writer.WriteSpan(PreviewCss.Keyword, "void");
 						break;
 				}
 			}
@@ -335,19 +335,19 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Function");
+						writer.WriteSpan(PreviewCss.Keyword, "Function");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteLink(writer, elementMemberType, null, null);
+						writer.WriteLink(elementMemberType, null, null);
 						break;
 				}
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			if (this.Language == SupportedLanguageId.Basic && !TypeInfo.TypeIsVoid(elementMemberType))
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, elementMemberType, "", "");
+				writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+				writer.WriteLink(elementMemberType, "", "");
 			}
 		}
 
@@ -360,30 +360,30 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Enumeration(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Enum");
+					writer.WriteSpan(PreviewCss.Keyword, "Enum");
 					break;
 				default:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "enum");
+					writer.WriteSpan(PreviewCss.Keyword, "enum");
 					break;
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, null, "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, null, "");
 			string underlyingType = ((Enumeration)this.Element).UnderlyingType;
 			if (!String.IsNullOrEmpty(underlyingType))
 			{
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
+						writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
 						break;
 					default:
 						writer.Write(" : ");
 						break;
 				}
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, underlyingType, null, "");
+				writer.WriteSpan(PreviewCss.Keyword, underlyingType, null, "");
 			}
 		}
 
@@ -396,22 +396,22 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Event(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Event");
+					writer.WriteSpan(PreviewCss.Keyword, "Event");
 					break;
 				default:
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "event");
+					writer.WriteSpan(PreviewCss.Keyword, "event");
 					break;
 			}
 
 			// Get the generated parameterized event handler type name if it exists.
 			// e.g., Public Event EventParameterized As TestClass.EventParameterizedEventHandler
 			var eventElement = (Event)this.Element;
-			string memberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
+			string memberType = this.Element.MemberType();
 			if (eventElement.ParameterCount > 0)
 			{
 				var parent = eventElement.GetParentClassInterfaceStructOrModule();
@@ -425,13 +425,13 @@ namespace CR_Documentor.Transformation.Syntax
 
 			if (this.Language != SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteLink(writer, memberType, null, null);
+				writer.WriteLink(memberType, null, null);
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, memberType, "", "");
+				writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+				writer.WriteLink(memberType, "", "");
 			}
 		}
 
@@ -444,17 +444,17 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Field(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Language != SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), null, null);
+				writer.WriteLink(this.Element.MemberType(), null, null);
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
+				writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+				writer.WriteLink(this.Element.MemberType(), "", "");
 			}
 		}
 
@@ -486,7 +486,7 @@ namespace CR_Documentor.Transformation.Syntax
 				{
 					writer.Write(HttpUtility.HtmlEncode(Strings.PreviewGenerator_LanguageNotSupported));
 				}
-				else if (!AccessSpecifiedElementExtensions.IsSupportedForPreview(this.Element))
+				else if (!this.Element.IsSupportedForPreview())
 				{
 					writer.Write(HttpUtility.HtmlEncode(Strings.PreviewGenerator_LanguageElementNotSupported));
 				}
@@ -562,20 +562,20 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				// For members that belong to an interface (methods in an interface definition), no visibility is written.
 				// For explicit interface implementations in C#, no visibility is written.
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+				writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			}
 
 			ContractWriter.Write(writer, this.Element, this.Language);
-			string elementMemberType = AccessSpecifiedElementExtensions.MemberType(this.Element);
+			string elementMemberType = this.Element.MemberType();
 			if (TypeInfo.TypeIsVoid(elementMemberType))
 			{
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Sub");
+						writer.WriteSpan(PreviewCss.Keyword, "Sub");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "void");
+						writer.WriteSpan(PreviewCss.Keyword, "void");
 						break;
 				}
 			}
@@ -584,14 +584,14 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Function");
+						writer.WriteSpan(PreviewCss.Keyword, "Function");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteLink(writer, elementMemberType, null, null);
+						writer.WriteLink(elementMemberType, null, null);
 						break;
 				}
 			}
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+			writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			TypeParameterWriter.WriteTypeParameters(writer, this.Element, this.Language);
 			ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 			TypeParameterWriter.WriteConstraintsPostSignature(writer, this.Element, this.Language);
@@ -599,17 +599,17 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				if (!TypeInfo.TypeIsVoid(elementMemberType))
 				{
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-					HtmlTextWriterExtensions.WriteLink(writer, elementMemberType, "", "");
+					writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+					writer.WriteLink(elementMemberType, "", "");
 				}
 				int count = method.ImplementsCount;
 				if (count > 0)
 				{
 					writer.Write(" ");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Implements");
+					writer.WriteSpan(PreviewCss.Keyword, "Implements");
 					for (int i = 0; i < count; i++)
 					{
-						HtmlTextWriterExtensions.WriteLink(writer, method.Implements[i], "", "");
+						writer.WriteLink(method.Implements[i], "", "");
 						if (i + 1 < count)
 						{
 							writer.Write(", ");
@@ -628,7 +628,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Property(HtmlTextWriter writer)
 		{
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			var property = (Property)this.Element;
 			switch (this.Language)
@@ -636,16 +636,16 @@ namespace CR_Documentor.Transformation.Syntax
 				case SupportedLanguageId.Basic:
 					if (property.ParameterCount > 0)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Default");
+						writer.WriteSpan(PreviewCss.Keyword, "Default");
 					}
 					// In VB, properties with the ReadOnly keyword parse with IsReadOnly
 					// set so we don't have to check for property.HasGetter && !property.HasSetter
 					// because the ElementContract method will handle ReadOnly.
 					else if (!property.HasGetter && property.HasSetter)
 					{
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "WriteOnly");
+						writer.WriteSpan(PreviewCss.Keyword, "WriteOnly");
 					}
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Property");
+					writer.WriteSpan(PreviewCss.Keyword, "Property");
 					break;
 				default:
 					break;
@@ -653,30 +653,30 @@ namespace CR_Documentor.Transformation.Syntax
 
 			if (this.Language != SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), null, null);
+				writer.WriteLink(this.Element.MemberType(), null, null);
 			}
 			if (property.ParameterCount > 0)
 			{
 				switch (this.Language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+						writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 						ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "(", ")");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "this", "", "");
+						writer.WriteSpan(PreviewCss.Keyword, "this", "", "");
 						ParameterWriter.Write(writer, this.Element as MemberWithParameters, this.Language, "[", "]");
 						break;
 				}
 			}
 			else
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, this.Element.Name, "", "");
+				writer.WriteSpan(PreviewCss.Identifier, this.Element.Name, "", "");
 			}
 			if (this.Language == SupportedLanguageId.Basic)
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
-				HtmlTextWriterExtensions.WriteLink(writer, AccessSpecifiedElementExtensions.MemberType(this.Element), "", "");
+				writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
+				writer.WriteLink(this.Element.MemberType(), "", "");
 			}
 			else
 			{
@@ -726,7 +726,7 @@ namespace CR_Documentor.Transformation.Syntax
 		{
 			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.GetSet);
 			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, keyword, "", "");
+			writer.WriteSpan(PreviewCss.Keyword, keyword, "", "");
 			if (this.Language != SupportedLanguageId.Basic)
 			{
 				writer.Write(";");

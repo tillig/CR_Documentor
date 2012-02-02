@@ -37,7 +37,7 @@ namespace CR_Documentor.Transformation.Syntax
 				if (argument is BinaryOperatorExpression)
 				{
 					var init = (BinaryOperatorExpression)argument;
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, init.LeftSide.ToString());
+					writer.WriteSpan(PreviewCss.Identifier, init.LeftSide.ToString());
 					switch (language)
 					{
 						case SupportedLanguageId.Basic:
@@ -47,11 +47,11 @@ namespace CR_Documentor.Transformation.Syntax
 							writer.Write("= ");
 							break;
 					}
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Literal, init.RightSide.ToString(), "", "");
+					writer.WriteSpan(PreviewCss.Literal, init.RightSide.ToString(), "", "");
 				}
 				else
 				{
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Literal, argument.ToString(), "", "");
+					writer.WriteSpan(PreviewCss.Literal, argument.ToString(), "", "");
 				}
 				if (j + 1 < arguments.Count)
 				{
@@ -100,7 +100,7 @@ namespace CR_Documentor.Transformation.Syntax
 						break;
 				}
 				var attribute = (DevExpress.CodeRush.StructuralParser.Attribute)attributes[i];
-				HtmlTextWriterExtensions.WriteLink(writer, attribute.Name, "", "");
+				writer.WriteLink(attribute.Name, "", "");
 				AttributeArguments(writer, attribute.Arguments, language);
 				switch (language)
 				{

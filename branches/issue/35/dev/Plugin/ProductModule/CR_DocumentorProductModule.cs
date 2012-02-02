@@ -186,8 +186,8 @@ namespace CR_Documentor.ProductModule
 			System.Version sysVersion = current.GetName().Version;
 			__version = new DevExpress.CodeRush.Common.Version(sysVersion.Major, sysVersion.Minor, sysVersion.Build, sysVersion.Revision, ReleaseType.Release);
 
-			__copyright = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyCopyrightAttribute>(current).Copyright;
-			__description = ICustomAttributeProviderExtensions.GetCustomAttribute<AssemblyDescriptionAttribute>(current).Description;
+			__copyright = current.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
+			__description = current.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
 		}
 
 		/// <summary>

@@ -8,8 +8,6 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </summary>
 	public static class AccessSpecifiedElementExtensions
 	{
-		// TODO: When we target .NET 3.5, convert these to real extension methods.
-
 		/// <summary>
 		/// Gets a flag indicating if there are generic type parameters
 		/// to render to the preview.
@@ -24,7 +22,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="element" /> is <see langword="null" />.
 		/// </exception>
-		public static bool HasGenericParameters(AccessSpecifiedElement element)
+		public static bool HasGenericParameters(this AccessSpecifiedElement element)
 		{
 			if (element == null)
 			{
@@ -47,7 +45,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <see langword="true" /> if a syntax preview can be generated
 		/// for the element, otherwise <see langword="false" />.
 		/// </returns>
-		public static bool IsSupportedForPreview(AccessSpecifiedElement element)
+		public static bool IsSupportedForPreview(this AccessSpecifiedElement element)
 		{
 			return
 				element is Enumeration ||
@@ -70,7 +68,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// is not a <see cref="DevExpress.CodeRush.StructuralParser.Member"/>,
 		/// this method returns <see langword="null" />.
 		/// </returns>
-		public static string MemberType(AccessSpecifiedElement element)
+		public static string MemberType(this AccessSpecifiedElement element)
 		{
 			Member member = element as Member;
 			if (member == null)

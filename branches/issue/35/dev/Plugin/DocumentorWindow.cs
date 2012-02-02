@@ -137,9 +137,9 @@ namespace CR_Documentor
 					ImageList imgList = new ImageList();
 
 					System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
+					imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Printer.ico"));
+					imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Settings.ico"));
+					imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Pause.ico"));
 					SetupToolbar(imgList);
 					this.Controls.Add(this._toolBar);
 
@@ -598,8 +598,8 @@ namespace CR_Documentor
 			try
 			{
 				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
-				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Printer.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Settings.ico"));
 				return true;
 			}
 			catch (Exception err)
