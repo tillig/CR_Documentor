@@ -55,35 +55,34 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine.RegisterCommentTagHandlers"/>
 		protected override void RegisterCommentTagHandlers()
 		{
-			// TODO: Factor this into the base class - decorate handlers with attributes so we don't have to register manually.
-			this.AddCommentTagHandler(DefaultCommentHandlerKey, new EventHandler<CommentMatchEventArgs>(this.HtmlPassThrough));
-			this.AddCommentTagHandler("block", new EventHandler<CommentMatchEventArgs>(this.Block));
-			this.AddCommentTagHandler("c", new EventHandler<CommentMatchEventArgs>(this.C));
-			this.AddCommentTagHandler("code", new EventHandler<CommentMatchEventArgs>(this.Code));
-			this.AddCommentTagHandler("event", new EventHandler<CommentMatchEventArgs>(this.Event));
-			this.AddCommentTagHandler("exception", new EventHandler<CommentMatchEventArgs>(this.Exception));
-			this.AddCommentTagHandler("exclude", new EventHandler<CommentMatchEventArgs>(this.IgnoreComment));
-			this.AddCommentTagHandler("example", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("include", new EventHandler<CommentMatchEventArgs>(this.Include));
-			this.AddCommentTagHandler("list", new EventHandler<CommentMatchEventArgs>(this.List));
-			this.AddCommentTagHandler("member", new EventHandler<CommentMatchEventArgs>(this.Member));
-			this.AddCommentTagHandler("note", new EventHandler<CommentMatchEventArgs>(this.Note));
-			this.AddCommentTagHandler("obsolete", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("overloads", new EventHandler<CommentMatchEventArgs>(this.IgnoreComment));
-			this.AddCommentTagHandler("para", new EventHandler<CommentMatchEventArgs>(this.Para));
-			this.AddCommentTagHandler("param", new EventHandler<CommentMatchEventArgs>(this.Param));
-			this.AddCommentTagHandler("paramref", new EventHandler<CommentMatchEventArgs>(this.Paramref));
-			this.AddCommentTagHandler("permission", new EventHandler<CommentMatchEventArgs>(this.Permission));
-			this.AddCommentTagHandler("preliminary", new EventHandler<CommentMatchEventArgs>(this.Preliminary));
-			this.AddCommentTagHandler("remarks", new EventHandler<CommentMatchEventArgs>(this.Remarks));
-			this.AddCommentTagHandler("returns", new EventHandler<CommentMatchEventArgs>(this.Returns));
-			this.AddCommentTagHandler("see", new EventHandler<CommentMatchEventArgs>(this.See));
-			this.AddCommentTagHandler("seealso", new EventHandler<CommentMatchEventArgs>(this.SeeAlso));
-			this.AddCommentTagHandler("summary", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("threadsafety", new EventHandler<CommentMatchEventArgs>(this.ThreadSafety));
-			this.AddCommentTagHandler("typeparam", new EventHandler<CommentMatchEventArgs>(this.TypeParam));
-			this.AddCommentTagHandler("typeparamref", new EventHandler<CommentMatchEventArgs>(this.TypeParamref));
-			this.AddCommentTagHandler("value", new EventHandler<CommentMatchEventArgs>(this.Value));
+			this.CommentMatchHandlers[""] = new EventHandler<CommentMatchEventArgs>(this.HtmlPassThrough);
+			this.CommentMatchHandlers["block"] = new EventHandler<CommentMatchEventArgs>(this.Block);
+			this.CommentMatchHandlers["c"] = new EventHandler<CommentMatchEventArgs>(this.C);
+			this.CommentMatchHandlers["code"] = new EventHandler<CommentMatchEventArgs>(this.Code);
+			this.CommentMatchHandlers["event"] = new EventHandler<CommentMatchEventArgs>(this.Event);
+			this.CommentMatchHandlers["exception"] = new EventHandler<CommentMatchEventArgs>(this.Exception);
+			this.CommentMatchHandlers["exclude"] = new EventHandler<CommentMatchEventArgs>(this.IgnoreComment);
+			this.CommentMatchHandlers["example"] = new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates);
+			this.CommentMatchHandlers["include"] = new EventHandler<CommentMatchEventArgs>(this.Include);
+			this.CommentMatchHandlers["list"] = new EventHandler<CommentMatchEventArgs>(this.List);
+			this.CommentMatchHandlers["member"] = new EventHandler<CommentMatchEventArgs>(this.Member);
+			this.CommentMatchHandlers["note"] = new EventHandler<CommentMatchEventArgs>(this.Note);
+			this.CommentMatchHandlers["obsolete"] = new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates);
+			this.CommentMatchHandlers["overloads"] = new EventHandler<CommentMatchEventArgs>(this.IgnoreComment);
+			this.CommentMatchHandlers["para"] = new EventHandler<CommentMatchEventArgs>(this.Para);
+			this.CommentMatchHandlers["param"] = new EventHandler<CommentMatchEventArgs>(this.Param);
+			this.CommentMatchHandlers["paramref"] = new EventHandler<CommentMatchEventArgs>(this.Paramref);
+			this.CommentMatchHandlers["permission"] = new EventHandler<CommentMatchEventArgs>(this.Permission);
+			this.CommentMatchHandlers["preliminary"] = new EventHandler<CommentMatchEventArgs>(this.Preliminary);
+			this.CommentMatchHandlers["remarks"] = new EventHandler<CommentMatchEventArgs>(this.Remarks);
+			this.CommentMatchHandlers["returns"] = new EventHandler<CommentMatchEventArgs>(this.Returns);
+			this.CommentMatchHandlers["see"] = new EventHandler<CommentMatchEventArgs>(this.See);
+			this.CommentMatchHandlers["seealso"] = new EventHandler<CommentMatchEventArgs>(this.SeeAlso);
+			this.CommentMatchHandlers["summary"] = new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates);
+			this.CommentMatchHandlers["threadsafety"] = new EventHandler<CommentMatchEventArgs>(this.ThreadSafety);
+			this.CommentMatchHandlers["typeparam"] = new EventHandler<CommentMatchEventArgs>(this.TypeParam);
+			this.CommentMatchHandlers["typeparamref"] = new EventHandler<CommentMatchEventArgs>(this.TypeParamref);
+			this.CommentMatchHandlers["value"] = new EventHandler<CommentMatchEventArgs>(this.Value);
 		}
 
 		#endregion

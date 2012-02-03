@@ -5,12 +5,10 @@ using System.IO;
 using System.Security;
 using System.Text;
 using System.Xml;
-
+using CR_Documentor.Diagnostics;
 using CR_Documentor.Options;
 using CR_Documentor.Xml;
-
 using SP = DevExpress.CodeRush.StructuralParser;
-using CR_Documentor.Diagnostics;
 
 namespace CR_Documentor.Transformation
 {
@@ -30,11 +28,6 @@ namespace CR_Documentor.Transformation
 		protected const string BodyReplacementMacro = "!!BODY!!";
 
 		/// <summary>
-		/// Constant used in registering a "default handler" for comment tags.  Sort of like a "default" case in a switch statement.
-		/// </summary>
-		protected const string DefaultCommentHandlerKey = "__default";
-
-		/// <summary>
 		/// Contains the signature of the current code target to render.
 		/// </summary>
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
@@ -47,12 +40,6 @@ namespace CR_Documentor.Transformation
 		/// </summary>
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
 		private SP.LanguageElement _codeTarget;
-
-		/// <summary>
-		/// Collection of transformation engine comment rendering events.
-		/// </summary>
-		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
-		private Dictionary<string, EventHandler<CommentMatchEventArgs>> _commentMatchEvents = new Dictionary<string, EventHandler<CommentMatchEventArgs>>();
 
 		/// <summary>
 		/// Internal storage for the
@@ -145,6 +132,18 @@ namespace CR_Documentor.Transformation
 				return this.CodeTarget as SP.AccessSpecifiedElement;
 			}
 		}
+
+		/// <summary>
+		/// Gets a dictionary of tag/handler mappings.
+		/// </summary>
+		/// <value>
+		/// A <see cref="System.Collections.Generic.Dictionary{K,V}"/>
+		/// where the key is the tag being matched and the value is the handler
+		/// for the tag. The key <see cref="System.String.Empty"/> should be used
+		/// as the "default" handler tag.
+		/// </value>
+		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
+		protected Dictionary<string, EventHandler<CommentMatchEventArgs>> CommentMatchHandlers { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Xml.XmlDocument"/>
@@ -257,6 +256,7 @@ namespace CR_Documentor.Transformation
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
 		protected TransformEngine()
 		{
+			this.CommentMatchHandlers = new Dictionary<string, EventHandler<CommentMatchEventArgs>>();
 			this.RegisterCommentTagHandlers();
 		}
 
@@ -337,41 +337,6 @@ namespace CR_Documentor.Transformation
 		}
 
 		/// <summary>
-		/// Adds a rendering handler for rendering a specific comment block.
-		/// </summary>
-		/// <param name="elementName">The name of the comment element to render (member, summary, code, etc.).</param>
-		/// <param name="handler">The handler that performs the rendering.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// Thrown if <paramref name="elementName" /> or <paramref name="handler" /> is <see langword="null" />.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// Thrown if <paramref name="elementName" /> is <see cref="System.String.Empty" />.
-		/// </exception>
-		protected void AddCommentTagHandler(string elementName, EventHandler<CommentMatchEventArgs> handler)
-		{
-			if (elementName == null)
-			{
-				throw new ArgumentNullException("elementName");
-			}
-			if (handler == null)
-			{
-				throw new ArgumentNullException("handler");
-			}
-			if (elementName.Length == 0)
-			{
-				throw new ArgumentOutOfRangeException("elementName");
-			}
-			if (!this._commentMatchEvents.ContainsKey(elementName))
-			{
-				this._commentMatchEvents.Add(elementName, handler);
-			}
-			else
-			{
-				this._commentMatchEvents[elementName] = (EventHandler<CommentMatchEventArgs>)Delegate.Combine(this._commentMatchEvents[elementName], handler);
-			}
-		}
-
-		/// <summary>
 		/// Applies the transformation to the passed in set of <see cref="System.Xml.XmlNode"/> objects.
 		/// </summary>
 		/// <param name="list">The nodes to apply the transform to.</param>
@@ -380,11 +345,11 @@ namespace CR_Documentor.Transformation
 		/// For each node in the list, if it's an <see cref="System.Xml.XmlElement"/>
 		/// and is recognized in the set of <see cref="CR_Documentor.Options.OptionSet.RecognizedTags"/>
 		/// in <see cref="CR_Documentor.Transformation.TransformEngine.Options"/>
-		/// and is registered with a handler (<see cref="CR_Documentor.Transformation.TransformEngine.AddCommentTagHandler"/>),
+		/// and is registered with a handler (<see cref="CR_Documentor.Transformation.TransformEngine.CommentMatchHandlers"/>),
 		/// the handler will be called with the element.
 		/// </para>
 		/// <para>
-		/// Register a handler using the <see cref="CR_Documentor.Transformation.TransformEngine.DefaultCommentHandlerKey"/>
+		/// Register a handler using the key <see cref="System.String.Empty"/>
 		/// to provide a default handler for tags that are recognized but don't
 		/// have a specific handler registered.
 		/// </para>
@@ -400,24 +365,15 @@ namespace CR_Documentor.Transformation
 					{
 						// The tag is recognized - call the appropriate handler
 						EventHandler<CommentMatchEventArgs> handler = null;
-						if (this._commentMatchEvents.ContainsKey(element.Name))
+						if (!this.CommentMatchHandlers.TryGetValue(element.Name, out handler))
 						{
-							handler = this._commentMatchEvents[element.Name] as EventHandler<CommentMatchEventArgs>;
+							if (!this.CommentMatchHandlers.TryGetValue("", out handler))
+							{
+								Log.Write(LogLevel.Warn, String.Format("No handler found for tag '{0}' found. Verify there is a default tag handler registered.", element.Name));
+							}
 						}
-						else if (this._commentMatchEvents.ContainsKey(DefaultCommentHandlerKey))
-						{
-							// No handler registered for the specific tag; get the default one.
-							handler = this._commentMatchEvents[DefaultCommentHandlerKey] as EventHandler<CommentMatchEventArgs>;
-						}
-						if (handler != null)
-						{
-							CommentMatchEventArgs args = new CommentMatchEventArgs(element);
-							handler(this, args);
-						}
-						else
-						{
-							Log.Write(LogLevel.Warn, String.Format("No handler found for tag '{0}' found. Verify there is a default tag handler registered.", element.Name));
-						}
+						CommentMatchEventArgs args = new CommentMatchEventArgs(element);
+						handler(this, args);
 					}
 					else if (CommentParser.IsErrorNode(element))
 					{
@@ -583,9 +539,9 @@ namespace CR_Documentor.Transformation
 			{
 				throw new ArgumentOutOfRangeException("elementName");
 			}
-			if (this._commentMatchEvents.ContainsKey(elementName))
+			if (this.CommentMatchHandlers.ContainsKey(elementName))
 			{
-				this._commentMatchEvents.Remove(elementName);
+				this.CommentMatchHandlers.Remove(elementName);
 			}
 		}
 
@@ -709,7 +665,7 @@ namespace CR_Documentor.Transformation
 			List<String> defaulted = new List<string>();
 			foreach (string tag in this.Options.RecognizedTags)
 			{
-				if (!this._commentMatchEvents.ContainsKey(tag))
+				if (!this.CommentMatchHandlers.ContainsKey(tag))
 				{
 					defaulted.Add(tag);
 				}
