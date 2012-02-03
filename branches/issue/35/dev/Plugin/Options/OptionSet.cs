@@ -179,7 +179,10 @@ namespace CR_Documentor.Options
 		/// Gets or sets a <see cref="Boolean"/> indicating whether tabs in code
 		/// blocks get replaced with spaces.
 		/// </summary>
-		/// <value>True if tabs in code blocks should be replaced with spaces; false otherwise.</value>
+		/// <value>
+		/// <see langword="true" /> if tabs in code blocks should be replaced with
+		/// spaces; <see langword="false" /> otherwise.
+		/// </value>
 		public virtual bool ConvertCodeTabsToSpaces { get; set; }
 
 		/// <summary>
