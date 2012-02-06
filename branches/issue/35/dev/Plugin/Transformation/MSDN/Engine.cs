@@ -957,7 +957,7 @@ namespace CR_Documentor.Transformation.MSDN
 				// The first part of the header is the name of the element
 				if (el is SP.Method)
 				{
-					this.Writer.Write(Lookup.MethodName((SP.Method)el));
+					this.Writer.Write(((SP.Method)el).DisplayName());
 				}
 				else
 				{

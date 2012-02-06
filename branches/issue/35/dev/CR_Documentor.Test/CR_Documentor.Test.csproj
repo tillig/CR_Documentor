@@ -112,6 +112,7 @@
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
     <Compile Include="Transformation\Syntax\LanguageTest.cs" />
+    <Compile Include="Transformation\Syntax\MethodExtensionsTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassOperatorTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ConstructorTest.cs" />
