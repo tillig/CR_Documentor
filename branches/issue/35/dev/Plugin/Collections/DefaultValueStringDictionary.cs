@@ -10,6 +10,8 @@ namespace CR_Documentor.Collections
 	/// </summary>
 	public class DefaultValueStringDictionary : StringDictionary
 	{
+		// TODO: See if we can get rid of DefaultValueStringDictionary in favor of Dictionar<K, V> and TryGetValue.
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultValueStringDictionary"/> class.
 		/// </summary>

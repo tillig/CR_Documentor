@@ -17,7 +17,6 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </summary>
 		public const string Basic = "Basic";
 
-
 		/// <summary>
 		/// Converts a string language ID into a supported language identifier.
 		/// </summary>
@@ -29,6 +28,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </returns>
 		public static SupportedLanguageId ConvertToSupportedLanguageId(string language)
 		{
+			// TODO: Refactor ConvertToSupportedLanguageId into an extension method on String (can it be just an enum parse?).
 			switch (language)
 			{
 				case Language.CSharp:

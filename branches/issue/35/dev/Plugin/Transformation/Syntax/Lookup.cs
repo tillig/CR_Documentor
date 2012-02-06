@@ -45,6 +45,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <returns>A simple string that can be used in the banner for the type, describing what it is in plain terms.</returns>
 		public static string ElementTypeDescription(SP.AccessSpecifiedElement element)
 		{
+			// TODO: Refactor ElementTypeDescription into an extension method on AccessSpecifiedElement.
 			if (element is SP.BaseVariable || element is SP.EnumElement)
 			{
 				return "Field";
@@ -112,6 +113,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </returns>
 		public static string Visibility(SupportedLanguageId language, SP.MemberVisibility visibility)
 		{
+			// TODO: Refactor Visibility into an extension method on MemberVisibility.
 			if (language == SupportedLanguageId.Basic)
 			{
 				switch (visibility)
