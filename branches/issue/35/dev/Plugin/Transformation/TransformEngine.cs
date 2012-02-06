@@ -143,7 +143,7 @@ namespace CR_Documentor.Transformation
 		/// as the "default" handler tag.
 		/// </value>
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
-		protected Dictionary<string, EventHandler<CommentMatchEventArgs>> CommentMatchHandlers { get; private set; }
+		protected Dictionary<string, Action<XmlElement>> CommentMatchHandlers { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Xml.XmlDocument"/>
@@ -256,7 +256,7 @@ namespace CR_Documentor.Transformation
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine" />
 		protected TransformEngine()
 		{
-			this.CommentMatchHandlers = new Dictionary<string, EventHandler<CommentMatchEventArgs>>();
+			this.CommentMatchHandlers = new Dictionary<string, Action<XmlElement>>();
 			this.RegisterCommentTagHandlers();
 		}
 
@@ -364,7 +364,7 @@ namespace CR_Documentor.Transformation
 					if (this.Options.RecognizedTags.Contains(element.Name))
 					{
 						// The tag is recognized - call the appropriate handler
-						EventHandler<CommentMatchEventArgs> handler = null;
+						Action<XmlElement> handler = null;
 						if (!this.CommentMatchHandlers.TryGetValue(element.Name, out handler))
 						{
 							if (!this.CommentMatchHandlers.TryGetValue("", out handler))
@@ -372,8 +372,7 @@ namespace CR_Documentor.Transformation
 								Log.Write(LogLevel.Warn, String.Format("No handler found for tag '{0}' found. Verify there is a default tag handler registered.", element.Name));
 							}
 						}
-						CommentMatchEventArgs args = new CommentMatchEventArgs(element);
-						handler(this, args);
+						handler(element);
 					}
 					else if (CommentParser.IsErrorNode(element))
 					{
@@ -394,26 +393,6 @@ namespace CR_Documentor.Transformation
 					TextProcessor.TextNode(this.Writer, node);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Applies the transformation to the children of a <see cref="System.Xml.XmlElement"/>.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		/// <remarks>
-		/// <para>
-		/// This can be used to handle tags where only the children get processed.
-		/// </para>
-		/// </remarks>
-		/// <seealso cref="CR_Documentor.Transformation.TransformEngine"/>
-		protected void ApplyTemplates(object sender, CommentMatchEventArgs e)
-		{
-			if (e == null)
-			{
-				throw new ArgumentNullException("e");
-			}
-			this.ApplyTemplates(e.Element);
 		}
 
 		/// <summary>
@@ -483,14 +462,15 @@ namespace CR_Documentor.Transformation
 		/// <summary>
 		/// Passes through HTML comment tags.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		protected void HtmlPassThrough(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		protected void HtmlPassThrough(XmlElement element)
 		{
 			this.Writer.Write("<");
-			this.Writer.Write(e.Element.Name);
-			TextProcessor.AttributePassThrough(this.Writer, e.Element);
-			if (e.Element.InnerXml == "")
+			this.Writer.Write(element.Name);
+			TextProcessor.AttributePassThrough(this.Writer, element);
+			if (element.InnerXml == "")
 			{
 				// If the tag is empty (like "<br />") just close it
 				// Otherwise we get odd things like "<br><br>"
@@ -499,50 +479,20 @@ namespace CR_Documentor.Transformation
 			else
 			{
 				this.Writer.Write(">");
-				this.ApplyTemplates(e.Element);
-				this.Writer.Write("</" + e.Element.Name + ">");
+				this.ApplyTemplates(element);
+				this.Writer.Write("</" + element.Name + ">");
 			}
 		}
 
 		/// <summary>
 		/// Ignores the comment match and renders nothing.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		protected void IgnoreComment(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		protected void IgnoreComment(XmlElement element)
 		{
 			// Do nothing - the comment is being ignored.
-		}
-
-		/// <summary>
-		/// Removes a rendering handler for rendering a specific comment block.
-		/// </summary>
-		/// <param name="elementName">The name of the comment element to render (member, summary, code, etc.).</param>
-		/// <param name="handler">The handler that performs the rendering.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// Thrown if <paramref name="elementName" /> or <paramref name="handler" /> is <see langword="null" />.
-		/// </exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
-		/// Thrown if <paramref name="elementName" /> is <see cref="System.String.Empty" />.
-		/// </exception>
-		protected void RemoveCommentTagHandler(string elementName, EventHandler<CommentMatchEventArgs> handler)
-		{
-			if (elementName == null)
-			{
-				throw new ArgumentNullException("elementName");
-			}
-			if (handler == null)
-			{
-				throw new ArgumentNullException("handler");
-			}
-			if (elementName.Length == 0)
-			{
-				throw new ArgumentOutOfRangeException("elementName");
-			}
-			if (this.CommentMatchHandlers.ContainsKey(elementName))
-			{
-				this.CommentMatchHandlers.Remove(elementName);
-			}
 		}
 
 		/// <summary>

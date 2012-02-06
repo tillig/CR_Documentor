@@ -197,7 +197,6 @@
     <Compile Include="Server\ResponseWriter.cs" />
     <Compile Include="Server\WebListener.cs" />
     <Compile Include="Server\WebServer.cs" />
-    <Compile Include="Transformation\CommentMatchEventArgs.cs" />
     <Compile Include="Transformation\MSDN\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
