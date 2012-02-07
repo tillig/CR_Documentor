@@ -1,6 +1,9 @@
 #summary Troubleshooting/FAQ information about using CR_Documentor
 #labels Featured,Phase-Support
 
+=Q: Where can I learn more about XML documentation tags?=
+Microsoft has a decent but minimal [http://msdn.microsoft.com/en-us/library/b2s063f7.aspx guide to tags on MSDN] but the best document I've seen was [http://issuu.com/pchew/docs/xml_document_guide compiled by a non-Microsoft-affiliated person and publicly posted].
+
 =Q: Why isn't my documentation rendering correctly?=
 While it may sound obvious, XML documentation comments are precisely that - XML.  If you enter invalid XML in your comments, they will not render properly.  CR_Documentor will do its best to point out parsing errors in your documentation, but in the end it's up to you to ensure your comments are valid XML.  For example, if you have "if(i < 10)" in a code block in your document, it's not going to render right (the unencoded "<" is invalid XML).  If you have "if(a && b)" in a comment, it's not going to render right ("&&" is not a valid XML entity).  The easiest solution to comment blocks not rendering is to select the problem block in the code editor, right-click, and select the "XML Encode Selection" option from the CR_Documentor context menu.  The other option is to enclose the text in a CDATA section.
 
