@@ -105,7 +105,6 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
-    <Compile Include="Diagnostics\ActivityContext.cs" />
     <Compile Include="Diagnostics\ILog.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\LogLevel.cs" />
@@ -218,6 +217,7 @@
     <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />
     <Compile Include="Transformation\MSDN\Statement.cs" />
     <Compile Include="Transformation\Syntax\Language.cs" />
+    <Compile Include="Transformation\Syntax\SupportedLanguageIdExtensions.cs" />
     <Compile Include="Transformation\Syntax\TypeInfo.cs" />
     <Compile Include="Transformation\Syntax\TypeParameterWriter.cs" />
     <Compile Include="Transformation\TransformEngine.cs">

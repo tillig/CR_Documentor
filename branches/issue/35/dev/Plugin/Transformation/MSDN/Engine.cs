@@ -1051,7 +1051,7 @@ namespace CR_Documentor.Transformation.MSDN
 			if (this.MemberSyntax == null)
 			{
 				// Refresh the member syntax signature cache if it's empty
-				PreviewGenerator generator = new PreviewGenerator(asElement, Language.ConvertToSupportedLanguageId(asElement.Document.Language));
+				PreviewGenerator generator = new PreviewGenerator(asElement, asElement.Document.Language.ToLanguageId());
 				this.MemberSyntax = generator.Generate();
 			}
 			this.Writer.Write(this.MemberSyntax);

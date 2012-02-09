@@ -95,7 +95,6 @@
     </Compile>
     <Compile Include="AssemblyExtensionsTest.cs" />
     <Compile Include="Collections\DefaultValueStringDictionaryTest.cs" />
-    <Compile Include="Diagnostics\ActivityContextTest.cs" />
     <Compile Include="Diagnostics\LoggerTest.cs" />
     <Compile Include="Diagnostics\LogManagerTest.cs" />
     <Compile Include="Diagnostics\MenuLoggerTest.cs" />
@@ -111,7 +110,6 @@
     <Compile Include="Server\ResponseWriterTest.cs" />
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
-    <Compile Include="Transformation\Syntax\LanguageTest.cs" />
     <Compile Include="Transformation\Syntax\MethodExtensionsTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassOperatorTest.cs" />
@@ -151,6 +149,7 @@
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\StructTest.cs" />
     <Compile Include="Transformation\Syntax\SimpleSignatureGeneratorTest\ElementTest.cs" />
     <Compile Include="Transformation\Syntax\SimpleSignatureGeneratorTest\GeneralTest.cs" />
+    <Compile Include="Transformation\Syntax\SupportedLanguageIdExtensionsTest.cs" />
     <Compile Include="Xml\EvaluatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
