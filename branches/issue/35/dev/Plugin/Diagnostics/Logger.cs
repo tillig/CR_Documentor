@@ -60,7 +60,7 @@ namespace CR_Documentor.Diagnostics
 		public Type LogOwner { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Logger"/> class.
+		/// Initializes a new instance of the <see cref="Logger{T}"/> class.
 		/// </summary>
 		/// <param name="logOwner">The <see cref="System.Type"/> that will be writing log messages.</param>
 		/// <exception cref="System.ArgumentNullException">
