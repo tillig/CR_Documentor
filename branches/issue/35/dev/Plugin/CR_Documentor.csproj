@@ -208,6 +208,7 @@
     <Compile Include="Transformation\Syntax\AttributeWriter.cs" />
     <Compile Include="Transformation\Syntax\ContractWriter.cs" />
     <Compile Include="Transformation\Syntax\HtmlTextWriterExtensions.cs" />
+    <Compile Include="Transformation\Syntax\MemberVisibilityExtensions.cs" />
     <Compile Include="Transformation\Syntax\MethodExtensions.cs" />
     <Compile Include="Transformation\Syntax\ParameterWriter.cs" />
     <Compile Include="Transformation\Syntax\PreviewCss.cs" />

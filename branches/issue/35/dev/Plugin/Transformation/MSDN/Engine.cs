@@ -966,7 +966,7 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write(" ");
 
 				// The second part of the header is the type of element
-				this.Writer.Write(Lookup.ElementTypeDescription(el));
+				this.Writer.Write(el.ElementTypeDescription());
 			}
 
 			// End banner

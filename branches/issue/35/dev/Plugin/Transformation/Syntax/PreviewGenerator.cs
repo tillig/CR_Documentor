@@ -137,7 +137,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				writer.WriteSpan(PreviewCss.Keyword, "new");
 			}
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			if (this.Language == SupportedLanguageId.Basic && this.Element.IsNew)
 			{
 				writer.WriteSpan(PreviewCss.Keyword, "Shadows");
@@ -195,7 +195,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void ClassOperator(HtmlTextWriter writer)
 		{
 			var method = (Method)this.Element;
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			bool isCast = method.IsImplicitCast || method.IsExplicitCast;
 
@@ -257,7 +257,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Constructor(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
@@ -282,7 +282,7 @@ namespace CR_Documentor.Transformation.Syntax
 		protected virtual void Destructor(HtmlTextWriter writer)
 		{
 			// Destructor preview always renders as protected.
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, MemberVisibility.Protected));
+			writer.WriteSpan(PreviewCss.Keyword, MemberVisibility.Protected.ForLanguage(this.Language));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -307,7 +307,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Delegate(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -360,7 +360,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Enumeration(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			switch (this.Language)
 			{
 				case SupportedLanguageId.Basic:
@@ -396,7 +396,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Event(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			switch (this.Language)
 			{
@@ -444,7 +444,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Field(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			if (this.Language != SupportedLanguageId.Basic)
 			{
@@ -562,7 +562,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				// For members that belong to an interface (methods in an interface definition), no visibility is written.
 				// For explicit interface implementations in C#, no visibility is written.
-				writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+				writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			}
 
 			ContractWriter.Write(writer, this.Element, this.Language);
@@ -628,7 +628,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		protected virtual void Property(HtmlTextWriter writer)
 		{
-			writer.WriteSpan(PreviewCss.Keyword, Lookup.Visibility(this.Language, this.Element.Visibility));
+			writer.WriteSpan(PreviewCss.Keyword, this.Element.Visibility.ForLanguage(this.Language));
 			ContractWriter.Write(writer, this.Element, this.Language);
 			var property = (Property)this.Element;
 			switch (this.Language)

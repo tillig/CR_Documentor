@@ -109,6 +109,8 @@
     <Compile Include="Server\ResponseWriterTest.cs" />
     <Compile Include="Server\WebListenerTest.cs" />
     <Compile Include="Server\WebServerTest.cs" />
+    <Compile Include="Transformation\Syntax\AccessSpecifiedElementExtensionsTest.cs" />
+    <Compile Include="Transformation\Syntax\MemberVisibilityExtensionsTest.cs" />
     <Compile Include="Transformation\Syntax\MethodExtensionsTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\AttributeTest.cs" />
     <Compile Include="Transformation\Syntax\PreviewGeneratorTest\ClassOperatorTest.cs" />
