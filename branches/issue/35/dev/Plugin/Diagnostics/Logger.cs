@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
-using DevExpress.DXCore.Threading;
 using DevExpress.CodeRush.Diagnostics;
+using DevExpress.DXCore.Threading;
 
 namespace CR_Documentor.Diagnostics
 {
@@ -87,62 +86,14 @@ namespace CR_Documentor.Diagnostics
 		}
 
 		/// <summary>
-		/// Gets a public <see langword="static" /> method from the internal log object.
-		/// </summary>
-		/// <param name="methodName">The name of the method to get.</param>
-		/// <param name="parameterTypes">The type(s) of parameters it accepts.</param>
-		/// <returns>
-		/// A reference to the public <see langword="static" /> method on the internal
-		/// log object.
-		/// </returns>
-		private MethodInfo GetPluginLogTypeMethod(string methodName, Type[] parameterTypes)
-		{
-			var info = typeof(LogBase<TLog>).GetMethod(methodName, BindingFlags.Public | BindingFlags.Static, null, parameterTypes, null);
-			if (info == null)
-			{
-				DevExpress.CodeRush.Diagnostics.ToolWindows.Log.SendErrorWithStackTrace("Unable to get static method {0} from type LogBase<{1}> - can't initialize logging delegate.", methodName, typeof(TLog));
-			}
-			return info;
-		}
-
-		/// <summary>
 		/// Initializes delegates to write things to the internal DXCore log.
 		/// </summary>
 		private void InitializeLoggingDelegates()
 		{
-			Type[] stringParameter = new Type[] { typeof(string) };
-			MethodInfo sendMsgMethod = this.GetPluginLogTypeMethod("SendMsg", stringParameter);
-			this.SendMsgHandler = delegate(string message)
-			{
-				if (sendMsgMethod != null)
-				{
-					sendMsgMethod.Invoke(null, new object[] { message });
-				}
-			};
-			MethodInfo sendWarningMethod = this.GetPluginLogTypeMethod("SendWarning", stringParameter);
-			this.SendWarningHandler = delegate(string message)
-			{
-				if (sendWarningMethod != null)
-				{
-					sendWarningMethod.Invoke(null, new object[] { message });
-				}
-			};
-			MethodInfo sendErrorMethod = this.GetPluginLogTypeMethod("SendError", stringParameter);
-			this.SendErrorHandler = delegate(string message)
-			{
-				if (sendErrorMethod != null)
-				{
-					sendErrorMethod.Invoke(null, new object[] { message });
-				}
-			};
-			MethodInfo sendExceptionMethod = this.GetPluginLogTypeMethod("SendException", new Type[] { typeof(Exception) });
-			this.SendExceptionHandler = delegate(Exception err)
-			{
-				if (sendExceptionMethod != null)
-				{
-					sendExceptionMethod.Invoke(null, new object[] { err });
-				}
-			};
+			this.SendMsgHandler = LogBase<TLog>.SendMsg;
+			this.SendWarningHandler = LogBase<TLog>.SendWarning;
+			this.SendErrorHandler = LogBase<TLog>.SendError;
+			this.SendExceptionHandler = LogBase<TLog>.SendException;
 		}
 
 		/// <summary>

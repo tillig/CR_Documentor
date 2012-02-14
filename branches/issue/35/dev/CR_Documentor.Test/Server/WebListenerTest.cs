@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Net;
 using CR_Documentor.Server;
+using DevExpress.DXCore.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TypeMock;
+using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Server
 {
 	[TestClass]
-	[VerifyMocks]
+	[Isolated]
 	public class WebListenerTest
 	{
 		private const UInt16 TestListenerPort = 22334;
 		private static readonly Guid TestListenerUniqueId = Guid.NewGuid();
 
+		[TestInitialize]
+		public void TestInitialize()
+		{
+			Isolate.WhenCalled(() => SynchronizationManager.BeginInvoke(null, null)).ReturnRecursiveFake();
+		}
+
 		[TestMethod]
 		[ExpectedException(typeof(System.NotSupportedException))]
 		public void Ctor_HttpListenerNotSupported()
 		{
-			using (RecordExpectations recorder = RecorderManager.StartRecording())
-			{
-				bool dummy = HttpListener.IsSupported;
-				recorder.Return(false);
-			}
+			Isolate.WhenCalled(() => HttpListener.IsSupported).WillReturn(false);
 			WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId);
 		}
 
@@ -30,13 +33,10 @@ namespace CR_Documentor.Test.Server
 		{
 			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				using (RecordExpectations recorder = RecorderManager.StartRecording())
-				{
-					listener.Stop();
-					recorder.CallOriginal();
-				}
+				Isolate.WhenCalled(() => listener.Stop()).CallOriginal();
 				listener.Start();
 				listener.Dispose();
+				Isolate.Verify.WasCalledWithExactArguments(() => listener.Stop());
 			}
 		}
 
@@ -45,12 +45,9 @@ namespace CR_Documentor.Test.Server
 		{
 			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
-				using (RecordExpectations recorder = RecorderManager.StartRecording())
-				{
-					listener.Stop();
-					recorder.FailWhenCalled();
-				}
+				Isolate.WhenCalled(() => listener.Stop()).CallOriginal();
 				listener.Dispose();
+				Isolate.Verify.WasNotCalled(() => listener.Stop());
 			}
 		}
 
@@ -67,16 +64,11 @@ namespace CR_Documentor.Test.Server
 		[TestMethod]
 		public void GetContext_RetrievesContextIfListening()
 		{
-			HttpListenerContext expectedContext = RecorderManager.CreateMockedObject<HttpListenerContext>();
-			using (RecordExpectations recorder = RecorderManager.StartRecording())
-			{
-				HttpListener dummyInternalListener = new HttpListener();
-				dummyInternalListener.Prefixes.Add(null);
-				bool dummyListening = dummyInternalListener.IsListening;
-				recorder.Return(true);
-				dummyInternalListener.GetContext();
-				recorder.Return(expectedContext);
-			}
+			var expectedContext = Isolate.Fake.Instance<HttpListenerContext>();
+			var dummyInternalListener = Isolate.Fake.Instance<HttpListener>();
+			Isolate.WhenCalled(() => dummyInternalListener.IsListening).WillReturn(true);
+			Isolate.WhenCalled(() => dummyInternalListener.GetContext()).WillReturn(expectedContext);
+			Isolate.Swap.NextInstance<HttpListener>().With(dummyInternalListener);
 			using (WebListener listener = new WebListener(TestListenerPort, TestListenerUniqueId))
 			{
 				HttpListenerContext actualContext = listener.GetContext();
