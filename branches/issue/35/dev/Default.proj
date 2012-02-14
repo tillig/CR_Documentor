@@ -91,5 +91,6 @@
 			<Output ItemName="BinaryPackageFiles" TaskParameter="Include"/>
 		</CreateItem>
 		<Zip Files="@(BinaryPackageFiles)" ZipFileName="$(BuildPackageDir)\CR_Documentor-$(Version).zip" Flatten="true"/>
+		<Copy SourceFiles="$(BuildBinDir)\CR_Documentor.vsix" DestinationFolder="$(BuildPackageDir)"/>
 	</Target>
 </Project>
