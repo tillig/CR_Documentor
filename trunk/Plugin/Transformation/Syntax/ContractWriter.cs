@@ -40,10 +40,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Shared");
+						writer.WriteSpan(PreviewCss.Keyword, "Shared");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "static");
+						writer.WriteSpan(PreviewCss.Keyword, "static");
 						break;
 				}
 			}
@@ -54,15 +54,15 @@ namespace CR_Documentor.Transformation.Syntax
 					case SupportedLanguageId.Basic:
 						if (element is Method)
 						{
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustOverride");
+							writer.WriteSpan(PreviewCss.Keyword, "MustOverride");
 						}
 						else
 						{
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "MustInherit");
+							writer.WriteSpan(PreviewCss.Keyword, "MustInherit");
 						}
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "abstract");
+						writer.WriteSpan(PreviewCss.Keyword, "abstract");
 						break;
 				}
 			}
@@ -71,10 +71,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "NotInheritable");
+						writer.WriteSpan(PreviewCss.Keyword, "NotInheritable");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "sealed");
+						writer.WriteSpan(PreviewCss.Keyword, "sealed");
 						break;
 				}
 			}
@@ -83,10 +83,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Const");
+						writer.WriteSpan(PreviewCss.Keyword, "Const");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "const");
+						writer.WriteSpan(PreviewCss.Keyword, "const");
 						break;
 				}
 			}
@@ -95,10 +95,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Overridable");
+						writer.WriteSpan(PreviewCss.Keyword, "Overridable");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "virtual");
+						writer.WriteSpan(PreviewCss.Keyword, "virtual");
 						break;
 				}
 			}
@@ -107,10 +107,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Overrides");
+						writer.WriteSpan(PreviewCss.Keyword, "Overrides");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "override");
+						writer.WriteSpan(PreviewCss.Keyword, "override");
 						break;
 				}
 			}
@@ -120,10 +120,10 @@ namespace CR_Documentor.Transformation.Syntax
 				switch (language)
 				{
 					case SupportedLanguageId.Basic:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ReadOnly");
+						writer.WriteSpan(PreviewCss.Keyword, "ReadOnly");
 						break;
 					default:
-						HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "readonly");
+						writer.WriteSpan(PreviewCss.Keyword, "readonly");
 						break;
 				}
 			}

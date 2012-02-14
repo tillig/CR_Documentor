@@ -87,11 +87,9 @@ namespace CR_Documentor.Controls
 				_transformer = value;
 				if (_transformer != null)
 				{
-					using (ActivityContext context = new ActivityContext(Log, "Transformation engine updated. Refreshing browser."))
-					{
-						this.PreviewContent = _transformer.GetHtmlPage(DefaultBodyMessage);
-						this.RefreshBrowser();
-					}
+					Log.Write(LogLevel.Info, "Transformation engine updated. Refreshing browser.");
+					this.PreviewContent = _transformer.GetHtmlPage(DefaultBodyMessage);
+					this.RefreshBrowser();
 				}
 			}
 		}
@@ -163,12 +161,10 @@ namespace CR_Documentor.Controls
 		/// </summary>
 		private void NavigateToInitialPage()
 		{
-			using (ActivityContext context = new ActivityContext(Log, "Initializing browser and navigating to initial page."))
-			{
-				string url = this.WebServer.Url.ToString();
-				this._browser.SafeUrls.Add(url);
-				this._browser.Navigate(url);
-			}
+			Log.Write(LogLevel.Info, "Initializing browser and navigating to initial page.");
+			string url = this.WebServer.Url.ToString();
+			this._browser.SafeUrls.Add(url);
+			this._browser.Navigate(url);
 		}
 
 		/// <summary>
@@ -221,11 +217,9 @@ namespace CR_Documentor.Controls
 			// Refresh if there was a change
 			if (refresh)
 			{
-				using (ActivityContext context = new ActivityContext(Log, "Refreshing browser with new content."))
-				{
-					this.PreviewContent = this._transformer.ToString();
-					this.RefreshBrowser();
-				}
+				Log.Write(LogLevel.Info, "Refreshing browser with new content.");
+				this.PreviewContent = this._transformer.ToString();
+				this.RefreshBrowser();
 			}
 		}
 

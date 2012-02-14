@@ -8,8 +8,6 @@ namespace CR_Documentor
 	/// </summary>
 	public static class ICustomAttributeProviderExtensions
 	{
-		// TODO: When we target .NET 3.5, convert these to real extension methods.
-
 		/// <summary>
 		/// Retrieves a single custom attribute from a type implementing <see cref="System.Reflection.ICustomAttributeProvider"/>.
 		/// Does not search the inheritance hierarchy.
@@ -22,7 +20,7 @@ namespace CR_Documentor
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="provider" /> is <see langword="null" />.
 		/// </exception>
-		public static T GetCustomAttribute<T>(ICustomAttributeProvider provider) where T : Attribute
+		public static T GetCustomAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
 		{
 			if (provider == null)
 			{

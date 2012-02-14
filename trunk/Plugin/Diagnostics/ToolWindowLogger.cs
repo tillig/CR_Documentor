@@ -13,7 +13,7 @@ namespace CR_Documentor.Diagnostics
 	/// method to retrieve the proper logging implementation for your class.
 	/// </para>
 	/// </remarks>
-	public class ToolWindowLogger : Logger
+	public class ToolWindowLogger : Logger<Log>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ToolWindowLogger"/> class.
@@ -22,6 +22,6 @@ namespace CR_Documentor.Diagnostics
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="logOwner" /> is <see langword="null" />.
 		/// </exception>
-		public ToolWindowLogger(Type logOwner) : base(logOwner, typeof(Log)) { }
+		public ToolWindowLogger(Type logOwner) : base(logOwner) { }
 	}
 }

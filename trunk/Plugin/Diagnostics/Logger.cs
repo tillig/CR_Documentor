@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
+using DevExpress.CodeRush.Diagnostics;
 using DevExpress.DXCore.Threading;
 
 namespace CR_Documentor.Diagnostics
@@ -8,59 +8,45 @@ namespace CR_Documentor.Diagnostics
 	/// <summary>
 	/// Base class for log object implementations.
 	/// </summary>
-	public abstract class Logger : ILog
+	public abstract class Logger<TLog> : ILog
+		where TLog : LogBase<TLog>, new()
 	{
+		/// <summary>
+		/// Format for log messages - {0} is the log owner type name; {1} is the message.
+		/// </summary>
+		public const string MessageFormat = "CR_Documentor [{0}]: {1}";
+
 		/// <summary>
 		/// Delegate for writing a log message to the internal DXCore log.
 		/// </summary>
 		/// <param name="message">The message to write to the log.</param>
-		private delegate void MessageHandler(string message);
+		public delegate void MessageHandler(string message);
 
 		/// <summary>
 		/// Delegate for writing an exception to the internal DXCore log.
 		/// </summary>
 		/// <param name="error">The <see cref="System.Exception"/> to write to the log.</param>
-		private delegate void ExceptionHandler(Exception error);
-
-		/// <summary>
-		/// Delegate for calling a no-parameter method on the internal DXCore log.
-		/// </summary>
-		private delegate void VoidHandler();
-
-		/// <summary>
-		/// Delegate for indenting the log.
-		/// </summary>
-		private MessageHandler _enter;
-
-		/// <summary>
-		/// Delegate for outdenting the log.
-		/// </summary>
-		private VoidHandler _exit;
+		public delegate void ExceptionHandler(Exception error);
 
 		/// <summary>
 		/// Delegate for writing error messages to the log.
 		/// </summary>
-		private MessageHandler _sendError;
+		public MessageHandler SendErrorHandler { get; private set; }
 
 		/// <summary>
 		/// Delegate for writing exceptions to the log.
 		/// </summary>
-		private ExceptionHandler _sendException;
+		public ExceptionHandler SendExceptionHandler { get; private set; }
 
 		/// <summary>
 		/// Delegate for writing informational messages to the log.
 		/// </summary>
-		private MessageHandler _sendMsg;
+		public MessageHandler SendMsgHandler { get; private set; }
 
 		/// <summary>
 		/// Delegate for writing warning messages to the log.
 		/// </summary>
-		private MessageHandler _sendWarning;
-
-		/// <summary>
-		/// Format for log messages - {0} is the log owner type name; {1} is the message.
-		/// </summary>
-		public const string MessageFormat = "CR_Documentor [{0}]: {1}";
+		public MessageHandler SendWarningHandler { get; private set; }
 
 		/// <summary>
 		/// Gets the <see cref="System.Type"/> for which this log object writes messages.
@@ -71,35 +57,19 @@ namespace CR_Documentor.Diagnostics
 		public Type LogOwner { get; private set; }
 
 		/// <summary>
-		/// Gets the type that writes log messages internally.
-		/// </summary>
-		/// <value>
-		/// A <see cref="System.Type"/> from DXCore that will actually write the
-		/// log messages to the DXCore log.
-		/// </value>
-		public Type PluginLogType { get; private set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Logger"/> class.
+		/// Initializes a new instance of the <see cref="Logger{T}"/> class.
 		/// </summary>
 		/// <param name="logOwner">The <see cref="System.Type"/> that will be writing log messages.</param>
-		/// <param name="pluginLogType">The <see langword="static" /> type that DXCore will use to log messages.</param>
 		/// <exception cref="System.ArgumentNullException">
-		/// Thrown if <paramref name="logOwner" /> or <paramref name="pluginLogType" />
-		/// is <see langword="null" />.
+		/// Thrown if <paramref name="logOwner" /> is <see langword="null" />.
 		/// </exception>
-		protected Logger(Type logOwner, Type pluginLogType)
+		protected Logger(Type logOwner)
 		{
 			if (logOwner == null)
 			{
 				throw new ArgumentNullException("logOwner");
 			}
-			if (pluginLogType == null)
-			{
-				throw new ArgumentNullException("pluginLogType");
-			}
 			this.LogOwner = logOwner;
-			this.PluginLogType = pluginLogType;
 			this.InitializeLoggingDelegates();
 		}
 
@@ -116,73 +86,14 @@ namespace CR_Documentor.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes a message to the log and indents the log so subsequent messages appear as "children."
-		/// </summary>
-		/// <param name="message">The message to write to the log.</param>
-		public virtual void Enter(string message)
-		{
-			SynchronizationManager.BeginInvoke(this._enter, new object[] { this.BuildMessage(message) });
-		}
-
-		/// <summary>
-		/// Exits a logical log context and outdents the log.
-		/// </summary>
-		public virtual void Exit()
-		{
-			SynchronizationManager.BeginInvoke(this._exit, new object[] { });
-		}
-
-		/// <summary>
-		/// Gets a public <see langword="static" /> method from the internal log object.
-		/// </summary>
-		/// <param name="methodName">The name of the method to get.</param>
-		/// <param name="parameterTypes">The type(s) of parameters it accepts.</param>
-		/// <returns>
-		/// A reference to the public <see langword="static" /> method on the internal
-		/// log object.
-		/// </returns>
-		private MethodInfo GetPluginLogTypeMethod(string methodName, Type[] parameterTypes)
-		{
-			return this.PluginLogType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static, null, parameterTypes, null);
-		}
-
-		/// <summary>
 		/// Initializes delegates to write things to the internal DXCore log.
 		/// </summary>
 		private void InitializeLoggingDelegates()
 		{
-			Type[] stringParameter = new Type[] { typeof(string) };
-			MethodInfo enterMethod = this.GetPluginLogTypeMethod("Enter", stringParameter);
-			this._enter = delegate(string message)
-			{
-				enterMethod.Invoke(null, new object[] { message });
-			};
-			MethodInfo sendMsgMethod = this.GetPluginLogTypeMethod("SendMsg", stringParameter);
-			this._sendMsg = delegate(string message)
-			{
-				sendMsgMethod.Invoke(null, new object[] { message });
-			};
-			MethodInfo sendWarningMethod = this.GetPluginLogTypeMethod("SendWarning", stringParameter);
-			this._sendWarning = delegate(string message)
-			{
-				sendWarningMethod.Invoke(null, new object[] { message });
-			};
-			MethodInfo sendErrorMethod = this.GetPluginLogTypeMethod("SendError", stringParameter);
-			this._sendError = delegate(string message)
-			{
-				sendErrorMethod.Invoke(null, new object[] { message });
-			};
-
-			MethodInfo exitMethod = this.GetPluginLogTypeMethod("Exit", System.Type.EmptyTypes);
-			this._exit = delegate()
-			{
-				exitMethod.Invoke(null, null);
-			};
-			MethodInfo sendExceptionMethod = this.GetPluginLogTypeMethod("SendException", new Type[] { typeof(Exception) });
-			this._sendException = delegate(Exception err)
-			{
-				sendExceptionMethod.Invoke(null, new object[] { err });
-			};
+			this.SendMsgHandler = LogBase<TLog>.SendMsg;
+			this.SendWarningHandler = LogBase<TLog>.SendWarning;
+			this.SendErrorHandler = LogBase<TLog>.SendError;
+			this.SendExceptionHandler = LogBase<TLog>.SendException;
 		}
 
 		/// <summary>
@@ -210,13 +121,13 @@ namespace CR_Documentor.Diagnostics
 			switch (level)
 			{
 				case LogLevel.Error:
-					levelHandler = this._sendError;
+					levelHandler = this.SendErrorHandler;
 					break;
 				case LogLevel.Info:
-					levelHandler = this._sendMsg;
+					levelHandler = this.SendMsgHandler;
 					break;
 				case LogLevel.Warn:
-					levelHandler = this._sendWarning;
+					levelHandler = this.SendWarningHandler;
 					break;
 			}
 			SynchronizationManager.BeginInvoke(levelHandler, new object[] { this.BuildMessage(message) });
@@ -239,7 +150,7 @@ namespace CR_Documentor.Diagnostics
 			this.Write(level, message);
 			if (error != null)
 			{
-				SynchronizationManager.BeginInvoke(this._sendException, new object[] { error });
+				SynchronizationManager.BeginInvoke(this.SendExceptionHandler, new object[] { error });
 			}
 		}
 	}

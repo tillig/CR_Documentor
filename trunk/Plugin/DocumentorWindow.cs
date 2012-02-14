@@ -121,38 +121,36 @@ namespace CR_Documentor
 			// and then we resume construction here.
 			this.SuspendLayout();
 
-			using (ActivityContext context = new ActivityContext(Log, "Constructing plugin."))
+			Log.Write(LogLevel.Info, "Constructing plugin.");
+			try
 			{
-				try
-				{
-					StartWebServer();
-					RebuildPreviewControl();
+				StartWebServer();
+				RebuildPreviewControl();
 
-					// Create the toolbar. The toolbar needs to be added after the
-					// preview window or it ends up covering the top bit of the browser.
-					Log.Write(LogLevel.Info, "Building toolbar.");
-					this._toolBar = new ToolBar();
-					this.UpdateToolbarFromOptions();
-					Log.Write(LogLevel.Info, "Building toolbar image list.");
-					ImageList imgList = new ImageList();
+				// Create the toolbar. The toolbar needs to be added after the
+				// preview window or it ends up covering the top bit of the browser.
+				Log.Write(LogLevel.Info, "Building toolbar.");
+				this._toolBar = new ToolBar();
+				this.UpdateToolbarFromOptions();
+				Log.Write(LogLevel.Info, "Building toolbar image list.");
+				ImageList imgList = new ImageList();
 
-					System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
-					imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Pause.ico"));
-					SetupToolbar(imgList);
-					this.Controls.Add(this._toolBar);
+				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Printer.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Settings.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Pause.ico"));
+				SetupToolbar(imgList);
+				this.Controls.Add(this._toolBar);
 
-					Log.Write(LogLevel.Info, "Construction complete.");
-				}
-				catch (Exception ex)
-				{
-					Log.Write(LogLevel.Error, "Error initializing CR_Documentor window.", ex);
-					throw;
-					// This last 'Throw' should cause DXCore to abandon Toolbox window creation.
-					// It would be better if we could test the facility to listen prior to entering this class constructor.
-					// However I cannot find an earlier entry point at the moment in which to test this.
-				}
+				Log.Write(LogLevel.Info, "Construction complete.");
+			}
+			catch (Exception ex)
+			{
+				Log.Write(LogLevel.Error, "Error initializing CR_Documentor window.", ex);
+				throw;
+				// This last 'Throw' should cause DXCore to abandon Toolbox window creation.
+				// It would be better if we could test the facility to listen prior to entering this class constructor.
+				// However I cannot find an earlier entry point at the moment in which to test this.
 			}
 
 			this.ResumeLayout(false);
@@ -200,27 +198,25 @@ namespace CR_Documentor
 		private void ToolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			string tag = e.Button.Tag.ToString();
-			using (ActivityContext context = new ActivityContext(Log, String.Format("Handling toolbar button click for tag [{0}].", tag)))
+			Log.Write(LogLevel.Info, String.Format("Handling toolbar button click for tag [{0}].", tag));
+			switch (tag)
 			{
-				switch (tag)
-				{
-					case "Print":
-						Log.Write(LogLevel.Info, "Printing CR_Documentor page.");
-						this._previewer.Print();
-						break;
-					case "Settings":
-						Log.Write(LogLevel.Info, "Showing CR_Documentor options.");
-						DocumentorOptions.Show();
-						break;
-					case "Pause":
-						this._pauseRendering = e.Button.Pushed;
-						Log.Write(LogLevel.Info, "CR_Documentor rendering is " + (this._pauseRendering ? "" : "un") + "paused.");
-						this.RefreshPreview(); // No-op if we've paused, but will automatically update if we've unpaused.
-						break;
-					default:
-						Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
-						break;
-				}
+				case "Print":
+					Log.Write(LogLevel.Info, "Printing CR_Documentor page.");
+					this._previewer.Print();
+					break;
+				case "Settings":
+					Log.Write(LogLevel.Info, "Showing CR_Documentor options.");
+					DocumentorOptions.Show();
+					break;
+				case "Pause":
+					this._pauseRendering = e.Button.Pushed;
+					Log.Write(LogLevel.Info, "CR_Documentor rendering is " + (this._pauseRendering ? "" : "un") + "paused.");
+					this.RefreshPreview(); // No-op if we've paused, but will automatically update if we've unpaused.
+					break;
+				default:
+					Log.Write(LogLevel.Warn, "Unhandled button tag: " + tag);
+					break;
 			}
 		}
 
@@ -280,18 +276,16 @@ namespace CR_Documentor
 		/// </param>
 		private void events_OptionsChanged(OptionsChangedEventArgs ea)
 		{
-			using (ActivityContext context = new ActivityContext(Log, "Options changed."))
-			{
-				// Things have to happen in exactly this order or the preview control
-				// won't get updated with the proper URL when the web server port
-				// gets updated.
+			Log.Write(LogLevel.Info, "Options changed.");
+			// Things have to happen in exactly this order or the preview control
+			// won't get updated with the proper URL when the web server port
+			// gets updated.
 
-				StartWebServer();
-				RebuildPreviewControl();
-				UpdatePreviewFromOptions();
-				UpdateToolbarFromOptions();
-				RefreshPreview();
-			}
+			StartWebServer();
+			RebuildPreviewControl();
+			UpdatePreviewFromOptions();
+			UpdateToolbarFromOptions();
+			RefreshPreview();
 		}
 
 		/// <summary>
@@ -506,6 +500,7 @@ namespace CR_Documentor
 			}
 			if (CodeRush.Source.InsideXMLDocComment)
 			{
+				// TODO: Troubleshoot issue where an XML comment with any XML entity (eg &gt; or &lt;) at the end doesn't think it's a comment.
 				XmlDocComment currentComment = CommentParser.GetXmlDocComment(CodeRush.Source.Active);
 				if (currentComment != null)
 				{
@@ -598,8 +593,8 @@ namespace CR_Documentor
 			try
 			{
 				System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
-				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Printer.ico"));
-				imgList.Images.Add(AssemblyExtensions.ReadEmbeddedResourceIcon(asm, "CR_Documentor.Resources.Settings.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Printer.ico"));
+				imgList.Images.Add(asm.ReadEmbeddedResourceIcon("CR_Documentor.Resources.Settings.ico"));
 				return true;
 			}
 			catch (Exception err)

@@ -220,34 +220,32 @@ namespace CR_Documentor
 			// Find the item with the corresponding tag
 			ContextMenuButton selected = null;
 			string tagToFind = e.Button.Tag;
-			using (ActivityContext context = new ActivityContext(Log, String.Format("Handling button [{0}].", tagToFind)))
+			Log.Write(LogLevel.Info, String.Format("Handling button [{0}].", tagToFind));
+			foreach (ContextMenuItem item in this.Children)
 			{
-				foreach (ContextMenuItem item in this.Children)
+				if (item is ContextMenuButton)
 				{
-					if (item is ContextMenuButton)
+					if (((ContextMenuButton)item).Tag == tagToFind)
 					{
-						if (((ContextMenuButton)item).Tag == tagToFind)
-						{
-							selected = (ContextMenuButton)item;
-							break;
-						}
-					}
-					else if (item is ContextMenuPopup)
-					{
-						selected = ((ContextMenuPopup)item).GetButtonByTag(tagToFind);
-						if (selected != null)
-						{
-							break;
-						}
+						selected = (ContextMenuButton)item;
+						break;
 					}
 				}
+				else if (item is ContextMenuPopup)
+				{
+					selected = ((ContextMenuPopup)item).GetButtonByTag(tagToFind);
+					if (selected != null)
+					{
+						break;
+					}
+				}
+			}
 
-				// Execute the item
-				if (selected != null)
-				{
-					Log.Write(LogLevel.Info, String.Format("Found button of type [{0}]; executing.", selected.GetType().Name));
-					selected.Execute();
-				}
+			// Execute the item
+			if (selected != null)
+			{
+				Log.Write(LogLevel.Info, String.Format("Found button of type [{0}]; executing.", selected.GetType().Name));
+				selected.Execute();
 			}
 		}
 
@@ -448,223 +446,221 @@ namespace CR_Documentor
 		protected virtual void CreateContextMenuItems()
 		{
 			// TODO: Refactor this method. It's far too long.
-			using (ActivityContext context = new ActivityContext(Log, "Creating context menu items."))
+			Log.Write(LogLevel.Info, "Creating context menu items.");
+			this.Children.Clear();
+
+			ContextMenuPopup popup = null;
+			ContextMenuPopup subPopup = null;
+			ContextMenuItem item = null;
+
+			// ------------------------------------------------------
+			// TEMPLATES
+			// ------------------------------------------------------
+			popup = MenuBuilder.NewPopup(null, "Templates", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Templates"));
+			popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
+
+			// <see ...>
+			if (this.Options.RecognizedTags.Contains("see"))
 			{
-				this.Children.Clear();
-
-				ContextMenuPopup popup = null;
-				ContextMenuPopup subPopup = null;
-				ContextMenuItem item = null;
-
-				// ------------------------------------------------------
-				// TEMPLATES
-				// ------------------------------------------------------
-				popup = MenuBuilder.NewPopup(null, "Templates", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Templates"));
-				popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
-
-				// <see ...>
-				if (this.Options.RecognizedTags.Contains("see"))
-				{
-					subPopup = MenuBuilder.NewPopup(popup, "See", "<see ... />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeCref", "<see cref=\"\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordTrue", "<see langword=\"true\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordFalse", "<see langword=\"false\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordNull", "<see langword=\"null\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordAbstract", "<see langword=\"abstract\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordSealed", "<see langword=\"sealed\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordStatic", "<see langword=\"static\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordVirtual", "<see langword=\"virtual\" />");
-					item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeHref", "<see href=\"\" />");
-				}
-
-				if (this.Options.RecognizedTags.Contains("list"))
-				{
-					// <list ...>
-					subPopup = MenuBuilder.NewPopup(popup, "List", "<list ... />");
-					// <list type="bullet">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListBullet",
-						"\n<list type=\"bullet\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
-						"<list type=\"bullet\" />");
-					// <list type="table">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListTable",
-						"\n<list type=\"table\">\n<listheader>\n<term></term>\n<description></description>\n</listheader>\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
-						"<list type=\"table\" />");
-					// <list type="number">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListNumber",
-						"\n<list type=\"number\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
-						"<list type=\"number\" />");
-					// <list type="definition">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListDefinition",
-						"\n<list type=\"definition\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
-						"<list type=\"definition\" />");
-					// <listheader>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListHeader",
-						"\n<listheader>\n<term></term>\n<description></description>\n</listheader>\n",
-						"<listheader />");
-					// <item>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"TemplatesListItem",
-						"\n<item>\n<term></term>\n<description></description>\n</item>\n",
-						"<item />");
-				}
-
-				// Primary Blocks
-				AddPrimaryBlocks(popup, "TemplatesPrimaryBlocks", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Templates.PrimaryBlocks"), false);
-
-				// Add the templates menu to the main list of popups
-				this.Children.Add(popup);
-
-				// ------------------------------------------------------
-				// EMBEDDINGS
-				// ------------------------------------------------------
-				// Create embeddings menu
-				popup = new ContextMenuPopupSelectExists();
-				popup.Tag = "Embed";
-				popup.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed");
-				popup.Parent = null;
-				popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
-
-				// Standard items
-				if (this.Options.RecognizedTags.Contains("para"))
-				{
-					// <para>
-					item = MenuBuilder.NewTemplateButton(popup,
-						"EmbedPara",
-						String.Format("\n<para>\n{0}\n</para>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<para />");
-					this.SetSelectionRequirements(item, AnySelection);
-				}
-				if (this.Options.RecognizedTags.Contains("see") &&
-					this.Options.RecognizedTags.Contains("seealso"))
-				{
-					subPopup = MenuBuilder.NewPopup(popup, "See", "<see/seealso />");
-
-					// <see cref="">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedSeeCref",
-						String.Format("<see cref=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<see cref=\"\" />");
-					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
-
-					// <seealso cref="">
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedSeeAlsoCref",
-						String.Format("<seealso cref=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<seealso cref=\"\" />");
-					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
-
-					// <see langword="">
-					// TODO: Add context so langword only shows up for valid selected words
-					// TODO: Add conversion so VB equivalents work for VB and convert the langword appropriately
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedSeeLangword",
-						String.Format("<see langword=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<see langword=\"\" />");
-					((TextTemplateContextMenuButton)item).ConvertSelectionToLower = true;
-					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
-				}
-				if (this.Options.RecognizedTags.Contains("code") &&
-					this.Options.RecognizedTags.Contains("c"))
-				{
-					subPopup = MenuBuilder.NewPopup(popup, "Code", "<code />");
-
-					// <code>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedCode",
-						String.Format("\n<code>\n{0}\n</code>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<code />");
-					this.SetSelectionRequirements(item, AnySelection);
-
-					// <c>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedC",
-						String.Format("<c>{0}</c>", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<c />");
-					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
-				}
-				if (this.Options.RecognizedTags.Contains("paramref"))
-				{
-					// <paramref>
-					item = MenuBuilder.NewTemplateButton(popup,
-						"EmbedParamref",
-						String.Format("<paramref name=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<paramref name=\"\" />");
-					this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
-				}
-
-				// Add listheader, item
-				if (this.Options.RecognizedTags.Contains("list") &&
-					this.Options.RecognizedTags.Contains("listheader") &&
-					this.Options.RecognizedTags.Contains("item"))
-				{
-					subPopup = MenuBuilder.NewPopup(popup, "List", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed.List"));
-					// <listheader>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedListHeader",
-						String.Format("\n<listheader>\n<term>{0}</term>\n</listheader>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<listheader />");
-					this.SetSelectionRequirements(item, AnySelection);
-					// <item>
-					item = MenuBuilder.NewTemplateButton(subPopup,
-						"EmbedListItem",
-						String.Format("\n<item>\n<term>{0}</term>\n</item>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
-						"<item />");
-					this.SetSelectionRequirements(item, AnySelection);
-				}
-
-				// Add primary blocks
-				AddPrimaryBlocks(popup, "EmbedPrimaryBlocks", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed.PrimaryBlocks"), true);
-
-				// Add embeddings menu
-				this.Children.Add(popup);
-
-
-				// Add "Expand all XML document sections"
-				OutlineXmlDocSectionsButton outlineButton = new OutlineXmlDocSectionsButton();
-				outlineButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.OutlineExpand");
-				outlineButton.ShouldCollapse = false;
-				outlineButton.Tag = "ExpandXmlDocSections";
-				outlineButton.BeginGroup = true;
-				Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
-				this.Children.Add(outlineButton);
-
-				// Add "Collapse all XML document sections"
-				outlineButton = new OutlineXmlDocSectionsButton();
-				outlineButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.OutlineCollapse");
-				outlineButton.ShouldCollapse = true;
-				outlineButton.Tag = "CollapseXmlDocSections";
-				Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
-				this.Children.Add(outlineButton);
-
-				// Add "XML Encode" for selection
-				XmlEncodeButton xmlEncodeButton = new XmlEncodeButton();
-				xmlEncodeButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.XmlEncode");
-				xmlEncodeButton.Tag = "XmlEncode";
-				Log.Write(LogLevel.Info, String.Format("Created XmlEncodeButton.  Tag: [{0}].", xmlEncodeButton.Tag));
-				this.Children.Add(xmlEncodeButton);
-
-				// Add "Convert to XML doc comment" for selection
-				ConvertSelectionToCommentButton convertToXmlDocCommentButton = new ConvertSelectionToCommentButton();
-				convertToXmlDocCommentButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ConvertSelectionToXmlDocComment");
-				convertToXmlDocCommentButton.Tag = "ConvertSelectionToXmlDocComment";
-				convertToXmlDocCommentButton.Context.Add("!" + DXCoreContext.CTX_InXmlDocComment);
-				Log.Write(LogLevel.Info, String.Format("Created ConvertSelectionToCommentButton.  Tag: [{0}].", convertToXmlDocCommentButton.Tag));
-				this.Children.Add(convertToXmlDocCommentButton);
-
-				// Add "Show/Hide CR_Documentor window" option
-				DocumentorVisibilityToggleButton visibleToggle = new DocumentorVisibilityToggleButton();
-				visibleToggle.ResourceManager = this.resourceManager;
-				visibleToggle.Caption = "CR_Documentor.DocumentorContextMenu.ToggleVisibility";
-				visibleToggle.Tag = "ToggleVisibility";
-				visibleToggle.BeginGroup = true;
-				Log.Write(LogLevel.Info, String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
-				this.Children.Add(visibleToggle);
+				subPopup = MenuBuilder.NewPopup(popup, "See", "<see ... />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeCref", "<see cref=\"\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordTrue", "<see langword=\"true\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordFalse", "<see langword=\"false\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordNull", "<see langword=\"null\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordAbstract", "<see langword=\"abstract\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordSealed", "<see langword=\"sealed\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordStatic", "<see langword=\"static\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeLangwordVirtual", "<see langword=\"virtual\" />");
+				item = MenuBuilder.NewTemplateButton(subPopup, "TemplatesSeeHref", "<see href=\"\" />");
 			}
+
+			if (this.Options.RecognizedTags.Contains("list"))
+			{
+				// <list ...>
+				subPopup = MenuBuilder.NewPopup(popup, "List", "<list ... />");
+				// <list type="bullet">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListBullet",
+					"\n<list type=\"bullet\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
+					"<list type=\"bullet\" />");
+				// <list type="table">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListTable",
+					"\n<list type=\"table\">\n<listheader>\n<term></term>\n<description></description>\n</listheader>\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
+					"<list type=\"table\" />");
+				// <list type="number">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListNumber",
+					"\n<list type=\"number\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
+					"<list type=\"number\" />");
+				// <list type="definition">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListDefinition",
+					"\n<list type=\"definition\">\n<item>\n<term></term>\n<description></description>\n</item>\n</list>\n",
+					"<list type=\"definition\" />");
+				// <listheader>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListHeader",
+					"\n<listheader>\n<term></term>\n<description></description>\n</listheader>\n",
+					"<listheader />");
+				// <item>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"TemplatesListItem",
+					"\n<item>\n<term></term>\n<description></description>\n</item>\n",
+					"<item />");
+			}
+
+			// Primary Blocks
+			AddPrimaryBlocks(popup, "TemplatesPrimaryBlocks", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Templates.PrimaryBlocks"), false);
+
+			// Add the templates menu to the main list of popups
+			this.Children.Add(popup);
+
+			// ------------------------------------------------------
+			// EMBEDDINGS
+			// ------------------------------------------------------
+			// Create embeddings menu
+			popup = new ContextMenuPopupSelectExists();
+			popup.Tag = "Embed";
+			popup.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed");
+			popup.Parent = null;
+			popup.Context.Add(DXCoreContext.CTX_InXmlDocComment);
+
+			// Standard items
+			if (this.Options.RecognizedTags.Contains("para"))
+			{
+				// <para>
+				item = MenuBuilder.NewTemplateButton(popup,
+					"EmbedPara",
+					String.Format("\n<para>\n{0}\n</para>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<para />");
+				this.SetSelectionRequirements(item, AnySelection);
+			}
+			if (this.Options.RecognizedTags.Contains("see") &&
+				this.Options.RecognizedTags.Contains("seealso"))
+			{
+				subPopup = MenuBuilder.NewPopup(popup, "See", "<see/seealso />");
+
+				// <see cref="">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedSeeCref",
+					String.Format("<see cref=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<see cref=\"\" />");
+				this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
+
+				// <seealso cref="">
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedSeeAlsoCref",
+					String.Format("<seealso cref=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<seealso cref=\"\" />");
+				this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
+
+				// <see langword="">
+				// TODO: Add context so langword only shows up for valid selected words
+				// TODO: Add conversion so VB equivalents work for VB and convert the langword appropriately
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedSeeLangword",
+					String.Format("<see langword=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<see langword=\"\" />");
+				((TextTemplateContextMenuButton)item).ConvertSelectionToLower = true;
+				this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
+			}
+			if (this.Options.RecognizedTags.Contains("code") &&
+				this.Options.RecognizedTags.Contains("c"))
+			{
+				subPopup = MenuBuilder.NewPopup(popup, "Code", "<code />");
+
+				// <code>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedCode",
+					String.Format("\n<code>\n{0}\n</code>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<code />");
+				this.SetSelectionRequirements(item, AnySelection);
+
+				// <c>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedC",
+					String.Format("<c>{0}</c>", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<c />");
+				this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
+			}
+			if (this.Options.RecognizedTags.Contains("paramref"))
+			{
+				// <paramref>
+				item = MenuBuilder.NewTemplateButton(popup,
+					"EmbedParamref",
+					String.Format("<paramref name=\"{0}\" />", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<paramref name=\"\" />");
+				this.SetSelectionRequirements(item, DXCoreContext.SelectionContext.LineFragment);
+			}
+
+			// Add listheader, item
+			if (this.Options.RecognizedTags.Contains("list") &&
+				this.Options.RecognizedTags.Contains("listheader") &&
+				this.Options.RecognizedTags.Contains("item"))
+			{
+				subPopup = MenuBuilder.NewPopup(popup, "List", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed.List"));
+				// <listheader>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedListHeader",
+					String.Format("\n<listheader>\n<term>{0}</term>\n</listheader>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<listheader />");
+				this.SetSelectionRequirements(item, AnySelection);
+				// <item>
+				item = MenuBuilder.NewTemplateButton(subPopup,
+					"EmbedListItem",
+					String.Format("\n<item>\n<term>{0}</term>\n</item>\n", TextTemplateContextMenuButton.TEXT_REPLACEMENT),
+					"<item />");
+				this.SetSelectionRequirements(item, AnySelection);
+			}
+
+			// Add primary blocks
+			AddPrimaryBlocks(popup, "EmbedPrimaryBlocks", resourceManager.GetString("CR_Documentor.DocumentorContextMenu.Embed.PrimaryBlocks"), true);
+
+			// Add embeddings menu
+			this.Children.Add(popup);
+
+
+			// Add "Expand all XML document sections"
+			OutlineXmlDocSectionsButton outlineButton = new OutlineXmlDocSectionsButton();
+			outlineButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.OutlineExpand");
+			outlineButton.ShouldCollapse = false;
+			outlineButton.Tag = "ExpandXmlDocSections";
+			outlineButton.BeginGroup = true;
+			Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
+			this.Children.Add(outlineButton);
+
+			// Add "Collapse all XML document sections"
+			outlineButton = new OutlineXmlDocSectionsButton();
+			outlineButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.OutlineCollapse");
+			outlineButton.ShouldCollapse = true;
+			outlineButton.Tag = "CollapseXmlDocSections";
+			Log.Write(LogLevel.Info, String.Format("Created OutlineXmlDocSectionsButton.  Tag: [{0}].", outlineButton.Tag));
+			this.Children.Add(outlineButton);
+
+			// Add "XML Encode" for selection
+			XmlEncodeButton xmlEncodeButton = new XmlEncodeButton();
+			xmlEncodeButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.XmlEncode");
+			xmlEncodeButton.Tag = "XmlEncode";
+			Log.Write(LogLevel.Info, String.Format("Created XmlEncodeButton.  Tag: [{0}].", xmlEncodeButton.Tag));
+			this.Children.Add(xmlEncodeButton);
+
+			// Add "Convert to XML doc comment" for selection
+			ConvertSelectionToCommentButton convertToXmlDocCommentButton = new ConvertSelectionToCommentButton();
+			convertToXmlDocCommentButton.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ConvertSelectionToXmlDocComment");
+			convertToXmlDocCommentButton.Tag = "ConvertSelectionToXmlDocComment";
+			convertToXmlDocCommentButton.Context.Add("!" + DXCoreContext.CTX_InXmlDocComment);
+			Log.Write(LogLevel.Info, String.Format("Created ConvertSelectionToCommentButton.  Tag: [{0}].", convertToXmlDocCommentButton.Tag));
+			this.Children.Add(convertToXmlDocCommentButton);
+
+			// Add "Show/Hide CR_Documentor window" option
+			DocumentorVisibilityToggleButton visibleToggle = new DocumentorVisibilityToggleButton();
+			visibleToggle.ResourceManager = this.resourceManager;
+			visibleToggle.Caption = "CR_Documentor.DocumentorContextMenu.ToggleVisibility";
+			visibleToggle.Tag = "ToggleVisibility";
+			visibleToggle.BeginGroup = true;
+			Log.Write(LogLevel.Info, String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
+			this.Children.Add(visibleToggle);
 		}
 
 		/// <summary>
@@ -685,11 +681,9 @@ namespace CR_Documentor
 		/// </summary>
 		protected virtual void RefreshSettings()
 		{
-			using (ActivityContext context = new ActivityContext(Log, "Refreshing settings."))
-			{
-				this.Options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
-				CreateContextMenuItems();
-			}
+			Log.Write(LogLevel.Info, "Refreshing settings.");
+			this.Options = OptionSet.GetOptionSetFromStorage(DocumentorOptions.Storage);
+			CreateContextMenuItems();
 		}
 
 		/// <summary>
