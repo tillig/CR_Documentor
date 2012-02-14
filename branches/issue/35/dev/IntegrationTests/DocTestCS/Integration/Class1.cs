@@ -14,8 +14,10 @@ namespace DocTestCS.Integration
 	/// </example>
 	/// <preliminary />
 	/// <remarks>
-	/// Remarks go here. First CREF to string: <see cref="System.String"/>.
-	/// Second CREF to string: <see cref="System.String"/>.
+    /// <para>
+    /// Remarks go here. First CREF to string: <see cref="System.String"/>.
+    /// Second CREF to string: <see cref="System.String"/>.
+    /// </para>
 	/// <block type="note">This is an ECMA 'note' block.</block>
 	/// <block type="example">This is an ECMA 'example' block.</block>
 	/// <block type="behaviors">This is an ECMA 'behaviors' block.</block>

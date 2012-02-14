@@ -202,7 +202,6 @@
     <Compile Include="Transformation\SandcastlePrototype\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Collections\DefaultValueStringDictionary.cs" />
     <Compile Include="Transformation\SandcastlePrototype\Resources\AssemblyInfo.cs" />
     <Compile Include="Transformation\Syntax\AccessSpecifiedElementExtensions.cs" />
     <Compile Include="Transformation\Syntax\AttributeWriter.cs" />
@@ -216,7 +215,6 @@
     <Compile Include="Transformation\Syntax\SupportedLanguageId.cs" />
     <Compile Include="Transformation\Syntax\Lookup.cs" />
     <Compile Include="Transformation\Syntax\PreviewGenerator.cs" />
-    <Compile Include="Transformation\MSDN\Statement.cs" />
     <Compile Include="Transformation\Syntax\Language.cs" />
     <Compile Include="Transformation\Syntax\SupportedLanguageIdExtensions.cs" />
     <Compile Include="Transformation\Syntax\TypeInfo.cs" />

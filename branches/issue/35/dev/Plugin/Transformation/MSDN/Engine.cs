@@ -1015,8 +1015,8 @@ namespace CR_Documentor.Transformation.MSDN
 		private string ProcessCrefTypeParameters(string cref)
 		{
 			string language = this.CodeTarget.Document.Language;
-			string open = HttpUtility.HtmlEncode(Statement.TypeParamListOpener[language]);
-			string close = HttpUtility.HtmlEncode(Statement.TypeParamListCloser[language]);
+			string open = HttpUtility.HtmlEncode(language == Language.Basic ? "(Of " : "<");
+			string close = HttpUtility.HtmlEncode(language == Language.Basic ? ")" : ">");
 			string processed = cref.Replace("{", open).Replace("}", close);
 			return processed;
 		}

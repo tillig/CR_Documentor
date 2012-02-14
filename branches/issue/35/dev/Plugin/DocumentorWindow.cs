@@ -500,6 +500,7 @@ namespace CR_Documentor
 			}
 			if (CodeRush.Source.InsideXMLDocComment)
 			{
+				// TODO: Troubleshoot issue where an XML comment with any XML entity (eg &gt; or &lt;) at the end doesn't think it's a comment.
 				XmlDocComment currentComment = CommentParser.GetXmlDocComment(CodeRush.Source.Active);
 				if (currentComment != null)
 				{

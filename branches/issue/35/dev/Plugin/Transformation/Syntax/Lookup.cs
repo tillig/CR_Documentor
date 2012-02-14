@@ -1,6 +1,6 @@
 using System;
-using CR_Documentor.Collections;
 using SP = DevExpress.CodeRush.StructuralParser;
+using System.Collections.Generic;
 
 namespace CR_Documentor.Transformation.Syntax
 {
@@ -12,30 +12,20 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <summary>
 		/// Display name of the language based on the syntax constants.
 		/// </summary>
-		public static readonly DefaultValueStringDictionary LanguageName;
+		public static readonly Dictionary<string, string> LanguageName = new Dictionary<string, string>()
+		{
+			{Language.Basic, "Visual Basic"},
+			{Language.CSharp, "C#"}
+		};
 
 		/// <summary>
 		/// The value under the HTML "select" element in the banner that corresponds
 		/// to the DXCore document language.
 		/// </summary>
-		public static readonly DefaultValueStringDictionary LanguageValue;
-
-		/// <summary>
-		/// Initializes <see langword="static" /> values of the <see cref="CR_Documentor.Transformation.Syntax.Lookup" /> class.
-		/// </summary>
-		static Lookup()
+		public static readonly Dictionary<string, string> LanguageValue = new Dictionary<string, string>()
 		{
-			// Language display names
-			LanguageName = new DefaultValueStringDictionary();
-			LanguageName.Add(Language.Basic, "Visual Basic");
-			LanguageName.Add(Language.CSharp, "C#");
-			LanguageName.DefaultValue = "--";
-
-			// Language select values
-			LanguageValue = new DefaultValueStringDictionary();
-			LanguageValue.Add(Language.Basic, "VisualBasic vb");
-			LanguageValue.Add(Language.CSharp, "CSharp cs");
-			LanguageValue.DefaultValue = "x";
-		}
+			{Language.Basic, "VisualBasic vb"},
+			{Language.CSharp, "CSharp cs"}
+		};
 	}
 }
