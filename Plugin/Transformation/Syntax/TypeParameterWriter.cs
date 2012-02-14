@@ -42,7 +42,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// </param>
 		public static void WriteConstraintsPostSignature(HtmlTextWriter writer, AccessSpecifiedElement element, SupportedLanguageId language)
 		{
-			if (ShowTypeParameterConstraintsInline(language) || !AccessSpecifiedElementExtensions.HasGenericParameters(element))
+			if (ShowTypeParameterConstraintsInline(language) || !element.HasGenericParameters())
 			{
 				return;
 			}
@@ -67,8 +67,8 @@ namespace CR_Documentor.Transformation.Syntax
 				}
 				writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraint);
 				writer.RenderBeginTag(HtmlTextWriterTag.Div);
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "where");
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name);
+				writer.WriteSpan(PreviewCss.Keyword, "where");
+				writer.WriteSpan(PreviewCss.TypeParameter, parameter.Name);
 				writer.Write(": ");
 				for (int j = 0; j < constraintCount; j++)
 				{
@@ -116,7 +116,7 @@ namespace CR_Documentor.Transformation.Syntax
 
 			writer.AddAttribute(HtmlTextWriterAttribute.Class, PreviewCss.Constraints);
 			writer.RenderBeginTag(HtmlTextWriterTag.Div);
-			HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As", "&nbsp;", " ");
+			writer.WriteSpan(PreviewCss.Keyword, "As", "&nbsp;", " ");
 			if (constraintCount > 1)
 			{
 				writer.Write("{");
@@ -152,11 +152,11 @@ namespace CR_Documentor.Transformation.Syntax
 				// it will render as...
 				// where T : IList
 				// because rendering the full type in a language-specific fashion is non-trivial.
-				HtmlTextWriterExtensions.WriteLink(writer, ((NamedTypeParameterConstraint)constraint).TypeReference.ToString(), "", "");
+				writer.WriteLink(((NamedTypeParameterConstraint)constraint).TypeReference.ToString(), "", "");
 			}
 			else
 			{
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, constraint.Name, "", "");
+				writer.WriteSpan(PreviewCss.Keyword, constraint.Name, "", "");
 			}
 		}
 
@@ -171,11 +171,11 @@ namespace CR_Documentor.Transformation.Syntax
 		/// The element for which parameters are being written.
 		/// </param>
 		/// <param name="language">
-		/// The langauge for which parametes are being written.
+		/// The language for which parameters are being written.
 		/// </param>
 		public static void WriteTypeParameters(HtmlTextWriter writer, AccessSpecifiedElement element, SupportedLanguageId language)
 		{
-			if (!AccessSpecifiedElementExtensions.HasGenericParameters(element))
+			if (!element.HasGenericParameters())
 			{
 				return;
 			}
@@ -186,7 +186,7 @@ namespace CR_Documentor.Transformation.Syntax
 			{
 				case SupportedLanguageId.Basic:
 					writer.Write("(");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "Of");
+					writer.WriteSpan(PreviewCss.Keyword, "Of");
 					break;
 				default:
 					writer.Write("&lt;");
@@ -198,7 +198,7 @@ namespace CR_Documentor.Transformation.Syntax
 			for (int i = 0; i < parameterCount; i++)
 			{
 				var parameter = typeParams[i];
-				HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.TypeParameter, parameter.Name, "", "");
+				writer.WriteSpan(PreviewCss.TypeParameter, parameter.Name, "", "");
 				if (parameter.Constraints.Count > 0)
 				{
 					WriteInlineConstraint(writer, parameter, language);

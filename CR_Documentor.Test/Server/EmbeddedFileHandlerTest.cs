@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using CR_Documentor.Resources;
 using CR_Documentor.Server;
+using DevExpress.DXCore.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TypeMock.ArrangeActAssert;
 
@@ -16,6 +17,12 @@ namespace CR_Documentor.Test.Server
 	[Isolated]
 	public class EmbeddedFileHandlerTest
 	{
+		[TestInitialize]
+		public void TestInitialize()
+		{
+			Isolate.WhenCalled(() => SynchronizationManager.BeginInvoke(null, null)).ReturnRecursiveFake();
+		}
+
 		[TestMethod]
 		public void Ctor_AttributesEnumerated()
 		{

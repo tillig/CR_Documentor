@@ -69,11 +69,11 @@ namespace CR_Documentor.Transformation.Syntax
 					switch (language)
 					{
 						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteLink(writer, "OutAttribute", "&lt;", "&gt; ");
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
+							writer.WriteLink("OutAttribute", "&lt;", "&gt; ");
+							writer.WriteSpan(PreviewCss.Keyword, "ByRef");
 							break;
 						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "out");
+							writer.WriteSpan(PreviewCss.Keyword, "out");
 							break;
 					}
 				}
@@ -82,10 +82,10 @@ namespace CR_Documentor.Transformation.Syntax
 					switch (language)
 					{
 						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ByRef");
+							writer.WriteSpan(PreviewCss.Keyword, "ByRef");
 							break;
 						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ref");
+							writer.WriteSpan(PreviewCss.Keyword, "ref");
 							break;
 					}
 				}
@@ -95,24 +95,24 @@ namespace CR_Documentor.Transformation.Syntax
 					switch (language)
 					{
 						case SupportedLanguageId.Basic:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "ParamArray");
+							writer.WriteSpan(PreviewCss.Keyword, "ParamArray");
 							break;
 						default:
-							HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "params");
+							writer.WriteSpan(PreviewCss.Keyword, "params");
 							break;
 					}
 				}
 
 				if (isBasic)
 				{
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, parameter.Name);
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Keyword, "As");
+					writer.WriteSpan(PreviewCss.Identifier, parameter.Name);
+					writer.WriteSpan(PreviewCss.Keyword, "As");
 				}
-				HtmlTextWriterExtensions.WriteLink(writer, parameter.ParamType, "", "");
+				writer.WriteLink(parameter.ParamType, "", "");
 				if (!isBasic)
 				{
 					writer.Write(" ");
-					HtmlTextWriterExtensions.WriteSpan(writer, PreviewCss.Identifier, parameter.Name, "", "");
+					writer.WriteSpan(PreviewCss.Identifier, parameter.Name, "", "");
 				}
 
 				// Sandcastle doesn't render the default value settings, but if

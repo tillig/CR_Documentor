@@ -13,7 +13,7 @@ namespace CR_Documentor.Diagnostics
 	/// method to retrieve the proper logging implementation for your class.
 	/// </para>
 	/// </remarks>
-	public class MenuLogger : Logger
+	public class MenuLogger : Logger<Log>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MenuLogger"/> class.
@@ -22,6 +22,6 @@ namespace CR_Documentor.Diagnostics
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="logOwner" /> is <see langword="null" />.
 		/// </exception>
-		public MenuLogger(Type logOwner) : base(logOwner, typeof(Log)) { }
+		public MenuLogger(Type logOwner) : base(logOwner) { }
 	}
 }

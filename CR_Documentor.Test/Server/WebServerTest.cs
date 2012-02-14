@@ -1,41 +1,42 @@
-using CR_Documentor.Server;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Net;
-using TypeMock;
+using CR_Documentor.Server;
+using DevExpress.DXCore.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Server
 {
 	[TestClass]
-	[VerifyMocks]
+	[Isolated]
 	public class WebServerTest
 	{
 		private const UInt16 TestServerPort = 22334;
+
+		[TestInitialize]
+		public void TestInitialize()
+		{
+			Isolate.WhenCalled(() => SynchronizationManager.BeginInvoke(null, null)).ReturnRecursiveFake();
+		}
 
 		[TestMethod]
 		public void Dispose_CallsStopIfStarted()
 		{
 			WebServer server = new WebServer(TestServerPort);
-			using (RecordExpectations recorder = RecorderManager.StartRecording())
-			{
-				server.Stop();
-			}
+			Isolate.WhenCalled(() => server.Stop()).IgnoreCall();
 			server.Start();
 			server.Dispose();
-			// If Stop isn't called, the mock expectation will fail.
+			Isolate.Verify.WasCalledWithExactArguments(() => server.Stop());
 		}
 
 		[TestMethod]
 		public void Dispose_DoesNotCallStopIfNotStarted()
 		{
 			WebServer server = new WebServer(TestServerPort);
-			using (RecordExpectations recorder = RecorderManager.StartRecording())
-			{
-				server.Stop();
-				recorder.FailWhenCalled();
-			}
+			Isolate.WhenCalled(() => server.Stop()).IgnoreCall();
 			server.Dispose();
+			Isolate.Verify.WasNotCalled(() => server.Stop());
 		}
 
 		[TestMethod]

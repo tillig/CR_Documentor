@@ -9,8 +9,6 @@ namespace CR_Documentor.Transformation.Syntax
 	/// </summary>
 	public static class HtmlTextWriterExtensions
 	{
-		// TODO: When we target .NET 3.5, convert these to real extension methods.
-
 		/// <summary>
 		/// Writes a hyperlink with HTML-encoded contents.
 		/// </summary>
@@ -21,7 +19,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteLink(HtmlTextWriter writer, string contents, string before, string after)
+		public static void WriteLink(this HtmlTextWriter writer, string contents, string before, string after)
 		{
 			if (writer == null)
 			{
@@ -58,9 +56,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteDiv(HtmlTextWriter writer, string cssClass, string contents)
+		public static void WriteDiv(this HtmlTextWriter writer, string cssClass, string contents)
 		{
-			WriteDiv(writer, cssClass, contents, null, null);
+			writer.WriteDiv(cssClass, contents, null, null);
 		}
 
 		/// <summary>
@@ -74,9 +72,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteDiv(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
+		public static void WriteDiv(this HtmlTextWriter writer, string cssClass, string contents, string before, string after)
 		{
-			WriteTag(writer, HtmlTextWriterTag.Div, cssClass, contents, before, after);
+			writer.WriteTag(HtmlTextWriterTag.Div, cssClass, contents, before, after);
 		}
 
 		/// <summary>
@@ -89,9 +87,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteSpan(HtmlTextWriter writer, string cssClass, string contents)
+		public static void WriteSpan(this HtmlTextWriter writer, string cssClass, string contents)
 		{
-			WriteSpan(writer, cssClass, contents, null, null);
+			writer.WriteSpan(cssClass, contents, null, null);
 		}
 
 		/// <summary>
@@ -105,9 +103,9 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteSpan(HtmlTextWriter writer, string cssClass, string contents, string before, string after)
+		public static void WriteSpan(this HtmlTextWriter writer, string cssClass, string contents, string before, string after)
 		{
-			WriteTag(writer, HtmlTextWriterTag.Span, cssClass, contents, before, after);
+			writer.WriteTag(HtmlTextWriterTag.Span, cssClass, contents, before, after);
 		}
 
 		/// <summary>
@@ -122,7 +120,7 @@ namespace CR_Documentor.Transformation.Syntax
 		/// <exception cref="System.ArgumentNullException">
 		/// Thrown if <paramref name="writer" /> is <see langword="null" />.
 		/// </exception>
-		public static void WriteTag(HtmlTextWriter writer, HtmlTextWriterTag tagKey, string cssClass, string contents, string before, string after)
+		public static void WriteTag(this HtmlTextWriter writer, HtmlTextWriterTag tagKey, string cssClass, string contents, string before, string after)
 		{
 			if (writer == null)
 			{

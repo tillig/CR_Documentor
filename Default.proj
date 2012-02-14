@@ -4,7 +4,8 @@
 		* Standard build = msbuild Default.proj
 		* Release build = msbuild Default.proj /p:Configuration=Release
 	-->
-	<Import Project="$(ProgramFiles)\Typemock\Isolator\6.0\TypeMock.MSBuild.Tasks"/>
+	<Import Project="$(ProgramFiles)\Typemock\Isolator\6.1\TypeMock.MSBuild.Tasks"/>
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<BuildDir>..\build</BuildDir>
@@ -31,7 +32,6 @@
 		<CleanFolders Include="CR_Documentor.Test\obj"/>
 		<CleanFolders Include="TestResults"/>
 	</ItemGroup>
-	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<Target Name="All">
 		<CallTarget Targets="Clean;Compile;Test"/>
 		<CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/>
@@ -91,5 +91,6 @@
 			<Output ItemName="BinaryPackageFiles" TaskParameter="Include"/>
 		</CreateItem>
 		<Zip Files="@(BinaryPackageFiles)" ZipFileName="$(BuildPackageDir)\CR_Documentor-$(Version).zip" Flatten="true"/>
+		<Copy SourceFiles="$(BuildBinDir)\CR_Documentor.vsix" DestinationFolder="$(BuildPackageDir)"/>
 	</Target>
 </Project>

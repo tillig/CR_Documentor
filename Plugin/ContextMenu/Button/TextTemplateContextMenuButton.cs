@@ -117,122 +117,92 @@ namespace CR_Documentor.ContextMenu.Button
 		public override void Execute()
 		{
 			// TODO: Refactor this nightmare huge method. It's too big.
-			using (ActivityContext context = new ActivityContext(Log, "Executing text insertion/replacement."))
+			Log.Write(LogLevel.Info, "Executing text insertion/replacement.");
+			// Mark the undo stack
+			CodeRush.UndoStack.BeginUpdate("InsertTextTemplate");
+
+			try
 			{
-				// Mark the undo stack
-				CodeRush.UndoStack.BeginUpdate("InsertTextTemplate");
+				// Get the original selection values
+				string originalSelectedText = "";
+				SourceRange originalRange;
+				ISavedSelection originalSelection = TextView.Active.Selection.Save();
 
-				try
+				if (CodeRush.Selection.Exists)
 				{
-					// Get the original selection values
-					string originalSelectedText = "";
-					SourceRange originalRange;
-					ISavedSelection originalSelection = TextView.Active.Selection.Save();
+					// Save the original selection values
+					Log.Write(LogLevel.Info, "Selection exists.  Saving selected text and active range.");
+					originalSelectedText = CodeRush.Selection.Text;
+					originalRange = CodeRush.Documents.ActiveTextView.GetSelectionRange();
+				}
+				else
+				{
+					// Set up an empty range at the point of insertion
+					Log.Write(LogLevel.Info, "No selection to save.");
+					originalRange = new SourceRange(CodeRush.Caret.Line, CodeRush.Caret.Offset);
+				}
 
-					if (CodeRush.Selection.Exists)
+				// Get the replacement text
+				string replacement = originalSelectedText;
+				if (replacement != "")
+				{
+					Log.Write(LogLevel.Info, "Formatting replacement text in preparation for embedding.");
+
+					// Convert any newlines to \n (we'll put that back later)
+					replacement = replacement.Replace(System.Environment.NewLine, "\n");
+
+					// Convert replacement text to lower case, if necessary
+					if (this.ConvertSelectionToLower)
 					{
-						// Save the original selection values
-						Log.Write(LogLevel.Info, "Selection exists.  Saving selected text and active range.");
-						originalSelectedText = CodeRush.Selection.Text;
-						originalRange = CodeRush.Documents.ActiveTextView.GetSelectionRange();
-					}
-					else
-					{
-						// Set up an empty range at the point of insertion
-						Log.Write(LogLevel.Info, "No selection to save.");
-						originalRange = new SourceRange(CodeRush.Caret.Line, CodeRush.Caret.Offset);
-					}
-
-					// Get the replacement text
-					string replacement = originalSelectedText;
-					if (replacement != "")
-					{
-						Log.Write(LogLevel.Info, "Formatting replacement text in preparation for embedding.");
-
-						// Convert any newlines to \n (we'll put that back later)
-						replacement = replacement.Replace(System.Environment.NewLine, "\n");
-
-						// Convert replacement text to lower case, if necessary
-						if (this.ConvertSelectionToLower)
-						{
-							replacement = replacement.ToLower(System.Globalization.CultureInfo.InvariantCulture);
-						}
-
-						// Strip out any XML doc comment prefixes - we'll put them back later
-						replacement = this.StripXmlDocCommentPrefix(replacement);
+						replacement = replacement.ToLower(System.Globalization.CultureInfo.InvariantCulture);
 					}
 
-					// Remove double-newlines at the end of any replacement text
-					if ((this.Content.IndexOf(TEXT_REPLACEMENT + "\n") >= 0) &&
-						(replacement.EndsWith("\n"))
-						)
+					// Strip out any XML doc comment prefixes - we'll put them back later
+					replacement = this.StripXmlDocCommentPrefix(replacement);
+				}
+
+				// Remove double-newlines at the end of any replacement text
+				if ((this.Content.IndexOf(TEXT_REPLACEMENT + "\n") >= 0) &&
+					(replacement.EndsWith("\n"))
+					)
+				{
+					Log.Write(LogLevel.Info, "Removing double-newlines at end of replacement.");
+					replacement = replacement.Substring(0, replacement.Length - 1);
+				}
+
+				// Get the full content to insert
+				// This will be a string without the XML doc comment prefixes in it
+				string fullContent = this.Content.Replace(TEXT_REPLACEMENT, replacement);
+
+				// Get the active text document
+				TextDocument activeTextDocument = CodeRush.Documents.ActiveTextDocument;
+				if (activeTextDocument == null)
+				{
+					// The active text document wasn't retrievable.
+					Log.Write(LogLevel.Warn, "Unable to retrieve active text document.");
+					return;
+				}
+
+				// If there's a \n at the beginning of the template, make sure it starts
+				// on its own line.  If it's the first line in the XML comment, leave it there.
+				// Also handle single-line insertions to make sure selections containing the
+				// beginning of the line are dealt with.
+
+				Log.Write(LogLevel.Info, "Processing beginning of insertion line.");
+
+				// Get the beginning of the insertion line
+				CodeRush.Selection.SelectRange(originalRange.Start.Line, 1, originalRange.Start.Line, originalRange.Start.Offset);
+
+				if (CodeRush.Selection.Exists)
+				{
+					// If there's a selection, see if this will be the first thing on the line.
+					string startText = CodeRush.Selection.Text.Trim();
+
+					if (startText.Length == 0)
 					{
-						Log.Write(LogLevel.Info, "Removing double-newlines at end of replacement.");
-						replacement = replacement.Substring(0, replacement.Length - 1);
-					}
-
-					// Get the full content to insert
-					// This will be a string without the XML doc comment prefixes in it
-					string fullContent = this.Content.Replace(TEXT_REPLACEMENT, replacement);
-
-					// Get the active text document
-					TextDocument activeTextDocument = CodeRush.Documents.ActiveTextDocument;
-					if (activeTextDocument == null)
-					{
-						// The active text document wasn't retrievable.
-						Log.Write(LogLevel.Warn, "Unable to retrieve active text document.");
-						return;
-					}
-
-					// If there's a \n at the beginning of the template, make sure it starts
-					// on its own line.  If it's the first line in the XML comment, leave it there.
-					// Also handle single-line insertions to make sure selections containing the
-					// beginning of the line are dealt with.
-
-					Log.Write(LogLevel.Info, "Processing beginning of insertion line.");
-
-					// Get the beginning of the insertion line
-					CodeRush.Selection.SelectRange(originalRange.Start.Line, 1, originalRange.Start.Line, originalRange.Start.Offset);
-
-					if (CodeRush.Selection.Exists)
-					{
-						// If there's a selection, see if this will be the first thing on the line.
-						string startText = CodeRush.Selection.Text.Trim();
-
-						if (startText.Length == 0)
-						{
-							// This is totally the beginning of the line -
-							// we even need to insert the XML doc comment prefix
-							// (but no newline)
-							if (fullContent.StartsWith("\n"))
-							{
-								fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent.Substring(1);
-							}
-							else
-							{
-								fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent;
-							}
-						}
-						else
-						{
-							// Strip any XML doc comment prefixes
-							startText = this.StripXmlDocCommentPrefix(CodeRush.Selection.Text);
-
-							// Trim any whitespace (which is all that should be left)
-							startText = startText.Trim();
-
-							// If that's it, we don't need to insert a newline.
-							if (startText.Length == 0 && fullContent.StartsWith("\n"))
-							{
-								fullContent = fullContent.Substring(1);
-							}
-						}
-					}
-					else
-					{
-						// There's NO selection so the entire beginning of the line was
-						// originally selected and we're going to want to put in the comment
-						// prefix but NOT add a newline.
+						// This is totally the beginning of the line -
+						// we even need to insert the XML doc comment prefix
+						// (but no newline)
 						if (fullContent.StartsWith("\n"))
 						{
 							fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent.Substring(1);
@@ -242,94 +212,121 @@ namespace CR_Documentor.ContextMenu.Button
 							fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent;
 						}
 					}
-					originalSelection.Restore();
-
-					Log.Write(LogLevel.Info, "Processing end of insertion line.");
-
-					// If there's a \n at the end of the template, make sure it ends on its own line.
-					// If it's the last line in the XML comment, leave it there.
-					if (fullContent.EndsWith("\n"))
+					else
 					{
-						// Get the end of the insertion line
-						CodeRush.Selection.SelectRange(
-							originalRange.End.Line,
-							originalRange.End.Offset,
-							originalRange.End.Line,
-							activeTextDocument.GetLineLength(originalRange.End.Line) + 1);
+						// Strip any XML doc comment prefixes
+						startText = this.StripXmlDocCommentPrefix(CodeRush.Selection.Text);
 
-						if (CodeRush.Selection.Exists)
+						// Trim any whitespace (which is all that should be left)
+						startText = startText.Trim();
+
+						// If that's it, we don't need to insert a newline.
+						if (startText.Length == 0 && fullContent.StartsWith("\n"))
 						{
-							// There's something at the end of this line
-
-							// If there's a selection, see if this will be the last thing on the line.
-							string endText = CodeRush.Selection.Text.Trim();
-							if (endText.Length == 0)
-							{
-								// This is the end of the line, not counting the whitespace.
-								// Nuke the extra newline.
-								fullContent = fullContent.Substring(0, fullContent.Length - 1);
-							}
-							else if (endText.StartsWith(DocumentorContextMenu.CommentPrefix))
-							{
-								// We've selected all the way to the next line.
-								// Replace the trailing standard newline with just a
-								// return (which won't get any comment prefix)
-								fullContent = fullContent.Substring(0, fullContent.Length - 1) + "\r";
-							}
+							fullContent = fullContent.Substring(1);
 						}
-						else
+					}
+				}
+				else
+				{
+					// There's NO selection so the entire beginning of the line was
+					// originally selected and we're going to want to put in the comment
+					// prefix but NOT add a newline.
+					if (fullContent.StartsWith("\n"))
+					{
+						fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent.Substring(1);
+					}
+					else
+					{
+						fullContent = DocumentorContextMenu.CommentPrefix + " " + fullContent;
+					}
+				}
+				originalSelection.Restore();
+
+				Log.Write(LogLevel.Info, "Processing end of insertion line.");
+
+				// If there's a \n at the end of the template, make sure it ends on its own line.
+				// If it's the last line in the XML comment, leave it there.
+				if (fullContent.EndsWith("\n"))
+				{
+					// Get the end of the insertion line
+					CodeRush.Selection.SelectRange(
+						originalRange.End.Line,
+						originalRange.End.Offset,
+						originalRange.End.Line,
+						activeTextDocument.GetLineLength(originalRange.End.Line) + 1);
+
+					if (CodeRush.Selection.Exists)
+					{
+						// There's something at the end of this line
+
+						// If there's a selection, see if this will be the last thing on the line.
+						string endText = CodeRush.Selection.Text.Trim();
+						if (endText.Length == 0)
 						{
-							// There's nothing at the end of this line, so remove
-							// any trailing newline.
+							// This is the end of the line, not counting the whitespace.
+							// Nuke the extra newline.
 							fullContent = fullContent.Substring(0, fullContent.Length - 1);
 						}
-
-						originalSelection.Restore();
+						else if (endText.StartsWith(DocumentorContextMenu.CommentPrefix))
+						{
+							// We've selected all the way to the next line.
+							// Replace the trailing standard newline with just a
+							// return (which won't get any comment prefix)
+							fullContent = fullContent.Substring(0, fullContent.Length - 1) + "\r";
+						}
+					}
+					else
+					{
+						// There's nothing at the end of this line, so remove
+						// any trailing newline.
+						fullContent = fullContent.Substring(0, fullContent.Length - 1);
 					}
 
-					// For each \n in the middle of the template, add the comment prefix.
-					Log.Write(LogLevel.Info, "Adding in XML comment prefixes.");
-					fullContent = fullContent.Replace("\n", "\n" + DocumentorContextMenu.CommentPrefix + " ");
-
-					Log.Write(LogLevel.Info, "Converting newlines back to system value.");
-
-					// For each \r in the middle of the template, convert to a regular newline.
-					fullContent = fullContent.Replace("\r", "\n");
-
-					// Put the system newline back in
-					fullContent = fullContent.Replace("\n", System.Environment.NewLine);
-
-					// Insert the content (replace any selected text)
-					Log.Write(LogLevel.Info, "Removing any existing selection in preparation for insert/embed.");
-					CodeRush.Selection.Delete();
-
-					Log.Write(LogLevel.Info, "Inserting/embedding text.");
-					SourceRange insertedRange = activeTextDocument.InsertText(CodeRush.Caret.SourcePoint, fullContent);
-
-					// Format the inserted area of the document if we inserted newlines
-					Log.Write(LogLevel.Info, "Formatting final insertion.");
-					SourceRange formattedRange = insertedRange;
-					formattedRange = activeTextDocument.Format(insertedRange);
-
-					Log.Write(LogLevel.Info, "Positioning caret.");
-					// TODO: Figure out how to place the caret in the spot with CARET_PLACEMENT
-
-					// Move to the end of the insertion
-					CodeRush.Caret.MoveTo(formattedRange.Bottom);
-
-					Log.Write(LogLevel.Info, "Insert/embed complete.");
+					originalSelection.Restore();
 				}
-				catch (Exception err)
-				{
-					Log.Write(LogLevel.Error, "Error while inserting/embedding text.", err);
-				}
-				finally
-				{
-					// End the undo stack mark
-					CodeRush.UndoStack.EndUpdate();
-				}
+
+				// For each \n in the middle of the template, add the comment prefix.
+				Log.Write(LogLevel.Info, "Adding in XML comment prefixes.");
+				fullContent = fullContent.Replace("\n", "\n" + DocumentorContextMenu.CommentPrefix + " ");
+
+				Log.Write(LogLevel.Info, "Converting newlines back to system value.");
+
+				// For each \r in the middle of the template, convert to a regular newline.
+				fullContent = fullContent.Replace("\r", "\n");
+
+				// Put the system newline back in
+				fullContent = fullContent.Replace("\n", System.Environment.NewLine);
+
+				// Insert the content (replace any selected text)
+				Log.Write(LogLevel.Info, "Removing any existing selection in preparation for insert/embed.");
+				CodeRush.Selection.Delete();
+
+				Log.Write(LogLevel.Info, "Inserting/embedding text.");
+				SourceRange insertedRange = activeTextDocument.InsertText(CodeRush.Caret.SourcePoint, fullContent);
+
+				// Format the inserted area of the document if we inserted newlines
+				Log.Write(LogLevel.Info, "Formatting final insertion.");
+				SourceRange formattedRange = insertedRange;
+				formattedRange = activeTextDocument.Format(insertedRange);
+
+				Log.Write(LogLevel.Info, "Positioning caret.");
+				// TODO: Figure out how to place the caret in the spot with CARET_PLACEMENT
+
+				// Move to the end of the insertion
+				CodeRush.Caret.MoveTo(formattedRange.Bottom);
+
+				Log.Write(LogLevel.Info, "Insert/embed complete.");
 			}
-
+			catch (Exception err)
+			{
+				Log.Write(LogLevel.Error, "Error while inserting/embedding text.", err);
+			}
+			finally
+			{
+				// End the undo stack mark
+				CodeRush.UndoStack.EndUpdate();
+			}
 		}
 
 		/// <summary>

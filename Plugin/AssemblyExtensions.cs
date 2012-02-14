@@ -1,7 +1,7 @@
 using System;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Drawing;
 
 namespace CR_Documentor
 {
@@ -10,8 +10,6 @@ namespace CR_Documentor
 	/// </summary>
 	public static class AssemblyExtensions
 	{
-		// TODO: When we target .NET 3.5, convert these to real extension methods.
-
 		/// <summary>
 		/// Loads an embedded icon from 
 		/// </summary>
@@ -20,7 +18,7 @@ namespace CR_Documentor
 		/// <returns>
 		/// The <see cref="System.Drawing.Icon"/> loaded from the 
 		/// </returns>
-		public static Icon ReadEmbeddedResourceIcon(Assembly assembly, string resourcePath)
+		public static Icon ReadEmbeddedResourceIcon(this Assembly assembly, string resourcePath)
 		{
 			if (assembly == null)
 			{
@@ -65,7 +63,7 @@ namespace CR_Documentor
 		/// Thrown if <paramref name="resourcePath" /> is <see cref="System.String.Empty"/>
 		/// or if it is not found in the assembly.
 		/// </exception>
-		public static string ReadEmbeddedResourceString(Assembly assembly, string resourcePath)
+		public static string ReadEmbeddedResourceString(this Assembly assembly, string resourcePath)
 		{
 			if (assembly == null)
 			{

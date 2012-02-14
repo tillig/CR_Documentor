@@ -43,7 +43,8 @@ namespace CR_Documentor.Transformation.MSDN
 			if (this._baseHtml == null)
 			{
 				// Lazy-initialize the base HTML. Doesn't matter if it's thread-safe.
-				this._baseHtml = AssemblyExtensions.ReadEmbeddedResourceString(System.Reflection.Assembly.GetExecutingAssembly(), ResourceBaseHtmlDocument);
+				var asm = System.Reflection.Assembly.GetExecutingAssembly();
+				this._baseHtml = asm.ReadEmbeddedResourceString(ResourceBaseHtmlDocument);
 			}
 			return this._baseHtml;
 		}
@@ -54,35 +55,34 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <seealso cref="CR_Documentor.Transformation.TransformEngine.RegisterCommentTagHandlers"/>
 		protected override void RegisterCommentTagHandlers()
 		{
-			// TODO: Factor this into the base class - decorate handlers with attributes so we don't have to register manually.
-			this.AddCommentTagHandler(DefaultCommentHandlerKey, new EventHandler<CommentMatchEventArgs>(this.HtmlPassThrough));
-			this.AddCommentTagHandler("block", new EventHandler<CommentMatchEventArgs>(this.Block));
-			this.AddCommentTagHandler("c", new EventHandler<CommentMatchEventArgs>(this.C));
-			this.AddCommentTagHandler("code", new EventHandler<CommentMatchEventArgs>(this.Code));
-			this.AddCommentTagHandler("event", new EventHandler<CommentMatchEventArgs>(this.Event));
-			this.AddCommentTagHandler("exception", new EventHandler<CommentMatchEventArgs>(this.Exception));
-			this.AddCommentTagHandler("exclude", new EventHandler<CommentMatchEventArgs>(this.IgnoreComment));
-			this.AddCommentTagHandler("example", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("include", new EventHandler<CommentMatchEventArgs>(this.Include));
-			this.AddCommentTagHandler("list", new EventHandler<CommentMatchEventArgs>(this.List));
-			this.AddCommentTagHandler("member", new EventHandler<CommentMatchEventArgs>(this.Member));
-			this.AddCommentTagHandler("note", new EventHandler<CommentMatchEventArgs>(this.Note));
-			this.AddCommentTagHandler("obsolete", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("overloads", new EventHandler<CommentMatchEventArgs>(this.IgnoreComment));
-			this.AddCommentTagHandler("para", new EventHandler<CommentMatchEventArgs>(this.Para));
-			this.AddCommentTagHandler("param", new EventHandler<CommentMatchEventArgs>(this.Param));
-			this.AddCommentTagHandler("paramref", new EventHandler<CommentMatchEventArgs>(this.Paramref));
-			this.AddCommentTagHandler("permission", new EventHandler<CommentMatchEventArgs>(this.Permission));
-			this.AddCommentTagHandler("preliminary", new EventHandler<CommentMatchEventArgs>(this.Preliminary));
-			this.AddCommentTagHandler("remarks", new EventHandler<CommentMatchEventArgs>(this.Remarks));
-			this.AddCommentTagHandler("returns", new EventHandler<CommentMatchEventArgs>(this.Returns));
-			this.AddCommentTagHandler("see", new EventHandler<CommentMatchEventArgs>(this.See));
-			this.AddCommentTagHandler("seealso", new EventHandler<CommentMatchEventArgs>(this.SeeAlso));
-			this.AddCommentTagHandler("summary", new EventHandler<CommentMatchEventArgs>(this.ApplyTemplates));
-			this.AddCommentTagHandler("threadsafety", new EventHandler<CommentMatchEventArgs>(this.ThreadSafety));
-			this.AddCommentTagHandler("typeparam", new EventHandler<CommentMatchEventArgs>(this.TypeParam));
-			this.AddCommentTagHandler("typeparamref", new EventHandler<CommentMatchEventArgs>(this.TypeParamref));
-			this.AddCommentTagHandler("value", new EventHandler<CommentMatchEventArgs>(this.Value));
+			this.CommentMatchHandlers[""] = this.HtmlPassThrough;
+			this.CommentMatchHandlers["block"] = this.Block;
+			this.CommentMatchHandlers["c"] = this.C;
+			this.CommentMatchHandlers["code"] = this.Code;
+			this.CommentMatchHandlers["event"] = this.Event;
+			this.CommentMatchHandlers["exception"] = this.Exception;
+			this.CommentMatchHandlers["exclude"] = this.IgnoreComment;
+			this.CommentMatchHandlers["example"] = this.ApplyTemplates;
+			this.CommentMatchHandlers["include"] = this.Include;
+			this.CommentMatchHandlers["list"] = this.List;
+			this.CommentMatchHandlers["member"] = this.Member;
+			this.CommentMatchHandlers["note"] = this.Note;
+			this.CommentMatchHandlers["obsolete"] = this.ApplyTemplates;
+			this.CommentMatchHandlers["overloads"] = this.IgnoreComment;
+			this.CommentMatchHandlers["para"] = this.Para;
+			this.CommentMatchHandlers["param"] = this.Param;
+			this.CommentMatchHandlers["paramref"] = this.Paramref;
+			this.CommentMatchHandlers["permission"] = this.Permission;
+			this.CommentMatchHandlers["preliminary"] = this.Preliminary;
+			this.CommentMatchHandlers["remarks"] = this.Remarks;
+			this.CommentMatchHandlers["returns"] = this.Returns;
+			this.CommentMatchHandlers["see"] = this.See;
+			this.CommentMatchHandlers["seealso"] = this.SeeAlso;
+			this.CommentMatchHandlers["summary"] = this.ApplyTemplates;
+			this.CommentMatchHandlers["threadsafety"] = this.ThreadSafety;
+			this.CommentMatchHandlers["typeparam"] = this.TypeParam;
+			this.CommentMatchHandlers["typeparamref"] = this.TypeParamref;
+			this.CommentMatchHandlers["value"] = this.Value;
 		}
 
 		#endregion
@@ -94,12 +94,13 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'block' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Block(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Block(XmlElement element)
 		{
 			this.Writer.Write("<p>");
-			string blockType = Evaluator.ValueOf(e.Element, "@type");
+			string blockType = Evaluator.ValueOf(element, "@type");
 			switch (blockType)
 			{
 				case "note":
@@ -124,46 +125,48 @@ namespace CR_Documentor.Transformation.MSDN
 					// Do nothing in the default case.
 					break;
 			}
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</p>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'c' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void C(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void C(XmlElement element)
 		{
 			this.Writer.Write("<code>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</code>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'code' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Code(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Code(XmlElement element)
 		{
 			this.Writer.Write("<pre class='code'>");
-			if (Evaluator.Test(e.Element, "@lang"))
+			if (Evaluator.Test(element, "@lang"))
 			{
 				this.Writer.Write("<span class='lang'>[");
-				this.Writer.Write(Evaluator.ValueOf(e.Element, "@lang"));
+				this.Writer.Write(Evaluator.ValueOf(element, "@lang"));
 				this.Writer.Write("]</span>");
 			}
 			// TODO: Handle correct whitespace for the "escaped" attribute of the "code" element.
-			string escaped = Evaluator.ValueOf(e.Element, "@escaped");
+			string escaped = Evaluator.ValueOf(element, "@escaped");
 			string outputCode = "";
 			if (escaped == "true")
 			{
-				outputCode = HttpUtility.HtmlEncode(e.Element.InnerXml);
+				outputCode = HttpUtility.HtmlEncode(element.InnerXml);
 			}
 			else
 			{
-				outputCode = HttpUtility.HtmlEncode(e.Element.InnerText);
+				outputCode = HttpUtility.HtmlEncode(element.InnerText);
 			}
 			if (this.Options.ConvertCodeTabsToSpaces)
 			{
@@ -177,54 +180,58 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes an 'event' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Event(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Event(XmlElement element)
 		{
-			this.StandardTableRow(e.Element);
+			this.StandardTableRow(element);
 		}
 
 		/// <summary>
 		/// Matches and processes an 'exception' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Exception(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Exception(XmlElement element)
 		{
-			this.StandardTableRow(e.Element);
+			this.StandardTableRow(element);
 		}
 
 		/// <summary>
 		/// Matches and processes an 'include' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Include(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Include(XmlElement element)
 		{
 			// If includes haven't been processed out, put a placeholder
 			this.Writer.Write("<i><b>[Insert documentation here: file = ");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@file"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@file"));
 			this.Writer.Write(", path = ");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@path"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@path"));
 			this.Writer.Write("]</b></i>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'list' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void List(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void List(XmlElement element)
 		{
 			XmlElement itemTerm = null;
 			XmlElement itemDescription = null;
 
-			switch (Evaluator.ValueOf(e.Element, "@type"))
+			switch (Evaluator.ValueOf(element, "@type"))
 			{
 				case "table":
 					this.Writer.Write("<div class='tablediv'><table cellspacing='0' class='dtTABLE'>");
 
-					foreach (XmlNode listHeader in e.Element.SelectNodes("listheader"))
+					foreach (XmlNode listHeader in element.SelectNodes("listheader"))
 					{
 						itemTerm = listHeader.SelectSingleNode("term") as XmlElement;
 						itemDescription = listHeader.SelectSingleNode("description") as XmlElement;
@@ -248,7 +255,7 @@ namespace CR_Documentor.Transformation.MSDN
 						}
 					}
 
-					foreach (XmlNode item in e.Element.SelectNodes("item"))
+					foreach (XmlNode item in element.SelectNodes("item"))
 					{
 						itemTerm = item.SelectSingleNode("term") as XmlElement;
 						itemDescription = item.SelectSingleNode("description") as XmlElement;
@@ -277,7 +284,7 @@ namespace CR_Documentor.Transformation.MSDN
 
 				case "bullet":
 					this.Writer.Write("<ul type='disc'>");
-					foreach (XmlNode item in e.Element.SelectNodes("item"))
+					foreach (XmlNode item in element.SelectNodes("item"))
 					{
 						itemTerm = item.SelectSingleNode("term") as XmlElement;
 						itemDescription = item.SelectSingleNode("description") as XmlElement;
@@ -308,7 +315,7 @@ namespace CR_Documentor.Transformation.MSDN
 
 				case "number":
 					this.Writer.Write("<ol type='1'>");
-					foreach (XmlNode item in e.Element.SelectNodes("item"))
+					foreach (XmlNode item in element.SelectNodes("item"))
 					{
 						itemTerm = item.SelectSingleNode("term") as XmlElement;
 						itemDescription = item.SelectSingleNode("description") as XmlElement;
@@ -339,7 +346,7 @@ namespace CR_Documentor.Transformation.MSDN
 
 				case "definition":
 					this.Writer.Write("<dl>");
-					foreach (XmlNode item in e.Element.SelectNodes("item"))
+					foreach (XmlNode item in element.SelectNodes("item"))
 					{
 						itemTerm = item.SelectSingleNode("term") as XmlElement;
 						itemDescription = item.SelectSingleNode("description") as XmlElement;
@@ -369,9 +376,10 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes the root 'member' element in a document.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Member(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Member(XmlElement element)
 		{
 			// Stick the banner at the top
 			this.Banner();
@@ -380,166 +388,166 @@ namespace CR_Documentor.Transformation.MSDN
 			this.Writer.Write("<div id='nstext'>");
 
 			// Errors (at top level)
-			this.ApplyTemplates(CommentParser.GetChildErrorNodes(e.Element));
+			this.ApplyTemplates(CommentParser.GetChildErrorNodes(element));
 
 			// Preliminary
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "preliminary");
+				LinkProcessor.RemoveDuplicates(element, "preliminary");
 			}
-			this.ApplyTemplates(e.Element, "preliminary");
+			this.ApplyTemplates(element, "preliminary");
 
 			// Obsolete
-			if (this.Options.RecognizedTags.Contains("obsolete") && e.Element.GetElementsByTagName("obsolete").Count != 0)
+			if (this.Options.RecognizedTags.Contains("obsolete") && element.GetElementsByTagName("obsolete").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "obsolete");
+					LinkProcessor.RemoveDuplicates(element, "obsolete");
 				}
 				this.Writer.Write("<p><font color=\"red\"><b>NOTE: This class is now obsolete.</b></font></p>");
-				this.ApplyTemplates(e.Element, "obsolete");
+				this.ApplyTemplates(element, "obsolete");
 				this.Writer.Write("<hr />");
 			}
 
 			// Summary
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "summary");
+				LinkProcessor.RemoveDuplicates(element, "summary");
 			}
-			this.ApplyTemplates(e.Element, "summary");
+			this.ApplyTemplates(element, "summary");
 
 			// Object Signature
 			this.Syntax();
 
 			// TypeParam
-			if (this.Options.RecognizedTags.Contains("typeparam") && e.Element.GetElementsByTagName("typeparam").Count != 0)
+			if (this.Options.RecognizedTags.Contains("typeparam") && element.GetElementsByTagName("typeparam").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "typeparam");
+					LinkProcessor.RemoveDuplicates(element, "typeparam");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Generic Template Parameters</h4>");
 				this.Writer.Write("<dl>");
-				this.ApplyTemplates(e.Element, "typeparam");
+				this.ApplyTemplates(element, "typeparam");
 				this.Writer.Write("</dl>");
 			}
 
 			// Param
-			if (this.Options.RecognizedTags.Contains("param") && e.Element.GetElementsByTagName("param").Count != 0)
+			if (this.Options.RecognizedTags.Contains("param") && element.GetElementsByTagName("param").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "param");
+					LinkProcessor.RemoveDuplicates(element, "param");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Parameters</h4>");
 				this.Writer.Write("<dl>");
-				this.ApplyTemplates(e.Element, "param");
+				this.ApplyTemplates(element, "param");
 				this.Writer.Write("</dl>");
 			}
 
 			// Returns
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "returns");
+				LinkProcessor.RemoveDuplicates(element, "returns");
 			}
-			this.ApplyTemplates(e.Element, "returns");
+			this.ApplyTemplates(element, "returns");
 
 			// Value
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "value");
+				LinkProcessor.RemoveDuplicates(element, "value");
 			}
-			this.ApplyTemplates(e.Element, "value");
+			this.ApplyTemplates(element, "value");
 
 			// Threadsafety
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "threadsafety");
+				LinkProcessor.RemoveDuplicates(element, "threadsafety");
 			}
-			this.ApplyTemplates(e.Element, "threadsafety");
+			this.ApplyTemplates(element, "threadsafety");
 
 			// Remarks
 			if (this.Options.ProcessDuplicateSeeLinks)
 			{
-				LinkProcessor.RemoveDuplicates(e.Element, "remarks");
+				LinkProcessor.RemoveDuplicates(element, "remarks");
 			}
-			this.ApplyTemplates(e.Element, "remarks");
+			this.ApplyTemplates(element, "remarks");
 
 			// Event
-			if (this.Options.RecognizedTags.Contains("event") && e.Element.GetElementsByTagName("event").Count != 0)
+			if (this.Options.RecognizedTags.Contains("event") && element.GetElementsByTagName("event").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "event");
+					LinkProcessor.RemoveDuplicates(element, "event");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Events</h4>");
 				this.Writer.Write("<div class='tablediv'><table cellspacing='0' class='dtTABLE'>");
 				this.Writer.Write("<tr valign='top'><th width='50%'>Event Type</th><th width='50%'>Reason</th></tr>");
-				this.ApplyTemplates(e.Element, "event");
+				this.ApplyTemplates(element, "event");
 				this.Writer.Write("</table></div>");
 			}
 
 			// Exception
-			if (this.Options.RecognizedTags.Contains("exception") && e.Element.GetElementsByTagName("exception").Count != 0)
+			if (this.Options.RecognizedTags.Contains("exception") && element.GetElementsByTagName("exception").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "exception");
+					LinkProcessor.RemoveDuplicates(element, "exception");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Exceptions</h4>");
 				this.Writer.Write("<div class='tablediv'><table cellspacing='0' class='dtTABLE'>");
 				this.Writer.Write("<tr valign='top'><th width='50%'>Exception Type</th><th width='50%'>Condition</th></tr>");
-				this.ApplyTemplates(e.Element, "exception");
+				this.ApplyTemplates(element, "exception");
 				this.Writer.Write("</table></div>");
 			}
 
 			// Example
-			if (this.Options.RecognizedTags.Contains("example") && e.Element.GetElementsByTagName("example").Count != 0)
+			if (this.Options.RecognizedTags.Contains("example") && element.GetElementsByTagName("example").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "example");
+					LinkProcessor.RemoveDuplicates(element, "example");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Example</h4>");
-				this.ApplyTemplates(e.Element, "example");
+				this.ApplyTemplates(element, "example");
 			}
 
 			// List enumeration members
 			this.EnumMembers();
 
 			// Permission
-			if (this.Options.RecognizedTags.Contains("permission") && e.Element.GetElementsByTagName("permission").Count != 0)
+			if (this.Options.RecognizedTags.Contains("permission") && element.GetElementsByTagName("permission").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "permission");
+					LinkProcessor.RemoveDuplicates(element, "permission");
 				}
 				this.Writer.Write("<h4 class='dtH4'>Requirements</h4><p><b>.NET Framework Security:</b>");
 				this.Writer.Write("<ul>");
-				this.ApplyTemplates(e.Element, "permission");
+				this.ApplyTemplates(element, "permission");
 				this.Writer.Write("</ul></p>");
 
 			}
 
 			// Seealso
-			if (this.Options.RecognizedTags.Contains("seealso") && e.Element.GetElementsByTagName("seealso").Count != 0)
+			if (this.Options.RecognizedTags.Contains("seealso") && element.GetElementsByTagName("seealso").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "seealso");
+					LinkProcessor.RemoveDuplicates(element, "seealso");
 				}
 				this.Writer.Write("<h4 class='dtH4'>See Also</h4>");
-				this.ApplyTemplates(e.Element, "seealso");
+				this.ApplyTemplates(element, "seealso");
 			}
 
 			// Include (at top level)
-			if (this.Options.RecognizedTags.Contains("include") && e.Element.GetElementsByTagName("include").Count != 0)
+			if (this.Options.RecognizedTags.Contains("include") && element.GetElementsByTagName("include").Count != 0)
 			{
 				if (this.Options.ProcessDuplicateSeeLinks)
 				{
-					LinkProcessor.RemoveDuplicates(e.Element, "include");
+					LinkProcessor.RemoveDuplicates(element, "include");
 				}
-				this.ApplyTemplates(e.Element, "include");
+				this.ApplyTemplates(element, "include");
 			}
 
 			// End the text area
@@ -551,33 +559,34 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'note' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Note(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Note(XmlElement element)
 		{
 			this.Writer.Write("<blockquote class='dtBlock'");
-			TextProcessor.AttributePassThrough(this.Writer, e.Element, new string[] { "style", "align" });
+			TextProcessor.AttributePassThrough(this.Writer, element, new string[] { "style", "align" });
 			this.Writer.Write(">");
-			switch (Evaluator.ValueOf(e.Element, "@type"))
+			switch (Evaluator.ValueOf(element, "@type"))
 			{
 				case "":
 					this.Writer.Write("<b>Note</b>   ");
-					this.ApplyTemplates(e.Element);
+					this.ApplyTemplates(element);
 					break;
 
 				case "caution":
 					this.Writer.Write("<b>CAUTION</b>   ");
-					this.ApplyTemplates(e.Element);
+					this.ApplyTemplates(element);
 					break;
 
 				case "inheritinfo":
 					this.Writer.Write("<b>Notes to Inheritors: </b>   ");
-					this.ApplyTemplates(e.Element);
+					this.ApplyTemplates(element);
 					break;
 
 				case "implementnotes":
 					this.Writer.Write("<b>Notes to Implementers: </b>   ");
-					this.ApplyTemplates(e.Element);
+					this.ApplyTemplates(element);
 					break;
 			}
 			this.Writer.Write("</blockquote>");
@@ -586,77 +595,82 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'para' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Para(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Para(XmlElement element)
 		{
 			this.Writer.Write("<p");
-			TextProcessor.AttributePassThrough(this.Writer, e.Element, new string[] { "style", "align" });
+			TextProcessor.AttributePassThrough(this.Writer, element, new string[] { "style", "align" });
 			this.Writer.Write(">");
-			if (Evaluator.Test(e.Element, "@lang"))
+			if (Evaluator.Test(element, "@lang"))
 			{
 				this.Writer.Write("<span class='lang'>[");
-				this.Writer.Write(Evaluator.ValueOf(e.Element, "@lang"));
+				this.Writer.Write(Evaluator.ValueOf(element, "@lang"));
 				this.Writer.Write("]</span> ");
 			}
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</p>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'param' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Param(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Param(XmlElement element)
 		{
 			this.Writer.Write("<dt><i>");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@name"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@name"));
 			this.Writer.Write("</i></dt>");
 			this.Writer.Write("<dd>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</dd>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'paramref' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Paramref(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Paramref(XmlElement element)
 		{
 			this.Writer.Write("<i>");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@name"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@name"));
 			this.Writer.Write("</i>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'permission' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Permission(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Permission(XmlElement element)
 		{
 			this.Writer.Write("<li><a href='urn:member:");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@cref"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@cref"));
 			this.Writer.Write("' title='");
-			this.Writer.Write(MemberKey.GetFullName(Evaluator.ValueOf(e.Element, "@cref")));
+			this.Writer.Write(MemberKey.GetFullName(Evaluator.ValueOf(element, "@cref")));
 			this.Writer.Write("'>");
-			this.Writer.Write(MemberKey.GetName(Evaluator.ValueOf(e.Element, "@cref")));
+			this.Writer.Write(MemberKey.GetName(Evaluator.ValueOf(element, "@cref")));
 			this.Writer.Write("</a> ");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</li>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'preliminary' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Preliminary(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Preliminary(XmlElement element)
 		{
 			this.Writer.Write("<p class='topicstatus'>");
-			string message = HttpUtility.HtmlEncode(e.Element.InnerText);
+			string message = HttpUtility.HtmlEncode(element.InnerText);
 			if (message == "")
 			{
 				message = "[This is preliminary documentation and subject to change.]";
@@ -668,35 +682,38 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'remarks' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Remarks(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Remarks(XmlElement element)
 		{
 			this.Writer.Write("<h4 class='dtH4'>Remarks</h4>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 		}
 
 		/// <summary>
 		/// Matches and processes a 'returns' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Returns(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Returns(XmlElement element)
 		{
 			this.Writer.Write("<h4 class='dtH4'>Return Value</h4>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 		}
 
 		/// <summary>
 		/// Matches and processes a 'see' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void See(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void See(XmlElement element)
 		{
-			if (Evaluator.Test(e.Element, "@langword"))
+			if (Evaluator.Test(element, "@langword"))
 			{
-				string langword = Evaluator.ValueOf(e.Element, "@langword");
+				string langword = Evaluator.ValueOf(element, "@langword");
 				switch (langword)
 				{
 					case "abstract":
@@ -724,10 +741,10 @@ namespace CR_Documentor.Transformation.MSDN
 						break;
 				}
 			}
-			else if (Evaluator.Test(e.Element, "@cref"))
+			else if (Evaluator.Test(element, "@cref"))
 			{
-				string cref = Evaluator.ValueOf(e.Element, "@cref");
-				string text = e.Element.InnerText;
+				string cref = Evaluator.ValueOf(element, "@cref");
+				string text = element.InnerText;
 				if (text != "")
 				{
 					text = HttpUtility.HtmlEncode(text);
@@ -736,7 +753,7 @@ namespace CR_Documentor.Transformation.MSDN
 				{
 					text = this.ProcessCrefTypeParameters(MemberKey.GetName(cref));
 				}
-				if (Evaluator.Test(e.Element, "@nolink"))
+				if (Evaluator.Test(element, "@nolink"))
 				{
 					this.Writer.Write("<b>");
 					this.Writer.Write(text);
@@ -753,15 +770,15 @@ namespace CR_Documentor.Transformation.MSDN
 					this.Writer.Write("</a>");
 				}
 			}
-			else if (Evaluator.Test(e.Element, "@href"))
+			else if (Evaluator.Test(element, "@href"))
 			{
 				this.Writer.Write("<a href='");
-				string href = Evaluator.ValueOf(e.Element, "@href");
+				string href = Evaluator.ValueOf(element, "@href");
 				this.Writer.Write(href);
 				this.Writer.Write("' title='");
 				this.Writer.Write(href);
 				this.Writer.Write("'>");
-				string text = e.Element.InnerText;
+				string text = element.InnerText;
 				if (text != "")
 				{
 					this.Writer.Write(HttpUtility.HtmlEncode(text));
@@ -777,37 +794,38 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'seealso' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void SeeAlso(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void SeeAlso(XmlElement element)
 		{
-			if (Evaluator.Test(e.Element, "@cref"))
+			if (Evaluator.Test(element, "@cref"))
 			{
 				this.Writer.Write("<a href='");
-				this.Writer.Write("urn:member:" + Evaluator.ValueOf(e.Element, "@cref"));
+				this.Writer.Write("urn:member:" + Evaluator.ValueOf(element, "@cref"));
 				this.Writer.Write("' title='");
-				this.Writer.Write(MemberKey.GetFullName(Evaluator.ValueOf(e.Element, "@cref")));
+				this.Writer.Write(MemberKey.GetFullName(Evaluator.ValueOf(element, "@cref")));
 				this.Writer.Write("'>");
-				string text = e.Element.InnerText;
+				string text = element.InnerText;
 				if (text != "")
 				{
 					this.Writer.Write(HttpUtility.HtmlEncode(text));
 				}
 				else
 				{
-					this.Writer.Write(this.ProcessCrefTypeParameters(MemberKey.GetName(Evaluator.ValueOf(e.Element, "@cref"))));
+					this.Writer.Write(this.ProcessCrefTypeParameters(MemberKey.GetName(Evaluator.ValueOf(element, "@cref"))));
 				}
 				this.Writer.Write("</a>");
 			}
-			else if (Evaluator.Test(e.Element, "@href"))
+			else if (Evaluator.Test(element, "@href"))
 			{
 				this.Writer.Write("<a href='");
-				string href = Evaluator.ValueOf(e.Element, "@href");
+				string href = Evaluator.ValueOf(element, "@href");
 				this.Writer.Write(href);
 				this.Writer.Write("' title='");
 				this.Writer.Write(href);
 				this.Writer.Write("'>");
-				string text = e.Element.InnerText;
+				string text = element.InnerText;
 				if (text != "")
 				{
 					this.Writer.Write(HttpUtility.HtmlEncode(text));
@@ -819,10 +837,10 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write("</a>");
 			}
 
-			XmlNodeList list = e.Element.ParentNode.SelectNodes("seealso");
+			XmlNodeList list = element.ParentNode.SelectNodes("seealso");
 			for (int i = 0; i < list.Count - 1; i++)
 			{
-				if (list[i] == e.Element)
+				if (list[i] == element)
 				{
 					this.Writer.Write(" | ");
 					break;
@@ -833,13 +851,14 @@ namespace CR_Documentor.Transformation.MSDN
 		/// <summary>
 		/// Matches and processes a 'threadsafety' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void ThreadSafety(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void ThreadSafety(XmlElement element)
 		{
 			this.Writer.Write("<h4 class='dtH4'>Thread Safety</h4><p>");
-			string tsStatic = Evaluator.ValueOf(e.Element, "@static");
-			string tsInstance = Evaluator.ValueOf(e.Element, "@instance");
+			string tsStatic = Evaluator.ValueOf(element, "@static");
+			string tsInstance = Evaluator.ValueOf(element, "@instance");
 			bool staticSafe = false;
 			bool instanceSafe = false;
 			if (tsStatic != null && tsStatic == "true")
@@ -870,45 +889,48 @@ namespace CR_Documentor.Transformation.MSDN
 
 			this.Writer.Write("</p>");
 
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 		}
 
 		/// <summary>
 		/// Matches and processes a 'typeparam' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void TypeParam(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void TypeParam(XmlElement element)
 		{
 			this.Writer.Write("<dt><i>");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@name"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@name"));
 			this.Writer.Write("</i></dt>");
 			this.Writer.Write("<dd>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 			this.Writer.Write("</dd>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'typeparamref' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void TypeParamref(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void TypeParamref(XmlElement element)
 		{
 			this.Writer.Write("<i>");
-			this.Writer.Write(Evaluator.ValueOf(e.Element, "@name"));
+			this.Writer.Write(Evaluator.ValueOf(element, "@name"));
 			this.Writer.Write("</i>");
 		}
 
 		/// <summary>
 		/// Matches and processes a 'value' element.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="CR_Documentor.Transformation.CommentMatchEventArgs"/> instance containing the event data.</param>
-		private void Value(object sender, CommentMatchEventArgs e)
+		/// <param name="element">
+		/// The <see cref="System.Xml.XmlElement"/> to process.
+		/// </param>
+		private void Value(XmlElement element)
 		{
 			this.Writer.Write("<h4 class='dtH4'>Value</h4>");
-			this.ApplyTemplates(e.Element);
+			this.ApplyTemplates(element);
 		}
 
 		#endregion
@@ -935,7 +957,7 @@ namespace CR_Documentor.Transformation.MSDN
 				// The first part of the header is the name of the element
 				if (el is SP.Method)
 				{
-					this.Writer.Write(Lookup.MethodName((SP.Method)el));
+					this.Writer.Write(((SP.Method)el).DisplayName());
 				}
 				else
 				{
@@ -944,7 +966,7 @@ namespace CR_Documentor.Transformation.MSDN
 				this.Writer.Write(" ");
 
 				// The second part of the header is the type of element
-				this.Writer.Write(Lookup.ElementTypeDescription(el));
+				this.Writer.Write(el.ElementTypeDescription());
 			}
 
 			// End banner
@@ -993,8 +1015,8 @@ namespace CR_Documentor.Transformation.MSDN
 		private string ProcessCrefTypeParameters(string cref)
 		{
 			string language = this.CodeTarget.Document.Language;
-			string open = HttpUtility.HtmlEncode(Statement.TypeParamListOpener[language]);
-			string close = HttpUtility.HtmlEncode(Statement.TypeParamListCloser[language]);
+			string open = HttpUtility.HtmlEncode(language == Language.Basic ? "(Of " : "<");
+			string close = HttpUtility.HtmlEncode(language == Language.Basic ? ")" : ">");
 			string processed = cref.Replace("{", open).Replace("}", close);
 			return processed;
 		}
@@ -1029,7 +1051,7 @@ namespace CR_Documentor.Transformation.MSDN
 			if (this.MemberSyntax == null)
 			{
 				// Refresh the member syntax signature cache if it's empty
-				PreviewGenerator generator = new PreviewGenerator(asElement, Language.ConvertToSupportedLanguageId(asElement.Document.Language));
+				PreviewGenerator generator = new PreviewGenerator(asElement, asElement.Document.Language.ToLanguageId());
 				this.MemberSyntax = generator.Generate();
 			}
 			this.Writer.Write(this.MemberSyntax);

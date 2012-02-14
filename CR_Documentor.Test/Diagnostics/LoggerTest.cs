@@ -1,23 +1,32 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using CR_Documentor.Diagnostics;
+using DevExpress.CodeRush.Diagnostics;
 using DevExpress.CodeRush.Diagnostics.ToolWindows;
+using DevExpress.DXCore.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TypeMock;
+using TypeMock.ArrangeActAssert;
 
 namespace CR_Documentor.Test.Diagnostics
 {
 	[TestClass]
-	[VerifyMocks]
+	[Isolated]
 	public class LoggerTest
 	{
+		private List<Tuple<string, string>> _messages = null;
+
 		[TestInitialize]
 		public void TestInitialize()
 		{
-			SynchronizationManagerMock.Initialize();
+			this._messages = new List<Tuple<string, string>>();
+			Isolate.WhenCalled(() => SynchronizationManager.BeginInvoke(null, null)).DoInstead(this.SynchronizationManagerMock);
+			Isolate.WhenCalled(() => LogBase<TestInternalLog>.SendError(null)).DoInstead(ctx => this.RecordMessage("SendError", ctx));
+			Isolate.WhenCalled(() => LogBase<TestInternalLog>.SendMsg(null)).DoInstead(ctx => this.RecordMessage("SendMsg", ctx));
+			Isolate.WhenCalled(() => LogBase<TestInternalLog>.SendWarning(null)).DoInstead(ctx => this.RecordMessage("SendWarning", ctx));
+			Isolate.WhenCalled(() => LogBase<TestInternalLog>.SendException(null)).DoInstead(ctx => this.RecordMessage("SendException", ctx));
 		}
 
 		[TestMethod]
@@ -35,28 +44,13 @@ namespace CR_Documentor.Test.Diagnostics
 		}
 
 		[TestMethod]
-		public void Enter_EntersLog()
-		{
-			string message = "Entry message.";
-			string expected = this.BuildExpectedMessage(message);
-
-			TestLogger logger = new TestLogger(typeof(LoggerTest));
-			logger.Enter(message);
-
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("Enter", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
-		}
-
-		[TestMethod]
-		public void Exit_ExitsLog()
+		public void Ctor_HandlersInitialized()
 		{
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
-			logger.Exit();
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("Exit", entry.Key, "The wrong internal log method was called.");
+			Assert.IsNotNull(logger.SendErrorHandler, "The error handler wasn't initialized.");
+			Assert.IsNotNull(logger.SendExceptionHandler, "The exception handler wasn't initialized.");
+			Assert.IsNotNull(logger.SendMsgHandler, "The message handler wasn't initialized.");
+			Assert.IsNotNull(logger.SendWarningHandler, "The warning handler wasn't initialized.");
 		}
 
 		[TestMethod]
@@ -84,10 +78,10 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Error, message);
 
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendError", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
+			Assert.AreEqual(1, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendError", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
 		}
 
 		[TestMethod]
@@ -100,13 +94,13 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Error, message, err);
 
-			Assert.AreEqual(2, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendError", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
-			entry = TestInternalLog.LogMessages[1];
-			Assert.AreEqual("SendException", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(err.Message, entry.Value.ToString(), "The exception message was incorrect.");
+			Assert.AreEqual(2, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendError", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
+			entry = this._messages[1];
+			Assert.AreEqual("SendException", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(err.ToString(), entry.Item2, "The exception message was incorrect.");
 		}
 
 		[TestMethod]
@@ -118,10 +112,10 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Info, message);
 
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendMsg", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
+			Assert.AreEqual(1, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendMsg", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
 		}
 
 		[TestMethod]
@@ -134,13 +128,13 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Info, message, err);
 
-			Assert.AreEqual(2, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendMsg", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
-			entry = TestInternalLog.LogMessages[1];
-			Assert.AreEqual("SendException", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(err.Message, entry.Value.ToString(), "The exception message was incorrect.");
+			Assert.AreEqual(2, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendMsg", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
+			entry = this._messages[1];
+			Assert.AreEqual("SendException", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(err.ToString(), entry.Item2, "The exception message was incorrect.");
 		}
 
 		[TestMethod]
@@ -169,10 +163,10 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Info, message, err);
 
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendMsg", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
+			Assert.AreEqual(1, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendMsg", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
 		}
 
 		[TestMethod]
@@ -184,10 +178,10 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Warn, message);
 
-			Assert.AreEqual(1, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendWarning", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
+			Assert.AreEqual(1, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendWarning", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
 		}
 
 		[TestMethod]
@@ -200,90 +194,55 @@ namespace CR_Documentor.Test.Diagnostics
 			TestLogger logger = new TestLogger(typeof(LoggerTest));
 			logger.Write(LogLevel.Warn, message, err);
 
-			Assert.AreEqual(2, TestInternalLog.LogMessages.Count, "The wrong number of messages was added.");
-			DictionaryEntry entry = TestInternalLog.LogMessages[0];
-			Assert.AreEqual("SendWarning", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(expected, entry.Value.ToString(), "The log message was incorrect.");
-			entry = TestInternalLog.LogMessages[1];
-			Assert.AreEqual("SendException", entry.Key, "The wrong internal log method was called.");
-			Assert.AreEqual(err.Message, entry.Value.ToString(), "The exception message was incorrect.");
-		}
-
-		[TestMethod]
-		public void TestInternalLog_VerifyInterface()
-		{
-			// This test is needed to ensure the test internal log class we've
-			// created is obeying the interface set forth in DXCore. If this
-			// fails then the interface to the real log classes has changed.
-			MethodInfo[] testMethods = typeof(TestInternalLog).GetMethods(BindingFlags.Public | BindingFlags.Static);
-			foreach (MethodInfo expected in testMethods)
-			{
-				ParameterInfo[] expectedParams = expected.GetParameters();
-				Type[] parameterTypes = new Type[expectedParams.Length];
-				for (int i = 0; i < expectedParams.Length; i++)
-				{
-					parameterTypes[i] = expectedParams[i].ParameterType;
-				}
-				MethodInfo actual = typeof(Log).GetMethod(expected.Name, BindingFlags.Public | BindingFlags.Static, null, parameterTypes, null);
-				Assert.IsNotNull(actual, "The method " + expected.Name + " from the test log class was not found in the real log implementation.");
-			}
+			Assert.AreEqual(2, this._messages.Count, "The wrong number of messages was added.");
+			var entry = this._messages[0];
+			Assert.AreEqual("SendWarning", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(expected, entry.Item2, "The log message was incorrect.");
+			entry = this._messages[1];
+			Assert.AreEqual("SendException", entry.Item1, "The wrong internal log method was called.");
+			Assert.AreEqual(err.ToString(), entry.Item2, "The exception message was incorrect.");
 		}
 
 		private string BuildExpectedMessage(string message)
 		{
-			string expected = String.Format(CultureInfo.InvariantCulture, Logger.MessageFormat, typeof(LoggerTest).Name, message);
-			return expected;
+			return String.Format(CultureInfo.InvariantCulture, TestLogger.MessageFormat, typeof(LoggerTest).Name, message);
 		}
 
-		private class TestLogger : Logger
+		private void RecordMessage(string method, MethodCallContext context)
+		{
+			var message = context.Parameters[0].ToString();
+			this._messages.Add(new Tuple<string, string>(method, message));
+		}
+
+		private IAsyncResult SynchronizationManagerMock(MethodCallContext context)
+		{
+			Func<object[], object> call = (object[] callParams) =>
+			{
+				if (callParams.Length == 0)
+				{
+					callParams = null;
+				}
+				return ((Delegate)context.Parameters[0]).DynamicInvoke(callParams);
+			};
+			object[] paramArray = context.Parameters[1] as object[];
+			IAsyncResult result = call.BeginInvoke(paramArray, null, null);
+			result.AsyncWaitHandle.WaitOne();
+			return result;
+		}
+
+		private class TestLogger : Logger<TestInternalLog>
 		{
 			public TestLogger(Type logOwner)
-				: base(logOwner, typeof(TestInternalLog))
+				: base(logOwner)
 			{
-				TestInternalLog.LogMessages.Clear();
 			}
 		}
 
-		// Log class that mimicks internal DXCore classes like
-		// DevExpress.CodeRush.Diagnostics.ToolWindows.Log
-		private sealed class TestInternalLog
+		private class TestInternalLog : LogBase<TestInternalLog>
 		{
-			public static List<DictionaryEntry> LogMessages = new List<DictionaryEntry>();
-
-			public static void Enter(string message)
+			protected override string Category
 			{
-				DictionaryEntry entry = new DictionaryEntry("Enter", message);
-				LogMessages.Add(entry);
-			}
-
-			public static void Exit()
-			{
-				DictionaryEntry entry = new DictionaryEntry("Exit", "");
-				LogMessages.Add(entry);
-			}
-
-			public static void SendMsg(string message)
-			{
-				DictionaryEntry entry = new DictionaryEntry("SendMsg", message);
-				LogMessages.Add(entry);
-			}
-
-			public static void SendWarning(string message)
-			{
-				DictionaryEntry entry = new DictionaryEntry("SendWarning", message);
-				LogMessages.Add(entry);
-			}
-
-			public static void SendError(string message)
-			{
-				DictionaryEntry entry = new DictionaryEntry("SendError", message);
-				LogMessages.Add(entry);
-			}
-
-			public static void SendException(Exception value)
-			{
-				DictionaryEntry entry = new DictionaryEntry("SendException", value.Message);
-				LogMessages.Add(entry);
+				get { return "TestCategory"; }
 			}
 		}
 	}
