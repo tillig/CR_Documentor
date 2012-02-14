@@ -3,4 +3,4 @@ using System.Reflection;
 
 [assembly: AssemblyProduct("CR_Documentor")]
 [assembly: AssemblyCopyright("Copyright © 2004 CR_Documentor Contributors")]
-[assembly: AssemblyVersion("2.6.1.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
