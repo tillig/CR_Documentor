@@ -42,3 +42,14 @@ You should see CR_Documentor listed when you view the !DevExpress->About box. If
 
 =CR_Documentor doesn't work right with DXCore 2010.1 and VS2010.=
 Using VS2010 and pre-release versions of DXCore 2010.1 you may notice that some of the context menu templates don't work as expected, or that the expand/collapse XML doc comments commands don't work quite right. Upgrade to the latest CR_Documentor and the official release of DXCore 2010.1 (2010.1.4) and everything should work properly.
+
+=Unable to uninstall CR_Documentor VSIX plugin with DXCore 11.2.=
+11.2 introduced the ability to install community plugins through VSIX installers. Up through version 11.2.8, though, the uninstall didn't work quite right. [http://www.devexpress.com/Support/Center/Issues/ViewIssue.aspx?issueid=Q382396 There is an issue on the DevExpress site for this] and it should be fixed in a release after 11.2.8.
+
+To uninstall the VSIX:
+  # Uninstall CR_Documentor using the Visual Studio Extension Manager.
+  # Close all Visual Studio instances.
+  # Open your Visual Studio extensions folder. In Windows 7/Windows 2008 it's in a folder like `C:\Users\yourusername\AppData\Local\Microsoft\VisualStudio\10.0\Extensions`
+  # Delete the `CR_Documentor Contributors` folder.
+
+After deleting the folder, the plugin will be entirely uninstalled.
