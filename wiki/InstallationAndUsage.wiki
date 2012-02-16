@@ -16,7 +16,23 @@ To use the latest CR_Documentor, you must have...
 DXCore is a free download from !DevExpress that you can either get [http://www.devexpress.com/Products/Visual_Studio_Add-in/DXCore/ as a standalone plugin engine] or as part of the [http://www.devexpress.com/Products/Visual_Studio_Add-in/CodeRushX/ CodeRush Xpress] bundle.
 
 = Installation =
+You have the choice of automatic installation ([http://visualstudiogallery.msdn.microsoft.com/668a65b5-2468-4afa-b78d-8c369850e2b2 via the Visual Studio Extension Gallery]) or manual installation (download a zip file and copy the extension to the right spot).
 
+_If you are using an Express Edition of Visual Studio, or a version of the plugin earlier than 3.0.0.0, you'll need to use the manual installation._
+
+==Automatic Installation==
+  * Inside Visual Studio, open the Extension Manager. (Tools -> Extension Manager...)
+  * Search for `CR_Documentor`
+  * Install the extension from the gallery.
+
+or
+
+  * Visit [http://visualstudiogallery.msdn.microsoft.com/668a65b5-2468-4afa-b78d-8c369850e2b2 the VS Gallery page for CR_Documentor].
+  * Click the "Download" button.
+
+The ConfigurationOptions page explains the various ways you can configure behavior.
+
+==Manual Installation==
   * Make sure all instances of Visual Studio are closed.
   * Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.
     * In versions before DXCore 9.1, this is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
