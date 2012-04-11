@@ -10,6 +10,7 @@ using CR_Documentor.Options;
 using DevExpress.CodeRush.Core;
 using DevExpress.CodeRush.Menus;
 using DevExpress.CodeRush.PlugInCore;
+using System.Threading;
 
 namespace CR_Documentor
 {
@@ -22,6 +23,11 @@ namespace CR_Documentor
 		/// Log entry handler.
 		/// </summary>
 		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentorContextMenu));
+
+		/// <summary>
+		/// Synchronization object to ensure context menu items only get added once.
+		/// </summary>
+		private static readonly object ContextMenuSyncRoot = new object();
 
 		/// <summary>
 		/// Standard context requiring "Any Selection."
@@ -172,41 +178,47 @@ namespace CR_Documentor
 			// Get the editor context menu
 			MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
 
-			// Clear the XML doc context menu
-			if (this.contextMenu != null)
+			lock (ContextMenuSyncRoot)
 			{
-				// Clear all items
+				// Clear the XML doc context menu
+				if (this.contextMenu != null)
+				{
+					Log.Write(LogLevel.Info, "CR_Documentor context menu popup exists; removing in preparation for refresh.");
+
+					// Clear all items
+					foreach (ContextMenuItem item in this.Children)
+					{
+						if (item is ContextMenuPopup)
+						{
+							((ContextMenuPopup)item).ClearItems();
+						}
+					}
+
+					// Remove the items in descending order so the item
+					// collection doesn't reorder on you mid-removal.
+					for (int i = this.contextMenu.Count - 1; i >= 0; i--)
+					{
+						if (this.contextMenu[i] != null)
+						{
+							this.contextMenu[i].Delete();
+						}
+					}
+
+					// Delete the menu itself
+					this.contextMenu.Delete();
+					this.contextMenu = null;
+				}
+
+				// Add the context menu to the editor context menu.
+				Log.Write(LogLevel.Info, "Adding CR_Documentor context menu popup to editor context menu.");
+				this.contextMenu = editorContextMenu.AddPopup();
+				this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
+
+				// Rebuild the context menu
 				foreach (ContextMenuItem item in this.Children)
 				{
-					if (item is ContextMenuPopup)
-					{
-						((ContextMenuPopup)item).ClearItems();
-					}
+					item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
 				}
-
-				// Remove the items in descending order so the item
-				// collection doesn't reorder on you mid-removal.
-				for (int i = this.contextMenu.Count - 1; i >= 0; i--)
-				{
-					if (this.contextMenu[i] != null)
-					{
-						this.contextMenu[i].Delete();
-					}
-				}
-
-				// Delete the menu itself
-				this.contextMenu.Delete();
-				this.contextMenu = null;
-			}
-
-			// Add the context menu to the editor context menu.
-			this.contextMenu = editorContextMenu.AddPopup();
-			this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
-
-			// Rebuild the context menu
-			foreach (ContextMenuItem item in this.Children)
-			{
-				item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
 			}
 		}
 
@@ -661,6 +673,8 @@ namespace CR_Documentor
 			visibleToggle.BeginGroup = true;
 			Log.Write(LogLevel.Info, String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
 			this.Children.Add(visibleToggle);
+
+			Log.Write(LogLevel.Info, "Completed adding context menu items.");
 		}
 
 		/// <summary>
