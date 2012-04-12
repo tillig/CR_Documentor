@@ -25,11 +25,6 @@ namespace CR_Documentor
 		private static readonly ILog Log = LogManager.GetLogger(typeof(DocumentorContextMenu));
 
 		/// <summary>
-		/// Synchronization object to ensure context menu items only get added once.
-		/// </summary>
-		private static readonly object ContextMenuSyncRoot = new object();
-
-		/// <summary>
 		/// Standard context requiring "Any Selection."
 		/// </summary>
 		protected const DXCoreContext.SelectionContext AnySelection = DXCoreContext.SelectionContext.LineFragment | DXCoreContext.SelectionContext.WholeLine | DXCoreContext.SelectionContext.MultiLines;
@@ -138,8 +133,8 @@ namespace CR_Documentor
 			resourceManager = new ResourceManager("CR_Documentor.Resources.Strings", typeof(DocumentorContextMenu).Assembly);
 
 			// Add event handlers
-			this.crEvents.OptionsChanged += new OptionsChangedEventHandler(crEvents_OptionsChanged);
-			this.crEvents.EditorMouseDown += new EditorMouseEventHandler(crEvents_EditorMouseDown);
+			this.crEvents.OptionsChanged += crEvents_OptionsChanged;
+			this.crEvents.EditorMouseDown += crEvents_EditorMouseDown;
 
 			// Refresh the settings/options
 			this.RefreshSettings();
@@ -152,6 +147,11 @@ namespace CR_Documentor
 		public override void FinalizePlugIn()
 		{
 			base.FinalizePlugIn();
+			Log.Write(LogLevel.Info, "Finalizing CR_Documentor context menu plugin.");
+
+			// Remove event handlers
+			this.crEvents.OptionsChanged -= crEvents_OptionsChanged;
+			this.crEvents.EditorMouseDown -= crEvents_EditorMouseDown;
 		}
 
 		/// <summary>
@@ -180,47 +180,44 @@ namespace CR_Documentor
 			Log.Write(LogLevel.Info, "CR_Documentor context menu handling right-click event.");
 			MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
 
-			lock (ContextMenuSyncRoot)
+			// Clear the XML doc context menu
+			if (this.contextMenu != null)
 			{
-				// Clear the XML doc context menu
-				if (this.contextMenu != null)
-				{
-					Log.Write(LogLevel.Info, "CR_Documentor context menu popup exists; removing in preparation for refresh.");
+				Log.Write(LogLevel.Info, "CR_Documentor context menu popup exists; removing in preparation for refresh.");
 
-					// Clear all items
-					foreach (ContextMenuItem item in this.Children)
-					{
-						if (item is ContextMenuPopup)
-						{
-							((ContextMenuPopup)item).ClearItems();
-						}
-					}
-
-					// Remove the items in descending order so the item
-					// collection doesn't reorder on you mid-removal.
-					for (int i = this.contextMenu.Count - 1; i >= 0; i--)
-					{
-						if (this.contextMenu[i] != null)
-						{
-							this.contextMenu[i].Delete();
-						}
-					}
-
-					// Delete the menu itself
-					this.contextMenu.Delete();
-					this.contextMenu = null;
-				}
-
-				// Add the context menu to the editor context menu.
-				Log.Write(LogLevel.Info, "Adding CR_Documentor context menu popup to editor context menu.");
-				this.contextMenu = editorContextMenu.AddPopup();
-				this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
-
-				// Rebuild the context menu
+				// Clear all items
 				foreach (ContextMenuItem item in this.Children)
 				{
-					item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
+					if (item is ContextMenuPopup)
+					{
+						((ContextMenuPopup)item).ClearItems();
+					}
 				}
+
+				// Remove the items in descending order so the item
+				// collection doesn't reorder on you mid-removal.
+				for (int i = this.contextMenu.Count - 1; i >= 0; i--)
+				{
+					if (this.contextMenu[i] != null)
+					{
+						this.contextMenu[i].Delete();
+					}
+				}
+
+				// Delete the menu itself
+				this.contextMenu.Delete();
+				this.contextMenu = null;
+			}
+
+			// Add the context menu to the editor context menu.
+			Log.Write(LogLevel.Info, "Adding CR_Documentor context menu popup to editor context menu.");
+			this.contextMenu = editorContextMenu.AddPopup();
+			this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
+
+			// Rebuild the context menu
+			foreach (ContextMenuItem item in this.Children)
+			{
+				item.Render(this.contextMenu, new MenuButtonClickEventHandler(this.contextMenuButton_Click));
 			}
 		}
 
