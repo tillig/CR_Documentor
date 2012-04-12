@@ -132,6 +132,7 @@ namespace CR_Documentor
 		public override void InitializePlugIn()
 		{
 			base.InitializePlugIn();
+			Log.Write(LogLevel.Info, "Initializing CR_Documentor context menu plugin.");
 
 			// Create resource manager for string localization.
 			resourceManager = new ResourceManager("CR_Documentor.Resources.Strings", typeof(DocumentorContextMenu).Assembly);
@@ -176,6 +177,7 @@ namespace CR_Documentor
 
 			// It's the right mouse button - rebuild the context menu
 			// Get the editor context menu
+			Log.Write(LogLevel.Info, "CR_Documentor context menu handling right-click event.");
 			MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
 
 			lock (ContextMenuSyncRoot)
