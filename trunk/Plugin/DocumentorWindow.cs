@@ -163,16 +163,16 @@ namespace CR_Documentor
 		{
 			base.InitializePlugIn();
 
-			this.WindowHide += new EventHandler(DocumentorWindow_WindowHide);
-			this.WindowShow += new EventHandler(DocumentorWindow_WindowShow);
+			this.WindowHide += DocumentorWindow_WindowHide;
+			this.WindowShow += DocumentorWindow_WindowShow;
 
-			this._events.LanguageElementActivated += new LanguageElementActivatedEventHandler(RefreshPreviewDefaultEventHandler);
-			this._events.AfterParse += new AfterParseEventHandler(RefreshPreviewDefaultEventHandler);
-			this._events.AfterClosingSolution += new DefaultHandler(RefreshPreviewDefaultEventHandler);
-			this._events.SolutionOpened += new DefaultHandler(RefreshPreviewDefaultEventHandler);
-			this._events.DocumentClosing += new DocumentEventHandler(RefreshPreviewDefaultEventHandler);
-			this._events.OptionsChanged += new OptionsChangedEventHandler(events_OptionsChanged);
-			this._events.BeginShutdown += new DefaultHandler(events_BeginShutdown);
+			this._events.LanguageElementActivated += RefreshPreviewDefaultEventHandler;
+			this._events.AfterParse += RefreshPreviewDefaultEventHandler;
+			this._events.AfterClosingSolution += RefreshPreviewDefaultEventHandler;
+			this._events.SolutionOpened += RefreshPreviewDefaultEventHandler;
+			this._events.DocumentClosing += RefreshPreviewDefaultEventHandler;
+			this._events.OptionsChanged += events_OptionsChanged;
+			this._events.BeginShutdown += events_BeginShutdown;
 
 			// Create resource manager for string localization.
 			_resourceManager = new System.Resources.ResourceManager("CR_Documentor.Resources.Strings", typeof(DocumentorWindow).Assembly);
@@ -188,6 +188,17 @@ namespace CR_Documentor
 			this._webServer.Dispose();
 			Log.Write(LogLevel.Info, "Web server stopped.");
 			base.FinalizePlugIn();
+
+			this.WindowHide -= DocumentorWindow_WindowHide;
+			this.WindowShow -= DocumentorWindow_WindowShow;
+
+			this._events.LanguageElementActivated -= RefreshPreviewDefaultEventHandler;
+			this._events.AfterParse -= RefreshPreviewDefaultEventHandler;
+			this._events.AfterClosingSolution -= RefreshPreviewDefaultEventHandler;
+			this._events.SolutionOpened -= RefreshPreviewDefaultEventHandler;
+			this._events.DocumentClosing -= RefreshPreviewDefaultEventHandler;
+			this._events.OptionsChanged -= events_OptionsChanged;
+			this._events.BeginShutdown -= events_BeginShutdown;
 		}
 
 		/// <summary>
