@@ -10,6 +10,7 @@ using CR_Documentor.Options;
 using DevExpress.CodeRush.Core;
 using DevExpress.CodeRush.Menus;
 using DevExpress.CodeRush.PlugInCore;
+using System.Threading;
 
 namespace CR_Documentor
 {
@@ -126,13 +127,14 @@ namespace CR_Documentor
 		public override void InitializePlugIn()
 		{
 			base.InitializePlugIn();
+			Log.Write(LogLevel.Info, "Initializing CR_Documentor context menu plugin.");
 
 			// Create resource manager for string localization.
 			resourceManager = new ResourceManager("CR_Documentor.Resources.Strings", typeof(DocumentorContextMenu).Assembly);
 
 			// Add event handlers
-			this.crEvents.OptionsChanged += new OptionsChangedEventHandler(crEvents_OptionsChanged);
-			this.crEvents.EditorMouseDown += new EditorMouseEventHandler(crEvents_EditorMouseDown);
+			this.crEvents.OptionsChanged += crEvents_OptionsChanged;
+			this.crEvents.EditorMouseDown += crEvents_EditorMouseDown;
 
 			// Refresh the settings/options
 			this.RefreshSettings();
@@ -145,6 +147,11 @@ namespace CR_Documentor
 		public override void FinalizePlugIn()
 		{
 			base.FinalizePlugIn();
+			Log.Write(LogLevel.Info, "Finalizing CR_Documentor context menu plugin.");
+
+			// Remove event handlers
+			this.crEvents.OptionsChanged -= crEvents_OptionsChanged;
+			this.crEvents.EditorMouseDown -= crEvents_EditorMouseDown;
 		}
 
 		/// <summary>
@@ -170,11 +177,14 @@ namespace CR_Documentor
 
 			// It's the right mouse button - rebuild the context menu
 			// Get the editor context menu
+			Log.Write(LogLevel.Info, "CR_Documentor context menu handling right-click event.");
 			MenuBar editorContextMenu = DevExpress.CodeRush.VSCore.Manager.Menus.Bars[VsCommonBar.EditorContext];
 
 			// Clear the XML doc context menu
 			if (this.contextMenu != null)
 			{
+				Log.Write(LogLevel.Info, "CR_Documentor context menu popup exists; removing in preparation for refresh.");
+
 				// Clear all items
 				foreach (ContextMenuItem item in this.Children)
 				{
@@ -200,6 +210,7 @@ namespace CR_Documentor
 			}
 
 			// Add the context menu to the editor context menu.
+			Log.Write(LogLevel.Info, "Adding CR_Documentor context menu popup to editor context menu.");
 			this.contextMenu = editorContextMenu.AddPopup();
 			this.contextMenu.Caption = resourceManager.GetString("CR_Documentor.DocumentorContextMenu.ContextMenuCaption");
 
@@ -661,6 +672,8 @@ namespace CR_Documentor
 			visibleToggle.BeginGroup = true;
 			Log.Write(LogLevel.Info, String.Format("Created DocumentorVisibilityToggleButton.  Tag: [{0}].", visibleToggle.Tag));
 			this.Children.Add(visibleToggle);
+
+			Log.Write(LogLevel.Info, "Completed adding context menu items.");
 		}
 
 		/// <summary>
