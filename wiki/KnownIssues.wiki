@@ -40,6 +40,8 @@ This generally means you don't have the minimum required version of DXCore insta
 =CR_Documentor does not appear in the "About" box.=
 You should see CR_Documentor listed when you view the !DevExpress->About box. If you don't, make sure you're on the latest version of CR_Documentor. You may also have to close all instances of Visual Studio and delete your DXCore Loader settings folder (%!AppData%\!CodeRush for VS .NET\1.1\Settings\Loader) - these settings can get corrupted across DXCore updates and it may have cached something incorrectly. Deleting the settings will cause them to be rebuilt from scratch and will not harm your DXCore installation.
 
+Also, as of version 12.1.5 of !CodeRush, the "About" box format changed. for a short time, the box did not display product information for installed plugins. If your version of !CodeRush is from around that version, there may not be a place for showing plugin info.
+
 =CR_Documentor doesn't work right with DXCore 2010.1 and VS2010.=
 Using VS2010 and pre-release versions of DXCore 2010.1 you may notice that some of the context menu templates don't work as expected, or that the expand/collapse XML doc comments commands don't work quite right. Upgrade to the latest CR_Documentor and the official release of DXCore 2010.1 (2010.1.4) and everything should work properly.
 
@@ -53,3 +55,6 @@ To uninstall the VSIX:
   # Delete the `CR_Documentor Contributors` folder.
 
 After deleting the folder, the plugin will be entirely uninstalled.
+
+= The !DevExpress Menu Doesn't Display =
+By default the free !CodeRush Xpress does not display the !DevExpress menu in Visual Studio. There are [http://stackoverflow.com/questions/2878437/how-to-display-coderush-menu-item-in-vs instructions on getting this menu to appear] though it may be simpler to assign a keyboard shortcut to toggle the CR_Documentor window. Use the instructions on the InstallationAndUsage page to set up a keyboard shortcut.
