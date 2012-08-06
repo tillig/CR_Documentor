@@ -47,9 +47,24 @@ The ConfigurationOptions page explains the various ways you can configure behavi
 = Usage =
 
   * Open an instance of Visual Studio.
-  * From the !DevExpress menu, select "Tool Windows," then "Documentor."  This will show the Documentor window.
+  * From the !DevExpress menu, select "Tool Windows," then "Documentor."  This will show the Documentor window. (If you don't see the !DevExpress menu, chances are you have !CodeRush Xpress installed. See below for tips on usage with !CodeRush Xpress.)
   * When working in a C# source file with XML documentation, watch the Documentor window as you edit your XML comments.  It will contain a preview of what your comments will look like when rendered into end-user documentation.
 
 http://cr-documentor.googlecode.com/svn/site/screenshots/show_window.png
 
 While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not. These options help you while working with XML doc comments. See the FeaturesList page for information on what's available.
+
+= Toggle the Window via Keyboard =
+If you'd rather show/hide the CR_Documentor window using a keyboard shortcut, you can do that, too.
+
+  # Press `Ctrl+Shift+Alt+O` to open the !CodeRush options menu.
+  # In the tree view on the left, expand the "IDE" node and select "Shortcuts."
+  # Click the small "A" button at the top of the options window to create a new keyboard shortcut.
+  # Press the key combination that you would like to use for displaying the CR_Documentor window. For example, `Ctrl+Shift+Alt+D`
+  # In the "Command" dropdown, select "Toggle CR_Documentor Window."
+  # Click "OK" to save the command and close the options window.
+
+Now you can use the keyboard shortcut to show/hide the CR_Documentor window rather than the !DevExpress "Tool Windows" menu.
+
+= !CodeRush Xpress =
+By default the free !CodeRush Xpress does not display the !DevExpress menu in Visual Studio. There are [http://stackoverflow.com/questions/2878437/how-to-display-coderush-menu-item-in-vs instructions on getting this menu to appear] though it may be simpler to assign a keyboard shortcut to toggle the CR_Documentor window. Use the instructions above to set up a keyboard shortcut.
