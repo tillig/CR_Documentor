@@ -4,7 +4,7 @@
 		* Standard build = msbuild Default.proj
 		* Release build = msbuild Default.proj /p:Configuration=Release
 	-->
-	<Import Project="$(ProgramFiles)\Typemock\Isolator\6.1\TypeMock.MSBuild.Tasks"/>
+	<!-- Import Project="$(ProgramFiles)\Typemock\Isolator\6.1\TypeMock.MSBuild.Tasks"/ -->
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
@@ -33,7 +33,8 @@
 		<CleanFolders Include="TestResults"/>
 	</ItemGroup>
 	<Target Name="All">
-		<CallTarget Targets="Clean;Compile;Test"/>
+		<CallTarget Targets="Clean;Compile"/>
+		<!-- CallTarget Targets="Clean;Compile;Test"/ -->
 		<CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/>
 		<Message Text="Build complete."/>
 	</Target>
