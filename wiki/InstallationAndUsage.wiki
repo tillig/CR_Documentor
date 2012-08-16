@@ -54,6 +54,11 @@ http://cr-documentor.googlecode.com/svn/site/screenshots/show_window.png
 
 While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not. These options help you while working with XML doc comments. See the FeaturesList page for information on what's available.
 
+= Intranet Settings =
+CR_Documentor hosts a tiny web server to display your documentation preview. To display properly, you need to allow the script in that preview to run, which may mean you need to enable intranet settings in Internet Explorer. *If you get prompted to enable Intranet Settings, please do.*
+
+http://cr-documentor.googlecode.com/svn/site/screenshots/intranetsettings.png
+
 = Toggle the Window via Keyboard =
 If you'd rather show/hide the CR_Documentor window using a keyboard shortcut, you can do that, too.
 
