@@ -58,7 +58,7 @@
 		<Exec Command="&quot;$(ProductionTools)\DBCSFix.exe&quot; /d:Chm /l:1033" WorkingDirectory="$(TempDir)" />
 		<Exec Command='"$(ToolsPath)\HTML Help Workshop\hhc.exe" "Chm\$(AssemblyName).hhp"' IgnoreExitCode="true" WorkingDirectory="$(TempDir)" />
 		<Copy SourceFiles="$(TempDir)\Chm\$(AssemblyName).chm" DestinationFolder="$(OutputDir)"/>
-		<RemoveDir Directories="$(TempDir)"/>
+		<RemoveDir Directories="$(TempDir)" ContinueOnError="true" />
 		<Message Text="Sandcastle Prototype documentation built."/>
 	</Target>
 	<Target Name="VerifyParameters">
