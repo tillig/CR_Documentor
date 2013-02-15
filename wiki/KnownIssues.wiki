@@ -10,6 +10,8 @@ This generally indicates that DXCore failed to load the plugin. The most common 
 
 http://cr-documentor.googlecode.com/svn/site/screenshots/windows_unblock_button.png
 
+*Note*: [http://www.devexpress.com/Support/Center/Question/Details/Q457704 CodeRush/Refactor/DXCore 12.2.5 - 12.2.6 didn't properly handle VSIX installed plugins]. The only solution for those versions is to manually download and install CR_Documentor.
+
 =The CR_Documentor window doesn't appear after clicking the tool window link.=
 That is, when you try to open the CR_Documentor window, it doesn't show up. This usually means that the internal web server wasn't allowed to start. You can look in your DXCore logs and see the error information. It may mean you don't have permissions (if you're running Visual Studio as a non-admin user, this may be the case) or it may be something else.
 
