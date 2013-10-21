@@ -4,16 +4,16 @@
 = Prerequisites =
 To use the latest CR_Documentor, you must have...
   * Visual Studio 2010.
-  * DXCore 11.2.8 (2011.2) or higher.
+  * !CodeRush 11.2.8 (2011.2) or higher.
 
-*Note*: As DXCore evolves, so does CR_Documentor. Be sure to get the version of CR_Documentor from the downloads section that matches your configuration. If you are on the latest DXCore, you should get the latest CR_Documentor.
+*Note*: As !CodeRush evolves, so does CR_Documentor. Be sure to get the version of CR_Documentor from the downloads section that matches your configuration. If you are on the latest !CodeRush, you should get the latest CR_Documentor.
   * CR_Documentor 1.8.2.0510 is the last version to support Visual Studio 2003.
-  * CR_Documentor 2.2.1.0 is the last version to support DXCore versions between 3.0.8.0 and 9.1.2.0.
-  * CR_Documentor 2.3.0.0 works only on DXCore 9.1.2.0.
-  * CR_Documentor 2.5.0.0 works only on DXCore 9.1.3 - 10.1.7.
+  * CR_Documentor 2.2.1.0 is the last version to support !CodeRush versions between 3.0.8.0 and 9.1.2.0.
+  * CR_Documentor 2.3.0.0 works only on !CodeRush 9.1.2.0.
+  * CR_Documentor 2.5.0.0 works only on !CodeRush 9.1.3 - 10.1.7.
   * CR_Documentor 2.6.1.0 is the last version to support Visual Studio 2005 and 2008.
 
-DXCore is a free download from !DevExpress that you can either get [http://www.devexpress.com/Products/Visual_Studio_Add-in/DXCore/ as a standalone plugin engine] or as part of the [http://www.devexpress.com/Products/Visual_Studio_Add-in/CodeRushX/ CodeRush Xpress] bundle.
+!CodeRush is a product from !DevExpress that enhances Visual Studio and adds a nice plugin framework. While I recommend [https://www.devexpress.com/Products/CodeRush/ getting the full version], there is a free version called [http://www.devexpress.com/Products/Visual_Studio_Add-in/CodeRushX/ CodeRush Xpress].
 
 = Installation =
 You have the choice of automatic installation ([http://visualstudiogallery.msdn.microsoft.com/668a65b5-2468-4afa-b78d-8c369850e2b2 via the Visual Studio Extension Gallery]) or manual installation (download a zip file and copy the extension to the right spot).
@@ -34,8 +34,8 @@ The ConfigurationOptions page explains the various ways you can configure behavi
 
 ==Manual Installation==
   * Make sure all instances of Visual Studio are closed.
-  * Copy the CR_Documentor.dll assembly into your DXCore plug-ins folder.
-    * In versions before DXCore 9.1, this is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
+  * Copy the CR_Documentor.dll assembly into your !CodeRush plug-ins folder.
+    * In versions before !CodeRush 9.1, this is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
     * In 9.1 and later, it's like:
       * C:\Documents and Settings\YOURUSERNAME\My Documents\!DevExpress\IDE Tools\Community\!PlugIns *OR*
       * C:\Users\YOURUSERNAME\Documents\!DevExpress\IDE Tools\Community\!PlugIns *OR*
