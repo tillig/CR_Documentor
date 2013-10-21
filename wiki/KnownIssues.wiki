@@ -6,21 +6,21 @@
 There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker] and/or are on the ProductRoadmap. Also check the FrequentlyAskedQuestions page if you find you're having trouble.
 
 =The CR_Documentor link isn't in the list of tool windows.=
-This generally indicates that DXCore failed to load the plugin. The most common reason for this is a security restriction in Windows 7/Windows Server 2008 and later. Windows knows the plugin was downloaded from the internet and blocks some of the functionality. Right-click the CR_Documentor.dll, select "Properties," and on the "General" tab click the "Unblock" button. This will allow the plugin to load correctly.
+This generally indicates that !CodeRush failed to load the plugin. The most common reason for this is a security restriction in Windows 7/Windows Server 2008 and later. Windows knows the plugin was downloaded from the internet and blocks some of the functionality. Right-click the CR_Documentor.dll, select "Properties," and on the "General" tab click the "Unblock" button. This will allow the plugin to load correctly.
 
 http://cr-documentor.googlecode.com/svn/site/screenshots/windows_unblock_button.png
 
 *Note*: [http://www.devexpress.com/Support/Center/Question/Details/Q457704 CodeRush/Refactor/DXCore 12.2.5 - 12.2.7 didn't properly handle VSIX installed plugins]. The only solution for those versions is to manually download and install CR_Documentor. It was fixed in 12.2.8.
 
 =The CR_Documentor window doesn't appear after clicking the tool window link.=
-That is, when you try to open the CR_Documentor window, it doesn't show up. This usually means that the internal web server wasn't allowed to start. You can look in your DXCore logs and see the error information. It may mean you don't have permissions (if you're running Visual Studio as a non-admin user, this may be the case) or it may be something else.
+That is, when you try to open the CR_Documentor window, it doesn't show up. This usually means that the internal web server wasn't allowed to start. You can look in your !CodeRush logs and see the error information. It may mean you don't have permissions (if you're running Visual Studio as a non-admin user, this may be the case) or it may be something else.
 
 There is a page describing the various ServerStartupErrors as well as workarounds where available.
 
 =The CR_Documentor window may not update as "real-time" as you would expect.=
-This is because it relies on the DXCore parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
-  * *Workaround 1: Save the document.* This causes DXCore to re-parse the document and provide a new set of information to CR_Documentor, which will update the preview.
-  * *Workaround 2: Change the frequency of document parsing.* If you work with large documents (or a lot of small documents) simultaneously, this may slow things down a little, but it will provide more frequent updates in the preview window and with other DXCore plugins.  To do this:
+This is because it relies on the !CodeRush parser, which only updates during editor "idle time," and only under certain settings.  That's why there's no manual "refresh" option - what you see in CR_Documentor is always the latest that has been made available for preview.  There are two possible workarounds to get an updated view:
+  * *Workaround 1: Save the document.* This causes !CodeRush to re-parse the document and provide a new set of information to CR_Documentor, which will update the preview.
+  * *Workaround 2: Change the frequency of document parsing.* If you work with large documents (or a lot of small documents) simultaneously, this may slow things down a little, but it will provide more frequent updates in the preview window and with other !CodeRush plugins.  To do this:
     # In Visual Studio, from the !DevExpress menu, select "Options."
     # In the bottom-left corner of the Options window, make sure "Expert" is selected.
     # Find the "Core" folder in the left-hand treeview, at the top.
@@ -34,20 +34,20 @@ This is because it relies on the DXCore parser, which only updates during editor
 Rather than use the "escaped" attribute, you can enclose the text in a CDATA tag.  CDATA whitespace is properly handled.  The "escaped" attribute is not supported by Sandcastle - it is an NDoc 1.3 specific feature.
 
 =The context menu templates may not insert/embed as expected if you have word wrap turned on in the Visual Studio editor.=
-This is a DXCore issue and nothing CR_Documentor can fix.  If you are using word wrap in Visual Studio and find the templates aren't working right, turn off word wrap.
+This is a !CodeRush issue and nothing CR_Documentor can fix.  If you are using word wrap in Visual Studio and find the templates aren't working right, turn off word wrap.
 
-=The CR_Documentor window may not display, and when looking in the DXCore error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).=
-This generally means you don't have the minimum required version of DXCore installed - you need to upgrade.
+=The CR_Documentor window may not display, and when looking in the !CodeRush error logs, you see an exception (System.Reflection.!TargetInvocationException or System.!MissingMethodException).=
+This generally means you don't have the minimum required version of !CodeRush installed - you need to upgrade.
 
 =CR_Documentor does not appear in the "About" box.=
-You should see CR_Documentor listed when you view the !DevExpress->About box. If you don't, make sure you're on the latest version of CR_Documentor. You may also have to close all instances of Visual Studio and delete your DXCore Loader settings folder (%!AppData%\!CodeRush for VS .NET\1.1\Settings\Loader) - these settings can get corrupted across DXCore updates and it may have cached something incorrectly. Deleting the settings will cause them to be rebuilt from scratch and will not harm your DXCore installation.
+You should see CR_Documentor listed when you view the !DevExpress->About box. If you don't, make sure you're on the latest version of CR_Documentor. You may also have to close all instances of Visual Studio and delete your !CodeRush Loader settings folder (%!AppData%\!CodeRush for VS .NET\1.1\Settings\Loader) - these settings can get corrupted across DXCore updates and it may have cached something incorrectly. Deleting the settings will cause them to be rebuilt from scratch and will not harm your !CodeRush installation.
 
 Also, as of version 12.1.5 of !CodeRush, the "About" box format changed. for a short time, the box did not display product information for installed plugins. If your version of !CodeRush is from around that version, there may not be a place for showing plugin info.
 
-=CR_Documentor doesn't work right with DXCore 2010.1 and VS2010.=
-Using VS2010 and pre-release versions of DXCore 2010.1 you may notice that some of the context menu templates don't work as expected, or that the expand/collapse XML doc comments commands don't work quite right. Upgrade to the latest CR_Documentor and the official release of DXCore 2010.1 (2010.1.4) and everything should work properly.
+=CR_Documentor doesn't work right with !CodeRush 2010.1 and VS2010.=
+Using VS2010 and pre-release versions of !CodeRush 2010.1 you may notice that some of the context menu templates don't work as expected, or that the expand/collapse XML doc comments commands don't work quite right. Upgrade to the latest CR_Documentor and the official release of !CodeRush 2010.1 (2010.1.4) and everything should work properly.
 
-=Unable to uninstall CR_Documentor VSIX plugin with DXCore 11.2.=
+=Unable to uninstall CR_Documentor VSIX plugin with !CodeRush 11.2.=
 11.2 introduced the ability to install community plugins through VSIX installers. Up through version 11.2.8, though, the uninstall didn't work quite right. [http://www.devexpress.com/Support/Center/Issues/ViewIssue.aspx?issueid=Q382396 There is an issue on the DevExpress site for this] and it should be fixed in a release after 11.2.8.
 
 To uninstall the VSIX:
