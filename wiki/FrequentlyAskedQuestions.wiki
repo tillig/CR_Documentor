@@ -41,7 +41,7 @@ public void Foo() {}
 
 Per the [http://msdn.microsoft.com/en-us/vcsharp/aa336809.aspx C# 3.0 Language Specification], the character sequence `/*` indicates the beginning of a standard block comment... _but `/**` indicates the beginning of an XML documentation comment._
 
-Since the opening line starts with `/**` the DXCore parsing engine reads it, correctly per the spec, as an XML doc comment and CR_Documentor attempts to render it. If you choose to open your standard delimited block comments with a line of asterisks, you may see CR_Documentor to display an error indicating the XML is invalid. (That's because it is - it's not XML at all!)
+Since the opening line starts with `/**` the !CodeRush parsing engine reads it, correctly per the spec, as an XML doc comment and CR_Documentor attempts to render it. If you choose to open your standard delimited block comments with a line of asterisks, you may see CR_Documentor to display an error indicating the XML is invalid. (That's because it is - it's not XML at all!)
 
 It is recommended that you follow the language spec and not open standard block comments with `/**`... but there are ways you can sort of have your cake and eat it, too. For example, rather than starting with `/**` leave a space between the two asterisks:
 
