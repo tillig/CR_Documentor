@@ -35,7 +35,9 @@
 	</ItemGroup>
 	<Target Name="All">
 		<CallTarget Targets="Clean;Compile;Test"/>
-		<CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/>
+		<!-- 11/19/2013: Commenting out documentation creation for now since it requires installation of Sandcastle. -->
+		<!-- CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/ -->
+		<CallTarget Targets="Package" Condition="'$(Configuration)' == 'Release'"/>
 		<Message Text="Build complete."/>
 	</Target>
 	<Target Name="Compile">
