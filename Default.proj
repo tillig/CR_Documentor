@@ -20,6 +20,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<CleanFolders Include="$(BuildDir)"/>
+		<CleanFolders Include="ipch"/>
 		<CleanFolders Include="Plugin\bin"/>
 		<CleanFolders Include="Plugin\obj"/>
 		<CleanFolders Include="IntegrationTests\DocTestCpp\bin"/>
