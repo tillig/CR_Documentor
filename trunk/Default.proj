@@ -4,11 +4,11 @@
 		* Standard build = msbuild Default.proj
 		* Release build = msbuild Default.proj /p:Configuration=Release
 	-->
-	<!-- Import Project="$(ProgramFiles)\Typemock\Isolator\6.1\TypeMock.MSBuild.Tasks"/ -->
+	<Import Project="$(ProgramFiles)\Typemock\Isolator\7.3\TypeMock.MSBuild.Tasks"/>
 	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-		<BuildDir>..\build</BuildDir>
+		<BuildDir>build_output</BuildDir>
 		<BuildBinDir>$(BuildDir)\bin</BuildBinDir>
 		<BuildDocDir>$(BuildDir)\doc</BuildDocDir>
 		<BuildDocTempDir>$(BuildDocDir)\temp</BuildDocTempDir>
@@ -34,8 +34,7 @@
 		<CleanFolders Include="TestResults"/>
 	</ItemGroup>
 	<Target Name="All">
-		<CallTarget Targets="Clean;Compile"/>
-		<!-- CallTarget Targets="Clean;Compile;Test"/ -->
+		<CallTarget Targets="Clean;Compile;Test"/>
 		<CallTarget Targets="Doc;Package" Condition="'$(Configuration)' == 'Release'"/>
 		<Message Text="Build complete."/>
 	</Target>
@@ -69,13 +68,13 @@
 		<MSBuild Projects="Build\SandcastlePrototype.proj" Targets="Doc" Properties="AssemblyPath=%(AssembliesToDocument.FullPath);AssemblyName=%(AssembliesToDocument.Filename);TempDir=..\$(BuildDocTempDir);OutputDir=..\$(BuildDocDir);DocXmlPath=..\$(BuildBinDir)\%(AssembliesToDocument.Filename).xml"/>
 	</Target>
 	<Target Name="Test">
-		<CreateProperty Value="$(BuildLogDir)\TestResults.trx">
-			<Output PropertyName="UnitTestResultsFile" TaskParameter="Value"/>
-		</CreateProperty>
-		<Delete Files="$(UnitTestResultsFile)"/>
 		<TypeMockStart/>
-		<Exec Command="mstest.exe /testcontainer:&quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /resultsfile:&quot;$(UnitTestResultsFile)&quot;"/>
+		<Exec Command="vstest.console.exe &quot;CR_Documentor.Test\bin\$(Configuration)\CR_Documentor.Test.dll&quot; /Logger:Trx"/>
+		<ItemGroup>
+			<TrxOutput Include="TestResults/*.trx" />
+		</ItemGroup>
 		<CallTarget Targets="Test-Finally"/>
+		<Copy SourceFiles="@(TrxOutput)" DestinationFolder="$(BuildLogDir)" />
 		<OnError ExecuteTargets="Test-Finally"/>
 	</Target>
 	<Target Name="Test-Finally">
