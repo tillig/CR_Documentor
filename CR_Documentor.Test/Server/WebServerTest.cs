@@ -10,6 +10,7 @@ namespace CR_Documentor.Test.Server
 {
 	[TestClass]
 	[Isolated]
+	[Ignore] // The web listener and server tests cause the VS test process to hang.
 	public class WebServerTest
 	{
 		private const UInt16 TestServerPort = 22334;
