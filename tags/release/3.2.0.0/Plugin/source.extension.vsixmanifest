@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+	<Metadata>
+		<Identity Id="CR_Documentor" Version="3.2.0.0" Language="en-US" Publisher="CR_Documentor Contributors" />
+		<DisplayName>CR_Documentor</DisplayName>
+		<Description xml:space="preserve">DXCore (CodeRush/Refactor) plugin that provides the ability to preview how XML documentation comments will render.</Description>
+		<MoreInfo>http://code.google.com/p/cr-documentor/</MoreInfo>
+		<License>license.txt</License>
+		<GettingStartedGuide>http://code.google.com/p/cr-documentor/wiki/InstallationAndUsage</GettingStartedGuide>
+		<Icon>VsixPreview.png</Icon>
+		<PreviewImage>VsixPreview.png</PreviewImage>
+	</Metadata>
+	<Installation>
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[10.0,]" />
+		<InstallationTarget Version="[10.0,]" Id="Microsoft.VisualStudio.Premium" />
+		<InstallationTarget Version="[10.0,]" Id="Microsoft.VisualStudio.Ultimate" />
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+	</Assets>
+</PackageManifest>
