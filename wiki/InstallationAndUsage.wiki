@@ -33,6 +33,8 @@ or
 The ConfigurationOptions page explains the various ways you can configure behavior.
 
 ==Manual Installation==
+*GOOGLE CODE IS REMOVING DOWNLOAD CAPABILITY.* As of January 2014, Google Code won't allow for download distribution. Given the primary mechanism for installation is now via the Extension Gallery, I'll be removing support for downloads when Google does, which also means "manual installation" will go away.
+
   * Make sure all instances of Visual Studio are closed.
   * Copy the CR_Documentor.dll assembly into your !CodeRush plug-ins folder.
     * In versions before !CodeRush 9.1, this is typically something like: C:\Program Files\Developer Express Inc\DXCore for Visual Studio .NET\2.0\Bin\Plugins
