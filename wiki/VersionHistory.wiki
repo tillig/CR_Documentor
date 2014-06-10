@@ -1,5 +1,12 @@
 #summary Describes the features and fixes available in each release.
 #labels Featured,Phase-Support
+=3.1.1.0=
+  * Compatibility fix for DXCore/CodeRush/Refactor 14.
+=3.1.0.2=
+  * Final updates for VS 2013 support.
+=3.1.0.0=
+  * Added VS 11 support to the installer.
+  * Maintenance to aid in issue #37 - Duplicate context menu is a DXCore issue, not something we can fix; but added some diagnostic logging and guarding to try to prevent what's possible.
 =3.0.0.0=
   * Added a VSIX installer and put the plugin in the [http://visualstudiogallery.msdn.microsoft.com/668a65b5-2468-4afa-b78d-8c369850e2b2 Visual Studio Gallery].
   * Updated to .NET 4.0 - the plugin now only supports VS 2010+
