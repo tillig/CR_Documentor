@@ -4,7 +4,7 @@
 To build the CR_Documentor source, you'll need...
 
   * Visual Studio 2013.
-  * !CodeRush 11.2.8 or later installed in the default location. Plugins will go in: `%USERPROFILE%\Documents\DevExpress\IDE Tools\Community\PlugIns`
+  * !CodeRush 11.2.8 or later installed in the default location.
   * [http://msbuildtasks.tigris.org/ MSBuild Community Tasks].
   * [http://codeplex.com/Sandcastle Sandcastle].
   * [http://www.typemock.com Typemock Isolator 7.3] - You will need to [http://www.typemock.com/free_open_source_license_form.php request a free open-source developer license].
