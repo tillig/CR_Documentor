@@ -131,9 +131,7 @@
     <Compile Include="Diagnostics\LogManager.cs" />
     <Compile Include="Diagnostics\MenuLogger.cs" />
     <Compile Include="Diagnostics\ToolWindowLogger.cs" />
-    <Compile Include="DocumentorActions.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="DocumentorActions.cs" />
     <Compile Include="DocumentorActions.Designer.cs">
       <DependentUpon>DocumentorActions.cs</DependentUpon>
     </Compile>
@@ -183,16 +181,10 @@
     <Compile Include="ProductModule\CR_DocumentorProductModule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DocumentorContextMenu.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DocumentorWindow.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="DocumentorContextMenu.cs" />
+    <Compile Include="DocumentorWindow.cs" />
     <Compile Include="AssemblyExtensions.cs" />
-    <Compile Include="Options\DocumentorOptions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Options\DocumentorOptions.cs" />
     <Compile Include="Options\DocumentorOptions.Designer.cs">
       <DependentUpon>DocumentorOptions.cs</DependentUpon>
     </Compile>
