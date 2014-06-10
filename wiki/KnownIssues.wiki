@@ -6,7 +6,9 @@
 There are a few known issues with CR_Documentor. Many have workarounds, but some are with external systems CR_Documentor can't control. Those items that are planned to be fixed should be filed in the [http://code.google.com/p/cr-documentor/issues/list issue tracker] and/or are on the ProductRoadmap. Also check the FrequentlyAskedQuestions page if you find you're having trouble.
 
 =The CR_Documentor link isn't in the list of tool windows.=
-This generally indicates that !CodeRush failed to load the plugin. The most common reason for this is a security restriction in Windows 7/Windows Server 2008 and later. Windows knows the plugin was downloaded from the internet and blocks some of the functionality. Right-click the CR_Documentor.dll, select "Properties," and on the "General" tab click the "Unblock" button. This will allow the plugin to load correctly.
+This generally indicates that !CodeRush failed to load the plugin. The most common reason for this is a security restriction in Windows 7/Windows Server 2008 and later if you downloaded the plugin manually. Windows knows the plugin was downloaded from the internet and blocks some of the functionality. (You won't see this if you install from the Visual Studio Gallery.)
+
+Right-click the CR_Documentor.dll, select "Properties," and on the "General" tab click the "Unblock" button. This will allow the plugin to load correctly.
 
 http://cr-documentor.googlecode.com/svn/site/screenshots/windows_unblock_button.png
 
