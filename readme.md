@@ -31,3 +31,12 @@ DXCore is a free download from Developer Express, Inc.: http://www.devexpress.co
 3. When working in a source file with XML documentation, watch the Documentor window as you edit your XML comments.  It will contain a preview of what your comments will look like when rendered into end-user documentation.
 
 While viewing a source code file, CR_Documentor provides an additional context menu.  Different options appear based on whether you are inside an XML doc comment or not; and whether you have text selected or not.
+
+##Building
+To build the CR\_Documentor source, you'll need...
+
+  * Visual Studio 2013.
+  * CodeRush 11.2.8 or later installed in the default location.
+  * [MSBuild Community Tasks](http://msbuildtasks.tigris.org/).
+  * [Sandcastle](http://codeplex.com/Sandcastle).
+  * [Typemock Isolator 7.3](http://www.typemock.com) - You will need to [request a free open-source developer license](http://www.typemock.com/free_open_source_license_form.php).
