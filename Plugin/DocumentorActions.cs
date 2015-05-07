@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using CR_Documentor.Diagnostics;
 using DevExpress.CodeRush.Core;
+using DevExpress.CodeRush.Interop.OLE;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
 
@@ -281,11 +282,11 @@ namespace CR_Documentor
 		{
 			if (!DXCoreContext.HasActiveWholeOrMultiLineSelection || CodeRush.Context.Satisfied(DXCoreContext.CTX_InXmlDocComment, false))
 			{
-				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusUnsupported;
+				ea.CommandFlags = OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
 			}
 			else
 			{
-				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusEnabled | EnvDTE.vsCommandStatus.vsCommandStatusSupported;
+				ea.CommandFlags = OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED;
 			}
 		}
 
@@ -324,11 +325,11 @@ namespace CR_Documentor
 		{
 			if (!DXCoreContext.EditingSourceFile)
 			{
-				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusUnsupported;
+				ea.CommandFlags = OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
 			}
 			else
 			{
-				ea.Status = EnvDTE.vsCommandStatus.vsCommandStatusEnabled | EnvDTE.vsCommandStatus.vsCommandStatusSupported;
+				ea.CommandFlags = OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED;
 			}
 		}
 

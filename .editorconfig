@@ -1,0 +1,21 @@
+; EditorConfig to support per-solution formatting.
+; Use the EditorConfig VS add-in to make this work.
+; http://editorconfig.org/
+; VS Add-In: http://visualstudiogallery.msdn.microsoft.com/c8bccfe2-650c-4b42-bc5c-845e21f96328
+; Sublime Text Add-In: https://github.com/sindresorhus/editorconfig-sublime#readme
+
+; This is the default for the codeline.
+root = true
+
+[*]
+end_of_line = CRLF
+indent_style = tab
+trim_trailing_whitespace = true
+
+[{*.ascx,*.aspx,*.config,*.cshtml,*.html,*.wxi,*.wxl,*.wxs}]
+indent_style = space
+indent_size = 4
+
+[{*.csproj,*.resx}]
+indent_style = space
+indent_size = 2
