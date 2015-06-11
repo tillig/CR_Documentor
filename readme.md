@@ -2,7 +2,7 @@
 
 Writing [XML documentation comments](http://msdn.microsoft.com/en-us/library/b2s063f7.aspx) in .NET can be troublesome sometimes because you can't really see what it's going to look like - you have to compile the code, then take the extracted XML doc and feed it to a rendering engine like [Sandcastle](http://www.codeplex.com/Sandcastle), then wait for the compiled help to come out so you can read it.
 
-**CR_Documentor is a plugin for [DXCore](http://www.devexpress.com/Products/Visual_Studio_Add-in/DXCore/) that allows you to preview what the documentation will look like when it's rendered - in a tool window inside Visual Studio.**
+**CR_Documentor is a plugin for [CodeRush](https://www.devexpress.com/Products/CodeRush/) that allows you to preview what the documentation will look like when it's rendered - in a tool window inside Visual Studio.**
 
 ##License
 
@@ -16,9 +16,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ##Requirements
 
-This product requires **DXCore for Visual Studio .NET 11.2.8 or later.**
+This product requires **CodeRush for Visual Studio .NET 11.2.8 or later.**
 
-DXCore is a free download from Developer Express, Inc.: http://www.devexpress.com/Products/Visual_Studio_Add-in/DXCore/
+CodeRush is a Visual Studio extension from Developer Express, Inc.: https://www.devexpress.com/Products/CodeRush/
 
 ##Installation
 
@@ -35,8 +35,8 @@ While viewing a source code file, CR_Documentor provides an additional context m
 ##Building
 To build the CR\_Documentor source, you'll need...
 
-  * Visual Studio 2013.
+  * Visual Studio 2015.
   * CodeRush 11.2.8 or later installed in the default location.
   * [MSBuild Community Tasks](http://msbuildtasks.tigris.org/).
   * [Sandcastle](http://codeplex.com/Sandcastle).
-  * [Typemock Isolator 7.3](http://www.typemock.com) - You will need to [request a free open-source developer license](http://www.typemock.com/free_open_source_license_form.php).
+  * [Typemock Isolator 8.1](http://www.typemock.com) - You will need to [request a free open-source developer license](http://www.typemock.com/free_open_source_license_form.php).
