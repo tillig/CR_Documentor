@@ -90,7 +90,7 @@
 		<CreateProperty Value="%(AssemblyIdentities.Version)">
 			<Output PropertyName="Version" TaskParameter="Value"/>
 		</CreateProperty>
-		<CreateItem Include="$(BuildBinDir)\CR_Documentor.dll;readme.html">
+		<CreateItem Include="$(BuildBinDir)\CR_Documentor.dll;readme.md">
 			<Output ItemName="BinaryPackageFiles" TaskParameter="Include"/>
 		</CreateItem>
 		<Zip Files="@(BinaryPackageFiles)" ZipFileName="$(BuildPackageDir)\CR_Documentor-$(Version).zip" Flatten="true"/>

@@ -16,7 +16,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ##Requirements
 
-This product requires **CodeRush for Visual Studio .NET 11.2.8 or later.**
+This product requires **CodeRush for Visual Studio .NET 14.2 or later.**
 
 CodeRush is a Visual Studio extension from Developer Express, Inc.: https://www.devexpress.com/Products/CodeRush/
 
@@ -36,7 +36,7 @@ While viewing a source code file, CR_Documentor provides an additional context m
 To build the CR\_Documentor source, you'll need...
 
   * Visual Studio 2015.
-  * CodeRush 11.2.8 or later installed in the default location.
+  * CodeRush 14.2 or later installed in the default location.
   * [MSBuild Community Tasks](http://msbuildtasks.tigris.org/).
   * [Sandcastle](http://codeplex.com/Sandcastle).
   * [Typemock Isolator 8.1](http://www.typemock.com) - You will need to [request a free open-source developer license](http://www.typemock.com/free_open_source_license_form.php).
