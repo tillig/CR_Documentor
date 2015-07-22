@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="CR_Documentor" Version="4.0.0" Language="en-US" Publisher="CR_Documentor Contributors" />
+		<Identity Id="CR_Documentor" Version="4.0.1" Language="en-US" Publisher="CR_Documentor Contributors" />
 		<DisplayName>CR_Documentor</DisplayName>
 		<Description xml:space="preserve">DXCore (CodeRush/Refactor) plugin that provides the ability to preview how XML documentation comments will render.</Description>
 		<MoreInfo>https://github.com/tillig/CR_Documentor/</MoreInfo>
