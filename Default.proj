@@ -23,8 +23,6 @@
 		<CleanFolders Include="ipch"/>
 		<CleanFolders Include="Plugin\bin"/>
 		<CleanFolders Include="Plugin\obj"/>
-		<CleanFolders Include="IntegrationTests\DocTestCpp\bin"/>
-		<CleanFolders Include="IntegrationTests\DocTestCpp\obj"/>
 		<CleanFolders Include="IntegrationTests\DocTestCS\bin"/>
 		<CleanFolders Include="IntegrationTests\DocTestCS\obj"/>
 		<CleanFolders Include="IntegrationTests\DocTestVB\bin"/>
