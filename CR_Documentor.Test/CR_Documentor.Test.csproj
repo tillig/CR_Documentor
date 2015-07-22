@@ -56,46 +56,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.CodeRush.Common">
-      <Name>DevExpress.CodeRush.Common</Name>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.Core">
-      <Name>DevExpress.CodeRush.Core</Name>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.PlugInCore">
-      <Name>DevExpress.CodeRush.PlugInCore</Name>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.StructuralParser">
-      <Name>DevExpress.CodeRush.StructuralParser</Name>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.CodeRush.VSCore">
-      <Name>DevExpress.CodeRush.VSCore</Name>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.DXCore.Controls.Utils.v6.3">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DevExpress.DXCore.Parser">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="EnvDTE">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="EnvDTE80">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="DevExpress.CodeRush.Common" />
+    <Reference Include="DevExpress.CodeRush.Core" />
+    <Reference Include="DevExpress.CodeRush.PlugInCore" />
+    <Reference Include="DevExpress.CodeRush.StructuralParser" />
+    <Reference Include="DevExpress.CodeRush.VSCore" />
+    <Reference Include="DevExpress.DXCore.Controls.Utils.v6.3" />
+    <Reference Include="DevExpress.DXCore.Parser" />
+    <Reference Include="EnvDTE" />
+    <Reference Include="EnvDTE80" />
     <Reference Include="Microsoft.mshtml">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -105,12 +79,8 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="TypeMock">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="TypeMock.ArrangeActAssert">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="TypeMock" />
+    <Reference Include="TypeMock.ArrangeActAssert" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyVersion.cs">
@@ -214,7 +184,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
